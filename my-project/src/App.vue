@@ -1,5 +1,4 @@
 <script setup>
-import HelloWorld from './components/HelloWorld.vue'
 import BaseNave from './components/BaseNave.vue';
 import ShowAllEvent from './view/admin__page/ShowAllEvent.vue';
 </script>
@@ -16,10 +15,12 @@ import ShowAllEvent from './view/admin__page/ShowAllEvent.vue';
  
   <!-- <HelloWorld msg="Vite + Vue" /> -->
 
-  <div >
-    <BaseNave/>
+  <div class="w-[100%] h-[100%]">
+    <BaseNave/>     
     <ShowAllEvent/>
-    HelloWorld
+    
+ 
+    
   </div>
 </template>
 
