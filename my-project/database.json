@@ -2,8 +2,29 @@
   "events": [
     {
       "id": 1,
-      "title": "json-server",
-      "author": "typicode"
+      "title":"อยากทำวันนี้ให้ดี",
+      "user": "นาย กล้วย",
+      "event": "หิวข้าว"
+    },
+    {
+      "id": 2,
+      "title": "Grocery shopping",
+      "user": "Jane Smith",
+      "event": "Going to the store to buy milk, bread, and eggs"
+    },
+    {
+      "id": 3,
+      "title": "Pay bills",
+      "user": "John Doe",
+      "event": "Paying the electricity bill online"
+    },
+    {
+      "id": 2,
+      "title":"อยาก",
+      "user": "นาย กล้วย",
+      "event": "หิวข้าว"
     }
+
+
   ]
 }
