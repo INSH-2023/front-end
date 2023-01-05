@@ -19,38 +19,26 @@ onBeforeMount(()=>{
 })
 </script>
 <template>
-    <div class="w-fit mx-auto my-4 p-2 border-spacing-2">
-        <table class="border-collapse border border-slate-500">
-            <thead>
-            <tr>
-                <th class="border border-gray-700"> title </th>
-                <th class="border border-gray-700"> username </th>
-                <th class="border border-gray-700"> event </th>
-                <!-- <th class="border border-gray-700"> details </th> -->
-            </tr>                
-            </thead>
-            <tbody>
-                <tr v-for="(data,index) in data" class="w-fit mx-auto ">
-                <td >{{data.title}}</td>
-                <td>{{data.user}}</td>
-                <td>{{data.event}}</td>
-                <td class="w-[10%] ">
-                    <button class="w-fit mx-auto bg-rose-400 rounded-lg p-1.5">
-                        details
-                    </button>
-                </td>
-                </tr>                
-            </tbody>
-
-            
-        </table>
-       <!-- <ul v-for="(data,index) in data">
-        <li class="">
-            {{data.title}}
-        </li>
-       </ul> -->
-        
+<div class=" h-[80%] w-[80%] bg-gray-200 mx-auto">
+    <div class="w-[100%] h-[100%] overflow-y-auto    bg-gray-300">
+   <table class="table-fixed  w-full ">
+        <tr class="sticky top-0 h-4 text-lg bg-gray-400">
+            <th >title</th>
+            <th>username</th>
+            <th>event</th>
+            <th></th>
+        </tr>
+        <tr v-for="(data,index) in data"  class="p-3 w-fit">
+            <td :key="index" class="text-center">{{ data.title }}</td>
+            <td :key="index" class="text-center">{{ data.user }}</td>
+            <td  :key="index" class="text-center">{{ data.event }}</td>
+            <td class="text-center">
+                <button class="bg-rose-400 text-white p-1.5 rounded">details</button>
+            </td>
+        </tr>
+   </table>
     </div>
+</div>
 </template>
 <style scoped>
 </style>
