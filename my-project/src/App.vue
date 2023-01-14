@@ -1,7 +1,4 @@
 <script setup>
-import BaseNav from './components/BaseNav.vue';
-import ShowAllEvent from './view/private__page/ShowAllEvent.vue';
-import Main_private from './view/private__page/Main_private.vue';
 import { useRouter } from 'vue-router'
 const myRouter = useRouter()
 </script>
