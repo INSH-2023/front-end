@@ -4,7 +4,7 @@ import {createRouter, createWebHistory} from 'vue-router'
 import Booking from '../view/private__page/for_user/Booking.vue'
 import Main_private_user from '../view/private__page/for_user/Main_private_user.vue'
 // admin
-import SignUp from '../view/public__page/SignUp.vue'
+import SignUp from '../view/private__page/for_admin/SignUp.vue'
 import ShowAllEvent from '../view/private__page/for_admin/showAllEvent.vue'
 import Main_private_admin from '../view/private__page/for_admin/Main_private_admin.vue'
 

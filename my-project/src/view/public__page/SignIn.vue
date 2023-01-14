@@ -1,18 +1,20 @@
 <script setup>
 </script>
 <template>
-    <div class="p-1.5 bg-gray-400 w-[400px] mx-auto">
-        <div class="m-6">
-            <h1 class="w-fit  mx-auto m-3"> Sign-In </h1>
+    
+    <div class="h-fit w-fit mx-auto font-mono">
+        <div class="mt-10 p-1.5 bg-gray-400 w-[400px] ">
+
+            <h1 class="w-fit  mx-auto m-3"> เข้าสู่ระบบ </h1>
             <!-- input mail -->
             <div class="w-[70%] mx-auto m-3">
-                <h2>Email</h2>
-                <input type="text" class="w-full" />
+                <h2>E-mail</h2>
+                <input type="text" class="w-full bg-transparent border-b-[1px] " />
             </div>
             <!-- input password -->
             <div class=" w-[70%] mx-auto m-3">
-                <h2 > Password</h2>
-                <input type="text" class="w-full"/> 
+                <h2 >Password</h2>
+                <input type="text" class="w-full bg-transparent border-b-[1px] "/> 
             </div>
             <!-- <div class=" w-[70%] mx-auto m-3">
                 <button class="hover:text-white">
@@ -20,7 +22,7 @@
                 </button>
             </div>             -->
         </div>
-    </div>
+    </div>    
 </template>
 <style scoped>
 </style>
