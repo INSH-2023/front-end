@@ -19,16 +19,7 @@ onBeforeMount(()=>{
 })
 </script>
 <template>
-<div class="">
-    <div>
-        <ul v-for="(data,index) in data">
-            <li  :key="index">
-                {{ data.event }}
-            </li>
-        </ul>
-    </div>
-</div>
-<!-- <div class="z-10 h-[80%] w-[80%] bg-gray-200 mx-auto">
+<div class="block z-10   bg-gray-200 mx-auto">
     <div class="w-[100%] h-[100%] overflow-y-auto    bg-gray-300">
    <table class="table-fixed  w-full ">
         <tr class="sticky top-0 h-4 text-lg bg-gray-400">
@@ -55,7 +46,7 @@ onBeforeMount(()=>{
         </tr>
    </table>
     </div>
-</div> -->
+</div>
 </template>
 <style scoped>
 </style>

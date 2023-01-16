@@ -2,9 +2,8 @@
 
 </script>
 <template>
-<div>
-    this is sing up
-</div>
+this is for show all user
 </template>
 <style scoped>
+
 </style>
