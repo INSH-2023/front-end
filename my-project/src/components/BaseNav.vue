@@ -52,22 +52,22 @@ onBeforeMount(()=>{
 <template>
 
     <!-- for home public page -->
-<div v-if="useW.toString()=='home'" class=" bg-[#13315C] h-fit">
-    <div class="flex  h-[45%]  w-fit mx-auto text-[15px]">
+<div v-if="useW.toString()=='home'" class=" bg-[#2196F3] h-fit">
+    <div class="flex  h-[45%]  w-fit mx-auto text-[20px]">
 
         <div >
         <div class="flex h-[100%] grow mx-auto  py-4 w-full">
     
         <!-- logo -->
             <div class="   my-auto grow-0 ml-4 ">
-                <img src="../assets/Moralcenter2.png" alt=" logo" class="w-[33px]"/>
+                <img src="../assets/Moral_Fainal.png" alt=" logo" class="w-[33px]"/>
                 <!-- <img src="../assets/Moralcenter_IT.png" alt=" logo" > -->
             </div>
 
             <!-- หน้า Home -->
-            <div class="px-2 my-auto mr-3 font-semibold  text-[#42A5F5]">
-                <h1 @click="goHome" class=" active:text-gray-600 cursor-pointer"> 
-                    IT help desk
+            <div class="px-2 my-auto mr-3 font-semibold  text-white">
+                <h1 @click="goHome" class=" active:text-gray-600 cursor-pointer text"> 
+                    IT Help Desk
                 </h1> 
             </div>
 
@@ -118,7 +118,7 @@ onBeforeMount(()=>{
 </div>
 
     <!-- for  user private page -->
-<div v-else-if=" role=='user' " class=" bg-[#13315C] h-fit">
+<div v-else-if=" role=='user' " class=" bg-[#2196F3] h-fit">
     <div class="flex  h-[45%]  w-fit mx-auto text-[15px]">
 
         <div class="">
@@ -126,42 +126,42 @@ onBeforeMount(()=>{
             
             <!-- logo -->
             <div class="  mx-3 my-auto grow-0 ml-4 ">
-                <img src="../assets/Moralcenter2.png" alt=" logo" class="w-[33px]"/>
+                <img src="../assets/Moral_Fainal.png" alt=" logo" class="w-[33px]"/>
             </div>
             
             <!-- หน้าหลัก -->
             <div v-if="role=='user'" class="px-2 my-auto mx-3">
-                <button @click="goBooking" class="hover:text-white font-semibold text-[#8DA9C4]"> 
+                <button @click="goBooking" class="hover:text-[#8DA9C4] font-semibold text-white"> 
                     แจ้งปัญหา
                 </button> 
             </div>
 
             <!-- หน้าสำหรับทดสอบ -->
             <div v-if="role=='user'"  class=" px-2 my-auto mx-3 ">
-                <button @click="goHistory" class="hover:text-white font-semibold text-[#8DA9C4]">
+                <button @click="goHistory" class="hover:text-[#8DA9C4] font-semibold text-white">
                  ประวัติ
                 </button>
             </div>
             <!-- แจ้งซ่อม -->
-            <div v-if="role=='admin'"  class=" px-2 my-auto mx-3 ">
-                <button @click="goShowAllEvent" class="hover:text-white font-semibold text-[#8DA9C4]">
+            <!-- <div v-if="role=='admin'"  class=" px-2 my-auto mx-3 ">
+                <button @click="goShowAllEvent" class="hover:text-[#8DA9C4] font-semibold text-[#8DA9C4]">
                     การแจ้งซ่อมทั้งหมด
                 </button>
-            </div>
+            </div> -->
 
             <!-- หน้าสำหรับแสดง users -->
-            <div v-if="role=='admin'"  class=" px-2 my-auto mx-3 ">
-               <button @click="goShowAllUser" class="hover:text-white font-semibold text-[#8DA9C4]">
+            <!-- <div v-if="role=='admin'"  class=" px-2 my-auto mx-3 ">
+               <button @click="goShowAllUser" class="hover:text-[#8DA9C4] font-semibold text-[#8DA9C4]">
                  ผู้ใช้ทั้งหมด
                 </button>
-            </div>
+            </div> -->
 
             <!-- เพิ่ม users -->
-            <div v-if="role=='admin'"  class=" px-2 my-auto mx-3 ">
-               <button @click="goRegister" class="hover:text-white font-semibold text-[#8DA9C4]">
+            <!-- <div v-if="role=='admin'"  class=" px-2 my-auto mx-3 ">
+               <button @click="goRegister" class="hover:text-[#8DA9C4] font-semibold text-[#8DA9C4]">
                  เพิ่มผู้ใช้
                 </button>
-            </div>            
+            </div>             -->
 
             <!-- ตั้งค่า drop down -->
             <div class="px-2 my-auto mx-3 ">
@@ -193,7 +193,7 @@ onBeforeMount(()=>{
         <!-- <h1 class="px-2">หมวดหมู่</h1> -->
             <!-- ออกจากระบบ -->
             <div class="px-2 my-auto mx-3">
-            <button @click="goHome" class="hover:text-white hover:bg-rose-400 px-2 rounded font-semibold text-[#8DA9C4]"> ออกจากระบบ</button>
+            <button @click="goHome" class="hover:text-[#E3F2FD] hover:bg-rose-400 px-2 rounded font-semibold text-white"> ออกจากระบบ</button>
             </div>
 
             <div  class="w-fit ml-3 flex  float-right mr-10 grow-0 right-0">

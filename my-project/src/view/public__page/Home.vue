@@ -6,7 +6,7 @@ const goSignIn=()=>myRouter.push({name:'signIn'})
 </script>
 <template>
 <div class="flex w-full h-[90%] font-mono ">
-   <div class=" m-auto  w-[60%] p-10 pr-1">
+   <div class=" m-auto -[200px] w-[590px] p-10 pr-1">
       <div class="w-fit ml-10 decoration-1 underline text-[25px] font-font-medium">
          IT help desk
       </div>
@@ -24,8 +24,8 @@ const goSignIn=()=>myRouter.push({name:'signIn'})
       </div>
    </div>
    <!-- photo -->
-   <div class="m-auto ">
-      <img src="../../assets/simple_photo.png" alt="">
+   <div class="m-auto w-[600px] ">
+      <img src="../../assets/contract_1.jpg" alt="photo" class="">
    </div>
 </div>
 </template>
