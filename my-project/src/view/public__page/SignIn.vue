@@ -2,29 +2,70 @@
 import{ref}from'vue'
 const email=ref('')
 const pw=ref('')
+
+// testing button
+const isEmailTesting=ref(false)
 </script>
 <template>
 <div>
-    <div class=" pt-3">
-       <div class="mt-3 w-fit mx-auto text-[60px] font-semibold">
+    <div class=" pt-3 relative ">
+       <div class="mt-6 w-fit mx-auto text-[60px] font-semibold text-gray-600">
          ลงชื่อเข้าใช้
        </div>
-       <div class="mt-6 w-[400px] mx-auto">
+       <div class="mt-6 w-[400px] h-[100px] mx-auto relative">
             <!-- input zone -->
-            <div class=" border-2 border-gray-400 rounded-[10px]">
+            <div class=" w-full h-fit border-2 border-gray-400 rounded-[10px]">
                 <div class="flex px-2 py-1.5">
                     <input type="text" placeholder="E-mail" class="w-[90%] focus:outline-0 my-auto">
-                    <button class="w-[10%] ml-[2px mx-auto] ">
-                       <h2 class="p-[1px] mx-auto rounded-full border-2 border-gray-500 text-gray-500 w-[30px]" >
-                         >
+                    <button @click="isEmailTesting=true" class="w-[10%] ml-[2px] mx-auto">
+                       <h2 v-show="isEmailTesting==false" class="p-[1px] mx-auto rounded-full border-2 border-gray-500 text-gray-500 w-[30px]" >
+                         > 
                        </h2> 
                     </button>
+                    
+                </div>
+                <hr v-show="isEmailTesting==true" class="w-[100%] h-[3px]   bg-gray-400 ">
+                <div v-show="isEmailTesting==true" class="flex px-2 py-1.5  ">
+                    <input type="text" placeholder="Password" class="w-[90%]  focus:outline-0 my-auto">
+                    <!-- <button class="w-[10%] ml-[2px] mx-auto">
+                        <h2 class="p-[1px] mx-auto rounded-full border-2 border-gray-500 text-gray-500 w-[30px]" >
+                         > 
+                        </h2> 
+                    </button> -->
                 </div>
                 <div>
                     
                 </div>
                 
             </div>
+       </div>
+
+       <!-- button submit -->
+       <div v-show="isEmailTesting==true" class="w-fit mx-auto mt-3">
+            <button class="bg-sky-500 px-[100px] py-[10px] rounded-2xl text-white">
+                login
+            </button>
+       </div>
+
+       <!-- หรือ -->
+       <div class="w-fit mx-auto mt-10">
+            <div class="flex ">
+                <hr class="m-auto w-[350px] h-[2px] bg-gray-400  border-gray-400">
+                <h5 class="px-2">
+                    หรือ
+                </h5>
+                <hr class="m-auto w-[350px] h-[2px] bg-gray-400  border-gray-400">
+            </div>
+       </div>
+
+       <!-- login by ms 365 -->
+       <div class=" w-fit mx-auto mt-5 border-2 rounded-2xl border-gray-400 font-semibold text-gray-500">
+            <button class="flex px-5 py-1.5">
+                <img src="../../assets/Microsoft_365_logo.png" alt="" class="mr-3 w-[30px]">
+                <h5 class="text-[15px] m-auto">
+                    เข้าสู่ระบบด้วย Microsoft 365
+                </h5>
+            </button>
        </div>
 
     </div>
