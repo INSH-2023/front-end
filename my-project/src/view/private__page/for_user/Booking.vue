@@ -2,8 +2,53 @@
 
 </script>
 <template>
-<div class="">
-    <div class="w-fit mx-auto pt-[40px] text-[60px] font-medium">
+<div>
+<div class="pt-4 ">
+    <!-- ส่วน navigation bar -->
+    <div class="flex mx-auto w-fit text-[25px] px-4 py-2 mt-4 bg-gray-300 rounded-3xl">
+
+        <!-- การแจ้งซ่อม -->
+        <div class=" flex mx-2  px-7 bg-amber-500 text-gray-100  rounded-2xl ">
+            <h5>
+            การแจ้งซ่อม                
+            </h5>
+            <h5 class="ml-4">
+                1
+            </h5>
+        </div>
+        
+        <!-- กำลังดำเนินการ -->
+        <div class=" flex mx-2  px-7 bg-sky-500 text-gray-100  rounded-2xl ">
+            <h5>
+            กำลังดำเนินการ                
+            </h5>
+            <h5 class="ml-2">
+                0
+            </h5>
+        </div>
+
+        <div class=" flex mx-2  px-7 bg-teal-400 text-gray-100  rounded-2xl ">
+            <h5>
+            เสร็จสิ้น               
+            </h5>
+            <h5 class="ml-2">
+                1
+            </h5>
+        </div>
+
+        <hr class="bg-gray-700 h-[35px] w-[2px] m-auto mx-2">
+
+        <!-- แจ้งซ่อม -->
+        <div class=" flex mx-2  px-7 bg-rose-500 text-gray-100  rounded-2xl ">
+            <h5>
+            แจ้งซ่อม              
+            </h5>
+        </div>
+    </div>
+
+
+    <!-- ส่วนล่าง -->
+    <div class="w-fit mx-auto mt-2  text-[60px] font-medium">
         บริการช่วยเหลือ
     </div>
     <div class="flex w-fit mx-auto p-2">
@@ -72,6 +117,7 @@
             <input id="searching" type="text" placeholder="ลองพิมพ์ปัญหาของคุณมาสิ" class="w-[453px] focus:outline-0 my-auto">
         </div>
     </div>
+</div>
 </div>
 </template>
 <style scoped>
