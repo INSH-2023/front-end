@@ -5,17 +5,17 @@
 <div>
 <div class="pt-4 ">
     <!-- ส่วน navigation bar -->
-    <div class="flex mx-auto w-fit text-[25px] px-4 py-2 mt-4 bg-gray-300 rounded-3xl">
+    <div class="flex mx-auto w-fit text-[40px] px-4 py-2 mt-4 bg-gray-300 rounded-3xl">
 
         <!-- การแจ้งซ่อม -->
-        <div class=" flex mx-2  px-7 bg-amber-500 text-gray-100  rounded-2xl ">
+        <button class=" flex mx-2  px-7 bg-amber-500 text-gray-100  rounded-2xl ">
             <h5>
             การแจ้งซ่อม                
             </h5>
             <h5 class="ml-4">
                 1
             </h5>
-        </div>
+        </button >
         
         <!-- กำลังดำเนินการ -->
         <div class=" flex mx-2  px-7 bg-sky-500 text-gray-100  rounded-2xl ">
