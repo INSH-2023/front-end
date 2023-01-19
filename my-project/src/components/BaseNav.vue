@@ -11,7 +11,7 @@ defineProps({
 })
 const isSetting =ref(false)
 const isLanguage = ref(false)
-const userName =ref("hello wolrd")
+const userName =ref("Hello wolrd")
 const myRouter = useRouter()
 const goSignIn=()=>myRouter.push({name:'signIn'})
 const goRegister=()=>myRouter.push({name:'signUp'})
@@ -88,10 +88,10 @@ onBeforeMount(()=>{
             <!-- menu username -->
             <div class="flex mr-[20px]">
                 <img src="../assets/alert.png" alt="alert" class="mx-3 w-[25px] m-auto">
-                <h3 class="m-auto mb-2 text-[14px] text-white font-medium">
+                <h3 class="m-auto mb-2 mx-1 text-[14px] text-white font-medium">
                     สวัสดี!
                 </h3>
-                <button class="w-fit mb-1.5 ml-1 m-auto mx-2 mr-10 text-[17px] text-white font-semibold">
+                <button class=" truncate w-[100px] mb-1.5 ml-2 m-auto mx-2 mr-10 text-[17px] text-white font-semibold">
                     {{ userName }}
                 </button>
                 

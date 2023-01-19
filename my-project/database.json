@@ -107,27 +107,81 @@
     {
       "id":1,
       "title":"จอพัง",
-      "solution":"Rubber Dome Keyboard หรือ คีย์บอร์ดแบบปุ่มยาง: เป็นคีย์บอร์ดที่สามารถพบเห็นและหาซื้อได้มากที่สุดในตลาด เนื่องด้วยต้นทุนในการผลิตที่ต่ำกว่าและสามารถผลิตได้ง่ายกว่าประเภทอื่นๆ แต่ข้อสังเกตนั้น คีย์บอร์ดประเภทนี้ก็มีอายุการใช้งานที่ต่ำที่สุดเช่นกัน เมื่อเทียบกับคีย์บอร์ดประเภทอื่น ในส่วนของปุ่มนั้น ก็อาจจะเรียกได้ว่ากดได้ไม่สบายที่สุดในบรรดาทั้ง 3 ประเภท การทำงานของคีย์บอร์ดประเภทนี้ก็จะใช้ปุ่มยางเล็กๆ วางไว้ใต้ปุ่ม แต่ละปุ่มจะเชื่อมต่อกับแผงวงจรMechanical Keyboard หรือ คีย์บอร์ดแบบกลไก: ",
+      "tag":["ทด","ทดสอบ","การทดสอบ","ทำเพื่อการทดสอบทังหมด"],
+      "text":"this is for testing testing testing testing testing testing testing testing testing testing testing testing testing testing testing testing testing testing testing testing testing testing testing testing testing testing testing testing testing testing testing testing testing", 
+      "solutions":
+      [
+        {
+          "step":1,
+          "solution":" u must testing 1"
+          
+        },
+        {
+          "step":2,
+          "solution":" u must testing 2 testing testing testing testing testing testing testing testing testing testing testing testing testing testing testing"
+        }
+        ,
+        {
+          "step":3,
+          "solution":" u must testing 2 testing testing testing testing testing testing testing testing testing testing testing testing testing testing testing"
+        }
+      ],
       "img":"../../src/assets/vue.svg"
       
     },
     {
       "id":2,
       "title":"เมาส์พัง",
-      "solution":"Rubber Dome Keyboard หรือ คีย์บอร์ดแบบปุ่มยาง: เป็นคีย์บอร์ดที่สามารถพบเห็นและหาซื้อได้มากที่สุดในตลาด เนื่องด้วยต้นทุนในการผลิตที่ต่ำกว่าและสามารถผลิตได้ง่ายกว่าประเภทอื่นๆ แต่ข้อสังเกตนั้น คีย์บอร์ดประเภทนี้ก็มีอายุการใช้งานที่ต่ำที่สุดเช่นกัน เมื่อเทียบกับคีย์บอร์ดประเภทอื่น ในส่วนของปุ่มนั้น ก็อาจจะเรียกได้ว่ากดได้ไม่สบายที่สุดในบรรดาทั้ง 3 ประเภท การทำงานของคีย์บอร์ดประเภทนี้ก็จะใช้ปุ่มยางเล็กๆ วางไว้ใต้ปุ่ม แต่ละปุ่มจะเชื่อมต่อกับแผงวงจรMechanical Keyboard หรือ คีย์บอร์ดแบบกลไก: ",
+      "tag":["ทด","ทดสอบ","การทดสอบ","ทำเพื่อการทดสอบทังหมด"],
+      "text":"this is for testing testing testing testing testing testing testing testing testing testing testing ",
+      "solutions":
+      [
+        {
+          "step":1,
+          "solution":" u must testing 1"
+        },
+        {
+          "step":2,
+          "solution":" u must testing 2"
+        }
+      ],
       "img":"../../src/assets/vue.svg"
     },
     {
       "id":3,
       "title":"คีย์บอร์ดพัง",
-      "solution":"Rubber Dome Keyboard หรือ คีย์บอร์ดแบบปุ่มยาง: เป็นคีย์บอร์ดที่สามารถพบเห็นและหาซื้อได้มากที่สุดในตลาด เนื่องด้วยต้นทุนในการผลิตที่ต่ำกว่าและสามารถผลิตได้ง่ายกว่าประเภทอื่นๆ แต่ข้อสังเกตนั้น คีย์บอร์ดประเภทนี้ก็มีอายุการใช้งานที่ต่ำที่สุดเช่นกัน เมื่อเทียบกับคีย์บอร์ดประเภทอื่น ในส่วนของปุ่มนั้น ก็อาจจะเรียกได้ว่ากดได้ไม่สบายที่สุดในบรรดาทั้ง 3 ประเภท การทำงานของคีย์บอร์ดประเภทนี้ก็จะใช้ปุ่มยางเล็กๆ วางไว้ใต้ปุ่ม แต่ละปุ่มจะเชื่อมต่อกับแผงวงจรMechanical Keyboard หรือ คีย์บอร์ดแบบกลไก: ",
-      "img":"../../src/assets/vue.svg"
+      "tag":["ทด","ทดสอบ","การทดสอบ","ทำเพื่อการทดสอบทังหมด"],
+      "text":"this is for testing testing testing testing testing testing testing testing testing testing testing ",
+      "solutions":
+      [
+        {
+          "step":1,
+          "solution":" u must testing 1"
+        },
+        {
+          "step":2,
+          "solution":" u must testing 2"
+        }
+      ],      "img":"../../src/assets/vue.svg"
     },
     {
       "id":4,
       "title":"เครื่องพิมพ์พัง",
-      "solution":"Rubber Dome Keyboard หรือ คีย์บอร์ดแบบปุ่มยาง: เป็นคีย์บอร์ดที่สามารถพบเห็นและหาซื้อได้มากที่สุดในตลาด เนื่องด้วยต้นทุนในการผลิตที่ต่ำกว่าและสามารถผลิตได้ง่ายกว่าประเภทอื่นๆ แต่ข้อสังเกตนั้น คีย์บอร์ดประเภทนี้ก็มีอายุการใช้งานที่ต่ำที่สุดเช่นกัน เมื่อเทียบกับคีย์บอร์ดประเภทอื่น ในส่วนของปุ่มนั้น ก็อาจจะเรียกได้ว่ากดได้ไม่สบายที่สุดในบรรดาทั้ง 3 ประเภท การทำงานของคีย์บอร์ดประเภทนี้ก็จะใช้ปุ่มยางเล็กๆ วางไว้ใต้ปุ่ม แต่ละปุ่มจะเชื่อมต่อกับแผงวงจรMechanical Keyboard หรือ คีย์บอร์ดแบบกลไก: ",
-      "img":"../../src/assets/vue.svg"
+      "tag":["ทด","ทดสอบ","การทดสอบ","ทำเพื่อการทดสอบทังหมด"],
+      "text":"this is for testing testing testing testing testing testing testing testing testing testing testing ",
+      "solutions":
+      [
+        {
+          "step":1,
+          "solution":" u must testing 1"
+        },
+        {
+          "step":2,
+          "solution":" u must testing 2"
+        }
+      ],      "img":"../../src/assets/vue.svg"
     }
   ]
+
+  
 }

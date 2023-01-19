@@ -4,7 +4,7 @@ const myRouter = useRouter()
 </script>
 
 <template>
-<div class="h-screen w-screen ">
+<div class="h-screen w-screen overflow-y-auto">
 
   <!-- <nav class="h-[20%]">
     <BaseNav/>
@@ -13,7 +13,7 @@ const myRouter = useRouter()
     <ShowAllEvent/>
   </div> -->
   <!-- <Main_private/> -->
-  <router-view></router-view>
+  <router-view ></router-view>
 </div>
 
 </template>

@@ -1,9 +1,15 @@
 import {createRouter, createWebHistory} from 'vue-router'
 
 // user
-import Booking from '../view/private__page/for_user/Booking.vue'
+import Booking_main from '../view/private__page/for_user/Booking_main.vue'
 import Main_private_user from '../view/private__page/for_user/Main_private_user.vue'
 import History from '../view/private__page/for_user/History.vue'
+
+// user/solution
+import Solutions from '../view/private__page/for_user/Solutions.vue'
+
+// user/report
+import Report from '../view/private__page/for_user/Report.vue'
 
 // admin
 import SignUp from '../view/private__page/for_admin/SignUp.vue'
@@ -62,19 +68,29 @@ const routes=[
 
     },
     {
-        path:'/account/user/report-problem',
+        path:'/account/user',
         name:'mainPrivateUser',
         component:Main_private_user,
         children:[
             {
-                path:'/account/user/report-problem',
+                path:'/account/user',
                 name:'booking',
-                component: Booking
+                component: Booking_main
             },
             {
                 path:'/account/user/history',
                 name:'history',
                 component: History
+            },
+            {
+                path:'/account/user/report-problem/:name?',
+                name:'report',
+                component: Report
+            },
+            {
+                path:'/account/user/solution/:id?',
+                name:'solution',
+                component: Solutions
             }
         ]
     },
