@@ -11,7 +11,7 @@ const goHowTo=(v)=>{
     myRouter.push({name:'solution',params:{id:v}})
 }
 const goReport=(v)=>{
-    myRouter.push({name:'report',params:{name:v}})
+    myRouter.push({name:'report',params:{id:v}})
     console.log('this is report of :',v)
 }
 
@@ -56,8 +56,8 @@ onBeforeMount(()=>{
         </button>
 
         <!-- solfware -->
-        <button  @click="goReport('solfware')" class="px-4 w-[130px] my-auto">
-            <img src="../../../assets/report_icon/solfware.png" alt="Solfware" class="w-[80px] h-[80px] w-fit mx-auto">
+        <button  @click="goReport('software')" class="px-4 w-[130px] my-auto">
+            <img src="../../../assets/report_icon/software.png" alt="Software" class="w-[80px] h-[80px] w-fit mx-auto">
             <h3 class="mt-2 w-fit mx-auto font-semibold">
                 Solfware
             </h3>
@@ -122,6 +122,19 @@ onBeforeMount(()=>{
             </h3> -->
         </button>
 
+        <button @click="goReport('application')" class="px-4 w-[130px] my-auto"> 
+            <img src="../../../assets/report_icon/application.png" alt="Meeting" class="w-[80px] h-[80px] w-fit mx-auto">            
+            <h3 class="mt-2 w-fit mx-auto font-semibold">
+                application
+            </h3>
+            <h3 class="w-fit mx-auto">
+                (แอปพลิเคชัน)
+            </h3>
+            <!-- <h3 class="mt-2 w-fit mx-auto">
+                Meating room
+            </h3> -->
+        </button>
+
         <!-- other -->
         <button @click="goReport('other')" class="px-4 w-[130px] my-auto"> 
             <img src="../../../assets/report_icon/other.png" alt="Other" class="w-[80px] h-[80px] w-fit m-auto">            
@@ -138,7 +151,7 @@ onBeforeMount(()=>{
     </div>
 
     <!-- line -->
-    <hr class="mt-[30px] w-[900px] h-[1px] border-0 mx-auto bg-gray-700">
+    <hr class="mt-[30px] w-[1100px] h-[1px] border-0 mx-auto bg-gray-700">
 
     <!-- searching -->
     <div class="relative w-[600px] h-[150px] mx-auto">

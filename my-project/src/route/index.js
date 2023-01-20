@@ -83,7 +83,7 @@ const routes=[
                 component: History
             },
             {
-                path:'/account/user/report-problem/:name?',
+                path:'/account/user/report-problem/:id?',
                 name:'report',
                 component: Report
             },
