@@ -4,6 +4,7 @@ import {createRouter, createWebHistory} from 'vue-router'
 import Booking_main from '../view/private__page/for_user/Booking_main.vue'
 import Main_private_user from '../view/private__page/for_user/Main_private_user.vue'
 import History from '../view/private__page/for_user/History.vue'
+// import Summary from '../view/private__page/for_user/Summary.vue'
 
 // user/solution
 import Solutions from '../view/private__page/for_user/Solutions.vue'
@@ -87,6 +88,9 @@ const routes=[
                 name:'report',
                 component: Report
             },
+            // {
+            //     path:'/account/user/report-problem/:id?/summary'
+            // },
             {
                 path:'/account/user/solution/:id?',
                 name:'solution',

@@ -4,20 +4,13 @@ import BaseNav from '../../../components/BaseNav.vue';
 // import ShowAllEvent from './for_admin/ShowAllEvent.vue';
 </script>
 <template>
-  <div class="flex h-[100%]">
  
-      <BaseLeftBar class="h-[100%] w-[12%]" />
-
-
-    <div class="h-[100%] w-[88%]">
-      <BaseNav useW="admin"   class="h-[10%] " /> 
-      <router-view            class=" h-[90%] block" />
-      
-
-    </div>
-    
-  </div>
-
+ <BaseNav  class="h-[9.5%]  w-full"/>
+ <div class="flex h-[90.5%]">
+    <BaseLeftBar class="w-[25vw] "/>
+    <router-view class="w-[75vw]" />  
+ </div>
+  
 
 </template>
 <style scoped>

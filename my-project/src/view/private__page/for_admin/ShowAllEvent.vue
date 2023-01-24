@@ -19,8 +19,8 @@ onBeforeMount(()=>{
 })
 </script>
 <template>
-<div class="">
-    <div>
+<div  class="overflow-auto">
+    <div div class=" pt-3">
         <ul v-for="(data,index) in data">
             <li  :key="index">
                 {{ data.event }}
@@ -28,6 +28,7 @@ onBeforeMount(()=>{
         </ul>
     </div>
 </div>
+
 <!-- <div class="z-10 h-[80%] w-[80%] bg-gray-200 mx-auto">
     <div class="w-[100%] h-[100%] overflow-y-auto    bg-gray-300">
    <table class="table-fixed  w-full ">
