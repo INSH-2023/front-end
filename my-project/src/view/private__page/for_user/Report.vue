@@ -8,18 +8,23 @@ const goMain=()=> myRouter.push({name:'booking'})
 const {params} = useRoute()
 const typeP =params.id
 
+// ทำ alert
+// ส่งออกข้อมูล
+
+
 // sample data
 const sampleData =ref([])
 
 // first
-const typeU = ref(undefined)
+const typeU = ref('')
+const userTypeU =ref('')
 // second
-const typeM =ref(undefined)
+const typeM =ref('')
 // third
 const problems =ref([])
 
 // other
-const others=ref(undefined)
+const others=ref('')
 const massage=ref('')
 
 // compute selection
@@ -28,6 +33,37 @@ const createdOBJ =ref({})
 
 
 // validation
+const vd_typeU=ref(undefined)
+const vd_userTypeU=ref(undefined)
+const vd_typeM =ref(undefined)
+
+const summaryInfo=()=>{
+
+    if(typeU.value == ''){
+        console.log('please select ur type of use')
+    }else
+    if(typeU.value=='sf'&&userTypeU.value==''){
+        console.log('please input ur device')
+    }else 
+    if(typeM.value == ''){
+        console.log('please select ur type of matchine')
+    }else
+    if(problems.value.length==0){
+        console.log('please select ur problems')
+    }else
+    if(isOther.value==true&&others.value==''){
+        console.log('please input ur orther')
+    }
+    else{
+        console.log('status good')
+        let nextB =document.getElementById('goSummary')
+        nextB.setAttribute('href','#summaryInfo')
+        nextB.click()
+        isSummary.value=true
+    }
+    
+}
+    
 
 
 // for other button
@@ -86,51 +122,55 @@ onBeforeMount(()=>{
 // sample data from back-end
  sampleData.value=[
     {
-        "id":'NoteBook1',
-        "problems":'NoteBook1',
-        "selection":false
+        "id":1,
+        "problems":'NoteBook1'
     },
     {
-        "id":'NoteBook2',
-        "problems":'NoteBook2',
-        "selection":false
+        "id":2,
+        "problems":'NoteBook2'
     },
     {
-        "id":'NoteBook3',
-        "problems":'NoteBook3',
-        "selection":false
+        "id":3,
+        "problems":'NoteBook3'
     },
     {
-        "id":'NoteBook4',
-        "problems":'NoteBook4',
-        "selection":false
+        "id":4,
+        "problems":'NoteBook4'
     },
     {
-        "id":'NoteBook5',
-        "problems":'NoteBook5',
-        "selection":false
+        "id":5,
+        "problems":'NoteBook5'
     },
     {
-        "id":'NoteBook6',
-        "problems":'NoteBook6',
-        "selection":false
+        "id":6,
+        "problems":'NoteBook6'
     },
     {
-        "id":'NoteBook7',
-        "problems":'NoteBook7',
-        "selection":false
+        "id":7,
+        "problems":'NoteBook7'
     }]
 
-    // for(let data of sampleData.value){
+    for(let data of sampleData.value){
+        data['selection']=false
+    }
+    // console.log(sampleData.value)
     //     createdOBJ.value={}
-    //     createdOBJ.value[`${data.problems}`]=data.id
     //     createdOBJ.value[`${data.problems}`]=false
     //     selectioned.value.push()
-    // }
-    // console.log(sampleData.value)
-
-
+    console.log(sampleData.value)
 })
+
+// save from
+const saveToLocal=()=>{
+    localStorage.setItem("form",{
+"typeU":typeU.value ,
+"userTypeU":userTypeU.value,
+"typeM":typeM.value,
+"problems":problems.value,
+"others":others.value,
+"massage":massage.value
+    })
+}
 </script>
 <template>
 <div class="overflow-auto">
@@ -156,15 +196,18 @@ onBeforeMount(()=>{
                         </label>                       
                     </div>
                     <div class="flex m-2">
-                        <input v-model="typeM" id="Self" type="radio" name="hardware_of" value="sf" class="m-auto mr-3">
+                        <input v-model="typeU" id="Self" type="radio" name="hardware_of" value="sf" class="m-auto mr-3">
                         <label for="Self" class="m-auto">
                             NoteBook / PC :ของส่วนตัวโปรดระบุ ยี้ห้อ / รุ่น
                         </label>
                         
                     </div>
-
-
-                </div>                
+                    
+                </div>  
+                
+                <div v-if="typeU=='sf'" class=" m-2">
+                        <input v-model="userTypeU" id="Self" type="text" placeholder="ระบุยี้ห้อของคุณที่นี้." name="input_type"  class="resize-none  m-auto w-[300px] mr-3 bg-gray-300 p-1.5 rounded-lg focus:outline-0">
+                </div>
             </div>
 
             <!-- second type of matchine -->
@@ -305,10 +348,10 @@ onBeforeMount(()=>{
                         ย้อนกลับ
                     </h4>
                 </button>
-                <button @click="isSummary=true" class="w-[130px] mx-3 p-2 font-semibold bg-rose-400 text-white rounded-xl">
-                    <h4>
+                <button @click="summaryInfo" class="w-[130px] mx-3 p-2 font-semibold bg-rose-400 text-white rounded-xl">
+                    <a id="goSummary">
                         ถัดไป
-                    </h4>
+                    </a>
                 </button>
             </div>
 
@@ -318,7 +361,7 @@ onBeforeMount(()=>{
 
         <!-- for summary -->
         <div v-if="isSummary==true" class="w-[1000px] mx-auto">
-            <div class=" w-fit mx-auto text-[25px] font-semibold">
+            <div id="summaryInfo" class=" w-fit mx-auto text-[25px] font-semibold">
                 <h3>
                     สรุปข้อมูล
                 </h3>
@@ -327,13 +370,13 @@ onBeforeMount(()=>{
             <!-- first -->
             <div v-if="typeP=='hardware'||typeP=='software'||typeP=='internet'" class="mt-10 w-fit text-[20px] font-semibold">
                 <h3 class="w-fit mx-auto mr-2">
-                   1. <span class="text-rose-500">ประเภท</span> ของ Hardware : {{  }}
+                   1. <span class="text-rose-500">ประเภท</span> ของ Hardware : {{ typeU=='or'?'เครื่องขององค์กร': 'เครื่องของ user'}}
                 </h3>
                 <h3 class="w-fit mx-auto mr-2">
-                    ยี้ห้อ : {{  }}
+                    ยี้ห้อ : {{ userTypeU }}
                 </h3>
-                <h3 class="w-fit mx-auto mr-2">
-                    S/N : {{  }}
+                <h3 v-if="typeU=='or'" class="w-fit mx-auto mr-2">
+                    S/N : 
                 </h3>
             </div>
 
@@ -352,7 +395,7 @@ onBeforeMount(()=>{
                     <div class="w-[150px] mx-auto p-2 bg-gray-200 rounded-xl ">
                         <img src="../../../assets/vue.svg" alt="NoteBook" class="w-[80px] mx-auto">
                         <h3 class="w-fit mx-auto">
-                            NoteBook
+                            {{typeM}}
                         </h3>
                     </div >
                 </div>
@@ -387,37 +430,15 @@ onBeforeMount(()=>{
 
                 
                 <div class="grid grid-cols-6 gap-y-2 gap-x-2 mt-4 text-[15px] font-medium">
-                    <!-- notebook -->
-                    <div  class="w-[150px] mx-auto p-2 bg-gray-200 rounded-xl ">
+                    
+                    <div v-for="(data,index) in problems" :key="index" class="w-[150px] mx-auto p-2 bg-gray-200 rounded-xl ">
                         <img src="../../../assets/vue.svg" alt="NoteBook" class="w-[80px] mx-auto">
                         <h3 class="w-fit mx-auto">
-                            NoteBook
-                        </h3>
-                    </div >
-
-                    <!-- PC -->
-                    <div  class="w-[150px] mx-auto p-2 bg-gray-200 rounded-xl ">
-                        <img src="../../../assets/vue.svg" alt="NoteBook" class="w-[80px] mx-auto">
-                        <h3 class="w-fit mx-auto ">
-                            PC
+                           {{data}}
                         </h3>
                     </div >
                     
-                    <!-- Smart Phone -->
-                    <div  class="w-[150px] mx-auto p-2 bg-gray-200 rounded-xl ">
-                        <img src="../../../assets/vue.svg" alt="NoteBook" class="w-[80px] mx-auto">
-                        <h3 class="w-fit mx-auto text-[14px]">
-                            Smart Phone
-                        </h3>
-                    </div >
 
-                    <!-- Tablet -->
-                    <div class="w-[150px] mx-auto p-2 bg-gray-200 rounded-xl ">
-                        <img src="../../../assets/vue.svg" alt="NoteBook" class="w-[80px] mx-auto">
-                        <h3 class="w-fit mx-auto">
-                            Tablet
-                        </h3>
-                    </div >
                 </div>
             </div>
 
@@ -463,7 +484,7 @@ onBeforeMount(()=>{
 
             <!-- button -->
             <div class="w-fit mx-auto mt-10">
-                <button @click="isSummary=false" class="w-[130px] mx-3 p-2 font-semibold bg-gray-400 text-white rounded-xl">
+                <button @click="isSummary=false ,myRouter.go(-1)" class="w-[130px] mx-3 p-2 font-semibold bg-gray-400 text-white rounded-xl">
                     <h4>
                         ย้อนกลับ
                     </h4>
