@@ -14,9 +14,9 @@ import Report from '../view/private__page/for_user/Report.vue'
 
 // admin
 import SignUp from '../view/private__page/for_admin/SignUp.vue'
-import ShowAllEvent from '../view/private__page/for_admin/showAllEvent.vue'
 import Main_private_admin from '../view/private__page/for_admin/Main_private_admin.vue'
 import ShowAllUser from '../view/private__page/for_admin/ShowAllUser.vue'
+import ShowAllEvent from'../view/private__page/for_admin/ShowAllEvent.vue'
 
 // public
 import SignIn from '../view/public__page/SignIn.vue'
@@ -46,12 +46,12 @@ const routes=[
         ]
     },
     {
-        path:'/account/admin/show-events',
+        path:'/account/admin/request',
         name:'mainPrivateAdmin',
         component:Main_private_admin,
         children:[
             {
-                path:'/account/admin/show-events',
+                path:'/account/admin/request',
                 name:'showAllEvents',
                 component:ShowAllEvent
             },

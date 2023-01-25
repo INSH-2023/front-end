@@ -1,10 +1,7 @@
 <script setup>
-
 </script>
 <template>
-this is for show all user
-texting
+
 </template>
 <style scoped>
-
 </style>
