@@ -4,138 +4,150 @@ const sampleData=ref([
     {
         "id":1,
         "user":"testingtestingtestingtesting",
-        "group":"testing",
-        "type":"IT Service",
-        "subject":"testing",
-        "data":"testing",
+        "email":"testingEmail@testingmain.com",
+        "group":"วิจัยและวัฒนะธรรม",
+        "type":"IT_Service",
+        "subject":"Hardware",
+        "date":"00/00/00",
         "status":"Request",
         "Assign":"testing"
     },
     {
         "id":2,
         "user":"หำใหญ่ ไข่ดาว",
-        "group":"testing",
-        "type":"PR Service",
-        "subject":"testing",
-        "data":"testing",
+        "email":"testingEmail@testingmain.com",
+        "group":"วิจัยและวัฒนะธรรม",
+        "type":"PR_Service",
+        "subject":"News",
+        "date":"00/00/00",
         "status":"Open_Case",
         "Assign":"testing"
     },
     {
         "id":3,
         "user":"โดส ทำไรวะเพื่อน",
-        "group":"testing",
-        "type":"IT Service",
-        "subject":"testing",
-        "data":"testing",
+        "email":"testingEmail@testingmain.com",
+        "group":"วิจัยและวัฒนะธรรม",
+        "type":"IT_Service",
+        "subject":"News",
+        "date":"00/00/00",
         "status":"In_Progress",
         "Assign":"testing"
     },
     {
         "id":4,
         "user":"เทส กี",
-        "group":"testing",
-        "type":"IT Service",
-        "subject":"testing",
-        "data":"testing",
+        "email":"testingEmail@testingmain.com",
+        "group":"วิจัยและวัฒนะธรรม",
+        "type":"IT_Service",
+        "subject":"Hardware",
+        "date":"00/00/00",
         "status":"Finish",
         "Assign":"testing"
     },
     {
         "id":5,
-        "user":"testing",
-        "group":"testing",
-        "type":"IT Service",
-        "subject":"testing",
-        "data":"testing",
-        "status":"Request",
-        "Assign":"testing"
+        "user":"testingtestingtesting 12346579800000000",
+        "email":"testingEmail@testingmain.com",
+        "group":"testingtestingtestingtestingtesting",
+        "type":"IT_Service",
+        "subject":"Hardwaretestingtestingtestingtesting",
+        "date":"00/00/00",
+        "status":"Finish",
+        "Assign":"testingtestingtesting testingtesting"
     },
     {
         "id":6,
-        "user":"testing",
-        "group":"testing",
-        "type":"PR Service",
-        "subject":"testing",
-        "data":"testing",
+        "user":"testingtestingtesting 12346579800000000",
+        "email":"testingEmail@testingmain.com",
+        "group":"testingtestingtestingtestingtesting",
+        "type":"IT_Service",
+        "subject":"Hardwaretestingtestingtestingtesting",
+        "date":"00/00/00",
         "status":"Finish",
-        "Assign":"testing"
+        "Assign":"testingtestingtesting testingtesting"
     },
     {
         "id":7,
-        "user":"testing",
-        "group":"testing",
-        "type":"testing",
-        "subject":"testing",
-        "data":"testing",
-        "status":"In_Progress",
-        "Assign":"testing"
+        "user":"testingtestingtesting 12346579800000000",
+        "email":"testingEmail@testingmain.com",
+        "group":"testingtestingtestingtestingtesting",
+        "type":"IT_Service",
+        "subject":"Hardwaretestingtestingtestingtesting",
+        "date":"00/00/00",
+        "status":"Finish",
+        "Assign":"testingtestingtesting testingtesting"
     },
     {
         "id":8,
-        "user":"testing",
-        "group":"testing",
-        "type":"testing",
-        "subject":"Request",
-        "data":"testing",
+        "user":"testingtestingtesting 12346579800000000",
+        "email":"testingEmail@testingmain.com",
+        "group":"testingtestingtestingtestingtesting",
+        "type":"IT_Service",
+        "subject":"Hardwaretestingtestingtestingtesting",
+        "date":"00/00/00",
         "status":"Finish",
-        "Assign":"testing"
+        "Assign":"testingtestingtesting testingtesting"
     },
     {
         "id":9,
-        "user":"testing",
-        "group":"testing",
-        "type":"testing",
-        "subject":"testing",
-        "data":"testing",
-        "status":"In_Progress",
-        "Assign":"testing"
+        "user":"testingtestingtesting 12346579800000000",
+        "email":"testingEmail@testingmain.com",
+        "group":"testingtestingtestingtestingtesting",
+        "type":"IT_Service",
+        "subject":"Hardwaretestingtestingtestingtesting",
+        "date":"00/00/00",
+        "status":"Finish",
+        "Assign":"testingtestingtesting testingtesting"
     },
     {
         "id":10,
-        "user":"testing",
-        "group":"testing",
-        "type":"testing",
-        "subject":"testing",
-        "data":"testing",
-        "status":"Request",
-        "Assign":"testing"
+        "user":"testingtestingtesting 12346579800000000",
+        "email":"testingEmail@testingmain.com",
+        "group":"testingtestingtestingtestingtesting",
+        "type":"IT_Service",
+        "subject":"Hardwaretestingtestingtestingtesting",
+        "date":"00/00/00",
+        "status":"Finish",
+        "Assign":"testingtestingtesting testingtesting"
     },
     {
         "id":11,
-        "user":"testing",
-        "group":"testing",
-        "type":"testing",
-        "subject":"testing",
-        "data":"testing",
+        "user":"testingtestingtesting 12346579800000000",
+        "email":"testingEmail@testingmain.com",
+        "group":"testingtestingtestingtestingtesting",
+        "type":"IT_Service",
+        "subject":"Hardwaretestingtestingtestingtesting",
+        "date":"00/00/00",
         "status":"Finish",
-        "Assign":"testing"
+        "Assign":"testingtestingtesting testingtesting"
     },
     {
         "id":12,
-        "user":"testing",
-        "group":"testing",
-        "type":"testing",
-        "subject":"testing",
-        "data":"testing",
-        "status":"Request",
-        "Assign":"testing"
+        "user":"testingtestingtesting 12346579800000000",
+        "email":"testingEmail@testingmain.com",
+        "group":"testingtestingtestingtestingtesting",
+        "type":"IT_Service",
+        "subject":"Hardwaretestingtestingtestingtesting",
+        "date":"00/00/00",
+        "status":"Finish",
+        "Assign":"testingtestingtesting testingtesting"
     },
     {
         "id":13,
-        "user":"testing",
-        "group":"testing",
-        "type":"testing",
-        "subject":"testing",
-        "data":"testing",
-        "status":"Request",
-        "Assign":"testing"
+        "user":"testingtestingtesting 12346579800000000",
+        "email":"testingEmail@testingmain.com",
+        "group":"testingtestingtestingtestingtesting",
+        "type":"IT_Service",
+        "subject":"Hardwaretestingtestingtestingtesting",
+        "date":"00/00/00",
+        "status":"Finish",
+        "Assign":"testingtestingtesting testingtesting"
     }
-    
 ])
 
 // bg color status
-const changeColorStatus=(v)=>{
+const changeColorBy=(v)=>{
     let style=[]
     
     if(v=='Request'){
@@ -156,21 +168,59 @@ const changeColorStatus=(v)=>{
         style.push('color: rgb(255 255 255);')
     }
 
+    if(v=='IT_Service'){
+        style.push('color: rgb(14 165 233);')
+        
+    }else
+    if(v=='PR_Service'){
+        style.push('color: rgb(217 119 6);')
+        
+    }
+
     return style
 }
 </script>
 <template>
-<div class="overflow-auto">
-    <div>
+<div class="">
+    <div class="">
+
+        <!-- header -->
         <div>
-            <div class="w-fit mx-auto mt-3 font-semibold text-[40px]">
-                Request
+            
+            <div class=" bg-gray-300">
+                <div class="w-full text-center font-semibold text-[40px] ">
+                    Request
+                </div>
+                <!-- button -->
+                <div class=" w-fit mx-auto mr-[60px]">
+                    <button class="flex w-fit">
+                        <span class="font-semibold my-auto">
+                            ตัวกรอง
+                        </span> 
+                        <img src="../../../assets/vue.svg" alt="icon" class="w-[20px] ml-[5px] my-auto">                                
+                    </button>
+                </div>
+
+                <!-- filter -->
+                <div class="flex ">
+                    <div >
+                        <div>
+                            testing
+                        </div>
+                    </div>
+                </div>
             </div>
-            <hr class="mt-3 bg-gray-700 mx-auto w-full h-[3px]">
-            <div class="w-[1200px] mx-auto mt-3 relative overflow-x-auto">
+                
+            <hr class="mt-3 bg-gray-700 mx-auto w-[90%] h-[3px]">
+
+        </div> 
+              <!-- table -->    
+        <div class="w-[1200px] mx-auto  h-[500px] ">
+               
+            <div class="overflow-y-auto mx-auto h-[100%] w-[100%] ">
                 <table class="w-full text-sm text-center text-gray-800 ">
-                    <thead class="text-lg ">
-                        <tr >
+                    <thead class="bg-white text-lg sticky top-0">
+                        <tr class="">
                             <th scope="col" class="py-3 px-6 ">
                                 User
                             </th>
@@ -195,38 +245,51 @@ const changeColorStatus=(v)=>{
                         </tr>                        
                     </thead>
                     <tbody>
-                        <tr v-for="data in sampleData" :key="data.id" class="text-[15px]  bg-white border-b-2 border-gray-700 hover:bg-gray-400 hover:rounded-lg">
-                            <td class="w-[130px]   font-medium px-6 py-4 text-left">
-                               <div class="w-[130px] text-ellipsis overflow-hidden">
-                                    {{data.user}}
-                               </div> 
+                        <tr v-for="data in sampleData"  class="text-[15px] cursor-pointer bg-white border-b-2 border-gray-300 hover:border-gray-400 hover:bg-gray-400">
+                            <td class="w-[140px]   font-medium px-6 py-4 text-left">
+                            <div class="w-[130px] font-semibold truncate ">
+                                {{data.user}}
+                            </div>
+                            <div class="w-[130px] text-[10px] truncate">
+                                {{ data.email }}
+                            </div> 
                             </td>
-                            <td class="px-6 py-4">
+                            <td class="w-[130px] px-6 py-4 font-semibold">
+                                <div class="w-[120px] truncate">
                                 {{data.group}}
+                                </div>
                             </td>
-                            <td class="px-6 py-4">
+                            <td class="w-[130px] px-6 py-4 font-semibold">
+                                <div :style="[changeColorBy(data.type)] " class="w-[120px] truncate">
                                 {{data.type}}
+                            </div>
                             </td>
-                            <td class="px-6 py-4">
-                                {{data.subject}}
-                            </td>
-                            <td class="px-6 py-4">
-                                {{data.data}}
-                            </td>
-                            <td class="px-3 py-4 text-center ">
-                               <div :style="[changeColorStatus(data.status)]" class="w-[120px] mx-auto static  py-[4px] px-[8px] rounded-2xl text-[15px] font-semibold">
-                                    {{data.status}}
-                               </div> 
-                            </td>
-                            <td class="px-6 py-4">
-                                {{data.Assign}}
-                            </td>
-                        </tr>
-                        
-                    </tbody>
+                            <td class="w-[130px] px-6 py-4 font-semibold">
+                                <div class="w-[120px] truncate">
+                                {{data.subject}}                                    
+                                </div>
 
-                </table>
-            </div>
+                            </td>
+                            <td class="w-[130px] px-6 py-4 font-semibold">
+                                <div class="w-[120px] ">
+                                {{data.date}}
+                                </div>
+                            </td>
+                            <td class="w-[130px] px-3 py-4 text-center ">
+                            <div :style="[changeColorBy(data.status)]" class="w-[120px] mx-auto static  py-[4px] px-[8px] rounded-2xl text-[15px] font-semibold ">
+                                {{data.status}}
+                            </div> 
+                            </td>
+                            <td class="w-[130px] px-6 py-4 font-semibold">
+                                <div class="w-[120px] truncate">
+                                {{data.Assign}}                                    
+                                </div>
+
+                            </td>
+                        </tr>      
+                    </tbody>
+                </table>    
+            </div>    
         </div>
     </div>
 </div>
