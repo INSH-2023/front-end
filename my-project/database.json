@@ -1,108 +1,4 @@
 {
-  "events": [
-    {
-      "id": 1,
-      "title":"อยากทำวันนี้ให้ดี",
-      "user": "นาย กล้วย",
-      "event": "หิวข้าว"
-    },
-    {
-      "id": 2,
-      "title": "Grocery shopping",
-      "user": "Jane Smith",
-      "event": "Going to the store to buy milk, bread, and eggs"
-    },
-    {
-      "id": 3,
-      "title": "Pay bills",
-      "user": "John Doe",
-      "event": "Paying the electricity bill online"
-    },
-    {
-      "id": 4,
-      "title":"อยาก",
-      "user": "นาย กล้วย",
-      "event": "หิวข้าว"
-    },
-    {
-      "id": 5,
-      "title":"อยาก",
-      "user": "นาย กล้วย",
-      "event": "หิวข้าว"
-    }
-    ,
-    {
-      "id": 6,
-      "title":"อยาก",
-      "user": "นาย กล้วย",
-      "event": "หิวข้าว"
-    }
-    ,
-    {
-      "id": 7,
-      "title":"อยาก",
-      "user": "นาย กล้วย",
-      "event": "หิวข้าว"
-    },
-    {
-      "id": 8,
-      "title":"อยาก",
-      "user": "นาย กล้วย",
-      "event": "หิวข้าว"
-    },
-    {
-      "id": 9,
-      "title":"อยาก",
-      "user": "นาย กล้วย",
-      "event": "หิวข้าว"
-    },
-    {
-      "id": 10,
-      "title":"อยาก",
-      "user": "นาย กล้วย",
-      "event": "หิวข้าว"
-    },
-    {
-      "id": 11,
-      "title":"อยาก",
-      "user": "นาย กล้วย",
-      "event": "หิวข้าว"
-    }
-    ,
-    {
-      "id": 12,
-      "title":"อยาก",
-      "user": "นาย กล้วย",
-      "event": "หิวข้าว"
-    }
-    ,
-    {
-      "id": 13,
-      "title":"อยาก",
-      "user": "นาย กล้วย",
-      "event": "หิวข้าว"
-    },
-    {
-      "id": 14,
-      "title":"อยาก",
-      "user": "นาย กล้วย",
-      "event": "หิวข้าว"
-    },
-    {
-      "id": 15,
-      "title":"อยาก",
-      "user": "นาย กล้วย",
-      "event": "หิวข้าว"
-    },
-    {
-      "id": 16,
-      "title":"อยาก",
-      "user": "นาย กล้วย",
-      "event": "หิวข้าว"
-    }
-
-
-  ],
   "solutions":[
     {
       "id":1,
@@ -125,8 +21,7 @@
           "step":3,
           "solution":" u must testing 2 testing testing testing testing testing testing testing testing testing testing testing testing testing testing testing"
         }
-      ],
-      "img":"../../src/assets/vue.svg"
+      ],"img":"../../../src/assets/vue.svg"
       
     },
     {
@@ -145,7 +40,7 @@
           "solution":" u must testing 2"
         }
       ],
-      "img":"../../src/assets/vue.svg"
+      "img":"../../../src/assets/vue.svg"
     },
     {
       "id":3,
@@ -162,7 +57,7 @@
           "step":2,
           "solution":" u must testing 2"
         }
-      ],      "img":"../../src/assets/vue.svg"
+      ],"img":"../../../src/assets/vue.svg"
     },
     {
       "id":4,
@@ -179,7 +74,7 @@
           "step":2,
           "solution":" u must testing 2"
         }
-      ],      "img":"../../src/assets/vue.svg"
+      ], "img":"../../../src/assets/vue.svg"
     }
   ]
 
