@@ -1,8 +1,10 @@
 <script setup>
 import {onBeforeMount, ref}from'vue'
-import {useRouter} from 'vue-router'
+import {useRouter,useRoute} from 'vue-router'
 import BaseStatus from '../../../components/BaseStatus.vue'
 const articleLink='http://localhost:3000/solutions'
+
+const {params}=useRoute()
 
 const myRouter =useRouter()
 const goHowTo=(v)=>{
@@ -10,8 +12,8 @@ const goHowTo=(v)=>{
     // console.log('this is id of solution',number)
     myRouter.push({name:'solution',params:{id:v}})
 }
-const goReport=(v)=>{
-    myRouter.push({name:'report',params:{id:v}})
+const goReport=(v1)=>{
+    myRouter.push({name:'report',params:{id:v1,service:params.service}})
     console.log('this is report of :',v)
 }
 
@@ -40,9 +42,13 @@ onBeforeMount(()=>{
 
     <!-- ส่วนล่าง -->
     <div class="w-fit mx-auto mt-4 text-[60px] text-gray-600 font-bold ">
-        เลือกบริการช่วยเหลือของ IT
+        <span v-if="params.service=='it'">เลือกบริการช่วยเหลือของ IT</span>
+        <span v-else-if="params.service=='pr'">เลือกบริการช่วยเหลือของ PR</span> 
+
     </div>
-    <div class="flex w-fit mx-auto p-2">
+
+    <!-- IT -->
+    <div v-if="params.service=='it'" class="flex w-fit mx-auto p-2">
         <!-- hard ware -->
         <button @click="goReport('hardware')" class="px-4 w-[130px] my-auto  ">
             <img src="../../../assets/report_icon/hardware.png" alt="Hardware"  class="  w-[80px] h-[80px] w-fit mx-auto">
@@ -147,6 +153,43 @@ onBeforeMount(()=>{
             <!-- <h3 class="mt-2 w-fit mx-auto">
                 Meating room
             </h3> -->
+        </button>
+    </div>
+
+    <!-- PR -->
+    <div v-if="params.service=='pr'" class="flex w-fit mx-auto p-2">
+        <!-- hard ware -->
+        <button @click="goReport('hardware')" class="px-4 w-[130px] my-auto  ">
+            <img src="../../../assets/vue.svg" alt="Hardware"  class="  w-[80px] h-[80px] w-fit mx-auto">
+            
+            <h3 class="mt-2 w-fit mx-auto font-semibold">
+                Media
+            </h3>
+            <h3 class="w-fit m-auto text-[14px]">  
+                (สื่อต่างๆ)
+            </h3>                
+        </button>
+        
+        <button @click="goReport('hardware')" class="px-4 w-[130px] my-auto  ">
+            <img src="../../../assets/vue.svg" alt="Hardware"  class="  w-[80px] h-[80px] w-fit mx-auto">
+            
+            <h3 class="mt-2 w-fit mx-auto font-semibold">
+                NEWS
+            </h3>
+            <h3 class="w-fit m-auto text-[14px]">  
+                (ข่าว)
+            </h3>                
+        </button>
+
+        <button @click="goReport('hardware')" class="px-4 w-[130px] my-auto  ">
+            <img src="../../../assets/vue.svg" alt="Hardware"  class="  w-[80px] h-[80px] w-fit mx-auto">
+            
+            <h3 class="mt-2 w-fit mx-auto font-semibold">
+                Other
+            </h3>
+            <h3 class="w-fit m-auto text-[14px]">  
+                (อื่นๆ)
+            </h3>                
         </button>
     </div>
 

@@ -1,5 +1,6 @@
 <script setup>
 import { useRouter } from 'vue-router'
+import BaseNav from './components/BaseNav.vue';
 const myRouter = useRouter()
 </script>
 
@@ -13,6 +14,8 @@ const myRouter = useRouter()
     <ShowAllEvent/>
   </div> -->
   <!-- <Main_private/> -->
+  <!-- <BaseNav  :isPublic="true"/> -->
+
   <router-view ></router-view>
 </div>
 

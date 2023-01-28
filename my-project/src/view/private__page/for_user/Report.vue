@@ -3,7 +3,7 @@ import{ref,computed,onBeforeMount} from 'vue'
 import {useRouter,useRoute} from 'vue-router'
 
 const myRouter = useRouter()
-const goMain=()=> myRouter.push({name:'booking'})
+const goMain=()=> myRouter.go(-1)
 
 const {params} = useRoute()
 const typeP =params.id
@@ -39,13 +39,13 @@ const vd_typeM =ref(undefined)
 
 const summaryInfo=()=>{
 
-    if(typeU.value == ''){
+    if(typeU.value == ''&&typeP =='hardware'&&typeP =='software'&&typeP =='internet'){
         console.log('please select ur type of use')
     }else
-    if(typeU.value=='sf'&&userTypeU.value==''){
+    if(typeU.value=='sf'&&userTypeU.value.length==0){
         console.log('please input ur device')
     }else 
-    if(typeM.value == ''){
+    if(typeM.value == ''&&typeP =='hardware'&&typeP =='software'&&typeP =='internet'){
         console.log('please select ur type of matchine')
     }else
     if(problems.value.length==0){
@@ -64,7 +64,8 @@ const summaryInfo=()=>{
     
 }
     
-
+// go back to main service
+// const goBack=(v)=>myRouter.push({path:`/account/user/services/${v}`})
 
 // for other button
 const isOther =ref(false)

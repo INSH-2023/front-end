@@ -5,7 +5,7 @@ import { onBeforeMount,ref } from 'vue';
 
 const {params} = useRoute()
 const myRouter=useRouter()
-const goMain =()=> myRouter.push({name:"booking"})
+const goMain =()=> myRouter.go(-1)
 
 console.log(params)
 const id = params.id

@@ -3,10 +3,9 @@ import {useRouter} from 'vue-router'
 import {ref,onBeforeMount} from 'vue'
 import User from '../icon/User.svg'
 defineProps({
-    useW:{
-        type:String,
-        require:true,
-        default:"home"
+    isPublic:{
+        type:Boolean,
+        default:false
     }
 })
 const isSetting =ref(false)
@@ -22,13 +21,13 @@ const goShowAllUser =()=>myRouter.push({name:'showAllUser'})
 const goShowAllEvent =()=>myRouter.push({name:'showAllEvents'}) 
 const goHistory =()=>myRouter.push({name:'history'})
 const goBooking =()=>myRouter.push({name:'booking'})
-
+const goService =()=>myRouter.push({name:'services'})
 
 
 // get role from local
 const role =ref(undefined)
 const getRole=()=>{
-    
+    isAdmin.value=localStorage.getItem('isAdmin')==='false'?false:true
     role.value=localStorage.getItem('role')
     console.log(role.value)
 }
@@ -44,7 +43,23 @@ const setRoleUser=()=>{
     goUser()
 }
 
+// switch for admin
+const isAdmin=ref(false)
+const toAdmin =()=>{
+    isAdmin.value= !isAdmin.value
+    // console.log("before change:",isAdmin.value)
+    // isAdmin.value==true?isAdmin.value=false:isAdmin.value=true
+    console.log("after change",isAdmin.value)
+    if(isAdmin.value==true){
+        localStorage.setItem('isAdmin',isAdmin.value)
+         goShowAllEvent()
+    }else
+    if(isAdmin.value==false){
+        localStorage.setItem('isAdmin',isAdmin.value)
+        goService()
+    }
 
+}
 
 onBeforeMount(()=>{
     getRole()
@@ -75,7 +90,7 @@ onBeforeMount(()=>{
         </div>
 
         <!-- user page -->
-        <div v-if="role=='user'" class="flex justify-between p-2 relative">
+        <div v-else-if="role=='user'" class="flex justify-between p-2 relative">
             <div class=" ml-[20px] w-fit ">
                 <div class="flex">
                     <img src="../assets/Moral_Fainal.png" alt="" class="w-[40px] inline-block">
@@ -127,15 +142,15 @@ onBeforeMount(()=>{
             </div>
         </div>
 
-        <div v-if="role=='admin'" class="flex justify-between p-2 relative">
+        <div v-else-if="role=='admin'" class="flex justify-between p-2 relative">
             <div class="flex ml-[20px] w-fit ">
                     <img src="../assets/Moral_Fainal.png" alt="" class="w-[40px]">
                     <div class="text-[20px] font-bold text-white my-auto m-3 ">
                         Zeed web
                     </div>
-                    <div class="text-[15px] font-bold text-white bg-rose-500 rounded py-[5px] px-[10px] my-auto m-3 ">
+                    <button @click="toAdmin" :style="[isAdmin===true?'background-color: rgb(244 63 94);color:white':'color: rgb(64 64 64);']" class="text-[15px] font-bold  rounded py-[5px] px-[10px] my-auto m-3 ">
                         Admin
-                    </div >
+                    </button >
 
             </div>
             <!-- menu username -->

@@ -6,6 +6,9 @@ import Main_private_user from '../view/private__page/for_user/Main_private_user.
 import History from '../view/private__page/for_user/History.vue'
 // import Summary from '../view/private__page/for_user/Summary.vue'
 
+// main service
+import Services from '../view/private__page/Main_service.vue'
+
 // user/solution
 import Solutions from '../view/private__page/for_user/Solutions.vue'
 
@@ -46,10 +49,11 @@ const routes=[
         ]
     },
     {
-        path:'/account/admin/request',
+        path:'/account/admin/service',
         name:'mainPrivateAdmin',
         component:Main_private_admin,
         children:[
+            
             {
                 path:'/account/admin/request',
                 name:'showAllEvents',
@@ -69,22 +73,27 @@ const routes=[
 
     },
     {
-        path:'/account/user',
+        path:'/account/user/services',
         name:'mainPrivateUser',
         component:Main_private_user,
         children:[
             {
-                path:'/account/user',
+                path:'/account/user/services',
+                name:'services',
+                component:Services
+            },
+            {
+                path:'/account/user/services/:service',
                 name:'booking',
                 component: Booking_main
             },
             {
-                path:'/account/user/history',
+                path:'/account/user/services/history',
                 name:'history',
                 component: History
             },
             {
-                path:'/account/user/report-problem/:id?',
+                path:'/account/user/services/:service?/report-problem/:id?',
                 name:'report',
                 component: Report
             },

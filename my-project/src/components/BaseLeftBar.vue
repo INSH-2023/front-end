@@ -12,43 +12,43 @@ const goHistory =()=>myRouter.push({name:'history'})
 const goBooking =()=>myRouter.push({name:'booking'})
 </script>
 <template>
-<div class="bg-[#134074] w-full h-full">
-    <div class="w-[200px] m-auto mt-4">
+<div class="bg-white border-r-2 border-gray-400 w-full h-full">
+    <div class="w-[250px] m-auto mt-8">
         <div class="m-auto">
-            <div class="flex m-auto w-full h-[30px] bg-white rounded-lg">
+            <div class="flex m-auto w-full h-[40px] bg-white rounded-xl border-2 border-gray-400">
                 <label for="searching" class="mx-2 my-auto">
                     <img src="../assets/loupe.png" alt="" class="w-[20px] h-[20px] ">
                 </label>
-                <input id="searching" type="text" class="w-[160px] focus:outline-0 bg-transparent">
+                <input id="searching" type="text" class="w-[210px]  focus:outline-0 bg-transparent">
             </div>
 
             <!-- list navigation -->
-            <div class="m-auto w-full mt-[50px] text-[24px]">
+            <div class="m-auto w-full mt-[50px] text-[20px]">
                 <ul>
                     <li class="">
-                        <button @click="goShowAllEvent" class="flex w-fit  font-semibold text-gray-200 ">
+                        <button @click="goShowAllEvent" class="flex w-fit  font-semibold text-gray-800 ">
                             <img src="../assets/vue.svg" alt="" class="w-[28px] h-[28] my-auto">
                             <span class="ml-3">Request</span> 
                         </button>
-                        <hr class="full border-[1px] mt-2">
+                        <hr class="full border-[1px] mt-2  border-gray-400">
                     </li>
                     <li @click="goShowAllUser" class="mt-3">
-                        <button class="flex w-fit  font-semibold text-gray-200 ">
+                        <button class="flex w-fit  font-semibold text-gray-800 ">
                             <img src="../assets/vue.svg" alt="" class="w-[28px] h-[28] my-auto">
                             <span class="ml-3">All User</span> 
                         </button>
-                        <hr class="full border-[1px] mt-2">
+                        <hr class="full border-[1px] mt-2 border-gray-400">
                     </li>
                     <li class="mt-3">
-                        <button @click="goRegister" class="flex w-fit  font-semibold text-gray-200 ">
+                        <button @click="goRegister" class="flex w-fit  font-semibold text-gray-800 ">
                             <img src="../assets/vue.svg" alt="" class="w-[28px] h-[28] my-auto">
                             <span class="ml-3">Add User</span> 
                         </button>
-                        <hr class="full border-[1px] mt-2">
+                        <hr class="full border-[1px] mt-2 border-gray-400">
                         
                     </li>
                     <li class="mt-3">
-                        <button  class="flex w-fit  font-semibold text-gray-200 ">
+                        <button  class="flex w-fit  font-semibold text-gray-800 ">
                             <img src="../assets/vue.svg" alt="" class="w-[28px] h-[28] my-auto">
                             <span class="ml-3">Dashboard</span> 
                         </button>
