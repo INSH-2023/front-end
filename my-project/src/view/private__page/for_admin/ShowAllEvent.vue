@@ -1,170 +1,27 @@
 <script setup>
-import{ref,computed}from'vue'
-const sampleData=ref([
-    {
-        "id":1,
-        "user":"testingtestingtestingtesting",
-        "email":"testingEmail@testingmain.com",
-        "group":"วิจัยและวัฒนะธรรม",
-        "type":"IT_Service",
-        "subject":"Hardware",
-        "date":"00/00/00",
-        "status":"Request",
-        "Assign":"testing"
-    },
-    {
-        "id":2,
-        "user":"หำใหญ่ ไข่ดาว",
-        "email":"testingEmail@testingmain.com",
-        "group":"วิจัยและวัฒนะธรรม",
-        "type":"PR_Service",
-        "subject":"News",
-        "date":"00/00/00",
-        "status":"Open_Case",
-        "Assign":"testing"
-    },
-    {
-        "id":3,
-        "user":"โดส ทำไรวะเพื่อน",
-        "email":"testingEmail@testingmain.com",
-        "group":"วิจัยและวัฒนะธรรม",
-        "type":"IT_Service",
-        "subject":"News",
-        "date":"00/00/00",
-        "status":"In_Progress",
-        "Assign":"testing"
-    },
-    {
-        "id":4,
-        "user":"เทส กี",
-        "email":"testingEmail@testingmain.com",
-        "group":"วิจัยและวัฒนะธรรม",
-        "type":"IT_Service",
-        "subject":"Hardware",
-        "date":"00/00/00",
-        "status":"Finish",
-        "Assign":"testing"
-    },
-    {
-        "id":5,
-        "user":"testingtestingtesting 12346579800000000",
-        "email":"testingEmail@testingmain.com",
-        "group":"testingtestingtestingtestingtesting",
-        "type":"IT_Service",
-        "subject":"Hardwaretestingtestingtestingtesting",
-        "date":"00/00/00",
-        "status":"Finish",
-        "Assign":"testingtestingtesting testingtesting"
-    },
-    {
-        "id":6,
-        "user":"testingtestingtesting 12346579800000000",
-        "email":"testingEmail@testingmain.com",
-        "group":"testingtestingtestingtestingtesting",
-        "type":"IT_Service",
-        "subject":"Hardwaretestingtestingtestingtesting",
-        "date":"00/00/00",
-        "status":"Finish",
-        "Assign":"testingtestingtesting testingtesting"
-    },
-    {
-        "id":7,
-        "user":"testingtestingtesting 12346579800000000",
-        "email":"testingEmail@testingmain.com",
-        "group":"testingtestingtestingtestingtesting",
-        "type":"IT_Service",
-        "subject":"Hardwaretestingtestingtestingtesting",
-        "date":"00/00/00",
-        "status":"Finish",
-        "Assign":"testingtestingtesting testingtesting"
-    },
-    {
-        "id":8,
-        "user":"testingtestingtesting 12346579800000000",
-        "email":"testingEmail@testingmain.com",
-        "group":"testingtestingtestingtestingtesting",
-        "type":"IT_Service",
-        "subject":"Hardwaretestingtestingtestingtesting",
-        "date":"00/00/00",
-        "status":"Finish",
-        "Assign":"testingtestingtesting testingtesting"
-    },
-    {
-        "id":9,
-        "user":"testingtestingtesting 12346579800000000",
-        "email":"testingEmail@testingmain.com",
-        "group":"testingtestingtestingtestingtesting",
-        "type":"IT_Service",
-        "subject":"Hardwaretestingtestingtestingtesting",
-        "date":"00/00/00",
-        "status":"Finish",
-        "Assign":"testingtestingtesting testingtesting"
-    },
-    {
-        "id":10,
-        "user":"testingtestingtesting 12346579800000000",
-        "email":"testingEmail@testingmain.com",
-        "group":"testingtestingtestingtestingtesting",
-        "type":"IT_Service",
-        "subject":"Hardwaretestingtestingtestingtesting",
-        "date":"00/00/00",
-        "status":"Finish",
-        "Assign":"testingtestingtesting testingtesting"
-    },
-    {
-        "id":11,
-        "user":"testingtestingtesting 12346579800000000",
-        "email":"testingEmail@testingmain.com",
-        "group":"testingtestingtestingtestingtesting",
-        "type":"IT_Service",
-        "subject":"Hardwaretestingtestingtestingtesting",
-        "date":"00/00/00",
-        "status":"Finish",
-        "Assign":"testingtestingtesting testingtesting"
-    },
-    {
-        "id":12,
-        "user":"testingtestingtesting 12346579800000000",
-        "email":"testingEmail@testingmain.com",
-        "group":"testingtestingtestingtestingtesting",
-        "type":"IT_Service",
-        "subject":"Hardwaretestingtestingtestingtesting",
-        "date":"00/00/00",
-        "status":"Finish",
-        "Assign":"testingtestingtesting testingtesting"
-    },
-    {
-        "id":13,
-        "user":"testingtestingtesting 12346579800000000",
-        "email":"testingEmail@testingmain.com",
-        "group":"testingtestingtestingtestingtesting",
-        "type":"IT_Service",
-        "subject":"Hardwaretestingtestingtestingtesting",
-        "date":"00/00/00",
-        "status":"Finish",
-        "Assign":"testingtestingtesting testingtesting"
-    }
-])
+import{ref,computed,onBeforeMount}from'vue'
+const sampleDataLink="http://localhost:3000/events"
 const isFilter=ref(false)
-
+const eventList=ref([])
+const comment =ref('')
 // bg color status
 const changeColorBy=(v)=>{
     let style=[]
     
-    if(v=='Request'){
+    if(v=='request'){
         style.push('background-color:rgb(31 41 55)')
         style.push('color: rgb(255 255 255);')
         
     }else
-    if(v=='Open_Case'){
+    if(v=='open_Case'){
         style.push('background-color:rgb(245 158 11)')
         style.push('color: rgb(255 255 255);')
     }else
-    if(v=='In_Progress'){
+    if(v=='in_Progress'){
         style.push('background-color:rgb(56 189 248)')
         style.push('color: rgb(255 255 255);')
     }else
-    if(v=='Finish'){
+    if(v=='finish'){
         style.push('background-color: rgb(45 212 191)')
         style.push('color: rgb(255 255 255);')
     }
@@ -181,10 +38,69 @@ const changeColorBy=(v)=>{
     return style
 }
 
-// show Info
-const showInfo =()=>{
-console.log('hello')
+// change status
+const changeST =(v)=>{
+    // let status = document.getElementById(v)
+    eventch.value.status=v
 }
+
+const eventch=ref({})
+const event=ref({})
+// showInfo
+const showInfoByID=async(v)=>{
+    event.value=[]
+    let detail =document.getElementById('goInfo')
+    detail.setAttribute("href","#showInfo")
+
+    let res=await fetch(`${sampleDataLink}/${v}`,{
+        method:'GET'
+    })
+    if(res.status==200){
+        console.log('get event successful')
+        event.value=await res.json()
+        eventch.value=event.value
+        console.log(event.value)
+    }else{
+        console.log('error to get event')
+    }
+}
+
+// show Info
+const clickedInfo =()=>{
+    document.getElementById('goInfo').click()
+    console.log('Show all detail')
+}
+
+// getInfo
+const getEvents =async(v)=>{
+    let res = await fetch(sampleDataLink,{
+        method:'GET'
+    })
+    if(res.status==200){
+        console.log('get event already')
+        eventList.value=await res.json()
+       
+    }else{
+        console.log('error something can not get events')
+    }
+}
+
+// delete
+const deleteItem =async (v)=>{
+    let res = await fetch(`${sampleDataLink}/${v}`,{
+        method:'DELETE'
+    })
+    if(res.status==200){
+        console.log('delete success')
+        getEvents()
+    }else{
+        console.log('can not delete data error something')
+    }
+}
+
+onBeforeMount(()=>{
+    getEvents()
+})
 </script>
 <template>
 <div class="overflow-y-auto relative">
@@ -194,7 +110,7 @@ console.log('hello')
             <div class=" bg-white w-full mx-auto  h-fit ">
                 <div class="w-full text-center font-semibold text-[40px] pt-6">
                     <div class="flex w-fit mx-auto">
-                        <img src="../../../assets/vue.svg" alt="users_icon" class="w-[40px] mr-4">
+                        <img src="../../../assets/admin_page/request.png" alt="users_icon" class="w-[40px] h-[40px] my-auto mr-4">
                         Request
                     </div>
                 </div>
@@ -204,7 +120,7 @@ console.log('hello')
                         <span class="font-semibold my-auto">
                             ตัวกรอง
                         </span> 
-                        <img src="../../../assets/vue.svg" alt="icon" class="w-[20px] ml-[5px] my-auto">                                
+                        <img src="../../../assets/admin_page/filter.png" alt="icon" class="w-[20px] ml-[5px] my-auto">                                
                     </button>
                 </div>
 
@@ -261,8 +177,8 @@ console.log('hello')
                         </tr>                        
                     </thead>
                     
-                    <tbody>
-                        <tr v-for="data in sampleData"  class="text-[15px] cursor-pointer bg-white border-b-2 border-gray-300 hover:border-gray-400 hover:bg-gray-400">
+                    <tbody> <!-- @click="clickedInfo" -->
+                        <tr  v-for="data in eventList"  class="relative text-[15px] cursor-pointer bg-white border-b-2 border-gray-300 hover:border-gray-400 ">
                             
                             <td class="w-[140px]   font-medium px-6 py-4 text-left">
                             <div class="w-[130px] font-semibold truncate ">
@@ -300,10 +216,10 @@ console.log('hello')
                             </td>
                             <td class="w-[130px] px-6 py-4 font-semibold">
                                 <div class="flex w-fit mx-auto truncate ">
-                                    <a href="#showInfo">
-                                        <img src="../../../assets/vue.svg" alt="delete_icon" class="w-[28px] m-2">
+                                    <a @click="showInfoByID(data.id)" id="goInfo" >
+                                        <img src="../../../assets/admin_page/edit.png" alt="delete_icon" class="w-[28px] m-2">
                                     </a>
-                                    <img src="../../../assets/vue.svg" alt="delete_icon" class="w-[28px] m-2">
+                                    <img id="delete" @click="deleteItem(data.id)" src="../../../assets/admin_page/bin.png" alt="delete_icon" class="w-[30px] m-2 hover:bg-rose-300 rounded p-[2px]">
                                 </div>
                             </td>
                             
@@ -319,7 +235,7 @@ console.log('hello')
     <!-- show detail -->
     <div id="showInfo" class="overlay">
         <div class=" popup2 h-96 ">
-            <div class="h-[100%] overflow-y-auto">
+            <div  class="h-[100%] overflow-y-auto">
                 <div id="summaryInfo" class=" w-fit mx-auto text-[25px] font-semibold">
                     <h3>
                         ข้อมูลเพิ่มเติม 
@@ -327,7 +243,44 @@ console.log('hello')
                 </div>
 
                 <!-- first -->
-                <div  class="mt-10  text-[20px] font-semibold ">
+                <table class="w-full   mt-10  text-[20px] font-semibold ">
+                   <tbody >
+                        <tr >
+                            <td class="text-right w-[130px]">
+                                ของผู้ใช้ :
+                            </td>
+                            <td class="truncate w-[]">
+                                {{ event.user }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-right">
+                                ประเภทของ :
+                            </td>
+                            <td>
+                                {{event.useT}}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-right">
+                                ยี่ห้อ : 
+                            </td>
+                            <td>
+                                {{event.userTU}}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-right">
+                                S/N :
+                            </td>
+                            <td>
+                                023u09234234234
+                            </td>
+                        </tr>
+                   </tbody>
+                </table>
+                
+                <!-- <div  class="mt-10  text-[20px] font-semibold ">
                     <div class="w-fit">
                         <h3>
                             ของ : 
@@ -342,12 +295,13 @@ console.log('hello')
                             S/N : 
                         </h3>                    
                     </div>
-                </div>
+                </div> -->
+
                 <!-- second  -->
                 <div class="mt-4 ">
                     <div class="text-[20px] font-semibold">
                         <h3 >
-                        ชนิด Hardware อุปกรณ์ของคุณ
+                        ชนิดของ Hardware 
                         </h3>
                                             
                     </div>
@@ -358,7 +312,7 @@ console.log('hello')
                         <div class="w-[70px]  p-2 bg-gray-200 rounded-xl ">
                             <img src="../../../assets/vue.svg" alt="NoteBook" class="w-[40px] mx-auto">
                             <h3 class="w-fit mx-auto text-[8px]">
-                            Notebook
+                            {{event.typeM}}
                             </h3>
                         </div >
                     </div>
@@ -368,23 +322,23 @@ console.log('hello')
                 <div   class="mt-4 " >
                     <div class="text-[20px] font-semibold">
                         <h3 >
-                            อาการของ Hardware ของคุณ
+                            อาการของ Hardware ที่พบ
                         </h3>   
                     </div>
 
                     
                     <div class="grid grid-cols-6 gap-y-2 gap-x-2 mt-4 text-[15px] font-medium">
                         
-                        <div   class="w-[70px] mx-auto p-2 bg-gray-200 rounded-xl ">
+                        <div  v-for="data in event.problems" class="w-[70px] mx-auto p-2 bg-gray-200 rounded-xl ">
                             <img src="../../../assets/vue.svg" alt="NoteBook" class="w-[40px] mx-auto">
                             <h3 class="w-fit mx-auto text-[8px]">
-                            Notebook testing
+                            {{data}}
                             </h3>
                         </div >
                         <div   class="w-[70px] mx-auto p-2 bg-gray-200 rounded-xl ">
                             <img src="../../../assets/vue.svg" alt="NoteBook" class="w-[40px] mx-auto">
                             <h3 class="w-fit mx-auto text-[8px]">
-                            Notebook testing
+                            other
                             </h3>
                         </div >
 
@@ -393,19 +347,19 @@ console.log('hello')
 
                 <!-- massage other -->
                 <div   class=" w-full mt-10 ">
-                    <div  class="">
+                    <div v-show="event.other !=''"  class="">
                         <label for="other_1" class="ml-2 text-[17px] font-semibold inline-b">
                             กรณีเลือก<span class="text-rose-500 pl-2">อื่นๆโปรดระบุ</span>
                         </label>
                         <span class="text-[13px] ml-2">(กรณีไม่พบปัญหาข้างต้น)</span>
-                        <textarea v-model="others" name="other" id="other_1"  disabled class="w-full h-[100px] resize-none pt-[10px] block rounded-xl bg-gray-300 p-2 focus:outline-0" ></textarea>
+                        <textarea v-model="event.other"  name="other" id="other_1"  disabled class="w-full h-[100px] resize-none pt-[10px] block rounded-xl bg-gray-300 p-2 focus:outline-0" ></textarea>
                     </div>
                     
-                    <div  class="">
+                    <div v-show="event.massage !=''" class="">
                         <label for="other_2" class="ml-2 text-[17px] font-semibold">
                             ระบุรายละเอียดของปัญหาที่พบ (ถ้ามี)
                         </label>
-                        <textarea v-model="massage" name="other" id="other_2"  disabled class="w-full h-[100px] resize-none block bg-gray-300 rounded-xl p-2 focus:outline-0"></textarea>
+                        <textarea v-model="event.massage"  name="other" id="other_2"  disabled class="w-full h-[100px] resize-none block bg-gray-300 rounded-xl p-2 focus:outline-0"></textarea>
                     </div>
                     <div>
 
@@ -419,18 +373,18 @@ console.log('hello')
                             <h5 class="font-semibold">
                                 Status
                             </h5>
-                            <div class="grid grid-cols-2 gap-y-2 gap-x-2 mt-1 text-[15px] font-medium">
-                                <button class="bg-gray-600 text-gray-300 p-2 text-center">
+                            <div class="grid grid-cols-2 gap-y-2 gap-x-2 mt-1 text-[15px] font-bold">
+                                <button id="request" @click="changeST('request')" :style="changeColorBy('request')" class="bg-gray-600 text-gray-300 p-2 text-center hover:bg-gray-300 hover:text-gray-600">
                                     Request
                                 </button>
-                                <button class="bg-gray-600 text-gray-300 p-2 text-center">
-                                    Request
+                                <button id="open_case" @click="changeST('open_case')" :style="changeColorBy('open_case')" class="bg-gray-600 text-gray-300 p-2 text-center hover:bg-gray-300 hover:text-gray-600">
+                                    Open Case
                                 </button>
-                                <button class="bg-gray-600 text-gray-300 p-2 text-center">
-                                    Request
+                                <button id="in_progress" @click="changeST('in_progress')" :style="changeColorBy('in_progress')" class="bg-gray-600 text-gray-300 p-2 text-center hover:bg-gray-300 hover:text-gray-600">
+                                    In Progress
                                 </button>
-                                <button class="bg-gray-600 text-gray-300 p-2 text-center">
-                                    Request
+                                <button id="finish" @click="changeST('finish')" :style="changeColorBy('finish')" class="bg-gray-600 text-gray-300 p-2 text-center hover:bg-gray-300 hover:text-gray-600">
+                                    Finish
                                 </button>
                             </div>
                         </div>
@@ -441,8 +395,9 @@ console.log('hello')
                             </h5>
                             <select name="" id="" class="w-[200px] mt-2 p-1 bg-gray-400 text-gray-700 font-semibold rounded">
                                 <option value="" selected disabled>เลือกผู้รับผิดชอบ</option>
-                                <option value="Testing_Tseing " class="font-semibold">Testing Tseing</option>
-                                <option value="gnitset_testing" class="font-semibold">gnitset testing</option>
+                                <option value="Testing_Tseing " class="font-semibold bg-gray-300">Testing Tseing</option>
+                                <option value="gnitset_testing" class="font-semibold bg-gray-300">gnitset testing</option>
+                                <option value="Testing_Tseing " class="font-semibold bg-gray-300">Testing Tseing</option>
 
                             </select>
                         </div>
@@ -456,7 +411,7 @@ console.log('hello')
                         <label for="other_1" class="ml-2 text-[17px] font-semibold inline-b">
                             Comment
                         </label>
-                        <textarea v-model="others" name="other" id="other_1"  disabled class="w-full h-[100px] resize-none pt-[10px] block rounded-xl bg-gray-300 p-2 focus:outline-0" ></textarea>
+                        <textarea v-model="comment"  name="other" id="other_1"   class="w-full h-[100px] resize-none pt-[10px] block rounded-xl bg-gray-300 p-2 focus:outline-0" ></textarea>
                     </div>
                     
                     <div>
@@ -465,7 +420,7 @@ console.log('hello')
                 </div>
                 
                 <!-- button -->
-                <div class="w-fit mx-auto mt-10">
+                <div v-show="eventch != event" class="w-fit mx-auto mt-10">
                     <button @click="isSummary=true" class="w-[130px] mx-3 p-2 font-semibold bg-rose-400 text-white rounded-xl">
                         <h4>
                             ทำการแก้ไข

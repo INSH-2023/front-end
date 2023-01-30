@@ -27,21 +27,21 @@ const goBooking =()=>myRouter.push({name:'booking'})
                 <ul>
                     <li class="">
                         <button @click="goShowAllEvent" class="flex w-fit  font-semibold text-gray-800 ">
-                            <img src="../assets/vue.svg" alt="" class="w-[28px] h-[28] my-auto">
+                            <img src="../assets/admin_page/request.png" alt="" class="w-[28px] h-[28] my-auto">
                             <span class="ml-3">Request</span> 
                         </button>
                         <hr class="full border-[1px] mt-2  border-gray-400">
                     </li>
                     <li @click="goShowAllUser" class="mt-3">
                         <button class="flex w-fit  font-semibold text-gray-800 ">
-                            <img src="../assets/vue.svg" alt="" class="w-[28px] h-[28] my-auto">
+                            <img src="../assets/admin_page/allUser.png" alt="" class="w-[28px] h-[28] my-auto">
                             <span class="ml-3">All User</span> 
                         </button>
                         <hr class="full border-[1px] mt-2 border-gray-400">
                     </li>
                     <li class="mt-3">
                         <button @click="goRegister" class="flex w-fit  font-semibold text-gray-800 ">
-                            <img src="../assets/vue.svg" alt="" class="w-[28px] h-[28] my-auto">
+                            <img src="../assets/admin_page/addUser.png" alt="" class="w-[28px] h-[28] my-auto">
                             <span class="ml-3">Add User</span> 
                         </button>
                         <hr class="full border-[1px] mt-2 border-gray-400">
@@ -49,7 +49,7 @@ const goBooking =()=>myRouter.push({name:'booking'})
                     </li>
                     <li class="mt-3">
                         <button  class="flex w-fit  font-semibold text-gray-800 ">
-                            <img src="../assets/vue.svg" alt="" class="w-[28px] h-[28] my-auto">
+                            <img src="../assets/admin_page/dashboard.png" alt="" class="w-[28px] h-[28] my-auto">
                             <span class="ml-3">Dashboard</span> 
                         </button>
                         <!-- <hr class="full border-[1px] mt-2"> -->

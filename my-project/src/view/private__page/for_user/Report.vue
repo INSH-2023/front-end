@@ -3,7 +3,9 @@ import{ref,computed,onBeforeMount} from 'vue'
 import {useRouter,useRoute} from 'vue-router'
 
 const myRouter = useRouter()
-const goMain=()=> myRouter.go(-1)
+const goBack=()=> myRouter.go(-1)
+const goMain=()=>myRouter.push({name:'booking'})
+const sampleDataLink ="http://localhost:3000/events"
 
 const {params} = useRoute()
 const typeP =params.id
@@ -172,6 +174,49 @@ const saveToLocal=()=>{
 "massage":massage.value
     })
 }
+
+// send form
+const isSubmitt=ref(false)
+const submitt = async()=>{
+    let res=await fetch(sampleDataLink ,{
+        method:'POST',
+        headers:{
+            "Content-Type":"application/json"
+        },
+        body:JSON.stringify({
+            user:"Testing Testing",
+            email:"testingTestingTesing@mail.com",
+            group:"วิจัยและวัฒนะธรรม",
+            type:"IT_Service",
+            subject:typeP,
+            status:"Request",
+            date:`${new Date().getHours()}:${new Date().getMinutes()}:${new Date().getSeconds()}`,
+            Assign:'Not Assign',
+            useT:typeU.value,
+            userTU:userTypeU.value,
+            typeM:typeM.value,
+            problems:problems.value,
+            other:others.value,
+            massage:massage.value,
+            
+
+        })
+        
+        
+    })
+    if(res.status==201){
+        console.log('post event successful')
+        isSummary.value=undefined
+        isSubmitt.value=true
+        setTimeout(goMain,5000)
+    }else{
+        console.log('error somthing can not post ')
+    }
+    
+    
+   
+}
+
 </script>
 <template>
 <div class="overflow-auto">
@@ -223,7 +268,7 @@ const saveToLocal=()=>{
                 <div class="grid grid-cols-6 gap-y-2 gap-x-2 mt-4 text-[15px] font-medium">
                     <!-- notebook -->
                     <button @click="typeM='NoteBook'" name="problem" :style="[typeM=='NoteBook'?'background-color:#1E88E5;color:#E3F2FD':'']" class="w-[150px] mx-auto p-2 bg-gray-200 rounded-xl hover:bg-gray-300">
-                        <img src="../../../assets/vue.svg" alt="NoteBook" class="w-[80px] mx-auto">
+                        <img src="../../../assets/machine/laptop.png" alt="NoteBook" class="w-[80px] mx-auto">
                         <h3 class="w-fit mx-auto">
                             NoteBook
                         </h3>
@@ -231,7 +276,7 @@ const saveToLocal=()=>{
 
                     <!-- PC -->
                     <button @click="typeM='PersonalComputer'" name="problem" :style="[typeM=='PersonalComputer'?'background-color:#1E88E5;color:#E3F2FD':'']" class="w-[150px] mx-auto p-2 bg-gray-200 rounded-xl hover:bg-gray-300">
-                        <img src="../../../assets/vue.svg" alt="NoteBook" class="w-[80px] mx-auto">
+                        <img src="../../../assets/machine/pc.png" alt="NoteBook" class="w-[80px] mx-auto">
                         <h3 class="w-fit mx-auto ">
                             PC
                         </h3>
@@ -239,7 +284,7 @@ const saveToLocal=()=>{
                     
                     <!-- Smart Phone -->
                     <button @click="typeM='Smart_Phone'" name="problem" :style="[typeM=='Smart_Phone'?'background-color:#1E88E5;color:#E3F2FD':'']" class="w-[150px] mx-auto p-2 bg-gray-200 rounded-xl hover:bg-gray-300">
-                        <img src="../../../assets/vue.svg" alt="NoteBook" class="w-[80px] mx-auto">
+                        <img src="../../../assets/machine/phone.png" alt="NoteBook" class="w-[80px] mx-auto">
                         <h3 class="w-fit mx-auto text-[14px]">
                             Smart Phone
                         </h3>
@@ -247,7 +292,7 @@ const saveToLocal=()=>{
 
                     <!-- Tablet -->
                     <button @click="typeM='Tablet'" name="problem" :style="[typeM=='Tablet'?'background-color:#1E88E5;color:#E3F2FD':'']" class="w-[150px] mx-auto p-2 bg-gray-200 rounded-xl hover:bg-gray-300">
-                        <img src="../../../assets/vue.svg" alt="NoteBook" class="w-[80px] mx-auto">
+                        <img src="../../../assets/machine/tablet.png" alt="NoteBook" class="w-[80px] mx-auto">
                         <h3 class="w-fit mx-auto">
                             Tablet
                         </h3>
@@ -285,7 +330,7 @@ const saveToLocal=()=>{
 
                 <div  class="grid grid-cols-6 gap-y-2 gap-x-2 mt-4 text-[15px] font-medium">
                     <!-- notebook -->
-                    <button  v-for="(value,index) in sampleData" :key="index" @click="addP(value.problems)" :style="[value.selection==true?'background-color:gray':'']" class="w-[150px] mx-auto p-2 hover:bg-gray-300 bg-gray-200 rounded-xl">
+                    <button  v-for="(value,index) in sampleData" :key="index" @click="addP(value.problems)" :style="[value.selection==true?'background-color:#1E88E5;color:#E3F2FD':'']" class="w-[150px] mx-auto p-2 hover:bg-gray-300 bg-gray-200 rounded-xl">
                         <img src="../../../assets/vue.svg" alt="NoteBook" class="w-[80px] mx-auto">
                         <h3 class="w-fit mx-auto">
                             {{value.problems}}
@@ -344,7 +389,7 @@ const saveToLocal=()=>{
 
             <!-- button -->
             <div class="w-fit mx-auto mt-10">
-                <button @click="goMain" class="w-[130px] mx-3 p-2 font-semibold bg-gray-400 text-white rounded-xl">
+                <button @click="goBack" class="w-[130px] mx-3 p-2 font-semibold bg-gray-400 text-white rounded-xl">
                     <h4>
                         ย้อนกลับ
                     </h4>
@@ -490,11 +535,27 @@ const saveToLocal=()=>{
                         ย้อนกลับ
                     </h4>
                 </button>
-                <button @click="isSummary=true" class="w-[130px] mx-3 p-2 font-semibold bg-rose-400 text-white rounded-xl">
+                <button @click="submitt" class="w-[130px] mx-3 p-2 font-semibold bg-rose-400 text-white rounded-xl">
                     <h4>
                         ขอรับบริการ
                     </h4>
                 </button>
+            </div>
+
+        </div>
+
+        <!-- submit -->
+        <div v-if="isSubmitt==true" class="w-[1000px] mx-auto">
+            <div class="w-fit mx-auto">
+                <img src="../../../assets/check.png" alt="check_icon" class="w-[130px] mt-[60px]">
+            </div>
+            <div class="w-fit mx-auto mt-4 font-semibold ">
+                <h3 class="text-[50px]">
+                    เราได้รับข้อมูลของคุณเรียบร้อยแล้ว
+                </h3>
+                <h3 class="text-[20px] text-center">
+                    เจ้าหน้าที่จะติดต่อร็วๆนี้
+                </h3>
             </div>
 
         </div>

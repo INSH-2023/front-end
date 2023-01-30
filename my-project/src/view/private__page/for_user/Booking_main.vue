@@ -12,8 +12,8 @@ const goHowTo=(v)=>{
     // console.log('this is id of solution',number)
     myRouter.push({name:'solution',params:{id:v}})
 }
-const goReport=(v1)=>{
-    myRouter.push({name:'report',params:{id:v1,service:params.service}})
+const goReport=(v)=>{
+    myRouter.push({name:'report',params:{id:v,service:params.service}})
     console.log('this is report of :',v)
 }
 
