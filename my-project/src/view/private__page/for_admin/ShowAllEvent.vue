@@ -3,7 +3,8 @@ import{ref,computed,onBeforeMount}from'vue'
 const sampleDataLink="http://localhost:3000/events"
 const isFilter=ref(false)
 const eventList=ref([])
-const comment =ref('')
+const assignCh =ref('')
+const commentCh =ref('')
 // bg color status
 const changeColorBy=(v)=>{
     let style=[]
@@ -13,11 +14,11 @@ const changeColorBy=(v)=>{
         style.push('color: rgb(255 255 255);')
         
     }else
-    if(v=='open_Case'){
+    if(v=='open_case'){
         style.push('background-color:rgb(245 158 11)')
         style.push('color: rgb(255 255 255);')
     }else
-    if(v=='in_Progress'){
+    if(v=='in_progress'){
         style.push('background-color:rgb(56 189 248)')
         style.push('color: rgb(255 255 255);')
     }else
@@ -38,19 +39,50 @@ const changeColorBy=(v)=>{
     return style
 }
 
+
 // change status
+const sIsR=ref(false)
+const sIsO=ref(false)
+const sIsI=ref(false)
+const sIsF=ref(false)
+
+const statusCh=ref(undefined)
 const changeST =(v)=>{
-    // let status = document.getElementById(v)
-    eventch.value.status=v
+    statusCh.value=''
+    sIsR.value=false
+    sIsO.value=false
+    sIsI.value=false
+    sIsF.value=false
+    if(v=='request'){
+        sIsR.value=true
+        statusCh.value=v
+    }
+    else if(v=='open_case'){
+        sIsO.value=true
+        statusCh.value=v
+    }
+    else if(v=='in_progress'){
+        sIsI.value=true
+        statusCh.value=v
+    }
+    else if(v=='finish'){
+        sIsF.value=true
+        statusCh.value=v
+    }
+    console.log(statusCh.value)
+    // rStatus.value=v
 }
 
 const eventch=ref({})
 const event=ref({})
 // showInfo
-const showInfoByID=async(v)=>{
+const showInfoByID=async(v,index)=>{
     event.value=[]
-    let detail =document.getElementById('goInfo')
-    detail.setAttribute("href","#showInfo")
+    statusCh.value=undefined
+    assignCh.value=''
+    commentCh.value=''
+    let detail =document.getElementsByClassName("goInfo")
+    console.log('this is index:',index)
 
     let res=await fetch(`${sampleDataLink}/${v}`,{
         method:'GET'
@@ -60,8 +92,52 @@ const showInfoByID=async(v)=>{
         event.value=await res.json()
         eventch.value=event.value
         console.log(event.value)
+        changeST(event.value.status)
+        event.value.assign==''?assignCh.value='': assignCh.value = event.value.assign
+        detail[index].setAttribute("href","#showInfo")
+        detail[index].click()
     }else{
         console.log('error to get event')
+    }
+}
+
+// edit by id
+const editInfo = async(v)=>{
+    let S =undefined
+    let res =await fetch(`${sampleDataLink}/${v}`,{
+        method:'PUT',
+        headers:{
+            "content-type": "application/json"
+        },
+        body:JSON.stringify({
+            user:event.value.user,
+            email:event.value.email,
+            group:event.value.group,
+            type:event.value.type,
+            subject:event.value.subject,
+            status:statusCh.value,
+            date:event.value.date,
+            assign:assignCh.value,
+            useT:event.value.useT,
+            userTU:event.value.userTU,
+            typeM:event.value.typeM,
+            problems:event.value.problems,
+            other:event.value.other,
+            massage:event.value.massage,
+            commentCh:commentCh.value
+        })
+    })
+    if(res.status==200){
+        // console.log('edit successful')
+        let close = document.getElementById('close_info')
+        console.log('edit is submitt ✅')
+        console.log(statusCh.value)
+        console.log(assignCh.value)
+        console.log(commentCh.value)
+        close.click()
+        getEvents()
+    }else{
+        console.log('can not edit error something 😂')
     }
 }
 
@@ -85,6 +161,21 @@ const getEvents =async(v)=>{
     }
 }
 
+// edit event
+const submitt =(v)=>{
+    if(statusCh.value == undefined){
+        console.log(statusCh.value)
+
+    }else
+    if(assignCh.value==''){
+        console.log(assignCh.value)
+    }else{
+        editInfo(v)
+    }
+   
+
+}
+
 // delete
 const deleteItem =async (v)=>{
     let res = await fetch(`${sampleDataLink}/${v}`,{
@@ -106,7 +197,6 @@ onBeforeMount(()=>{
 <div class="overflow-y-auto relative">
     <div class="">
         <div class="">
-            
             <div class=" bg-white w-full mx-auto  h-fit ">
                 <div class="w-full text-center font-semibold text-[40px] pt-6">
                     <div class="flex w-fit mx-auto">
@@ -165,20 +255,30 @@ onBeforeMount(()=>{
                             <th scope="col" class="py-3 px-6">
                                 Subject
                             </th>
-                            <th scope="col" class="py-3 px-6">
+                            <th scope="col" class="py-3 px-2">
                                 Data
                             </th>
                             <th scope="col" class="p-3">
                                 Status
                             </th>
                             <th scope="col" class="p-3">
-                               
+                               Assign
                             </th>
                         </tr>                        
                     </thead>
                     
-                    <tbody> <!-- @click="clickedInfo" -->
-                        <tr  v-for="data in eventList"  class="relative text-[15px] cursor-pointer bg-white border-b-2 border-gray-300 hover:border-gray-400 ">
+                    <!-- wait -->
+                    <div v-if="eventList.length>0">
+
+                    </div>
+                    <!-- no data -->
+                    <div v-else-if="eventList.length==0">
+                        this no data try again later
+                    </div>
+
+                    <!-- have data -->
+                    <tbody v-else-if="eventList.length>0"> <!-- @click="clickedInfo" -->
+                        <tr  v-for="(data,index) in eventList" :key="index" class="relative text-[15px]  bg-white border-b-2 border-gray-300 hover:border-gray-400 ">
                             
                             <td class="w-[140px]   font-medium px-6 py-4 text-left">
                             <div class="w-[130px] font-semibold truncate ">
@@ -193,33 +293,40 @@ onBeforeMount(()=>{
                                 {{data.group}}
                                 </div>
                             </td>
-                            <td class="w-[130px] px-6 py-4 font-semibold">
-                                <div :style="[changeColorBy(data.type)] " class="w-[120px] truncate">
+                            <td class="w-[90px] px-6 py-4 font-semibold">
+                                <div :style="[changeColorBy(data.type)] " class="w-[90px] truncate">
                                 {{data.type}}
                             </div>
                             </td>
-                            <td class="w-[130px] px-6 py-4 font-semibold">
-                                <div class="w-[120px] truncate">
+                            <td class="w-[90px] px-6 py-4 font-semibold">
+                                <div class="w-[90px] truncate">
                                 {{data.subject}}                                    
                                 </div>
 
                             </td>
-                            <td class="w-[130px] px-6 py-4 font-semibold">
-                                <div class="w-[120px] ">
+                            <td class="w-[70px] px-6 py-4 font-semibold">
+                                <div class="w-[70px] ">
                                 {{data.date}}
                                 </div>
                             </td>
                             <td class="w-[130px] px-3 py-4 text-center ">
-                            <div :style="[changeColorBy(data.status)]" class="w-[120px] mx-auto static  py-[4px] px-[8px] rounded-2xl text-[15px] font-semibold ">
-                                {{data.status}}
-                            </div> 
+                                <div :style="[changeColorBy(data.status)]" class="w-[120px] mx-auto static  py-[4px] px-[8px] rounded-2xl text-[15px] font-semibold ">
+                                    {{data.status}}
+                                </div> 
                             </td>
                             <td class="w-[130px] px-6 py-4 font-semibold">
-                                <div class="flex w-fit mx-auto truncate ">
-                                    <a @click="showInfoByID(data.id)" id="goInfo" >
-                                        <img src="../../../assets/admin_page/edit.png" alt="delete_icon" class="w-[28px] m-2">
+                                <div class="w-[120px] ">
+                                {{data.assign}}
+                                </div>
+                            </td>                            
+                            <td class="w-[130px] px-6 py-4 font-semibold">
+                                <div class="flex w-fit mx-auto  ">
+                                    <a    class="goInfo ">
+                                        <button @click="showInfoByID(data.id,index)">
+                                            <img src="../../../assets/admin_page/edit.png" alt="edit_icon" class="w-[28px] h-[28px] mr-2 ">
+                                        </button>
                                     </a>
-                                    <img id="delete" @click="deleteItem(data.id)" src="../../../assets/admin_page/bin.png" alt="delete_icon" class="w-[30px] m-2 hover:bg-rose-300 rounded p-[2px]">
+                                    <img id="delete" @click="deleteItem(data.id)" src="../../../assets/admin_page/bin.png" alt="delete_icon" class="w-[28px] h-[28px] mx-1 hover:bg-rose-300 rounded ">
                                 </div>
                             </td>
                             
@@ -258,7 +365,7 @@ onBeforeMount(()=>{
                                 ประเภทของ :
                             </td>
                             <td>
-                                {{event.useT}}
+                                {{event.useT=='or'?'เป็นขององค์กร':'เป็นของส่วนตัว'}}
                             </td>
                         </tr>
                         <tr>
@@ -307,11 +414,11 @@ onBeforeMount(()=>{
                     </div>
 
                     
-                    <div class=" mt-4 text-[15px] font-medium">
+                    <div v-if="event.subject=='software'||event.subject=='hardware'||event.subject=='internet'" class=" mt-4 text-[15px] font-medium">
                         <!-- notebook -->
-                        <div class="w-[70px]  p-2 bg-gray-200 rounded-xl ">
+                        <div class="w-[85px]  p-2 bg-gray-200 rounded-xl ">
                             <img src="../../../assets/vue.svg" alt="NoteBook" class="w-[40px] mx-auto">
-                            <h3 class="w-fit mx-auto text-[8px]">
+                            <h3 class="w-fit mx-auto text-[4px]">
                             {{event.typeM}}
                             </h3>
                         </div >
@@ -322,21 +429,21 @@ onBeforeMount(()=>{
                 <div   class="mt-4 " >
                     <div class="text-[20px] font-semibold">
                         <h3 >
-                            อาการของ Hardware ที่พบ
+                            อาการของ {{event.subject}} ที่พบ
                         </h3>   
                     </div>
 
                     
                     <div class="grid grid-cols-6 gap-y-2 gap-x-2 mt-4 text-[15px] font-medium">
                         
-                        <div  v-for="data in event.problems" class="w-[70px] mx-auto p-2 bg-gray-200 rounded-xl ">
+                        <div  v-for="data in event.problems" class="w-[85px] mx-auto p-2 bg-gray-200 rounded-xl ">
                             <img src="../../../assets/vue.svg" alt="NoteBook" class="w-[40px] mx-auto">
                             <h3 class="w-fit mx-auto text-[8px]">
                             {{data}}
                             </h3>
                         </div >
-                        <div   class="w-[70px] mx-auto p-2 bg-gray-200 rounded-xl ">
-                            <img src="../../../assets/vue.svg" alt="NoteBook" class="w-[40px] mx-auto">
+                        <div v-if="event.other==''"  class="w-[70px] mx-auto p-2 bg-gray-200 rounded-xl ">
+                            <img src="../../../assets/vue.svg" alt="NoteBook" class="w-[85px] mx-auto">
                             <h3 class="w-fit mx-auto text-[8px]">
                             other
                             </h3>
@@ -374,16 +481,16 @@ onBeforeMount(()=>{
                                 Status
                             </h5>
                             <div class="grid grid-cols-2 gap-y-2 gap-x-2 mt-1 text-[15px] font-bold">
-                                <button id="request" @click="changeST('request')" :style="changeColorBy('request')" class="bg-gray-600 text-gray-300 p-2 text-center hover:bg-gray-300 hover:text-gray-600">
+                                <button id="request" name="status" @click="changeST('request')" :style="[sIsR==true?changeColorBy('request'):'']" class="bg-gray-600 text-gray-300 p-2 text-center hover:bg-gray-300 hover:text-gray-600">
                                     Request
                                 </button>
-                                <button id="open_case" @click="changeST('open_case')" :style="changeColorBy('open_case')" class="bg-gray-600 text-gray-300 p-2 text-center hover:bg-gray-300 hover:text-gray-600">
+                                <button id="open_case" name="status" @click="changeST('open_case')" :style="[sIsO==true?changeColorBy('open_case'):'']" class="bg-gray-600 text-gray-300 p-2 text-center hover:bg-gray-300 hover:text-gray-600">
                                     Open Case
                                 </button>
-                                <button id="in_progress" @click="changeST('in_progress')" :style="changeColorBy('in_progress')" class="bg-gray-600 text-gray-300 p-2 text-center hover:bg-gray-300 hover:text-gray-600">
+                                <button id="in_progress" name="status" @click="changeST('in_progress')" :style="[sIsI==true?changeColorBy('in_progress'):'']" class="bg-gray-600 text-gray-300 p-2 text-center hover:bg-gray-300 hover:text-gray-600">
                                     In Progress
                                 </button>
-                                <button id="finish" @click="changeST('finish')" :style="changeColorBy('finish')" class="bg-gray-600 text-gray-300 p-2 text-center hover:bg-gray-300 hover:text-gray-600">
+                                <button id="finish" name="status" @click="changeST('finish')" :style="[sIsF==true?changeColorBy('finish'):'']" class="bg-gray-600 text-gray-300 p-2 text-center hover:bg-gray-300 hover:text-gray-600">
                                     Finish
                                 </button>
                             </div>
@@ -393,8 +500,8 @@ onBeforeMount(()=>{
                             <h5 class="font-semibold">
                                 Assign
                             </h5>
-                            <select name="" id="" class="w-[200px] mt-2 p-1 bg-gray-400 text-gray-700 font-semibold rounded">
-                                <option value="" selected disabled>เลือกผู้รับผิดชอบ</option>
+                            <select v-model="assignCh" name="assign" id="assign" class="w-[200px] mt-2 p-1 bg-gray-400 text-gray-700 font-semibold  rounded">
+                                <option value='' selected disabled>เลือกผู้รับผิดชอบ</option>
                                 <option value="Testing_Tseing " class="font-semibold bg-gray-300">Testing Tseing</option>
                                 <option value="gnitset_testing" class="font-semibold bg-gray-300">gnitset testing</option>
                                 <option value="Testing_Tseing " class="font-semibold bg-gray-300">Testing Tseing</option>
@@ -411,7 +518,7 @@ onBeforeMount(()=>{
                         <label for="other_1" class="ml-2 text-[17px] font-semibold inline-b">
                             Comment
                         </label>
-                        <textarea v-model="comment"  name="other" id="other_1"   class="w-full h-[100px] resize-none pt-[10px] block rounded-xl bg-gray-300 p-2 focus:outline-0" ></textarea>
+                        <textarea v-model="commentCh"  name="other" id="other_1"   class="w-full h-[100px] resize-none pt-[10px] block rounded-xl bg-gray-300 p-2 focus:outline-0" ></textarea>
                     </div>
                     
                     <div>
@@ -420,8 +527,8 @@ onBeforeMount(()=>{
                 </div>
                 
                 <!-- button -->
-                <div v-show="eventch != event" class="w-fit mx-auto mt-10">
-                    <button @click="isSummary=true" class="w-[130px] mx-3 p-2 font-semibold bg-rose-400 text-white rounded-xl">
+                <div v-show="statusCh != undefined &&statusCh != 'request'&& assignCh.length>0 " class="w-fit mx-auto mt-10">
+                    <button @click="submitt(event.id)" class="w-[130px] mx-3 p-2 font-semibold bg-rose-400 text-white rounded-xl">
                         <h4>
                             ทำการแก้ไข
                         </h4>
@@ -430,8 +537,10 @@ onBeforeMount(()=>{
                 
             </div>
 
-            <div class="absolute top-[10px] right-[20px] font-bold text-[30px]">
-                <a href="#">X</a>
+            <div class="absolute top-[15px] right-[15px] font-bold text-[30px]">
+                <a id="close_info" href="#">
+                    <img src="../../../assets/admin_page/close.png" alt="close_icon" class="w-[20px]">
+                </a>
             </div>
         </div>
     </div>
