@@ -1,5 +1,6 @@
 <script setup>
 import{ref,computed,onBeforeMount}from'vue'
+import BaseLoading from '../../../components/BaseLoading.vue';
 const sampleDataLink="http://localhost:3000/events"
 const isFilter=ref(false)
 const eventList=ref([])
@@ -147,6 +148,7 @@ const clickedInfo =()=>{
     console.log('Show all detail')
 }
 
+const eventStatus =ref(undefined)
 // getInfo
 const getEvents =async(v)=>{
     let res = await fetch(sampleDataLink,{
@@ -155,9 +157,11 @@ const getEvents =async(v)=>{
     if(res.status==200){
         console.log('get event already')
         eventList.value=await res.json()
+        eventStatus.value=true
        
     }else{
         console.log('error something can not get events')
+        eventStatus.value=false
     }
 }
 
@@ -196,7 +200,64 @@ onBeforeMount(()=>{
 <template>
 <div class="overflow-y-auto relative">
     <div class="">
-        <div class="">
+
+        <!-- wait -->
+        <div v-if="eventStatus==undefined">
+            <div class=" bg-white w-full mx-auto  h-fit ">
+                <div class="w-full text-center font-semibold text-[40px]">
+                    <div class="my-auto w-fit mx-auto mt-[250px]">
+                        <!-- <img src="../../../assets/admin_page/request.png" alt="users_icon" class="w-[40px] h-[40px] my-auto mr-4"> -->
+                        <BaseLoading/>
+                        <!-- <button @click="getEvents()" class="mt-6 bg-rose-300 focus:bg-rose-400 text-gray-700 focus:text-whte px-2 mx-auto rounded-lg">
+                            Refresh
+                        </button>   -->
+                    </div>
+                </div>
+              
+            </div>
+        </div>
+        <!-- no data -->
+        <div v-else-if="eventStatus==false">
+            <div class=" bg-white w-full mx-auto  h-fit ">
+                <div class="w-full text-center font-semibold text-[40px]">
+                    <div class="my-auto w-fit mx-auto mt-[250px]">
+                        <!-- <img src="../../../assets/admin_page/request.png" alt="users_icon" class="w-[40px] h-[40px] my-auto mr-4"> -->
+                        <h4>
+                            No data try again later .😏
+                        </h4>
+                        <!-- <button @click="getEvents()" class="mt-6 bg-rose-300 focus:bg-rose-400 text-gray-700 focus:text-whte px-2 mx-auto rounded-lg">
+                            Refresh
+                        </button>   -->
+                    </div>
+                </div>
+              
+            </div>
+        </div>
+        
+        <!-- can get data but no data (clean) -->
+        <div v-else-if="eventStatus==false ||eventList.length==0">
+            <div class=" bg-white w-full mx-auto  h-fit ">
+                <div class="w-full text-center font-semibold text-[40px]">
+                    <div class="my-auto w-fit mx-auto mt-[250px]">
+                        <!-- <img src="../../../assets/admin_page/request.png" alt="users_icon" class="w-[40px] h-[40px] my-auto mr-4"> -->
+                        <h4>
+                            Can get data but no data.😏
+                        </h4>
+                        <h4 class="text-[25px]">
+                            Wait for user send request.👌
+                        </h4>
+                        <!-- <button @click="getEvents()" class="mt-6 bg-rose-300 focus:bg-rose-400 text-gray-700 focus:text-whte px-2 mx-auto rounded-lg">
+                            Refresh
+                        </button>   -->
+                    </div>
+                </div>
+              
+            </div>
+        </div>
+                
+
+        <!-- have data -->
+        <div v-else-if="eventStatus==true" class="">
             <div class=" bg-white w-full mx-auto  h-fit ">
                 <div class="w-full text-center font-semibold text-[40px] pt-6">
                     <div class="flex w-fit mx-auto">
@@ -267,17 +328,10 @@ onBeforeMount(()=>{
                         </tr>                        
                     </thead>
                     
-                    <!-- wait -->
-                    <div v-if="eventList.length>0">
 
-                    </div>
-                    <!-- no data -->
-                    <div v-else-if="eventList.length==0">
-                        this no data try again later
-                    </div>
 
                     <!-- have data -->
-                    <tbody v-else-if="eventList.length>0"> <!-- @click="clickedInfo" -->
+                    <tbody > <!-- @click="clickedInfo" -->
                         <tr  v-for="(data,index) in eventList" :key="index" class="relative text-[15px]  bg-white border-b-2 border-gray-300 hover:border-gray-400 ">
                             
                             <td class="w-[140px]   font-medium px-6 py-4 text-left">
