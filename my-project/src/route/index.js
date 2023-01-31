@@ -20,7 +20,7 @@ import SignUp from '../view/private__page/for_admin/SignUp.vue'
 import Main_private_admin from '../view/private__page/for_admin/Main_private_admin.vue'
 import ShowAllUser from '../view/private__page/for_admin/ShowAllUser.vue'
 import ShowAllEvent from'../view/private__page/for_admin/ShowAllEvent.vue'
-
+import WriteSolutions from '../view/private__page/for_admin/Write_solution.vue'
 // public
 import SignIn from '../view/public__page/SignIn.vue'
 import Home from '../view/public__page/Home.vue'
@@ -68,6 +68,11 @@ const routes=[
                 path:'/account/admin/show-users',
                 name:'showAllUser',
                 component:ShowAllUser
+            },
+            {
+                path:'/account/admin/write-solutions',
+                name:'writeS',
+                component:WriteSolutions
             }
         ]
 

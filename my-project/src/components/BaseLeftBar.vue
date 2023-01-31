@@ -10,6 +10,7 @@ const goShowAllUser =()=>myRouter.push({name:'showAllUser'})
 const goShowAllEvent =()=>myRouter.push({name:'showAllEvents'}) 
 const goHistory =()=>myRouter.push({name:'history'})
 const goBooking =()=>myRouter.push({name:'booking'})
+const goWriteS =()=>myRouter.push({name:'writeS'})
 </script>
 <template>
 <div class="bg-white border-r-2 border-gray-400 w-full h-full">
@@ -48,13 +49,22 @@ const goBooking =()=>myRouter.push({name:'booking'})
                         
                     </li>
                     <li class="mt-3">
-                        <button  class="flex w-fit  font-semibold text-gray-800 ">
+                        <button @click="goWriteS" class="flex w-fit  font-semibold text-gray-800 ">
+                            <img src="../assets/admin_page/new-document.png" alt="" class="w-[28px] h-[28] my-auto">
+                            <span class="ml-3">Write solutions</span> 
+                        </button>
+                        <hr class="full border-[1px] mt-2 border-gray-400">
+                        
+                    </li>                    
+                    <li class="mt-3">
+                        <button @click="goWriteS" class="flex w-fit  font-semibold text-gray-800 ">
                             <img src="../assets/admin_page/dashboard.png" alt="" class="w-[28px] h-[28] my-auto">
                             <span class="ml-3">Dashboard</span> 
                         </button>
                         <!-- <hr class="full border-[1px] mt-2"> -->
                         
                     </li>
+                    
                 </ul>
             </div>
         </div>
