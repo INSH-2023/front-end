@@ -1,66 +1,6 @@
 {
   "events": [
-    {
-      "id": 3,
-      "user": "โดส ทำไรวะเพื่อน",
-      "email": "testingEmail@testingmain.com",
-      "group": "วิจัยและวัฒนะธรรม",
-      "type": "IT_Service",
-      "subject": "News",
-      "date": "00/00/00",
-      "status": "In_Progress",
-      "Assign": "testing",
-      "useT": "or",
-      "userTU": "",
-      "typeM": "PC",
-      "problems": [
-        "NoteBook3",
-        "NoteBook3",
-        "NoteBook3"
-      ],
-      "other": "testingtesting",
-      "massage": "testingtesting"
-    },
-    {
-      "id": 4,
-      "user": "เทส กี",
-      "email": "testingEmail@testingmain.com",
-      "group": "วิจัยและวัฒนะธรรม",
-      "type": "IT_Service",
-      "subject": "Hardware",
-      "date": "00/00/00",
-      "status": "Finish",
-      "Assign": "testing",
-      "useT": "or",
-      "userTU": "",
-      "typeM": "PC",
-      "problems": [
-        "NoteBook3",
-        "NoteBook3",
-        "NoteBook3"
-      ],
-      "other": "testingtestingtestingtesting",
-      "massage": "testingtestingtesting"
-    },
-    {
-      "user": "Testing Testing",
-      "email": "testingTestingTesing@mail.com",
-      "group": "วิจัยและวัฒนะธรรม",
-      "type": "IT_Service",
-      "subject": "hardware",
-      "status": "Request",
-      "date": "15:42:55",
-      "Assign": "Not Assign",
-      "useT": "or",
-      "userTU": "",
-      "typeM": "PC",
-      "problems": [
-        "NoteBook3"
-      ],
-      "other": "testing",
-      "massage": "testingtesting",
-      "id": 5
-    }
+    
   ],
   "solutions": [
     {
