@@ -9,6 +9,7 @@ const sampleDataLink ="http://localhost:3000/events"
 
 const {params} = useRoute()
 const typeP =params.id
+const service=params.service
 
 // ทำ alert
 // ส่งออกข้อมูล
@@ -187,11 +188,11 @@ const submitt = async()=>{
             user:"Testing Testing",
             email:"testingTestingTesing@mail.com",
             group:"วิจัยและวัฒนะธรรม",
-            type:"IT_Service",
+            type:`${service.toUpperCase()}_Service`,
             subject:typeP,
-            status:"Request",
-            date:`${new Date().getHours()}:${new Date().getMinutes()}:${new Date().getSeconds()}`,
-            Assign:'Not Assign',
+            status:"request",
+            date:`${parseInt(new Date().getHours())<10?'0'+(new Date().getHours()):new Date().getHours()}:${parseInt(new Date().getMinutes())<10?'0'+new Date().getMinutes():new Date().getMinutes()}:${parseInt(new Date().getSeconds())<10?'0'+new Date().getSeconds():new Date().getSeconds()}`,
+            assign:'Not_assign',
             useT:typeU.value,
             userTU:userTypeU.value,
             typeM:typeM.value,
@@ -275,7 +276,7 @@ const submitt = async()=>{
                     </button>
 
                     <!-- PC -->
-                    <button @click="typeM='PersonalComputer'" name="problem" :style="[typeM=='PersonalComputer'?'background-color:#1E88E5;color:#E3F2FD':'']" class="w-[150px] mx-auto p-2 bg-gray-200 rounded-xl hover:bg-gray-300">
+                    <button @click="typeM='PC'" name="problem" :style="[typeM=='PC'?'background-color:#1E88E5;color:#E3F2FD':'']" class="w-[150px] mx-auto p-2 bg-gray-200 rounded-xl hover:bg-gray-300">
                         <img src="../../../assets/machine/pc.png" alt="NoteBook" class="w-[80px] mx-auto">
                         <h3 class="w-fit mx-auto ">
                             PC
