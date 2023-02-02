@@ -17,9 +17,24 @@ const solutions =ref([])
             </div>
 
             <!-- body -->
-            <div class="">
-                <div>
+            <div class="w-[1200px] mt-10">
+                <div class="w-fit mx-auto">
 
+                    <!-- title -->
+                    <div class="">
+                        <h4>
+                            Title
+                        </h4>
+                        <input type="text">
+                    </div>
+
+                    <!-- tag -->
+                    <div>
+                        <h4>
+                            Tag
+                        </h4>
+                        <input type="text">
+                    </div>
                 </div>
             </div>
 
