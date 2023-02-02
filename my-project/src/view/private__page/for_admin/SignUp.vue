@@ -1,15 +1,182 @@
 <script setup>
 import {ref} from 'vue'
 
+const userLink ='http://localhost:3000/users'
+
 const fName=ref('')
 const lName =ref('')
 const email = ref('')
 const group = ref('')
+const position=ref('')
+const office =ref('')
+const role =ref('')
 const passW = ref('')
 const cPassW = ref('')
 
+// lenght
+const fNameL=30
+const lNameL=30
+const emailL=30
+const passWL=14
+
+// style
+const fNameS=ref(undefined)
+const lNameS=ref(undefined)
+const emailS=ref(undefined)
+const groupS =ref(undefined)
+const positionS=ref(undefined)
+const officeS =ref(undefined)
+const roleS =ref(undefined)
+const passWS =ref(undefined)
+const cPassWS =ref(undefined)
+
+// validate
+const validate=()=>{
+    let vStatus =false
+
+    fNameS.value=undefined
+    lNameS.value=undefined
+    emailS.value=undefined
+    groupS.value =undefined
+    passWS.value =undefined
+    cPassWS.value =undefined
+    positionS.value=undefined
+    officeS.value =undefined
+    roleS.value =undefined
+
+    if(fName.value.length==0){
+        console.log('Please input ur first name')
+        fNameS.value=false
+        vStatus =true
+        
+    }
+    if(lName.value.length==0){
+        console.log('Please input ur last name')
+        lNameS.value=false
+        vStatus =true
+    }
+    if(email.value.length==0){
+        console.log('Please input ur email')
+        emailS.value=false
+        vStatus =true
+    }
+    if(group.value.length==0){
+        console.log('Please input ur group')
+        groupS.value=false
+        vStatus =true
+    }
+    if(position.value.length==0){
+        console.log('Please input ur position')
+        positionS.value=false
+        vStatus =true
+    }
+    if(office.value.length==0){
+        console.log('Please input ur office')
+        officeS.value=false
+        vStatus =true
+    }
+    if(role.value.length==0){
+        console.log('Please input ur role')
+        roleS.value=false
+        vStatus =true
+    }
+    if(passW.value.length==0){
+        console.log('Please input ur password')
+        passWS.value=false
+        vStatus =true
+    }
+    if(cPassW.value.length==0){
+        console.log('Please input ur confirm password')
+        cPassWS.value=false
+        vStatus =true
+    }
+    if(fName.value.length>fNameL){
+        console.log(`lenght of first name more then ${fNameL}`)
+        fNameS.value=false
+        vStatus =true
+    }
+    if(lName.value.length>lNameL){
+        console.log(`lenght of last name more then ${lNameL}`)
+        lNameS.value=false
+        vStatus =true
+    }
+    if(email.value.length>emailL){
+        console.log(`lenght of email more then ${emailL}`)
+        emailS.value=false
+        vStatus =true
+    }
+    if(valFormEmail(email.value)==false){
+        console.log('this email invalid')
+        emailS.value=false
+        vStatus =true
+    }
+    if(passW.value.length>passWL){
+        console.log(`lenght of password more then ${passWL}`)
+        passWS.value=false
+        vStatus =true
+    }
+    if(cPassW.value.length>passWL){
+        console.log(`lenght of password more then ${passWL}`)
+        cPassWS.value=false
+        vStatus =true
+    }  
+    if(passW.value !=cPassW.value){
+        console.log('password not match')
+        passWS.value=false
+        cPassWS.value=false
+        vStatus =true
+    }
+
+    return vStatus
+}
+
+// re
+
+// validate email
+const valFormEmail = (input) => {
+    let valid =
+      /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+    if (input.match(valid)) {
+      return true;
+    } else {
+      return false;
+    }
+}
+
 // submit
 const submittS =ref(undefined)
+const submittform =async()=>{
+    // let status=undefined
+    if(validate()){
+        console.log('cannot create new user')
+    }else{
+        
+    const res =await fetch(userLink,{
+        method:'POST',
+        headers:{
+            "content-type": "application/json"
+        },
+        body:JSON.stringify({
+            first_name:fName.value,
+            last_name:lName.value,
+            email:email.value,
+            role_name:role.value,
+            office:office.value,
+            position:position.value,
+            passW:passW.value,
+            cPassW:cPassW.value,
+            status:'inActive',
+        })
+    })
+    if(res.status==201){
+        console.log('form is create user successfull')
+
+    }else{
+        console.log('error something maybe try again later')
+    } 
+    }
+    
+}
 
 // show password
 const pd =ref(false)
@@ -25,6 +192,9 @@ const showPd =()=>{
     }
     // console.log('hello world')
 }
+
+
+
 </script>
 <template>
 <div class="overflow-y-auto ">
@@ -41,80 +211,169 @@ const showPd =()=>{
 
             <!-- body -->
             <div class="w-[1200px] mt-10">
-                <div class=" w-fit mx-auto text-[22px]">
+                <div class=" w-[600px] mx-auto p-1 text-[22px]">
                     <!-- first name -->
-                    <div class="flex ">
-                        <label for="fName" class="w-[120px] font-semibold m-2">
+                    <div class="relative h-[60px]">
+                        <!-- <label for="fName" class="w-[120px] font-semibold m-2">
                             First Name
-                        </label>
-                        <input v-model="fName" id="fName" type="text" class="w-[400px] h-[40px] bg-gray-300 m-2 px-1.5 rounded-lg focus:outline-0" >
+                        </label> -->
+                        <h4 v-show="fName.length>0" class="text-sm font-semibold text-gray-500 mx-2">
+                            First Name
+                            <span class="" :style="[fName.length==fNameL?'color: rgb(225 29 72);':'']">
+                                {{fName.length}}/{{fNameL}}
+                            </span>
+                        </h4>
+                        <input v-model="fName" placeholder="First Name" id="fName" type="text" :maxlength="fNameL" :style="[fNameS==false?'border-color: rgb(225 29 72);border-width: 2px;':'']" class="absolute bottom-0 w-full h-[40px]  bg-gray-300 text-gray-500   px-2 rounded-lg focus:outline-0" >
                     </div>
 
                     <!-- last name -->
-                    <div class="flex ">
-                        <label for="lName" class="w-[120px] font-semibold m-2">
+                    <div class="relative h-[60px] mt-1.5 ">
+                        <!-- <label for="lName" class="w-[120px] font-semibold m-2">
                             Last Name
-                        </label>
-                        <input v-model="lName" id="lName" type="text" class="w-[400px] h-[40px] bg-gray-300 m-2 px-1.5 rounded-lg focus:outline-0" >
+                        </label> -->
+                        <h4 v-show="lName.length>0" class="text-sm font-semibold text-gray-500 mx-2">
+                            Last Name
+                            <span class="" :style="[lName.length==fNameL?'color: rgb(225 29 72);':'']">
+                                {{lName.length}}/{{lNameL}}
+                            </span>
+                        </h4>                        
+                        <input v-model="lName" placeholder="Last Name" id="lName" type="text" :maxlength="lNameL" :style="[lNameS==false?'border-color: rgb(225 29 72);border-width: 2px;':'']" class="absolute bottom-0 w-full h-[40px] bg-gray-300 text-gray-500    px-2 rounded-lg focus:outline-0" >
                     </div>
 
                     <!-- email -->
-                    <div class="flex ">
-                        <label for="email" class="w-[120px] font-semibold m-2">
+                    <div class="relative h-[60px] mt-1.5 ">
+                        <!-- <label for="email" class="w-[120px] font-semibold m-2">
                             Email
-                        </label>
-                        <div class="flex w-[400px] h-[40px] m-2 p-1 bg-gray-300 rounded-lg">
-                            <input v-model="email" id="email" type="text" class="w-[250px] h-full mx-1  px-1.5 bg-transparent focus:outline-0" >
-                            <h4 class="w-fit my-auto text-[15px]">
+                        </label> -->
+                        <h4 v-show="email.length>0" class="text-sm font-semibold text-gray-500 mx-2">
+                            Email
+                            <span class="" :style="[email.length==emailL?'color: rgb(225 29 72);':'']">
+                                {{email.length}}/{{emailL}}
+                            </span>
+                        </h4> 
+                        <div :style="[emailS==false?'border-color: rgb(225 29 72);border-width: 2px;':'']" class="absolute bottom-0 flex w-full h-[40px]  p-1 bg-gray-300 rounded-lg">
+                            <input v-model="email" placeholder="Email" id="email" type="text" :maxlength="emailL"   class="w-full h-full mx-1   bg-transparent text-gray-500 focus:outline-0" >
+                            <h4 class="w-fit my-auto mx-2 font-semibold text-[15px] text-gray-500">
                                 @moralcenter.or.th
                             </h4>
                         </div>
                     </div>
 
                     <!-- group -->
-                    <div class="flex ">
-                        <label for="group" class="w-[120px]  font-semibold m-2">
+                    <div class="h-[60px] mt-2 text-sm">
+                        <!-- <label for="group" class="w-[120px]  font-semibold m-2">
                             Group
-                        </label>
-                        <select v-model="group"  id="group" class="w-[400px] h-[40px] m-2 px-1.5 bg-gray-300 rounded-lg focus:outline-0">
-                            <option value="" selected disabled>เลือกสิจ๊ะ</option>
-                            <option value="1" >sample 1</option>
-                            <option value="2" >sample 2</option>
-                            <option value="3" >sample 3</option>
+                        </label> -->
+                        <div class="static flex w-full ">
+
+                            <!-- role -->
+                            <div class="relative w-full h-[60px] mx-1">
+                                <h4 v-show="role.length>0" class="text-sm font-semibold text-gray-500 mx-2">
+                                    Role
+                                </h4> 
+                                <select v-model="role"  id="role" :style="[roleS==false?'border-color: rgb(225 29 72);border-width: 2px;':'']" class="absolute bottom-0 w-full h-[40px]  px-2 bg-gray-300 text-gray-500 rounded-lg focus:outline-0">
+                                    <option value="" selected disabled hidden >Role</option>
+                                    <option value="1" >sample 1</option>
+                                    <option value="2" >sample 2</option>
+                                    <option value="3" >sample 3</option>
 
 
-                        </select>
+                                </select>                                
+                            </div>
+
+                            <!-- Position -->
+                            <div class="relative w-full h-[60px] mx-1">
+                                <h4 v-show="position.length>0" class="text-sm font-semibold text-gray-500 mx-2">
+                                    Position
+                                </h4> 
+                                <select v-model="position"  id="position" :style="[positionS==false?'border-color: rgb(225 29 72);border-width: 2px;':'']" class="absolute bottom-0  w-full h-[40px]  px-2 bg-gray-300 text-gray-500 rounded-lg focus:outline-0">
+                                    <option value="" selected disabled hidden >Position</option>
+                                    <option value="1" >sample 1</option>
+                                    <option value="2" >sample 2</option>
+                                    <option value="3" >sample 3</option>
+
+
+                                </select>
+                            </div>
+
+                            <!-- Office -->
+                            <div class="relative w-full h-[60px] mx-1">
+                                <h4 v-show="office.length>0" class="text-sm font-semibold text-gray-500 mx-2">
+                                    Office
+                                </h4> 
+                                <select v-model="office"  id="position" :style="[officeS==false?'border-color: rgb(225 29 72);border-width: 2px;':'']" class="absolute bottom-0  w-full h-[40px]  px-2 bg-gray-300 text-gray-500 rounded-lg focus:outline-0">
+                                    <option value="" selected disabled hidden >Office</option>
+                                    <option value="1" >sample 1</option>
+                                    <option value="2" >sample 2</option>
+                                    <option value="3" >sample 3</option>
+
+
+                                </select>
+                            </div>                            
+                            
+                            <!-- Group -->
+                            <div class="relative w-full h-[60px] mx-1">
+                                <h4 v-show="group.length>0" class="text-sm font-semibold text-gray-500 mx-2">
+                                    Group
+                                </h4> 
+                                <select v-model="group"  id="position" :style="[groupS==false?'border-color: rgb(225 29 72);border-width: 2px;':'']" class="absolute bottom-0  w-full h-[40px]  px-2 bg-gray-300 text-gray-500 rounded-lg focus:outline-0">
+                                    <option value="" selected disabled hidden >Group</option>
+                                    <option value="1" >sample 1</option>
+                                    <option value="2" >sample 2</option>
+                                    <option value="3" >sample 3</option>
+
+
+                                </select>
+                            </div>                            
+                            
+                        </div>
+
                         <!-- <input id="group" type="text" class="w-[300px] bg-gray-300 m-2 rounded-lg" > -->
                     </div>
 
                     <!-- password -->
-                    <div class="flex ">
-                        <label for="pw" class="w-[120px] font-semibold m-2">
+                    <div class="relative h-[60px] mt-1.5">
+                        <!-- <label for="pw" class="w-[120px] font-semibold m-2">
                             Password
-                        </label>
-                        <div class="relative">
-                            <input v-model="passW" id="pw" type="password" class="w-[400px] h-[40px] bg-gray-300 m-2 px-1.5 rounded-lg focus:outline-0" >
-                            <img @click="showPd" src="../../../assets/vue.svg" alt="eye"  class="absolute top-[13px] right-[15px] w-[20px] cursor-pointer ">
-                        </div>
+                        </label> -->
+                        <h4 v-show="passW.length>0" class="text-sm font-semibold text-gray-500 mx-2">
+                            Password
+                            <span class="">
+                                {{passW.length}}/14
+                            </span>
+                        </h4>
+                        <div class="absolute w-full bottom-0">
+                            <div class="relative  ">
+                                <input v-model="passW" placeholder="Password" id="pw" type="password" :maxlength="passWL" :style="[passWS==false?'border-color: rgb(225 29 72);border-width: 2px;':'']" class="w-full h-[40px] bg-gray-300 text-gray-500  px-2 rounded-lg focus:outline-0" >
+                                <img v-show="passW.length>0" @click="showPd" src="../../../assets/vue.svg" alt="eye"  class="absolute top-[10px] right-[15px] w-[20px] cursor-pointer ">
+                            </div>                            
+                        </div> 
+
                     </div>
                     
                     <!-- confirm -->
-                    <div class="flex ">
-                        <label for="cPd" class="w-[120px] font-semibold m-2">
+                    <div class="relative  h-[60px] mt-1.5">
+                        <!-- <label for="cPd" class="w-[120px] font-semibold m-2">
                             
                             Confirm password
-                        </label>
-                        <input v-model="cPassW" id="cPd" type="password" class="w-[400px] h-[40px] bg-gray-300 m-2 my-auto px-1.5 rounded-lg focus:outline-0" >
+                        </label> -->
+                        <h4 v-show="cPassW.length>0" class="text-sm font-semibold text-gray-500 mx-2">
+                            Confirm Password
+                            <span class="">
+                                {{cPassW.length}}/14
+                            </span>
+                        </h4> 
+                        <input v-model="cPassW" placeholder="Confirm Password"  id="cPd" type="password" :maxlength="passWL" :style="[cPassWS==false?'border-color: rgb(225 29 72);border-width: 2px;':'']" class="absolute bottom-0 w-full h-[40px] text-gray-500 bg-gray-300   px-2 rounded-lg focus:outline-0" >
                     </div>
 
 
                     <!-- button -->
-                    <div class="w-fit mx-auto  mt-3">
-                        <button class="relative w-[200px] h-[40px] p-1 text-[20px] bg-rose-300 font-semibold text-gray-600  rounded-xl">
-                            <h4 @click="submittS=true" class="static">
-                                Submit
+                    <div class="w-fit mx-auto  mt-10">
+                        <button @click="submittform()" :style="['background-color:#77BEFF']" class="relative w-[200px] h-[40px] p-1 text-[20px]   rounded-2xl">
+                            <h4 @click="submittS=true" class="static font-light text-white">
+                                Create User
                             </h4>
-                            <img v-show="submittS==true" src="../../../assets/vue.svg" alt="spin_loading" class="absolute top-[10px] right-[25px] w-[20px] animate-spin">
+                            <img  v-show="submittS==true"  src="../../../assets/vue.svg" alt="spin_loading" class="absolute top-[10px] right-[25px] w-[20px] animate-spin">
                         </button>
                     </div>
                 </div>
