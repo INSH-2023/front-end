@@ -1,4 +1,18 @@
 {
+  "users": [
+    {
+      "first_name": "testing",
+      "last_name": "testing",
+      "email": "testing@mail.com",
+      "role_name": "1",
+      "office": "1",
+      "position": "1",
+      "passW": "testing",
+      "cPassW": "testing",
+      "status": "inActive",
+      "id": 1
+    }
+  ],
   "events": [
     {
       "user": "Testing Testing",
@@ -77,31 +91,6 @@
       "type": "IT_Service",
       "subject": "hardware",
       "status": "request",
-      "date": "11:12:02",
-      "assign": "Not_assign",
-      "useT": "or",
-      "userTU": "",
-      "typeM": "Smart_Phone",
-      "problems": [
-        "NoteBook3",
-        "NoteBook4",
-        "NoteBook5",
-        "NoteBook6",
-        "NoteBook2",
-        "NoteBook1",
-        "NoteBook7"
-      ],
-      "other": "",
-      "massage": "",
-      "id": 4
-    },
-    {
-      "user": "Testing Testing",
-      "email": "testingTestingTesing@mail.com",
-      "group": "วิจัยและวัฒนะธรรม",
-      "type": "IT_Service",
-      "subject": "hardware",
-      "status": "request",
       "date": "14:16:37",
       "assign": "Not_assign",
       "useT": "or",
@@ -118,6 +107,26 @@
       "other": "",
       "massage": "",
       "id": 5
+    },
+    {
+      "user": "Testing Testing",
+      "email": "testingTestingTesing@mail.com",
+      "group": "วิจัยและวัฒนะธรรม",
+      "type": "IT_Service",
+      "subject": "hardware",
+      "status": "request",
+      "date": "16:01:22",
+      "assign": "Not_assign",
+      "useT": "or",
+      "userTU": "",
+      "typeM": "PC",
+      "problems": [
+        "NoteBook3",
+        "NoteBook2"
+      ],
+      "other": "",
+      "massage": "",
+      "id": 6
     }
   ],
   "solutions": [
