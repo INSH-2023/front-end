@@ -160,11 +160,11 @@ const submittform =async()=>{
             first_name:fName.value,
             last_name:lName.value,
             email:email.value,
-            role_name:role.value,
+            role:role.value,
             office:office.value,
             position:position.value,
             passW:passW.value,
-            cPassW:cPassW.value,
+            group_work:group.value,
             status:'inActive',
         })
     })
