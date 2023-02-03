@@ -1,5 +1,9 @@
 <script setup>
-import{ref,computed}from'vue'
+import{ref,computed, onBeforeMount}from'vue'
+
+const userLink ='http://localhost:3000/users'
+const userList =ref([])
+
 const sampleData=ref([
     {
         "id":1,
@@ -53,6 +57,23 @@ const changeColorBy=(v)=>{
 
     return style
 }
+
+// get user
+const getUsers =async()=>{
+    const res =await fetch(userLink,{
+        method:'GET'
+    })
+    if(res.status==200){
+        userList.value=await res.json()
+        console.log('get data successfull')
+    }else{
+        console.log('cannot get user list')
+    }
+}
+
+onBeforeMount(()=>{
+    getUsers()
+})
 
 
 </script>
@@ -109,7 +130,7 @@ const changeColorBy=(v)=>{
                     <thead class="bg-white text-lg sticky top-0">
                         <tr class="">
                             <th scope="col" class="py-3 px-6 ">
-                                User
+                                Name
                             </th>
                             <th scope="col" class="py-3 px-6">
                                 Group
@@ -128,29 +149,29 @@ const changeColorBy=(v)=>{
                         </tr>                        
                     </thead>
                     <tbody>
-                        <tr v-for="data in sampleData"  class="text-[15px] cursor-pointer bg-white border-b-2 border-gray-300 hover:border-gray-400 hover:bg-gray-400">
+                        <tr v-for="data in userList"  class="text-[15px] cursor-pointer bg-white border-b-2 border-gray-300 hover:border-gray-400 hover:bg-gray-400">
                             <td class="w-[140px]   font-medium px-6 py-4 text-left">
                             <div class="w-[130px] font-semibold truncate mx-auto">
-                                {{data.user}}
+                                {{data.first_name}} {{ data.last_name }}
                             </div>
                             <div class="w-[130px] text-[10px] truncate mx-auto">
                                 {{ data.email }}
                             </div> 
                             </td>
                             <td class="w-[130px] px-6 py-4 font-semibold ">
-                                <div class="w-[120px] truncate mx-auto">
-                                    {{data.group}}
+                                <div class="w-[130px] truncate mx-auto">
+                                    {{data.group_work}}
                                 </div>
                             </td>
                             <td class="w-[130px] px-6 py-4 font-semibold ">
-                                <div class="w-[120px] truncate mx-auto" :style="data.active==true?'color:green':'color:red'">
-                                    {{data.active==true?'Active':'inActive'}}                                    
+                                <div class="w-[120px] truncate mx-auto" :style="data.status=='Active'?'color:green':'color:red'">
+                                    {{data.status}}                                    
                                 </div>
 
                             </td>
                             <td class="w-[130px] px-6 py-4 font-semibold ">
                                 <div class="w-[120px] mx-auto">
-                                {{data.respo}}
+                                {{data.role}}
                                 </div>
                             </td>
                             <td class="w-[130px] px-6 py-4 font-semibold">
