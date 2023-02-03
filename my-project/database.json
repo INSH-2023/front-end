@@ -4,12 +4,12 @@
       "first_name": "testing",
       "last_name": "testing",
       "email": "testing@mail.com",
-      "role_name": "1",
+      "role": "1",
       "office": "1",
       "position": "1",
       "passW": "testing",
-      "cPassW": "testing",
-      "status": "inActive",
+      "group_work": "วิจัยและวัฒนะธรรม",
+      "status": "Active",
       "id": 1
     }
   ],
