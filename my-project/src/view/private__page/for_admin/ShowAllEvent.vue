@@ -1,7 +1,7 @@
 <script setup>
 import{ref,computed,onBeforeMount}from'vue'
 import BaseLoading from '../../../components/BaseLoading.vue';
-const sampleDataLink="http://localhost:3000/events"
+const requestLink="http://localhost:3000/events"
 const isFilter=ref(false)
 const eventList=ref([])
 const assignCh =ref('')
@@ -85,7 +85,7 @@ const showInfoByID=async(v,index)=>{
     let detail =document.getElementsByClassName("goInfo")
     console.log('this is index:',index)
 
-    let res=await fetch(`${sampleDataLink}/${v}`,{
+    let res=await fetch(`${requestLink}/${v}`,{
         method:'GET'
     })
     if(res.status==200){
@@ -105,7 +105,7 @@ const showInfoByID=async(v,index)=>{
 // edit by id
 const editInfo = async(v)=>{
     let S =undefined
-    let res =await fetch(`${sampleDataLink}/${v}`,{
+    let res =await fetch(`${requestLink}/${v}`,{
         method:'PUT',
         headers:{
             "content-type": "application/json"
@@ -151,7 +151,7 @@ const clickedInfo =()=>{
 const eventStatus =ref(undefined)
 // getInfo
 const getEvents =async(v)=>{
-    let res = await fetch(sampleDataLink,{
+    let res = await fetch(requestLink,{
         method:'GET'
     })
     if(res.status==200){
@@ -182,7 +182,7 @@ const submitt =(v)=>{
 
 // delete
 const deleteItem =async (v)=>{
-    let res = await fetch(`${sampleDataLink}/${v}`,{
+    let res = await fetch(`${requestLink}/${v}`,{
         method:'DELETE'
     })
     if(res.status==200){
@@ -415,6 +415,14 @@ onBeforeMount(()=>{
                             </td>
                         </tr>
                         <tr>
+                            <td class="text-right w-[130px]" >
+                                Service : 
+                            </td>
+                            <td :style="[changeColorBy(event.type)]">
+                                {{ event.type }}
+                            </td>
+                        </tr>
+                        <tr v-show="event.type=='IT_Service'">
                             <td class="text-right">
                                 ประเภทของ :
                             </td>
@@ -422,7 +430,7 @@ onBeforeMount(()=>{
                                 {{event.useT=='or'?'เป็นขององค์กร':'เป็นของส่วนตัว'}}
                             </td>
                         </tr>
-                        <tr>
+                        <tr v-show="event.type=='IT_Service'">
                             <td class="text-right">
                                 ยี่ห้อ : 
                             </td>
@@ -430,7 +438,7 @@ onBeforeMount(()=>{
                                 {{event.userTU}}
                             </td>
                         </tr>
-                        <tr>
+                        <tr v-show="event.type=='IT_Service'">
                             <td class="text-right">
                                 S/N :
                             </td>
@@ -459,7 +467,7 @@ onBeforeMount(()=>{
                 </div> -->
 
                 <!-- second  -->
-                <div class="mt-4 ">
+                <div v-show="event.type=='IT_Service'" class="mt-4 ">
                     <div class="text-[20px] font-semibold">
                         <h3 >
                         ชนิดของ Hardware 
@@ -482,13 +490,16 @@ onBeforeMount(()=>{
                 <!-- problem -->
                 <div   class="mt-4 " >
                     <div class="text-[20px] font-semibold">
-                        <h3 >
+                        <h3 v-show="event.type=='IT_Service'">
                             อาการของ {{event.subject}} ที่พบ
-                        </h3>   
+                        </h3>  
+                        <h3 v-show="event.type=='PR_Service'">
+                            ความช่วยเหลือที่ต้องการเกี่ยวกับ<span class="text-rose-500 pl-2">{{event.subject}}</span> 
+                        </h3> 
                     </div>
 
                     
-                    <div class="grid grid-cols-6 gap-y-2 gap-x-2 mt-4 text-[15px] font-medium">
+                    <div class="w-full grid grid-cols-6 gap-y-2 gap-x-2 mt-4 text-[15px] font-medium">
                         
                         <div  v-for="data in event.problems" class="w-[85px] mx-auto p-2 bg-gray-200 rounded-xl ">
                             <img src="../../../assets/vue.svg" alt="NoteBook" class="w-[40px] mx-auto">
@@ -496,8 +507,8 @@ onBeforeMount(()=>{
                             {{data}}
                             </h3>
                         </div >
-                        <div v-if="event.other==''"  class="w-[70px] mx-auto p-2 bg-gray-200 rounded-xl ">
-                            <img src="../../../assets/vue.svg" alt="NoteBook" class="w-[85px] mx-auto">
+                        <div v-if="event.other!=''"  class="w-[70px] mx-auto p-2 bg-gray-200 rounded-xl ">
+                            <img src="../../../assets/vue.svg" alt="NoteBook" class="w-[40px] mx-auto">
                             <h3 class="w-fit mx-auto text-[8px]">
                             other
                             </h3>
@@ -508,7 +519,7 @@ onBeforeMount(()=>{
 
                 <!-- massage other -->
                 <div   class=" w-full mt-10 ">
-                    <div v-show="event.other !=''"  class="">
+                    <div v-show="event.other!=''"  class="">
                         <label for="other_1" class="ml-2 text-[17px] font-semibold inline-b">
                             กรณีเลือก<span class="text-rose-500 pl-2">อื่นๆโปรดระบุ</span>
                         </label>
@@ -516,7 +527,7 @@ onBeforeMount(()=>{
                         <textarea v-model="event.other"  name="other" id="other_1"  disabled class="w-full h-[100px] resize-none pt-[10px] block rounded-xl bg-gray-300 p-2 focus:outline-0" ></textarea>
                     </div>
                     
-                    <div v-show="event.massage !=''" class="">
+                    <div v-show="event.massage!=''" class="mt-3">
                         <label for="other_2" class="ml-2 text-[17px] font-semibold">
                             ระบุรายละเอียดของปัญหาที่พบ (ถ้ามี)
                         </label>
@@ -625,7 +636,7 @@ onBeforeMount(()=>{
   margin: auto;
   margin-top: 3%;
   /* overflow-y: auto; */
-  padding: 40px;
+  padding: 35px;
   background: #fff;
   width: 40%;
   height: 600px;
