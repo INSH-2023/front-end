@@ -21,6 +21,7 @@ import Main_private_admin from '../view/private__page/for_admin/Main_private_adm
 import ShowAllUser from '../view/private__page/for_admin/ShowAllUser.vue'
 import ShowAllEvent from'../view/private__page/for_admin/ShowAllEvent.vue'
 import WriteSolutions from '../view/private__page/for_admin/Write_solution.vue'
+import ShowAllSolution from '../view/private__page/for_admin/ShowAllSolution.vue'
 // public
 import SignIn from '../view/public__page/SignIn.vue'
 import Home from '../view/public__page/Home.vue'
@@ -65,7 +66,7 @@ const routes=[
                 component:SignUp
             },
             {
-                path:'/account/admin/show-users',
+                path:'/account/admin/all-users',
                 name:'showAllUser',
                 component:ShowAllUser
             },
@@ -73,6 +74,11 @@ const routes=[
                 path:'/account/admin/write-solutions',
                 name:'writeS',
                 component:WriteSolutions
+            },
+            {
+                path:'/account/admin/all-solution',
+                name:'showAllSolution',
+                component:ShowAllSolution
             }
         ]
 
