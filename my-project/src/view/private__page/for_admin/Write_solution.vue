@@ -1,6 +1,7 @@
 <script setup>
 import {ref} from 'vue' 
 
+const solutionLink ='http://localhost:3000/solutions'
 
 const title=ref('')
 const tag =ref('')
@@ -87,14 +88,101 @@ const removeElement=(v)=>{
     console.log('remove element')
 }
 
+//clean tag data
+const getTagToArr=(v)=>{
+ tagArr.value =  v.split(",")
+//  console.log(v)
+}
+
+// validate
+const validate =async()=>{
+    let status=undefined
+
+    // more than limit
+    if(title.value.length>titleL){
+        console.log('length of title more than limit')
+    }
+    if(tag.value.length>tagL){
+        console.log('length of tag more than limit')
+    }
+    if(discription.value.length>discriptionL){
+        console.log('length of discription more than limit')
+    }
+    if(solutionT.value.length>solutionL){
+        console.log('some step ,length of solution text more than limit')
+    }
+    if(solutions.value.length>15){
+        console.log('length of solution array  more than limit')
+    }
+
+    // not input data
+    if(title.value.length==0){
+        console.log('please input ur title')
+        status==true
+    }
+    if(tag.value.length==0 ||tagArr.value.length==0){
+        console.log('please input ur tag')
+        status==true
+    }
+    if(discription.value.length==0){
+        console.log('please input ur discription')
+        status==true
+    }
+    if(solutions.value.length==0){
+        console.log('please input ur solutions')
+        status==true
+    }
+    
+    console.log('title'+title.value)
+    console.log('tag'+tag.value)
+    console.log('tagArr'+tagArr.value)
+    console.log('discription'+discription.value)
+    console.log('solutions'+solutions.value)
+
+    return status
+}
+
 // submit form
-const submitt=(v)=>{
-    // let index =solutions.value.index
+const submitt=async()=>{
+    getTagToArr(tag.value)
+
+    if(validate()==true){
+        console.log('please input ur info')
+    }else{
+        const res =await fetch(solutionLink,{
+            method:'POST',
+            headers:{
+                "content-type": "application/json"
+            },
+            body:JSON.stringify({
+                title:title.value,
+                tag:tagArr.value,
+                text:discription.value,
+                solutions:solutions.value
+
+            })
+        }) 
+        if(res.status==201){
+            console.log('add successful')
+
+        }else{
+            console.log('error something')
+        }  
+    }
 
     
+    // let index =solutions.value.index
+
+   
+    // console.log(getTagToArr(tag.value))
+    // console.log(tagArr.value[0])
+    // console.log(tagArr.value) 
+
     // solutions.value=[]
-    console.log(solutions.value)
+    // console.log(solutions.value)
 }
+
+
 </script>
 <template>
 <div class="overflow-y-auto ">
@@ -159,7 +247,7 @@ const submitt=(v)=>{
                     <div :style="[icon!= undefined ? 'background-color: rgb(209 213 219); ':'']" class="relative w-full h-fit mt-4  rounded-lg">
                         <img v-show="icon!= undefined" id="previewIcon" src="#" alt="show image" class="w-[80px] mx-auto mt-3 py-3"/>
                         <div :style="[icon != undefined? 'width: 100%;border-bottom-right-radius: 8px;border-bottom-left-radius: 8px;':'width: fit-content; border-radius:8px']" class=" mx-auto p-1.5 bg-gray-400  font-light text-center">
-                            <label  for="file" class="w-full text-white cursor-pointer ">
+                            <label  for="file" class="w-fit text-white cursor-pointer ">
                                 <input id="file" type="file" accept=".png,.jpg,.jpeg" class="hidden" @change="uploadIcon"/>
                                 <span v-show="icon==undefined" >Upload File</span>
                                 <span v-show="icon!=undefined" >{{ iconName }}</span>
