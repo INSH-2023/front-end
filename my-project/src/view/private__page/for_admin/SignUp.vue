@@ -273,9 +273,9 @@ const showPd =()=>{
                                 </h4> 
                                 <select v-model="role"  id="role" :style="[roleS==false?'border-color: rgb(225 29 72);border-width: 2px;':'']" class="absolute bottom-0 w-full h-[40px]  px-2 bg-gray-300 text-gray-500 rounded-lg focus:outline-0">
                                     <option value="" selected disabled hidden >Role</option>
-                                    <option value="1" >sample 1</option>
-                                    <option value="2" >sample 2</option>
-                                    <option value="3" >sample 3</option>
+                                    <option value="user" >User</option>
+                                    <option value="admin_it" >Admin IT</option>
+                                    <option value="admin_PR" >Admin PR</option>
 
 
                                 </select>                                
@@ -318,9 +318,14 @@ const showPd =()=>{
                                 </h4> 
                                 <select v-model="group"  id="position" :style="[groupS==false?'border-color: rgb(225 29 72);border-width: 2px;':'']" class="absolute bottom-0  w-full h-[40px]  px-2 bg-gray-300 text-gray-500 rounded-lg focus:outline-0">
                                     <option value="" selected disabled hidden >Group</option>
-                                    <option value="1" >sample 1</option>
-                                    <option value="2" >sample 2</option>
-                                    <option value="3" >sample 3</option>
+                                    <option value="บริหารจัดการองค์กร" >บริหารจัดการองค์กร</option>
+                                    <option value="นโยบายและยุทธศาสตร์" >นโยบายและยุทธศาสตร์</option>
+                                    <option value="วิจัยนวัตกรรมและระบบพฤติกรรมไทย" >วิจัยนวัตกรรมและระบบพฤติกรรมไทย</option>
+                                    <option value="สื่อสารและรณรงค์ทางสังคม" >สื่อสารและรณรงค์ทางสังคม</option>
+                                    <option value="ศูนย์ข้อมูลและเทคโนโลยีสารสนเทศ" >ศูนย์ข้อมูลและเทคโนโลยีสารสนเทศ</option>
+                                    <option value="สมัชชาคุณธรรมและความร่วมมือนานาชาติ" >สมัชชาคุณธรรมและความร่วมมือนานาชาติ</option>
+                                    <option value="ส่งเสริมคุณธรรมเครือข่ายทางสังคม" >ส่งเสริมคุณธรรมเครือข่ายทางสังคม</option>
+
 
 
                                 </select>
