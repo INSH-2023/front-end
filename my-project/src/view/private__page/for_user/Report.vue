@@ -41,29 +41,47 @@ const vd_userTypeU=ref(undefined)
 const vd_typeM =ref(undefined)
 
 const summaryInfo=()=>{
-
-    if(typeU.value == ''&&typeP =='hardware'&&typeP =='software'&&typeP =='internet'){
-        console.log('please select ur type of use')
+// console.log(service)
+    if(service=='it'){
+        if(typeU.value == ''&&typeP =='hardware'&&typeP =='software'&&typeP =='internet'){
+            console.log('please select ur type of use')
+        }else
+        if(typeU.value=='sf'&&userTypeU.value.length==0){
+            console.log('please input ur device')
+        }else 
+        if(typeM.value == ''&&typeP =='hardware'&&typeP =='software'&&typeP =='internet'){
+            console.log('please select ur type of matchine')
+        }else
+        if(problems.value.length==0){
+            console.log('please select ur problems')
+        }else
+        if(isOther.value==true&&others.value==''){
+            console.log('please input ur orther')
+        }
+        else{
+            console.log('status good')
+            let nextB =document.getElementById('goSummary')
+            nextB.setAttribute('href','#summaryInfo')
+            nextB.click()
+            isSummary.value=true
+        }
     }else
-    if(typeU.value=='sf'&&userTypeU.value.length==0){
-        console.log('please input ur device')
-    }else 
-    if(typeM.value == ''&&typeP =='hardware'&&typeP =='software'&&typeP =='internet'){
-        console.log('please select ur type of matchine')
-    }else
-    if(problems.value.length==0){
-        console.log('please select ur problems')
-    }else
-    if(isOther.value==true&&others.value==''){
-        console.log('please input ur orther')
+    if(service=='pr'){
+        if(problems.value.length==0){
+            console.log('please select ur problems')
+        }else
+        if(isOther.value==true&&others.value==''){
+            console.log('please input ur orther')
+        }else{
+            console.log('status good')
+            let nextB =document.getElementById('goSummary')
+            nextB.setAttribute('href','#summaryInfo')
+            nextB.click()
+            isSummary.value=true
+        }
+        // console.log(service)
     }
-    else{
-        console.log('status good')
-        let nextB =document.getElementById('goSummary')
-        nextB.setAttribute('href','#summaryInfo')
-        nextB.click()
-        isSummary.value=true
-    }
+    
     
 }
     
@@ -326,7 +344,13 @@ const submitt = async()=>{
                     </h3>
                     <h3 v-if="typeP=='application'">
                         1. เลือก หัวข้อ <span class="text-rose-500">Application</span> ที่ต้องการให้ช่วยเหลือ
-                    </h3>                     
+                    </h3> 
+                    <h3 v-if="typeP=='media'">
+                        1. เลือก หัวข้อ <span class="text-rose-500">Media</span> ที่ต้องการให้ช่วยเหลือ
+                    </h3>
+                    <h3 v-if="typeP=='news'">
+                        1. เลือก หัวข้อ <span class="text-rose-500">News</span> ที่ต้องการให้ช่วยเหลือ
+                    </h3>                    
                 </div>
 
                 <div  class="grid grid-cols-6 gap-y-2 gap-x-2 mt-4 text-[15px] font-medium">
@@ -361,7 +385,8 @@ const submitt = async()=>{
                     
                     <div  class="mx-4">
                         <label for="other_2" class="ml-3 text-[17px] font-semibold">
-                            ระบุรายละเอียดของปัญหาที่พบ (ถ้ามี)
+                            <span v-if="service=='it'">ระบุรายละเอียดของปัญหาที่พบ (ถ้ามี)</span>
+                            <span v-if="service=='pr'">ระบุรายละเอียดเพิ่มเติม (ถ้ามี)</span> 
                         </label>
                         <textarea v-model="massage" name="other" id="other_2" cols="50" rows="10" class="resize-none block bg-gray-300 rounded-xl p-2 focus:outline-0"></textarea>
                     </div>
@@ -395,7 +420,7 @@ const submitt = async()=>{
                         ย้อนกลับ
                     </h4>
                 </button>
-                <button @click="summaryInfo" class="w-[130px] mx-3 p-2 font-semibold bg-rose-400 text-white rounded-xl">
+                <button @click="summaryInfo()" class="w-[130px] mx-3 p-2 font-semibold bg-rose-400 text-white rounded-xl">
                     <a id="goSummary">
                         ถัดไป
                     </a>
@@ -471,6 +496,13 @@ const submitt = async()=>{
                         1. <span class="text-rose-500"> สรุป </span> ปัญหา Application ที่คุณต้องการความช่วยเหลือ
                     </h3> 
 
+                    <h3 v-if="typeP=='media'">
+                        1. <span class="text-rose-500"> สรุป </span> ปัญหาเกี่ยวกับ Media ที่คุณต้องการความช่วยเหลือ
+                    </h3> 
+
+                    <h3 v-if="typeP=='news'">
+                        1. <span class="text-rose-500"> สรุป </span> ปัญหาเกี่ยวกับ News ที่คุณต้องการความช่วยเหลือ
+                    </h3> 
                     
                     
                 </div>
@@ -500,7 +532,7 @@ const submitt = async()=>{
                     <textarea v-model="others" name="other" id="other_1" cols="50" rows="5" disabled class="resize-none pt-[10px] block rounded-xl bg-gray-300 p-2 focus:outline-0" ></textarea>
                 </div>
                 
-                <div  class="mx-4">
+                <div v-show="massage.length != 0"  class="mx-4">
                     <label for="other_2" class="ml-3 text-[17px] font-semibold">
                         ระบุรายละเอียดของปัญหาที่พบ (ถ้ามี)
                     </label>
