@@ -11,6 +11,30 @@
       "group_work": "วิจัยและวัฒนะธรรม",
       "status": "Active",
       "id": 1
+    },
+    {
+      "first_name": "testing",
+      "last_name": "testing",
+      "email": "testing@mail.com",
+      "role": "1",
+      "office": "1",
+      "position": "1",
+      "passW": "hello",
+      "group_work": "1",
+      "status": "inActive",
+      "id": 2
+    },
+    {
+      "first_name": "testing",
+      "last_name": "testing",
+      "email": "TTT@mail.com",
+      "role": "user",
+      "office": "1",
+      "position": "1",
+      "passW": "hhh",
+      "group_work": "บริหารจัดการองค์กร",
+      "status": "inActive",
+      "id": 3
     }
   ],
   "events": [
@@ -18,115 +42,52 @@
       "user": "Testing Testing",
       "email": "testingTestingTesing@mail.com",
       "group": "วิจัยและวัฒนะธรรม",
-      "type": "PR_Service",
+      "type": "IT_Service",
       "subject": "hardware",
-      "status": "in_progress",
-      "date": "16:14:42",
-      "assign": "Testing_Tseing ",
+      "status": "request",
+      "date": "14:37:33",
+      "assign": "Not_assign",
       "useT": "sf",
-      "userTU": "PR_service",
-      "typeM": "PC",
+      "userTU": "เอเซี้ยน",
+      "typeM": "NoteBook",
       "problems": [
         "NoteBook2",
-        "NoteBook1",
-        "NoteBook7",
+        "NoteBook4",
+        "NoteBook5",
+        "NoteBook6",
         "NoteBook3",
-        "NoteBook4"
+        "NoteBook1",
+        "NoteBook7"
       ],
-      "other": "",
-      "massage": "",
-      "commentCh": "sdfkljsdkjsd",
+      "other": "IT service",
+      "massage": "message testing it service",
       "id": 1
     },
     {
       "user": "Testing Testing",
       "email": "testingTestingTesing@mail.com",
       "group": "วิจัยและวัฒนะธรรม",
-      "type": "IT_Service",
-      "subject": "hardware",
-      "status": "request",
-      "date": "09:39:53",
-      "assign": "Not_assign",
-      "useT": "or",
+      "type": "PR_Service",
+      "subject": "media",
+      "status": "open_case",
+      "date": "14:38:52",
+      "assign": "Testing_Tseing ",
+      "useT": "",
       "userTU": "",
-      "typeM": "NoteBook",
+      "typeM": "",
       "problems": [
-        "NoteBook3",
+        "NoteBook1",
         "NoteBook2",
+        "NoteBook3",
         "NoteBook4",
-        "NoteBook5",
         "NoteBook6",
-        "NoteBook1",
+        "NoteBook5",
         "NoteBook7"
       ],
-      "other": "",
-      "massage": "",
+      "other": "testing media",
+      "massage": "PR service testing",
+      "commentCh": "sdfsdf",
       "id": 2
-    },
-    {
-      "user": "Testing Testing",
-      "email": "testingTestingTesing@mail.com",
-      "group": "วิจัยและวัฒนะธรรม",
-      "type": "IT_Service",
-      "subject": "hardware",
-      "status": "request",
-      "date": "09:41:14",
-      "assign": "Not_assign",
-      "useT": "sf",
-      "userTU": "เอเซี่้ยน",
-      "typeM": "PC",
-      "problems": [
-        "NoteBook3",
-        "NoteBook5",
-        "NoteBook4"
-      ],
-      "other": "",
-      "massage": "",
-      "id": 3
-    },
-    {
-      "user": "Testing Testing",
-      "email": "testingTestingTesing@mail.com",
-      "group": "วิจัยและวัฒนะธรรม",
-      "type": "IT_Service",
-      "subject": "hardware",
-      "status": "request",
-      "date": "14:16:37",
-      "assign": "Not_assign",
-      "useT": "or",
-      "userTU": "",
-      "typeM": "NoteBook",
-      "problems": [
-        "NoteBook2",
-        "NoteBook4",
-        "NoteBook3",
-        "NoteBook5",
-        "NoteBook1",
-        "NoteBook7"
-      ],
-      "other": "",
-      "massage": "",
-      "id": 5
-    },
-    {
-      "user": "Testing Testing",
-      "email": "testingTestingTesing@mail.com",
-      "group": "วิจัยและวัฒนะธรรม",
-      "type": "IT_Service",
-      "subject": "hardware",
-      "status": "request",
-      "date": "16:01:22",
-      "assign": "Not_assign",
-      "useT": "or",
-      "userTU": "",
-      "typeM": "PC",
-      "problems": [
-        "NoteBook3",
-        "NoteBook2"
-      ],
-      "other": "",
-      "massage": "",
-      "id": 6
     }
   ],
   "solutions": [
@@ -221,6 +182,31 @@
         }
       ],
       "img": "../../../src/assets/vue.svg"
+    },
+    {
+      "title": "testing solu",
+      "tag": [
+        "tetsing",
+        "solu",
+        "losu",
+        "suiiiiiii"
+      ],
+      "text": "hello this is testing for ex write solution",
+      "solutions": [
+        {
+          "id": 1,
+          "solution": "hello wolrd 1"
+        },
+        {
+          "id": 2,
+          "solution": "hello world 2"
+        },
+        {
+          "id": 3,
+          "solution": "hello world 3"
+        }
+      ],
+      "id": 5
     }
   ]
 }
