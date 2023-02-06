@@ -159,7 +159,7 @@ onBeforeMount(()=>{
     <!-- PR -->
     <div v-if="params.service=='pr'" class="flex w-fit mx-auto p-2">
         <!-- hard ware -->
-        <button @click="goReport('hardware')" class="px-4 w-[130px] my-auto  ">
+        <button @click="goReport('media')" class="px-4 w-[130px] my-auto  ">
             <img src="../../../assets/vue.svg" alt="Hardware"  class="  w-[80px] h-[80px] w-fit mx-auto">
             
             <h3 class="mt-2 w-fit mx-auto font-semibold">
@@ -170,7 +170,7 @@ onBeforeMount(()=>{
             </h3>                
         </button>
         
-        <button @click="goReport('hardware')" class="px-4 w-[130px] my-auto  ">
+        <button @click="goReport('news')" class="px-4 w-[130px] my-auto  ">
             <img src="../../../assets/vue.svg" alt="Hardware"  class="  w-[80px] h-[80px] w-fit mx-auto">
             
             <h3 class="mt-2 w-fit mx-auto font-semibold">
@@ -181,7 +181,7 @@ onBeforeMount(()=>{
             </h3>                
         </button>
 
-        <button @click="goReport('hardware')" class="px-4 w-[130px] my-auto  ">
+        <button @click="goReport('other')" class="px-4 w-[130px] my-auto  ">
             <img src="../../../assets/vue.svg" alt="Hardware"  class="  w-[80px] h-[80px] w-fit mx-auto">
             
             <h3 class="mt-2 w-fit mx-auto font-semibold">
@@ -197,7 +197,7 @@ onBeforeMount(()=>{
     <hr class="mt-[30px] w-[1100px] h-[1px] border-0 mx-auto bg-gray-700">
 
     <!-- searching -->
-    <div class="relative w-[600px] h-[150px] mx-auto">
+    <div v-if="params.service=='it'" class="relative w-[600px] h-[150px] mx-auto">
         <h3 class="mx-auto w-fit mt-4 text-[30px]">
             หรือค้นหาหัวข้อปัญหาที่คุณเจอ
         </h3>
@@ -219,7 +219,7 @@ onBeforeMount(()=>{
     </div>
 
     <!-- list problems -->
-    <div class="grid grid-cols-2 gap-4 w-[1000px] mx-auto mt-3">
+    <div v-if="params.service=='it'" class="grid grid-cols-2 gap-4 w-[1000px] mx-auto mt-3">
         <div v-for="(dataa,index) in arrArticle" :key="index" >
             <img :src="dataa.img" alt="logo" class="ml-10 w-[100px]">
             <div class="ml-[10px] my-1.5 text-[20px] font-semibold">
