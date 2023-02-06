@@ -11,6 +11,7 @@ const goShowAllEvent =()=>myRouter.push({name:'showAllEvents'})
 const goHistory =()=>myRouter.push({name:'history'})
 const goBooking =()=>myRouter.push({name:'booking'})
 const goWriteS =()=>myRouter.push({name:'writeS'})
+const goShowAllSolution =()=>myRouter.push({name:'showAllSolution'})
 </script>
 <template>
 <div class="bg-white border-r-2 border-gray-400 w-full h-full">
@@ -29,7 +30,7 @@ const goWriteS =()=>myRouter.push({name:'writeS'})
                     <li class="">
                         <button @click="goShowAllEvent" class="flex w-fit  font-semibold text-gray-800 ">
                             <img src="../assets/admin_page/request.png" alt="" class="w-[28px] h-[28] my-auto">
-                            <span class="ml-3">Request</span> 
+                            <span class="ml-3">All Request</span> 
                         </button>
                         <hr class="full border-[1px] mt-2  border-gray-400">
                     </li>
@@ -55,15 +56,23 @@ const goWriteS =()=>myRouter.push({name:'writeS'})
                         </button>
                         <hr class="full border-[1px] mt-2 border-gray-400">
                         
-                    </li>                    
+                    </li>
                     <li class="mt-3">
+                        <button @click="goShowAllSolution" class="flex w-fit  font-semibold text-gray-800 ">
+                            <img src="../assets/admin_page/dashboard.png" alt="" class="w-[28px] h-[28] my-auto">
+                            <span class="ml-3">All Solution</span> 
+                        </button>
+                        <!-- <hr class="full border-[1px] mt-2 border-gray-400"> -->
+                        
+                    </li>                    
+                    <!-- <li class="mt-3">
                         <button @click="goWriteS" class="flex w-fit  font-semibold text-gray-800 ">
                             <img src="../assets/admin_page/dashboard.png" alt="" class="w-[28px] h-[28] my-auto">
                             <span class="ml-3">Dashboard</span> 
                         </button>
-                        <!-- <hr class="full border-[1px] mt-2"> -->
+                        <hr class="full border-[1px] mt-2 border-gray-400">
                         
-                    </li>
+                    </li> -->
                     
                 </ul>
             </div>
