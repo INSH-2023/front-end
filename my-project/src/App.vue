@@ -21,6 +21,8 @@ const myRouter = useRouter()
 
 </template>
 
-<style scoped>
-
+<style >
+*{
+  font-family: 'Kanit', sans-serif;
+}
 </style>
