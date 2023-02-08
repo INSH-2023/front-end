@@ -217,7 +217,7 @@ const showPd =()=>{
                         <!-- <label for="fName" class="w-[120px] font-semibold m-2">
                             First Name
                         </label> -->
-                        <h4 v-show="fName.length>0" class="text-sm font-semibold text-gray-500 mx-2">
+                        <h4 v-show="fName.length>0" class="text-sm font-semibold text-gray-500 mx-2  transition-opacity fade-in delay-150">
                             First Name
                             <span class="" :style="[fName.length==fNameL?'color: rgb(225 29 72);':'']">
                                 {{fName.length}}/{{fNameL}}
