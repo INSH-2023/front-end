@@ -111,16 +111,16 @@ const editInfo = async(v)=>{
             "content-type": "application/json"
         },
         body:JSON.stringify({
-            user:event.value.user,
+            full_name:event.value.user,
             email:event.value.email,
-            group:event.value.group,
-            type:event.value.type,
+            group_work:event.value.group,
+            service_type:event.value.service_type,
             subject:event.value.subject,
             status:statusCh.value,
             date:event.value.date,
             assign:assignCh.value,
             useT:event.value.useT,
-            userTU:event.value.userTU,
+            brand:event.value.userTU,
             typeM:event.value.typeM,
             problems:event.value.problems,
             other:event.value.other,
@@ -336,7 +336,7 @@ onBeforeMount(()=>{
                             
                             <td class="w-[140px]   font-medium px-6 py-4 text-left">
                             <div class="w-[130px] font-semibold truncate ">
-                                {{data.user}}
+                                {{data.full_name}}
                             </div>
                             <div class="w-[130px] text-[10px] truncate">
                                 {{ data.email }}
@@ -344,12 +344,12 @@ onBeforeMount(()=>{
                             </td>
                             <td class="w-[130px] px-6 py-4 font-semibold">
                                 <div class="w-[120px] truncate">
-                                {{data.group}}
+                                {{data.group_work}}
                                 </div>
                             </td>
                             <td class="w-[90px] px-6 py-4 font-semibold">
-                                <div :style="[changeColorBy(data.type)] " class="w-[90px] truncate">
-                                {{data.type}}
+                                <div :style="[changeColorBy(data.service_type)] " class="w-[90px] truncate">
+                                {{data.service_type}}
                             </div>
                             </td>
                             <td class="w-[90px] px-6 py-4 font-semibold">
@@ -411,18 +411,18 @@ onBeforeMount(()=>{
                                 ของผู้ใช้ :
                             </td>
                             <td class="truncate w-[]">
-                                {{ event.user }}
+                                {{ event.full_name }}
                             </td>
                         </tr>
                         <tr>
                             <td class="text-right w-[130px]" >
                                 Service : 
                             </td>
-                            <td :style="[changeColorBy(event.type)]">
-                                {{ event.type }}
+                            <td :style="[changeColorBy(event.service_type)]">
+                                {{ event.service_type }}
                             </td>
                         </tr>
-                        <tr v-show="event.type=='IT_Service'">
+                        <tr v-show="event.service_type=='IT_Service'">
                             <td class="text-right">
                                 ประเภทของ :
                             </td>
@@ -430,20 +430,20 @@ onBeforeMount(()=>{
                                 {{event.useT=='or'?'เป็นขององค์กร':'เป็นของส่วนตัว'}}
                             </td>
                         </tr>
-                        <tr v-show="event.type=='IT_Service'">
+                        <tr v-show="event.service_type=='IT_Service'">
                             <td class="text-right">
                                 ยี่ห้อ : 
                             </td>
                             <td>
-                                {{event.userTU}}
+                                {{event.brand}}
                             </td>
                         </tr>
-                        <tr v-show="event.type=='IT_Service'">
+                        <tr v-show="event.service_type=='IT_Service'">
                             <td class="text-right">
                                 S/N :
                             </td>
                             <td>
-                                023u09234234234
+                                {{event.sn}}
                             </td>
                         </tr>
                    </tbody>
@@ -467,7 +467,7 @@ onBeforeMount(()=>{
                 </div> -->
 
                 <!-- second  -->
-                <div v-show="event.type=='IT_Service'" class="mt-4 ">
+                <div v-show="event.service_type=='IT_Service'" class="mt-4 ">
                     <div class="text-[20px] font-semibold">
                         <h3 >
                         ชนิดของ Hardware 
@@ -490,10 +490,10 @@ onBeforeMount(()=>{
                 <!-- problem -->
                 <div   class="mt-4 " >
                     <div class="text-[20px] font-semibold">
-                        <h3 v-show="event.type=='IT_Service'">
+                        <h3 v-show="event.service_type=='IT_Service'">
                             อาการของ {{event.subject}} ที่พบ
                         </h3>  
-                        <h3 v-show="event.type=='PR_Service'">
+                        <h3 v-show="event.service_type=='PR_Service'">
                             ความช่วยเหลือที่ต้องการเกี่ยวกับ<span class="text-rose-500 pl-2">{{event.subject}}</span> 
                         </h3> 
                     </div>
