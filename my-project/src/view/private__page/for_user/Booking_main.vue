@@ -26,8 +26,27 @@ let res =await fetch(articleLink,{
 })
 if(res.status==200){
    arrArticle.value = await res.json()
+   await randomAricle(4,arrArticle.value.length,arrArticle.value)
     console.log(arrArticle.value)
 }
+}
+
+// random article
+const ranArticle=ref([])
+const randomAricle =async(n,max,data)=>{
+    let ranN=undefined
+    let i=0
+    for(i=0;i<n;i++){
+        if(ranN==Math.floor(Math.random()*max)){
+            i--
+            ranN=Math.floor(Math.random()*max)
+        }else{
+            ranN=Math.floor(Math.random()*max)
+            console.log( Math.floor(Math.random()*max) ) 
+            ranArticle.value.push(data[ranN]) 
+        }
+    }
+    // return Math.floor(Math.random()*max) 
 }
 
 onBeforeMount(()=>{
@@ -219,16 +238,16 @@ onBeforeMount(()=>{
     </div>
 
     <!-- list problems -->
-    <div v-if="params.service=='it'" class="grid grid-cols-2 gap-4 w-[1000px] mx-auto mt-3">
-        <div v-for="(dataa,index) in arrArticle" :key="index" >
-            <img :src="dataa.img" alt="logo" class="ml-10 w-[100px]">
-            <div class="ml-[10px] my-1.5 text-[20px] font-semibold">
+    <div v-if="params.service=='it'" class="grid grid-cols-2 grid-rows-2 gap-4 w-[1000px] mx-auto mt-3">
+        <div v-for="(dataa,index) in ranArticle" :key="index"  class="bg-gray-100 p-2 rounded-2xl hover:bg-gray-200">
+            <img :src="dataa.img" alt="logo" class=" w-[45px] mx-3 mt-2">
+            <h5 class="ml-[10px] mb-1.5 mt-2 text-[20px] font-semibold">
                 {{dataa.title}}
-            </div>
-            <p  class="resize-none w-full h-[180px] p-2 text-[15px] text-ellipsis whitespace-normal break-words">
+            </h5>
+            <p  class="resize-none w-full h-[100px] px-2 text-[15px] text-ellipsis whitespace-normal break-words">
                 {{ dataa.text }}
             </p>
-            <button @click="goHowTo(dataa.id)" class="text-sky-500 hover:text-sky-400">
+            <button @click="goHowTo(dataa.id)" class="w-fit text-left p-2 text-sky-500 hover:text-sky-700 block">
                 ดูรายละเอียดเพิ่มเติม &#62;&nbsp;
             </button>
         </div>
