@@ -208,7 +208,7 @@ const submitt=async()=>{
                     <!-- title -->
                     <div class="relative h-[60px]">
 
-                        <h4 v-show="title.length>0" class="text-sm font-semibold text-gray-500 mx-2">
+                        <h4 v-show="title.length>0" class="text text-sm font-semibold text-gray-500 mx-2">
                             Title
                             <span class="text-gray-300" :style="[title.length==titleL?'color: rgb(225 29 72);':'']">
                                 {{title.length}}/{{titleL}}
@@ -219,7 +219,7 @@ const submitt=async()=>{
 
                     <!-- tag -->
                     <div class="relative h-[60px] mt-1.5 ">
-                        <h4 v-show="tag.length>0" class="text-sm font-semibold text-gray-500 mx-2">
+                        <h4 v-show="tag.length>0" class="text text-sm font-semibold text-gray-500 mx-2">
                             Tag
                             <span class="text-gray-300" :style="[tag.length==tagL?'color: rgb(225 29 72);':'']">
                                 {{tag.length}}/{{tagL}}
@@ -233,7 +233,7 @@ const submitt=async()=>{
 
                     <!-- discription -->
                     <div class="relative h-[140px] mt-1.5 ">
-                        <h4 v-show="discription.length>0" class="text-sm font-semibold text-gray-500 mx-2">
+                        <h4 v-show="discription.length>0" class="text text-sm font-semibold text-gray-500 mx-2">
                             Discription
                             <span class="text-gray-300" :style="[discription.length==discriptionL?'color: rgb(225 29 72);':'']">
                                 {{discription.length}}/{{discriptionL}}
@@ -264,7 +264,7 @@ const submitt=async()=>{
 
                     <!-- solutions -->
                     <div v-for="(data,index) in solutions" :key="index" class="solu relative h-[160px]  ">
-                        <h4 v-show="data.solution.length>0" class="text-sm font-semibold text-gray-500 mx-2">
+                        <h4 v-show="data.solution.length>0" class="text text-sm font-semibold text-gray-500 mx-2">
                             Step {{ index+1 }}
                             <span class="text-gray-300" :style="[data.solution.length==solutionL?'color: rgb(225 29 72);':'']">
                                 {{data.solution.length}}/{{solutionL}}
@@ -303,4 +303,13 @@ const submitt=async()=>{
 </div>
 </template>
 <style scoped>
+.text{
+    animation: tada 1.5s
+}
+
+@keyframes tada{
+    0%{opacity: 0;}
+    100%{opacity: 1;}
+}
+
 </style>
