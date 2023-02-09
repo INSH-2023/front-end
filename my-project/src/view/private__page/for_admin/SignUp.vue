@@ -147,35 +147,35 @@ const valFormEmail = (input) => {
 const submittS =ref(undefined)
 const submittform =async()=>{
     // let status=undefined
-    goRotate()
-    // if(validate()){
-    //     console.log('cannot create new user')
-    // }else{
+    // goRotate()
+    if(validate()){
+        console.log('cannot create new user')
+    }else{
         
-    // const res =await fetch(userLink,{
-    //     method:'POST',
-    //     headers:{
-    //         "content-type": "application/json"
-    //     },
-    //     body:JSON.stringify({
-    //         first_name:fName.value,
-    //         last_name:lName.value,
-    //         email:email.value,
-    //         role:role.value,
-    //         office:office.value,
-    //         position:position.value,
-    //         passW:passW.value,
-    //         group_work:group.value,
-    //         status:'inActive',
-    //     })
-    // })
-    // if(res.status==201){
-    //     console.log('form is create user successfull')
+    const res =await fetch(userLink,{
+        method:'POST',
+        headers:{
+            "content-type": "application/json"
+        },
+        body:JSON.stringify({
+            first_name:fName.value,
+            last_name:lName.value,
+            email:email.value,
+            role:role.value,
+            office:office.value,
+            position:position.value,
+            passW:passW.value,
+            group_work:group.value,
+            status:'inActive',
+        })
+    })
+    if(res.status==201){
+        console.log('form is create user successfull')
 
-    // }else{
-    //     console.log('error something maybe try again later')
-    // } 
-    // }
+    }else{
+        console.log('error something maybe try again later')
+    } 
+    }
     
 }
 
