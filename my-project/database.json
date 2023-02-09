@@ -35,6 +35,18 @@
       "group_work": "บริหารจัดการองค์กร",
       "status": "inActive",
       "id": 3
+    },
+    {
+      "first_name": "first name",
+      "last_name": "Last name",
+      "email": "email@mail.com",
+      "role": "user",
+      "office": "2",
+      "position": "1",
+      "passW": "123",
+      "group_work": "นโยบายและยุทธศาสตร์",
+      "status": "inActive",
+      "id": 4
     }
   ],
   "events": [
