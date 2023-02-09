@@ -5,7 +5,8 @@ import {useRouter,useRoute} from 'vue-router'
 const myRouter = useRouter()
 const goBack=()=> myRouter.go(-1)
 const goMain=()=>myRouter.push({name:'booking'})
-const sampleDataLink ="http://localhost:3000/events"
+const eventLink ="http://localhost:3000/events"
+const problemsLink = "http://localhost:3000/problems"
 
 const {params} = useRoute()
 const typeP =params.id
@@ -111,7 +112,7 @@ const addP =(v)=>{
 
         // animation
         for(let value2 of sampleData.value){
-            if(value2.problems==v){
+            if(value2.name==v){
                 value2.selection= !value2.selection
             }
             
@@ -123,7 +124,7 @@ const addP =(v)=>{
 
         // animation
         for(let value2 of sampleData.value){
-            if(value2.problems==v){
+            if(value2.name==v){
                 value2.selection= !value2.selection
             }
             
@@ -139,47 +140,65 @@ const addP =(v)=>{
 const isSummary=ref(false)
 
 
-onBeforeMount(()=>{
-    
-// sample data from back-end
- sampleData.value=[
-    {
-        "id":1,
-        "problems":'NoteBook1'
-    },
-    {
-        "id":2,
-        "problems":'NoteBook2'
-    },
-    {
-        "id":3,
-        "problems":'NoteBook3'
-    },
-    {
-        "id":4,
-        "problems":'NoteBook4'
-    },
-    {
-        "id":5,
-        "problems":'NoteBook5'
-    },
-    {
-        "id":6,
-        "problems":'NoteBook6'
-    },
-    {
-        "id":7,
-        "problems":'NoteBook7'
-    }]
+// get problems
+const getProblems=async()=>{
+    const res = await fetch(problemsLink,{
+        method:'GET'
+    })
+    if(res.status==200){
+        sampleData.value=await res.json()
+        console.log('get problems successful')        
+        await addProperty(sampleData.value)
+    }else{
+        console.log('error something cannot get data')
+    }
+}
 
-    for(let data of sampleData.value){
+// add property
+const addProperty =async(v)=>{
+    for(let data of v){
         data['selection']=false
     }
-    // console.log(sampleData.value)
+    console.log(v)
+}
+
+onBeforeMount(()=>{
+    getProblems()
+// sample data from back-end
+//  sampleData.value=[
+//     {
+//         "id":1,
+//         "problems":'NoteBook1'
+//     },
+//     {
+//         "id":2,
+//         "problems":'NoteBook2'
+//     },
+//     {
+//         "id":3,
+//         "problems":'NoteBook3'
+//     },
+//     {
+//         "id":4,
+//         "problems":'NoteBook4'
+//     },
+//     {
+//         "id":5,
+//         "problems":'NoteBook5'
+//     },
+//     {
+//         "id":6,
+//         "problems":'NoteBook6'
+//     },
+//     {
+//         "id":7,
+//         "problems":'NoteBook7'
+//     }]
+
+        // console.log(sampleData.value)
     //     createdOBJ.value={}
     //     createdOBJ.value[`${data.problems}`]=false
     //     selectioned.value.push()
-    console.log(sampleData.value)
 })
 
 // save from
@@ -197,7 +216,7 @@ const saveToLocal=()=>{
 // send form
 const isSubmitt=ref(false)
 const submitt = async()=>{
-    let res=await fetch(sampleDataLink ,{
+    let res=await fetch(eventLink ,{
         method:'POST',
         headers:{
             "Content-Type":"application/json"
@@ -356,10 +375,10 @@ const submitt = async()=>{
 
                 <div  class="grid grid-cols-6 gap-y-2 gap-x-2 mt-4 text-[15px] font-medium">
                     <!-- notebook -->
-                    <button  v-for="(value,index) in sampleData" :key="index" @click="addP(value.problems)" :style="[value.selection==true?'background-color:#1E88E5;color:#E3F2FD':'']" class="w-[150px] mx-auto p-2 hover:bg-gray-300 bg-gray-200 rounded-xl">
+                    <button  v-for="(value,index) in sampleData" :key="index" @click="addP(value.name)" :style="[value.selection==true?'background-color:#1E88E5;color:#E3F2FD':'']" class="w-[150px] mx-auto p-2 hover:bg-gray-300 bg-gray-200 rounded-xl">
                         <img src="../../../assets/vue.svg" alt="NoteBook" class="w-[80px] mx-auto">
                         <h3 class="w-fit mx-auto">
-                            {{value.problems}}
+                            {{value.name}}
                         </h3>
                     </button>
  
