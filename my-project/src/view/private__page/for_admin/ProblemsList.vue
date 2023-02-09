@@ -1,10 +1,12 @@
 <script setup>
 import {ref,onBeforeMount} from 'vue'
 
-const problemsLink='http://localhost:3000/problem'
+const problemsLink='http://localhost:3000/problems'
 const problemList=ref([])
+const name=ref('')
 
-const subject=ref('none')
+
+const subject=ref('hardware')
 const isEdit =ref(false)
 // get problem
 const getP =async()=>{
@@ -13,7 +15,7 @@ const getP =async()=>{
     })
     if(res.status==200){
         problemList.value=await res.json()
-        splitProblems(1)
+        splitProblems(currentPage.value)
         console.log('get problems successful')
     }else{
         console.log('error something cannot get data')
@@ -36,7 +38,9 @@ const pageN =()=>{
 }
 
 // for click and first value
+const currentPage=ref(1)
 const splitProblems=(N)=>{
+    currentPage.value = N
     let max =(N*maxOfPage.value)-1
     let min =(max-maxOfPage.value)+1
     let arr =[]
@@ -76,7 +80,7 @@ const hoverFn =(b,n)=>{
         eEdit.style.display="block"
         card.style.background="#C6AC8F"
 
-        console.log('hover',n)
+        // console.log('hover',n)
     }else{
         // eInfo.style.visibility="visible"
         // eEdit.style.visibility="hidden"
@@ -85,6 +89,45 @@ const hoverFn =(b,n)=>{
         card.style.background="#EAE0D5"
     }
    
+}
+
+// add new problem
+const addProblem =async()=>{
+    let res =await fetch(problemsLink,{
+        method:'POST',
+        headers:{
+            "content-type": "application/json"
+        },
+        body:JSON.stringify({
+            img:"../../../src/assets/vue.svg",
+            subject:subject.value,
+            name:name.value
+        })
+    })
+    if(res.status==201){
+        console.log('add problem success 😏')
+        getP()
+    }else{
+        console.log('error cannot add new poblem')
+    }
+}
+
+// delete problems
+const removeProblem = async (n)=>{
+    let res =await fetch(`${problemsLink}/${n}`,{
+        method:'DELETE'
+    })
+    if(res.status==200){
+        console.log('delete problem success')
+        getP()
+    }else{
+        console.log('error cannot delete problem')
+    }
+}
+
+// edit
+const editProblem =()=>{
+    console.log('this is edit')
 }
 
 onBeforeMount(()=>{
@@ -144,9 +187,14 @@ onBeforeMount(()=>{
                     </h4>
                     <select v-model="subject" name="subject" id="subject" class="absolute bottom-0 w-[200px] bg-[#C6AC8F] text-[#0A0908] text-[20px] font-light rounded-lg p-[1px]  px-[10px]">
                         <option value="none" selected hidden>Type of subject</option>
-                        <option value="hardware1" >Hardware1</option>
-                        <option value="hardware2" >Hardware2</option>
-                        <option value="hardware3" >Hardware3</option>
+                        <option value="hardware" >Hardware</option>
+                        <option value="software" >Software</option>
+                        <option value="internet" >Internet</option>
+                        <option value="printer" >Printer</option>
+                        <option value="website" >Website</option>
+                        <option value="meeting" >Meeting</option>
+                        <option value="application" >Application</option>
+
 
 
                     </select>
@@ -169,14 +217,14 @@ onBeforeMount(()=>{
                             </h4>
                             <!-- edit button -->
                             <div class="w-full h-fit mt-3">
-                                <button class="bg-[#0A0908] text-[#EAE0D5] text-[20px] px-4 py-2 font-light hover:bg-[#EAE0D5] hover:text-[#0A0908] rounded-lg">
+                                <button @click="editProblem" class="bg-[#0A0908] text-[#EAE0D5] text-[20px] px-4 py-2 font-light hover:bg-[#EAE0D5] hover:text-[#0A0908] rounded-lg">
                                     แก้ไขข้อมูล
                                 </button>
                             </div>
 
                             <!-- delete card -->
                             <div class="w-full h-fit mt-2">
-                                <button class=" bg-[#C1121F] text-[#FDF0D5] text-[14px] px-3 py-1 font-light hover:bg-rose-300 hover:text-gray-600 rounded-lg">
+                                <button @click="removeProblem(p.id)" class=" bg-[#C1121F] text-[#FDF0D5] text-[14px] px-3 py-1 font-light hover:bg-rose-300 hover:text-gray-600 rounded-lg">
                                     ลบข้อมูล
                                 </button>                                
                             </div>
@@ -195,6 +243,17 @@ onBeforeMount(()=>{
                         {{N}}
                     </button>
                 </div>
+
+                <!-- add button -->
+                <div class="absolute right-[4px] bottom-[10px]">
+                    <input v-model="name" type="text" class="bg-gray-400">
+                    <button @click="addProblem()" class="relative w-[40px] h-[40px] mt-6  m-auto bg-transparent   border-gray-400 border-[4px] hover:bg-gray-500 hover:border-gray-200 hover:text-sky-200 rounded-full">
+                        <h4 class="absolute w-full h-full  top-[-20px]  text-[45px] text-sky-400 font-light">
+                        +
+                        </h4> 
+                    </button>                    
+                </div>
+
 
             </div>
     </div>
