@@ -147,34 +147,35 @@ const valFormEmail = (input) => {
 const submittS =ref(undefined)
 const submittform =async()=>{
     // let status=undefined
-    if(validate()){
-        console.log('cannot create new user')
-    }else{
+    goRotate()
+    // if(validate()){
+    //     console.log('cannot create new user')
+    // }else{
         
-    const res =await fetch(userLink,{
-        method:'POST',
-        headers:{
-            "content-type": "application/json"
-        },
-        body:JSON.stringify({
-            first_name:fName.value,
-            last_name:lName.value,
-            email:email.value,
-            role:role.value,
-            office:office.value,
-            position:position.value,
-            passW:passW.value,
-            group_work:group.value,
-            status:'inActive',
-        })
-    })
-    if(res.status==201){
-        console.log('form is create user successfull')
+    // const res =await fetch(userLink,{
+    //     method:'POST',
+    //     headers:{
+    //         "content-type": "application/json"
+    //     },
+    //     body:JSON.stringify({
+    //         first_name:fName.value,
+    //         last_name:lName.value,
+    //         email:email.value,
+    //         role:role.value,
+    //         office:office.value,
+    //         position:position.value,
+    //         passW:passW.value,
+    //         group_work:group.value,
+    //         status:'inActive',
+    //     })
+    // })
+    // if(res.status==201){
+    //     console.log('form is create user successfull')
 
-    }else{
-        console.log('error something maybe try again later')
-    } 
-    }
+    // }else{
+    //     console.log('error something maybe try again later')
+    // } 
+    // }
     
 }
 
@@ -193,7 +194,30 @@ const showPd =()=>{
     // console.log('hello world')
 }
 
+// animation rotate
+const degree_start =ref(0)
+const degree_end =ref(0)
+const isSpin =ref(false)
+const goRotate =()=>{
 
+    document.getElementById('submitB').classList.toggle('spin')
+   
+    isSpin.value = !isSpin.value
+    console.log(isSpin.value)
+    if(isSpin.value==true){
+        degree_end.value='rotate(360deg)'
+        degree_start.value='rotate(0deg)'
+        document.getElementById('submitB').classList.add('spin')
+        console.log('spin right')
+    }else if(isSpin.value==false){
+        degree_end.value='rotate(-360deg)'
+        degree_start.value='rotate(0deg)'
+        document.getElementById('submitB').classList.add('spin')
+        console.log('spin left')
+    }
+
+    
+}
 
 </script>
 <template>
@@ -374,8 +398,8 @@ const showPd =()=>{
 
                     <!-- button -->
                     <div class="w-fit mx-auto  mt-10">
-                        <button @click="submittform()" :style="['background-color:#77BEFF']" class="relative w-[200px] h-[40px] p-1 text-[20px]   rounded-2xl">
-                            <h4 @click="submittS=true" class="static font-light text-white">
+                        <button id="submitB" @click="submittform()" :style="['background-color:#77BEFF']" class=" relative w-[200px] h-[40px] p-1 text-[20px]   rounded-2xl">
+                            <h4 @click="submittS=true" class=" static font-light text-white">
                                 Create User
                             </h4>
                             <img  v-show="submittS==true"  src="../../../assets/vue.svg" alt="spin_loading" class="absolute top-[10px] right-[25px] w-[20px] animate-spin">
@@ -392,4 +416,20 @@ const showPd =()=>{
 </div>
 </template>
 <style scoped>
+.spin{
+    /* width: 200px;
+    height: 40px;
+    font-size: 20px;
+    padding: 4px;
+    border-radius: 1rem; */
+    animation: rotate 1s 1;
+    
+}
+
+@keyframes rotate{
+ 0%{transform: v-bind(degree_start);
+    
+    }
+ 100%{transform: v-bind(degree_end);}
+}
 </style>
