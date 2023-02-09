@@ -59,6 +59,33 @@ const splitProblems=(N)=>{
     // }else{}
 }
 
+// display fn 
+const display=ref(undefined)
+const hoverFn =(b,n)=>{
+    display.value=b
+    let eInfo =document.getElementById(`info_${n}`)
+    let eEdit =document.getElementById(`edit_${n}`)
+    let card = document.getElementById(`card_${n}`)
+
+    // var element = document.getElementById("myDIV");
+//   element.classList.remove("mystyle");
+    if(display.value==true){
+        // eInfo.style.visibility="hidden"
+        // eEdit.style.visibility="visible"
+        eInfo.style.display="none"
+        eEdit.style.display="block"
+        card.style.background="#C6AC8F"
+
+        console.log('hover',n)
+    }else{
+        // eInfo.style.visibility="visible"
+        // eEdit.style.visibility="hidden"
+        eEdit.style.display="none"
+        eInfo.style.display="block"
+        card.style.background="#EAE0D5"
+    }
+   
+}
 
 onBeforeMount(()=>{
     getP()
@@ -112,12 +139,15 @@ onBeforeMount(()=>{
                 <!-- <hr class="mt-3 bg-gray-700  w-full h-[3px]"/> -->
                 <!-- select type -->
                 <div class="relative w-fit h-[53px] mt-[20px] ml-[20px]   ">
-                    <h4 v-show="subject !='none'" class="ml-2 text-sm font-semiboldd text-[#C6AC8F]">
+                    <h4 v-show="subject !='none'" class="text ml-2 text-sm font-semiboldd text-[#C6AC8F]">
                         Type of subject
                     </h4>
                     <select v-model="subject" name="subject" id="subject" class="absolute bottom-0 w-[200px] bg-[#C6AC8F] text-[#0A0908] text-[20px] font-light rounded-lg p-[1px]  px-[10px]">
                         <option value="none" selected hidden>Type of subject</option>
-                        <option value="hardware" >Hardware</option>
+                        <option value="hardware1" >Hardware1</option>
+                        <option value="hardware2" >Hardware2</option>
+                        <option value="hardware3" >Hardware3</option>
+
 
                     </select>
                     <!-- <input type="text" class="bg-gray-200"> -->
@@ -125,16 +155,33 @@ onBeforeMount(()=>{
 
                 <!-- การ์ด problems -->
                 <div class=" grid grid-cols-4 gap-4 mt-[15px] ml-10 text-center">
-                    <div @mouseover="isEdit='hidden'" @mouseleave="isEdit='visible'"  v-for="(p,index) in problemSplit" :key="index" class="card block w-full h-[175px] mx-auto bg-[#EAE0D5] rounded-lg">
-                        <div  class="info ">
+                    <div :id="`card_${index}`" @mouseover="hoverFn(true,index)" @mouseleave="hoverFn(false,index)"   v-for="(p,index) in problemSplit" :key="index" class="card block w-full h-[175px] mx-auto bg-[#EAE0D5] rounded-lg">
+                        <div :id="`info_${index}`" class="info ">
                             <img :src="p.img" alt="logo" class="w-[80px] mx-auto mt-6 ">
                             <!-- ชื่อ -->
                             <h4 class="text-[20px] mt-6 font-light">
                                 {{ p.name }}
                             </h4>                           
                         </div>
-                        <div  class="edit ">
-                            testing
+                        <div :id="`edit_${index}`" style="display: none;" class="edit  mt-[20px] ">
+                            <h4 class="w-full font-semibold text-[#FFFFFF] cursor-default">
+                                {{ p.name }}                              
+                            </h4>
+                            <!-- edit button -->
+                            <div class="w-full h-fit mt-3">
+                                <button class="bg-[#0A0908] text-[#EAE0D5] text-[20px] px-4 py-2 font-light hover:bg-[#EAE0D5] hover:text-[#0A0908] rounded-lg">
+                                    แก้ไขข้อมูล
+                                </button>
+                            </div>
+
+                            <!-- delete card -->
+                            <div class="w-full h-fit mt-2">
+                                <button class=" bg-[#C1121F] text-[#FDF0D5] text-[14px] px-3 py-1 font-light hover:bg-rose-300 hover:text-gray-600 rounded-lg">
+                                    ลบข้อมูล
+                                </button>                                
+                            </div>
+
+
                         </div>
  
                         <!-- <button @click="">splitProblems</button> -->
@@ -154,6 +201,15 @@ onBeforeMount(()=>{
 </div>
 </template>
 <style scoped>
+.text{
+    animation: tada 2s 
+}
 
+
+
+@keyframes tada{
+    0%{opacity: 0%;}
+    100%{opacity: 100%;}
+}
 
 </style>
