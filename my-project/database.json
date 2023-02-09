@@ -89,97 +89,87 @@
       "other": "",
       "massage": "hello testing PR_Service",
       "id": 2
+    },
+    {
+      "full_name": "Testing Testing",
+      "email": "testingTestingTesing@mail.com",
+      "group_work": "วิจัยและวัฒนะธรรม",
+      "service_type": "IT_Service",
+      "subject": "hardware",
+      "status": "request",
+      "date": "16:29:26",
+      "assign": "Not_assign",
+      "useT": "sf",
+      "sn": "20a20345",
+      "brand": "testing new problem select",
+      "typeM": "PC",
+      "problems": [
+        "ลำโพงไม่ดัง",
+        "กล้องไม่ติด",
+        "ชาร์จแบตไม่เข้า",
+        "ช่อง USB"
+      ],
+      "other": "",
+      "massage": "",
+      "id": 3
     }
   ],
-  "problem":[
+  "problems": [
     {
-      "id":1,
-      "img":"../../../src/assets/vue.svg",
-      "name":"เครื่องเปิดไม่ติด"
+      "img": "../../../src/assets/vue.svg",
+      "subject": "hardware",
+      "name": "หน้าจอไม่ติด",
+      "id": 1
     },
     {
-      "id":2,
-      "img":"../../../src/assets/vue.svg",
-      "name":"ติดไม่เเปิดครื่อง"
+      "img": "../../../src/assets/vue.svg",
+      "subject": "hardware",
+      "name": "ลำโพงไม่ดัง",
+      "id": 2
     },
     {
-      "id":3,
-      "img":"../../../src/assets/vue.svg",
-      "name":"ติดไม่เเปิดครื่อง"
+      "img": "../../../src/assets/vue.svg",
+      "subject": "hardware",
+      "name": "กล้องไม่ติด",
+      "id": 3
     },
     {
-      "id":4,
-      "img":"../../../src/assets/vue.svg",
-      "name":"ติดไม่เเปิดครื่อง"
+      "img": "../../../src/assets/vue.svg",
+      "subject": "hardware",
+      "name": "ชาร์จแบตไม่เข้า",
+      "id": 4
     },
     {
-      "id":5,
-      "img":"../../../src/assets/vue.svg",
-      "name":"ติดไม่เเปิดครื่อง"
+      "img": "../../../src/assets/vue.svg",
+      "subject": "hardware",
+      "name": "ช่อง USB",
+      "id": 5
     },
     {
-      "id":6,
-      "img":"../../../src/assets/vue.svg",
-      "name":"ติดไม่เเปิดครื่อง"
+      "img": "../../../src/assets/vue.svg",
+      "subject": "hardware",
+      "name": "TouchPad",
+      "id": 6
     },
     {
-      "id":7,
-      "img":"../../../src/assets/vue.svg",
-      "name":"ติดไม่เเปิดครื่อง"
+      "img": "../../../src/assets/vue.svg",
+      "subject": "hardware",
+      "name": "เปิดเครื่องไม่ติด",
+      "id": 7
     },
     {
-      "id":8,
-      "img":"../../../src/assets/vue.svg",
-      "name":"ติดไม่เเปิดครื่อง"
+      "img": "../../../src/assets/vue.svg",
+      "subject": "hardware",
+      "name": "เมาส์ใช้ไม่ได้",
+      "id": 8
     },
     {
-      "id":9,
-      "img":"../../../src/assets/vue.svg",
-      "name":"ติดไม่เเปิดครื่อง"
-    },
-    {
-      "id":10,
-      "img":"../../../src/assets/vue.svg",
-      "name":"ติดไม่เเปิดครื่อง"
-    },
-    {
-      "id":11,
-      "img":"../../../src/assets/vue.svg",
-      "name":"ติดไม่เเปิดครื่อง"
-    },
-    {
-      "id":12,
-      "img":"../../../src/assets/vue.svg",
-      "name":"ติดไม่เเปิดครื่อง"
-    },
-    {
-      "id":13,
-      "img":"../../../src/assets/vue.svg",
-      "name":"ติดไม่เเปิดครื่อง"
-    },
-    {
-      "id":14,
-      "img":"../../../src/assets/vue.svg",
-      "name":"ติดไม่เเปิดครื่อง"
-    },
-    {
-      "id":15,
-      "img":"../../../src/assets/vue.svg",
-      "name":"ติดไม่เเปิดครื่อง"
-    },
-    {
-      "id":16,
-      "img":"../../../src/assets/vue.svg",
-      "name":"ติดไม่เเปิดครื่อง"
-    },
-    {
-      "id":17,
-      "img":"../../../src/assets/vue.svg",
-      "name":"ติดไม่เเปิดครื่อง"
+      "img": "../../../src/assets/vue.svg",
+      "subject": "hardware",
+      "name": "sdfgjsdlfgjdsjgjdfggljdsfgjgds",
+      "id": 9
     }
-    
-  ]
-  ,
+  ],
   "solutions": [
     {
       "id": 1,
