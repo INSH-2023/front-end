@@ -45,7 +45,7 @@
       "service_type": "IT_Service",
       "subject": "hardware",
       "status": "request",
-      "date": "10:51:18",
+      "date": "1995-12-17T03:24:00",
       "assign": "Not_assign",
       "useT": "sf",
       "sn": "20a20345",
@@ -71,7 +71,7 @@
       "service_type": "PR_Service",
       "subject": "media",
       "status": "request",
-      "date": "10:51:41",
+      "date": "1995-12-17T03:24:00",
       "assign": "Not_assign",
       "useT": "",
       "sn": "20a20345",
@@ -91,6 +91,95 @@
       "id": 2
     }
   ],
+  "problem":[
+    {
+      "id":1,
+      "img":"../../../src/assets/vue.svg",
+      "name":"เครื่องเปิดไม่ติด"
+    },
+    {
+      "id":2,
+      "img":"../../../src/assets/vue.svg",
+      "name":"ติดไม่เเปิดครื่อง"
+    },
+    {
+      "id":3,
+      "img":"../../../src/assets/vue.svg",
+      "name":"ติดไม่เเปิดครื่อง"
+    },
+    {
+      "id":4,
+      "img":"../../../src/assets/vue.svg",
+      "name":"ติดไม่เเปิดครื่อง"
+    },
+    {
+      "id":5,
+      "img":"../../../src/assets/vue.svg",
+      "name":"ติดไม่เเปิดครื่อง"
+    },
+    {
+      "id":6,
+      "img":"../../../src/assets/vue.svg",
+      "name":"ติดไม่เเปิดครื่อง"
+    },
+    {
+      "id":7,
+      "img":"../../../src/assets/vue.svg",
+      "name":"ติดไม่เเปิดครื่อง"
+    },
+    {
+      "id":8,
+      "img":"../../../src/assets/vue.svg",
+      "name":"ติดไม่เเปิดครื่อง"
+    },
+    {
+      "id":9,
+      "img":"../../../src/assets/vue.svg",
+      "name":"ติดไม่เเปิดครื่อง"
+    },
+    {
+      "id":10,
+      "img":"../../../src/assets/vue.svg",
+      "name":"ติดไม่เเปิดครื่อง"
+    },
+    {
+      "id":11,
+      "img":"../../../src/assets/vue.svg",
+      "name":"ติดไม่เเปิดครื่อง"
+    },
+    {
+      "id":12,
+      "img":"../../../src/assets/vue.svg",
+      "name":"ติดไม่เเปิดครื่อง"
+    },
+    {
+      "id":13,
+      "img":"../../../src/assets/vue.svg",
+      "name":"ติดไม่เเปิดครื่อง"
+    },
+    {
+      "id":14,
+      "img":"../../../src/assets/vue.svg",
+      "name":"ติดไม่เเปิดครื่อง"
+    },
+    {
+      "id":15,
+      "img":"../../../src/assets/vue.svg",
+      "name":"ติดไม่เเปิดครื่อง"
+    },
+    {
+      "id":16,
+      "img":"../../../src/assets/vue.svg",
+      "name":"ติดไม่เเปิดครื่อง"
+    },
+    {
+      "id":17,
+      "img":"../../../src/assets/vue.svg",
+      "name":"ติดไม่เเปิดครื่อง"
+    }
+    
+  ]
+  ,
   "solutions": [
     {
       "id": 1,
