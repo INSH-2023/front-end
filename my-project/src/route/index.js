@@ -22,6 +22,8 @@ import ShowAllUser from '../view/private__page/for_admin/ShowAllUser.vue'
 import ShowAllEvent from'../view/private__page/for_admin/ShowAllEvent.vue'
 import WriteSolutions from '../view/private__page/for_admin/Write_solution.vue'
 import ShowAllSolution from '../view/private__page/for_admin/ShowAllSolution.vue'
+import ProblemsList from '../view/private__page/for_admin/ProblemsList.vue'
+
 // public
 import SignIn from '../view/public__page/SignIn.vue'
 import Home from '../view/public__page/Home.vue'
@@ -79,6 +81,11 @@ const routes=[
                 path:'/account/admin/all-solution',
                 name:'showAllSolution',
                 component:ShowAllSolution
+            },
+            {
+                path:'/account/admin/add-problems',
+                name:'problemsList',
+                component:ProblemsList
             }
         ]
 
