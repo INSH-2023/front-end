@@ -103,27 +103,90 @@
       "id": 2
     },
     {
+      "full_name": "รติกร วังวงค์",
+      "email": "ratikorn.w@mail.com",
+      "group_work": "บริหารจัดการองค์กร",
+      "service_type": "IT_Service",
+      "subject": "hardware",
+      "status": "finish",
+      "date": "2022-03-10T12:24:00",
+      "assign": "Not_assign",
+      "useT": "or",
+      "sn": "6011555050033",
+      "brand": "HP Pavilion",
+      "typeM": "NoteBook",
+      "problems": [
+        "เปิดเครื่องไม่ติด"
+      ],
+      "other": "",
+      "massage": "เครื่องเปิดไม่ติด ไม่สามารถใช้งานได้",
+      "commentCh": "ได้ทำการเปลี่ยนอะไหล่ที่เสียให้ใช้งานได้เป็นปกติ",
+      "id": 3
+    },
+    {
       "full_name": "Testing Testing",
       "email": "testingTestingTesing@mail.com",
       "group_work": "วิจัยและวัฒนะธรรม",
       "service_type": "IT_Service",
       "subject": "hardware",
       "status": "request",
-      "date": "16:29:26",
+      "date": "15:11:26",
       "assign": "Not_assign",
       "useT": "sf",
       "sn": "20a20345",
-      "brand": "testing new problem select",
-      "typeM": "PC",
+      "brand": "แปปเด้อ",
+      "typeM": "Smart_Phone",
       "problems": [
+        "หน้าจอไม่ติด",
         "ลำโพงไม่ดัง",
-        "กล้องไม่ติด",
-        "ชาร์จแบตไม่เข้า",
-        "ช่อง USB"
+        "กล้องไม่ติด"
       ],
       "other": "",
       "massage": "",
-      "id": 3
+      "id": 4
+    },
+    {
+      "full_name": "ณัฐวุฒิ วศินใคทริ",
+      "email": "Nuttawut.w@mail.com",
+      "group_work": "",
+      "service_type": "IT_Service",
+      "subject": "hardware",
+      "status": "request",
+      "date": "15:11:26",
+      "assign": "Not_assign",
+      "useT": "sf",
+      "sn": "20a20345",
+      "brand": "แปปเด้อ",
+      "typeM": "Smart_Phone",
+      "problems": [
+        "หน้าจอไม่ติด",
+        "ลำโพงไม่ดัง",
+        "กล้องไม่ติด"
+      ],
+      "other": "",
+      "massage": "",
+      "id": 5
+    },
+    {
+      "full_name": "Testing Testing",
+      "email": "testingTestingTesing@mail.com",
+      "group_work": "วิจัยและวัฒนะธรรม",
+      "service_type": "IT_Service",
+      "subject": "hardware",
+      "status": "request",
+      "date": "15:18:47",
+      "assign": "Not_assign",
+      "useT": "or",
+      "sn": "20a20345",
+      "brand": "",
+      "typeM": "PC",
+      "problems": [
+        "ชาร์จแบตไม่เข้า",
+        "กล้องไม่ติด"
+      ],
+      "other": "",
+      "massage": "",
+      "id": 6
     }
   ],
   "problems": [
@@ -174,12 +237,6 @@
       "subject": "hardware",
       "name": "เมาส์ใช้ไม่ได้",
       "id": 8
-    },
-    {
-      "img": "../../../src/assets/vue.svg",
-      "subject": "hardware",
-      "name": "sdfgjsdlfgjdsjgjdfggljdsfgjgds",
-      "id": 9
     }
   ],
   "solutions": [

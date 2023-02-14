@@ -1,25 +1,43 @@
 <script setup>
-import {ref,onBeforeMount} from 'vue'
+import {ref,computed,onBeforeMount} from 'vue'
 
 const problemsLink='http://localhost:3000/problems'
 const problemList=ref([])
 const name=ref('')
 
 
-const subject=ref('hardware')
+const subjectCr=ref('none')
+
 const isEdit =ref(false)
-// get problem
-const getP =async()=>{
-    const res = await fetch(problemsLink,{
+// get  problem
+const getP =async(v)=>{
+    if(v != undefined){
+    const res = await fetch(`${problemsLink}/${v}`,{
+        method:'GET'
+    })
+    if(res.status==200){
+        problemList.value=await res.json()
+        splitProblems(currentPage.value)
+        console.log('get problems by value successful')
+        console.log(v)
+    }else{
+        console.log('error something cannot get data by value successful')
+    }
+    }else
+    if(v == undefined){
+        const res = await fetch(problemsLink,{
         method:'GET'
     })
     if(res.status==200){
         problemList.value=await res.json()
         splitProblems(currentPage.value)
         console.log('get problems successful')
+        console.log(v)
     }else{
         console.log('error something cannot get data')
     }
+    }
+
 }
 
 // split data
@@ -119,7 +137,10 @@ const removeProblem = async (n)=>{
     })
     if(res.status==200){
         console.log('delete problem success')
-        getP()
+        await getP()
+        if(problemList.value.length<=maxOfPage.value){
+            splitProblems(1)
+        }
     }else{
         console.log('error cannot delete problem')
     }
@@ -134,6 +155,21 @@ onBeforeMount(()=>{
     getP()
 })
 
+
+// auto change subject 
+const subjectCh=(event)=>{
+    let type =event.target.value.trim()
+    if(type != subjectCr.value){
+        subjectCr.value=type
+        console.log('hello world from change subject',subjectCr.value)
+        // getP(type)    
+    }else 
+    if(type == subjectCr.value){
+        console.log('subject not change :' ,subjectCr.value)
+    }
+
+
+}
 
 </script>
 <template>
@@ -182,10 +218,10 @@ onBeforeMount(()=>{
                 <!-- <hr class="mt-3 bg-gray-700  w-full h-[3px]"/> -->
                 <!-- select type -->
                 <div class="relative w-fit h-[53px] mt-[20px] ml-[20px]   ">
-                    <h4 v-show="subject !='none'" class="text ml-2 text-sm font-semiboldd text-[#C6AC8F]">
+                    <h4 v-show="subjectCr !='none'" class="text ml-2 text-sm font-semiboldd text-[#C6AC8F]">
                         Type of subject
                     </h4>
-                    <select v-model="subject" name="subject" id="subject" class="absolute bottom-0 w-[200px] bg-[#C6AC8F] text-[#0A0908] text-[20px] font-light rounded-lg p-[1px]  px-[10px]">
+                    <select @change="subjectCh" name="subject" id="subject" class="absolute bottom-0 w-[200px] bg-[#C6AC8F] text-[#0A0908] text-[20px] font-light rounded-lg p-[1px]  px-[10px]">
                         <option value="none" selected hidden>Type of subject</option>
                         <option value="hardware" >Hardware</option>
                         <option value="software" >Software</option>

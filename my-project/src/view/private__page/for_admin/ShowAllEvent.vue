@@ -111,16 +111,17 @@ const editInfo = async(v)=>{
             "content-type": "application/json"
         },
         body:JSON.stringify({
-            full_name:event.value.user,
+            full_name:event.value.full_name,
             email:event.value.email,
-            group_work:event.value.group,
+            group_work:event.value.group_work,
             service_type:event.value.service_type,
             subject:event.value.subject,
             status:statusCh.value,
             date:event.value.date,
             assign:assignCh.value,
             useT:event.value.useT,
-            brand:event.value.userTU,
+            sn:event.value.sn,
+            brand:event.value.brand,
             typeM:event.value.typeM,
             problems:event.value.problems,
             other:event.value.other,
@@ -396,7 +397,7 @@ onBeforeMount(()=>{
     <!-- show detail -->
     <div id="showInfo" class="overlay">
         <div class=" popup2 h-96 ">
-            <div  class="h-[100%] overflow-y-auto">
+            <div  class="h-[100%] p-3 overflow-y-auto">
                 <div id="summaryInfo" class=" w-fit mx-auto text-[25px] font-semibold">
                     <h3>
                         ข้อมูลเพิ่มเติม 
@@ -566,27 +567,13 @@ onBeforeMount(()=>{
                                 Assign
                             </h5>
                             <select v-model="assignCh" name="assign" id="assign" class="w-[200px] mt-2 p-1 bg-gray-400 text-gray-700 font-semibold  rounded">
-                                <option value='' selected disabled>เลือกผู้รับผิดชอบ</option>
+                                <option value='Not_assign' selected disabled>เลือกผู้รับผิดชอบ</option>
                                 <option value="Testing_Tseing " class="font-semibold bg-gray-300">Testing Tseing</option>
                                 <option value="gnitset_testing" class="font-semibold bg-gray-300">gnitset testing</option>
                                 <option value="Testing_Tseing " class="font-semibold bg-gray-300">Testing Tseing</option>
 
                             </select>
                         </div>
-
-                    </div>
-                </div>
-
-                <!-- comment -->
-                <div   class=" w-full mt-10 ">
-                    <div  class="">
-                        <label for="other_1" class="ml-2 text-[17px] font-semibold inline-b">
-                            Comment
-                        </label>
-                        <textarea v-model="commentCh"  name="other" id="other_1"   class="w-full h-[100px] resize-none pt-[10px] block rounded-xl bg-gray-300 p-2 focus:outline-0" ></textarea>
-                    </div>
-                    
-                    <div>
 
                     </div>
                 </div>
@@ -599,7 +586,42 @@ onBeforeMount(()=>{
                         </h4>
                     </button>
                 </div>
-                
+
+                <hr class="w-full h-[10px] mt-10">
+
+                <!-- comment -->
+                <div   class=" w-full mt-4 ">
+
+
+                    <label for="other_1" class="ml-2 text-[20px] font-light inline-b">
+                            Comment
+                    </label>
+
+                    <!-- old comments -->
+                    <div class="comment_old w-[540px] h-[300px] mt-3 mx-auto  overflow-y-auto bg-gray-500 rounded-t-lg">
+                        <div class="w-[530px] h-fit  pt-3 px-3">
+                            <!-- comment -->
+                            <div class=" pt-3 p-2 pb-4 mb-4 bg-[#1976D2] text-[#BBDEFB] rounded-lg">
+                                <h5 class=" pl-2 text-sm text-[#64B5F6] font-semibold italic">
+                                    13:56 13/2/2566
+                                </h5>
+                                <p class="pl-4 font-light">
+                                    นี่เป็นการทดสอบนะครับและทดสอบเพื่อที่เราตะได้รู้ว่าเรานั้นสามารถทำการทดสอบกับข้อความของข้อความเหล่านี้ได้และเราจะไม่หยุดทดสอบจนกว่าจะได้ทดสอบเพื่อที่จะไม่โดนหักคะแนน
+                                </p>                                
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- new comment -->
+                    <div  class="comment_new w-[540px] h-fit  mx-auto ">
+
+                        <textarea v-model="commentCh"  name="other" id="other_1" placeholder="text something ....."  class="w-full h-[70px] resize-none pt-[10px] block  bg-gray-300 p-2  focus:outline-0" ></textarea>                  
+
+                        <button v-show="commentCh.length!=0" class="comment_new_button w-full h-[40px]  bg-[#2196F3] text-white font-light rounded-b-xl">
+                            Post Comment
+                        </button>                            
+                    </div>
+                </div>
             </div>
 
             <div class="absolute top-[15px] right-[15px] font-bold text-[30px]">
@@ -637,6 +659,9 @@ onBeforeMount(()=>{
   margin-top: 3%;
   /* overflow-y: auto; */
   padding: 35px;
+  padding-top: 45px;
+  padding-left: 30px;
+  padding-right: 16px;
   background: #fff;
   width: 40%;
   height: 600px;
@@ -658,6 +683,57 @@ onBeforeMount(()=>{
   .option {
     width: 20%;
   }
+}
+
+.comment_new{
+    position: relative;
+    z-index: 5;
+
+}
+.comment_new_button{
+    position: absolute;
+    animation: tada 1.5s;
+    /* transition: opacity 500ms; */
+    transition: all 1s;
+    z-index: 1;
+
+}
+
+
+@keyframes tada{
+    0%{
+        opacity: 0;
+        /* transition-property: all 1s; */
+        margin-top: -30px;
+    }
+    100%{
+        opacity: 1;
+        /* transition-property: all 1s; */
+        margin-top:0px;
+
+    }
+}
+
+::-webkit-scrollbar{
+    width: 10px;
+    background-color: rgb(119, 173, 212);
+    border-radius: 20px;
+}
+
+::-webkit-scrollbar-thumb{
+    background-color: rgb(104, 104, 104);
+    border-radius: 20px;
+}
+/* scroll bar of comments */
+.comment_old::-webkit-scrollbar{
+    background-color: transparent;
+    width:10px
+}
+
+.comment_old::-webkit-scrollbar-thumb{
+    background-color: rgb(119, 173, 212);
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
 }
 
 </style>

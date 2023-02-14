@@ -1,8 +1,8 @@
 <script setup>
-import {onBeforeMount, ref}from'vue'
+import {onBeforeMount, ref,computed}from'vue'
 import {useRouter,useRoute} from 'vue-router'
 import BaseStatus from '../../../components/BaseStatus.vue'
-const articleLink='http://localhost:3000/solutions'
+const solutionLink='http://localhost:3000/solutions'
 
 const {params}=useRoute()
 
@@ -17,17 +17,57 @@ const goReport=(v)=>{
     console.log('this is report of :',v)
 }
 
+// searching 
 const searching=ref('')
+const findingKeyW=computed(()=>{
+    let arr=[]
+    let keyWord=searching.value.toLowerCase()
+
+    let matchStep=(a,kw)=>{
+        let check = false
+        for(let data of a){
+            if(data.solution.includes(kw)){
+                check=true
+                console.log('this from searching nested fn match step')
+            }
+            
+        }
+        return check
+    }
+
+    for(let solu of solutionList.value){
+       if(solu.title.toLowerCase()==keyWord){
+            arr.push(solu)
+            console.log('This from searching title',solu.title)
+       }
+       if(solu.tag.includes(keyWord)){
+            arr.push(solu)
+            console.log('this from searching tag :', solu.tag.includes(keyWord))
+       }else
+       if(solu.text.toLowerCase().includes(keyWord)){
+            arr.push(solu)
+            console.log('this from searching text: ', solu.text.includes(keyWord))
+       }else
+       if(matchStep(solu.solutions,keyWord)){
+            arr.push(solu)
+            console.log('this from searching step: ',matchStep(solu.solutions,keyWord))
+       }
+
+       
+    }
+    return arr
+})
+
 // get article
-const arrArticle=ref([])
+const solutionList=ref([])
 const getArticle = async()=>{
-let res =await fetch(articleLink,{
+let res =await fetch(solutionLink,{
     method:'GET'
 })
 if(res.status==200){
-   arrArticle.value = await res.json()
-   await randomAricle(4,arrArticle.value.length,arrArticle.value)
-    console.log(arrArticle.value)
+   solutionList.value = await res.json()
+   await randomAricle(4,solutionList.value.length,solutionList.value)
+    console.log(solutionList.value)
 }
 }
 
@@ -230,8 +270,8 @@ onBeforeMount(()=>{
         <div class="ml-[70px] text-gray-500 text-[13px] mt-[2px]">
                 เช่น อินเตอร์เน็ตใช้ไม่ได้ แป้นพิมพ์ใช้ไม่ได้ ปริ้นไม่ออก
         </div>
-        <div  class="absolute w-[440px] bg-gray-200 mx-[95px] mt-[-20px]">
-            <div v-show="searching.length!=0" v-for="(data,index) in arrArticle" :key="index"  class="px-2 py-1.5 ">
+        <div  class="absolute w-[440px] h-fit bg-gray-200 mx-[95px] mt-[-20px]">
+            <div v-show="searching.length!=0" v-for="(data,index) in findingKeyW" :key="index"  class="px-2 py-1.5 ">
                 {{data.title}}
             </div>
         </div>
@@ -254,6 +294,25 @@ onBeforeMount(()=>{
 
         
     </div>
+
+
+        <!-- list problems searching -->
+    <!-- <div v-if="params.service=='it'" class="grid grid-cols-2 grid-rows-2 gap-4 w-[1000px] mx-auto mt-3">
+        <div v-for="(dataa,index) in findingKeyW" :key="index"  class="bg-gray-100 p-2 rounded-2xl hover:bg-gray-200">
+            <img :src="dataa.img" alt="logo" class=" w-[45px] mx-3 mt-2">
+            <h5 class="ml-[10px] mb-1.5 mt-2 text-[20px] font-semibold">
+                {{dataa.title}}
+            </h5>
+            <p  class="resize-none w-full h-[100px] px-2 text-[15px] text-ellipsis whitespace-normal break-words">
+                {{ dataa.text }}
+            </p>
+            <button @click="goHowTo(dataa.id)" class="w-fit text-left p-2 text-sky-500 hover:text-sky-700 block">
+                ดูรายละเอียดเพิ่มเติม &#62;&nbsp;
+            </button>
+        </div>
+
+        
+    </div> -->
 </div>
 </div>
 </template>

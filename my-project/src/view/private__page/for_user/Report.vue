@@ -21,7 +21,7 @@ const sampleData =ref([])
 
 // first
 const typeU = ref('')
-const userTypeU =ref('')
+const brand =ref('')
 // second
 const typeM =ref('')
 // third
@@ -38,7 +38,7 @@ const createdOBJ =ref({})
 
 // validation
 const vd_typeU=ref(undefined)
-const vd_userTypeU=ref(undefined)
+const vd_brand=ref(undefined)
 const vd_typeM =ref(undefined)
 
 const summaryInfo=()=>{
@@ -47,7 +47,7 @@ const summaryInfo=()=>{
         if(typeU.value == ''&&typeP =='hardware'&&typeP =='software'&&typeP =='internet'){
             console.log('please select ur type of use')
         }else
-        if(typeU.value=='sf'&&userTypeU.value.length==0){
+        if(typeU.value=='sf'&&brand.value.length==0){
             console.log('please input ur device')
         }else 
         if(typeM.value == ''&&typeP =='hardware'&&typeP =='software'&&typeP =='internet'){
@@ -205,7 +205,7 @@ onBeforeMount(()=>{
 const saveToLocal=()=>{
     localStorage.setItem("form",{
 "typeU":typeU.value ,
-"userTypeU":userTypeU.value,
+"brand":brand.value,
 "typeM":typeM.value,
 "problems":problems.value,
 "others":others.value,
@@ -232,7 +232,7 @@ const submitt = async()=>{
             assign:'Not_assign',
             useT:typeU.value,
             sn:'20a20345',
-            brand:userTypeU.value,
+            brand:brand.value,
             typeM:typeM.value,
             problems:problems.value,
             other:others.value,
@@ -291,7 +291,7 @@ const submitt = async()=>{
                 </div>  
                 
                 <div v-if="typeU=='sf'" class=" m-2">
-                        <input v-model="userTypeU" id="Self" type="text" placeholder="ระบุยี้ห้อของคุณที่นี้." name="input_type"  class="resize-none  m-auto w-[300px] mr-3 bg-gray-300 p-1.5 rounded-lg focus:outline-0">
+                        <input v-model="brand" id="Self" type="text" placeholder="ระบุยี้ห้อของคุณที่นี้." name="input_type"  class="resize-none  m-auto w-[300px] mr-3 bg-gray-300 p-1.5 rounded-lg focus:outline-0">
                 </div>
             </div>
 
@@ -460,16 +460,57 @@ const submitt = async()=>{
             </div>
 
             <!-- first -->
-            <div v-if="typeP=='hardware'||typeP=='software'||typeP=='internet'" class="mt-10 w-fit text-[20px] font-semibold">
-                <h3 class="w-fit mx-auto mr-2">
+            <div v-if="typeP=='hardware'||typeP=='software'||typeP=='internet'" class="w-full h-fit mt-10  text-[20px] font-semibold">
+                <!-- <h3 class="w-fit mx-auto mr-2">
                    1. <span class="text-rose-500">ประเภท</span> ของ Hardware : {{ typeU=='or'?'เครื่องขององค์กร': 'เครื่องของ user'}}
-                </h3>
-                <h3 class="w-fit mx-auto mr-2">
-                    ยี้ห้อ : {{ userTypeU }}
-                </h3>
-                <h3 v-if="typeU=='or'" class="w-fit mx-auto mr-2">
-                    S/N : 
-                </h3>
+                </h3> -->
+                
+                <table class=" w-fit h-fit   mt-10  text-[20px] font-semibold ">
+                    <tbody >
+                        <!-- <tr >
+                            <td class="text-right w-[130px]">
+                                ผู้ใช้ :
+                            </td>
+                            <td class="truncate w-[]">
+                                {{ event.full_name }}
+                                testing
+                            </td>
+                        </tr> -->
+                        <!-- <tr>
+                            <td class="text-right w-[130px]" >
+                                Service : 
+                            </td>
+                            <td :style="[changeColorBy(event.service_type)]">
+                                {{ service }}
+                            </td>
+                        </tr> -->
+                        <tr>
+                            <td class="text-right">
+                                1. <span class="text-rose-500">ประเภท</span> ของ Hardware : 
+                            </td>
+                            <td>
+                                {{typeU=='or'?'เป็นขององค์กร':'เป็นของส่วนตัว'}}
+                            </td>
+                        </tr>
+                        <tr >
+                            <td class="text-right">
+                                ยี่ห้อ : 
+                            </td>
+                            <td>
+                                {{brand}}
+                            </td>
+                        </tr>
+                        <tr >
+                            <td class="text-right">
+                                S/N :
+                            </td>
+                            <td>
+                                <!-- {{sn}} -->
+                                123128234
+                            </td>
+                        </tr>
+                   </tbody>
+                </table>
             </div>
 
             <!-- second  -->
