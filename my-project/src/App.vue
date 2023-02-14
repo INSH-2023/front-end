@@ -25,4 +25,14 @@ const myRouter = useRouter()
 *{
   font-family: 'Kanit', sans-serif;
 }
+
+.show_up{
+  animation: tada 0.7s
+}
+
+@keyframes tada{
+    0%{opacity: 0;}
+    100%{opacity: 1;}
+}
+
 </style>
