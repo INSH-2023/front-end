@@ -236,7 +236,7 @@ onBeforeMount(()=>{
         </div>
         
         <!-- can get data but no data (clean) -->
-        <div v-else-if="eventStatus==false ||eventList.length==0">
+        <div v-else-if="eventStatus==false ||eventList.length==0" class="show_up">
             <div class=" bg-white w-full mx-auto  h-fit ">
                 <div class="w-full text-center font-semibold text-[40px]">
                     <div class="my-auto w-fit mx-auto mt-[250px]">
@@ -258,7 +258,7 @@ onBeforeMount(()=>{
                 
 
         <!-- have data -->
-        <div v-else-if="eventStatus==true" class="">
+        <div v-else-if="eventStatus==true" class="show_request show_up">
             <div class=" bg-white w-full mx-auto  h-fit ">
                 <div class="w-full text-center font-semibold text-[40px] pt-6">
                     <div class="flex w-fit mx-auto">
@@ -302,8 +302,8 @@ onBeforeMount(()=>{
         <div class="w-[1200px] mx-auto  h-[450px] mt-16"> 
             <hr class="mt-3 bg-gray-700  w-[1170px] h-[3px]">
             <div class="overflow-y-auto mx-auto h-[100%] w-[100%] ">
-                <table class="w-full text-sm text-center text-gray-800 ">
-                    <thead class="bg-white text-lg sticky top-0">
+                <table class="relative w-full text-sm text-center text-gray-800 ">
+                    <thead class="absolute bg-white text-lg sticky top-0 z-10">
                         <tr class="">
                             <th scope="col" class="py-3 px-6 ">
                                 User
@@ -326,14 +326,17 @@ onBeforeMount(()=>{
                             <th scope="col" class="p-3">
                                Assign
                             </th>
+                            <th scope="col" class="p-3">
+                              
+                            </th>
                         </tr>                        
                     </thead>
                     
 
 
                     <!-- have data -->
-                    <tbody > <!-- @click="clickedInfo" -->
-                        <tr  v-for="(data,index) in eventList" :key="index" class="relative text-[15px]  bg-white border-b-2 border-gray-300 hover:border-gray-400 ">
+                    <tbody class="z-0"> <!-- @click="clickedInfo" -->
+                        <tr  v-for="(data,index) in eventList" :key="index" class="relative text-[15px]  bg-white border-b-2 border-gray-300 hover:border-gray-400 z-1">
                             
                             <td class="w-[140px]   font-medium px-6 py-4 text-left">
                             <div class="w-[130px] font-semibold truncate ">
@@ -411,7 +414,7 @@ onBeforeMount(()=>{
                             <td class="text-right w-[130px]">
                                 ของผู้ใช้ :
                             </td>
-                            <td class="truncate w-[]">
+                            <td class="indent-[5px] truncate w-[]">
                                 {{ event.full_name }}
                             </td>
                         </tr>
@@ -419,7 +422,7 @@ onBeforeMount(()=>{
                             <td class="text-right w-[130px]" >
                                 Service : 
                             </td>
-                            <td :style="[changeColorBy(event.service_type)]">
+                            <td :style="[changeColorBy(event.service_type)]" class="indent-[5px]">
                                 {{ event.service_type }}
                             </td>
                         </tr>
@@ -427,7 +430,7 @@ onBeforeMount(()=>{
                             <td class="text-right">
                                 ประเภทของ :
                             </td>
-                            <td>
+                            <td class="indent-[5px]">
                                 {{event.useT=='or'?'เป็นขององค์กร':'เป็นของส่วนตัว'}}
                             </td>
                         </tr>
@@ -435,7 +438,7 @@ onBeforeMount(()=>{
                             <td class="text-right">
                                 ยี่ห้อ : 
                             </td>
-                            <td>
+                            <td class="indent-[5px]">
                                 {{event.brand}}
                             </td>
                         </tr>
@@ -443,7 +446,7 @@ onBeforeMount(()=>{
                             <td class="text-right">
                                 S/N :
                             </td>
-                            <td>
+                            <td class="indent-[5px]">
                                 {{event.sn}}
                             </td>
                         </tr>
@@ -468,7 +471,7 @@ onBeforeMount(()=>{
                 </div> -->
 
                 <!-- second  -->
-                <div v-show="event.service_type=='IT_Service'" class="mt-4 ">
+                <div v-show="event.service_type=='IT_Service'&& (event.subject=='hardware'||event.subject=='software'||event.subject=='internet')" class="mt-4 ">
                     <div class="text-[20px] font-semibold">
                         <h3 >
                         ชนิดของ Hardware 
@@ -580,7 +583,7 @@ onBeforeMount(()=>{
                 
                 <!-- button -->
                 <div v-show="statusCh != undefined &&statusCh != 'request'&& assignCh.length>0 " class="w-fit mx-auto mt-10">
-                    <button @click="submitt(event.id)" class="w-[130px] mx-3 p-2 font-semibold bg-rose-400 text-white rounded-xl">
+                    <button @click="submitt(event.id)" class="w-[130px] mx-3 p-2 font-semibold bg-violet-500  text-white rounded-xl">
                         <h4>
                             ทำการแก้ไข
                         </h4>
@@ -605,7 +608,7 @@ onBeforeMount(()=>{
                                 <h5 class=" pl-2 text-sm text-[#64B5F6] font-semibold italic">
                                     13:56 13/2/2566
                                 </h5>
-                                <p class="pl-4 font-light">
+                                <p class="indent-[10px] pl-4 font-light">
                                     นี่เป็นการทดสอบนะครับและทดสอบเพื่อที่เราตะได้รู้ว่าเรานั้นสามารถทำการทดสอบกับข้อความของข้อความเหล่านี้ได้และเราจะไม่หยุดทดสอบจนกว่าจะได้ทดสอบเพื่อที่จะไม่โดนหักคะแนน
                                 </p>                                
                             </div>
@@ -615,9 +618,9 @@ onBeforeMount(()=>{
                     <!-- new comment -->
                     <div  class="comment_new w-[540px] h-fit  mx-auto ">
 
-                        <textarea v-model="commentCh"  name="other" id="other_1" placeholder="text something ....."  class="w-full h-[70px] resize-none pt-[10px] block  bg-gray-300 p-2  focus:outline-0" ></textarea>                  
+                        <textarea v-model="commentCh"  name="other" id="other_1" placeholder="text something ....."  class="w-full h-[70px] resize-none pt-[10px] block  bg-gray-300 p-2  focus:outline-0 " ></textarea>                  
 
-                        <button v-show="commentCh.length!=0" class="comment_new_button w-full h-[40px]  bg-[#2196F3] text-white font-light rounded-b-xl">
+                        <button v-show="commentCh.length!=0" class="comment_new_button w-full h-[40px]  bg-[#2196F3] text-white font-light rounded-b-xl ">
                             Post Comment
                         </button>                            
                     </div>
@@ -649,6 +652,7 @@ onBeforeMount(()=>{
   transition: opacity 500ms;
   visibility: hidden;
   opacity: 0;
+  z-index: 50;
 }
 .overlay:target {
   visibility: visible;
@@ -735,5 +739,6 @@ onBeforeMount(()=>{
     border-top-right-radius: 20px;
     border-bottom-right-radius: 20px;
 }
+
 
 </style>
