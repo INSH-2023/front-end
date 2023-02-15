@@ -53,10 +53,10 @@ const summaryInfo=()=>{
         if(typeM.value == ''&&typeP =='hardware'&&typeP =='software'&&typeP =='internet'){
             console.log('please select ur type of matchine')
         }else
-        if(problems.value.length==0){
+        if(problems.value.length==0 && isOther.value == false){
             console.log('please select ur problems')
         }else
-        if(isOther.value==true&&others.value==''){
+        if(isOther.value==true&&others.value.length==0){
             console.log('please input ur orther')
         }
         else{
@@ -577,7 +577,12 @@ const submitt = async()=>{
                            {{data}}
                         </h3>
                     </div >
-                    
+                    <div v-show="isOther==true" class="w-[150px] mx-auto p-2 bg-gray-200 rounded-xl ">
+                        <img src="../../../assets/vue.svg" alt="NoteBook" class="w-[80px] mx-auto">
+                        <h3 class="w-fit mx-auto">
+                           Other
+                        </h3>
+                    </div >
 
                 </div>
             </div>
