@@ -72,7 +72,7 @@ onBeforeMount(()=>{
         <!-- default home -->
         <div v-if="role==null" class=" p-2">
             <div class="flex ml-[20px] w-fit">
-                <img src="../assets/Moral_Fainal.png" alt="" class="w-[40px]">
+                <img src="../assets/Moral_Fainal.png" alt="" class="w-[40px] h-[40px]">
                 <div class="text-[20px] font-bold text-white my-auto m-3 ">
                     Zeed web
                 </div>
@@ -93,7 +93,7 @@ onBeforeMount(()=>{
         <div v-else-if="role=='user'" class="flex justify-between p-2 relative">
             <div class=" ml-[20px] w-fit ">
                 <div class="flex">
-                    <img src="../assets/Moral_Fainal.png" alt="" class="w-[40px] inline-block">
+                    <img src="../assets/Moral_Fainal.png" alt="" class="w-[40px] h-[40px] inline-block">
                     <div class="text-[20px] font-bold text-white my-auto m-3 ">
                         Zeed web
                     </div>                    
@@ -142,9 +142,10 @@ onBeforeMount(()=>{
             </div>
         </div>
 
+        <!-- admin page -->
         <div v-else-if="role=='admin'" class="flex justify-between p-2 relative">
             <div class="flex ml-[20px] w-fit ">
-                    <img src="../assets/Moral_Fainal.png" alt="" class="w-[40px]">
+                    <img src="../assets/Moral_Fainal.png" alt="" class="w-[40px] h-[40px] my-auto">
                     <div class="text-[20px] font-bold text-white my-auto m-3 ">
                         Zeed web
                     </div>
