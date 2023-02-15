@@ -173,7 +173,7 @@ const subjectCh=(event)=>{
 
 </script>
 <template>
-<div class="overflow-y-auto relative">
+<div class="overflow-y-auto relative show_up">
     <div class="">
         <div class=" bg-white w-full mx-auto  h-fit ">
                 <div class="w-full text-center font-semibold text-[40px] pt-6">
@@ -217,24 +217,51 @@ const subjectCh=(event)=>{
             <div class="relative w-[1100px] mx-auto  h-[500px] ">
                 <!-- <hr class="mt-3 bg-gray-700  w-full h-[3px]"/> -->
                 <!-- select type -->
-                <div class="relative w-fit h-[53px] mt-[20px] ml-[20px]   ">
-                    <h4 v-show="subjectCr !='none'" class="text ml-2 text-sm font-semiboldd text-[#C6AC8F]">
-                        Type of subject
-                    </h4>
-                    <select @change="subjectCh" name="subject" id="subject" class="absolute bottom-0 w-[200px] bg-[#C6AC8F] text-[#0A0908] text-[20px] font-light rounded-lg p-[1px]  px-[10px]">
-                        <option value="none" selected hidden>Type of subject</option>
-                        <option value="hardware" >Hardware</option>
-                        <option value="software" >Software</option>
-                        <option value="internet" >Internet</option>
-                        <option value="printer" >Printer</option>
-                        <option value="website" >Website</option>
-                        <option value="meeting" >Meeting</option>
-                        <option value="application" >Application</option>
+                <div class=" flex w-full h-[53px] mt-[20px] ml-[20px]   ">
+                    <!-- select type -->
+                    <div class="relative w-[250px]">
+                        <h4 v-show="subjectCr !='none'" class="text ml-2 text-sm font-semiboldd text-[#C6AC8F]">
+                            Type of subject
+                        </h4>
+                        <select @change="subjectCh" name="subject" id="subject" class="absolute bottom-0 w-[200px] bg-[#C6AC8F] text-[#0A0908] text-[20px] font-light rounded-lg p-[1px]  px-[10px]">
+                            <option value="none" selected hidden>Type of subject</option>
+                            <option value="hardware" >Hardware</option>
+                            <option value="software" >Software</option>
+                            <option value="internet" >Internet</option>
+                            <option value="printer" >Printer</option>
+                            <option value="website" >Website</option>
+                            <option value="meeting" >Meeting</option>
+                            <option value="application" >Application</option>
+                        </select>                        
+                    </div>
 
+                    <!-- add new problem -->
+                    <!-- <div class="relative overflow-visible flex w-[300px] h-[50px] my-auto    ">
+                        <div class="relative w-[20px] z-10">
+                            <button class=" inset-0 top-[-20px] w-[50px] h-[50px] my-auto bg-gray-300 p-2 text-[40px] font-light rounded-[50%]">
+                                <hr class="w-full h-[4px] bg-gray-800 ">
+                                <hr class="w-[4px] h-full bg-gray-800 ">
+                            </button>                            
+                        </div>
 
+                        <div class="relative w-[150px] h-[40px] bg-sky-800 z-0">
+                            <input type="text" class="absolute bottom-0 w-[] my-auto ml-10 bg-rose-300 ">
+                        </div>
+                    </div> -->
 
-                    </select>
-                    <!-- <input type="text" class="bg-gray-200"> -->
+                    <!-- add new problem ใช้ไปก่อน-->
+                    <div class="flex bg-gray-500 my-auto px-2 py-1.5 rounded-3xl">
+                        <!-- <h4 class="text-white my-auto">
+                            name : 
+                        </h4> -->
+                        <input v-model="name" type="text" class="bg-gray-300 pl-2 p-1 rounded-l-xl focus:outline-0" />
+                        <!-- <button class="bg-gray-300 text-sm p-1 font-semibold">
+                            UPLOAD ICON
+                        </button> -->
+                        <button @click="addProblem" class="bg-gray-500 px-2 rounded-r-3xl text-white ">
+                            Create Problem
+                        </button>
+                    </div>
                 </div>
 
                 <!-- การ์ด problems -->
@@ -280,15 +307,15 @@ const subjectCh=(event)=>{
                     </button>
                 </div>
 
-                <!-- add button -->
-                <div class="absolute right-[4px] bottom-[10px]">
+                <!-- add button old version -->
+                <!-- <div class="absolute right-[4px] bottom-[10px]">
                     <input v-model="name" type="text" class="bg-gray-400">
                     <button @click="addProblem()" class="relative w-[40px] h-[40px] mt-6  m-auto bg-transparent   border-gray-400 border-[4px] hover:bg-gray-500 hover:border-gray-200 hover:text-sky-200 rounded-full">
                         <h4 class="absolute w-full h-full  top-[-20px]  text-[45px] text-sky-400 font-light">
                         +
                         </h4> 
                     </button>                    
-                </div>
+                </div> -->
 
 
             </div>
