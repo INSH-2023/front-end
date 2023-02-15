@@ -1,5 +1,5 @@
 <script setup>
-import {ref} from 'vue'
+import {ref,computed} from 'vue'
 
 const userLink ='http://localhost:3000/users'
 
@@ -143,6 +143,12 @@ const valFormEmail = (input) => {
     }
 }
 
+// modify email
+const emailM=(event)=>{
+    let emailM =event.target.value
+    email.value = emailM+'@moralcenter.or.th'
+}
+
 // submit
 const submittS =ref(undefined)
 const submittform =async()=>{
@@ -158,26 +164,55 @@ const submittform =async()=>{
             "content-type": "application/json"
         },
         body:JSON.stringify({
-            first_name:fName.value,
-            last_name:lName.value,
-            email:email.value,
-            role:role.value,
-            office:office.value,
-            position:position.value,
-            passW:passW.value,
-            group_work:group.value,
+            first_name:fName.value.trim(),
+            last_name:lName.value.trim(),
+            email:email.value.trim(),
+            role:role.value.trim(),
+            office:office.value.trim(),
+            position:position.value.trim(),
+            passW:passW.value.trim(),
+            group_work:group.value.trim(),
             status:'inActive',
         })
     })
     if(res.status==201){
         console.log('form is create user successfull')
-
+        clear()
     }else{
         console.log('error something maybe try again later')
     } 
     }
     
 }
+
+// clear input 
+const clear=()=>{
+
+    // input
+    fName.value =''
+    lName.value =''
+    email.value = ''
+    group.value = ''
+    position.value= ''
+    office.value = ''
+    role.value = ''
+    passW.value = ''
+    cPassW.value =''
+
+    // status
+    fNameS.value=undefined
+    lNameS.value=undefined
+    emailS.value=undefined
+    groupS.value =undefined
+    passWS.value =undefined
+    cPassWS.value =undefined
+    positionS.value=undefined
+    officeS.value =undefined
+    roleS.value =undefined
+
+}
+
+
 
 // show password
 const pd =ref(false)
@@ -221,7 +256,7 @@ const goRotate =()=>{
 
 </script>
 <template>
-<div class="overflow-y-auto ">
+<div class="overflow-y-auto show_up">
     <div>
         <div>
             <!-- header -->
@@ -276,7 +311,7 @@ const goRotate =()=>{
                             </span>
                         </h4> 
                         <div :style="[emailS==false?'border-color: rgb(225 29 72);border-width: 2px;':'']" class="absolute bottom-0 flex w-full h-[40px]  p-1 bg-gray-300 rounded-lg">
-                            <input v-model="email" placeholder="Email" id="email" type="text" :maxlength="emailL"   class="w-full h-full mx-1   bg-transparent text-gray-500 focus:outline-0" >
+                            <input @change="emailM" placeholder="Email" id="email" type="text" :maxlength="emailL"   class="w-full h-full mx-1   bg-transparent text-gray-500 focus:outline-0" >
                             <h4 class="w-fit my-auto mx-2 font-semibold text-[15px] text-gray-500">
                                 @moralcenter.or.th
                             </h4>
@@ -309,15 +344,16 @@ const goRotate =()=>{
                             <div class="relative w-full h-[60px] mx-1">
                                 <h4 v-show="position.length>0" class="text-sm font-semibold text-gray-500 mx-2">
                                     Position
-                                </h4> 
-                                <select v-model="position"  id="position" :style="[positionS==false?'border-color: rgb(225 29 72);border-width: 2px;':'']" class="absolute bottom-0  w-full h-[40px]  px-2 bg-gray-300 text-gray-500 rounded-lg focus:outline-0">
+                                </h4>
+                                <input v-model="position" type="text" placeholder="Position" :style="[positionS==false?'border-color: rgb(225 29 72);border-width: 2px;':'']" class="absolute bottom-0  w-full h-[40px]  px-2 bg-gray-300 text-gray-500 rounded-lg focus:outline-0"> 
+                                <!-- <select v-model="position"  id="position"  >
                                     <option value="" selected disabled hidden >Position</option>
-                                    <option value="1" >sample 1</option>
-                                    <option value="2" >sample 2</option>
+                                    <option value="เจ้าหน้าที่เทคโนโลยีสารสนเทศ" >เจ้าหน้าที่เทคโนโลยีสารสนเทศ</option>
+                                    <option value="หัวหน้ากลุ่มงานศูนย์ข้อมูลและเทคโนโลยีสารสนเทศ" >หัวหน้ากลุ่มงานศูนย์ข้อมูลและเทคโนโลยีสารสนเทศ</option>
                                     <option value="3" >sample 3</option>
 
 
-                                </select>
+                                </select> -->
                             </div>
 
                             <!-- Office -->
@@ -327,11 +363,11 @@ const goRotate =()=>{
                                 </h4> 
                                 <select v-model="office"  id="position" :style="[officeS==false?'border-color: rgb(225 29 72);border-width: 2px;':'']" class="absolute bottom-0  w-full h-[40px]  px-2 bg-gray-300 text-gray-500 rounded-lg focus:outline-0">
                                     <option value="" selected disabled hidden >Office</option>
-                                    <option value="1" >sample 1</option>
-                                    <option value="2" >sample 2</option>
-                                    <option value="3" >sample 3</option>
-
-
+                                    <option value="ผู้บริหาร" >ผู้บริหาร</option>
+                                    <option value="สำนักส่งเสริมและขับเคลื่อนเครือข่ายทางสังคม" >สำนักส่งเสริมและขับเคลื่อนเครือข่ายทางสังคม</option>
+                                    <option value="สำนักบริหารจัดการองค์กรและยุทธศาสตร์" >สำนักบริหารจัดการองค์กรและยุทธศาสตร์</option>
+                                    <option value="สำนักพัฒนาองค์ความรู้นวัตกรรมและสื่อสารสนเทศ" >สำนักพัฒนาองค์ความรู้นวัตกรรมและสื่อสารสนเทศ</option>
+                                    <option value="งานตรวจสอบภายใน" >งานตรวจสอบภายใน</option>
                                 </select>
                             </div>                            
                             
@@ -342,6 +378,7 @@ const goRotate =()=>{
                                 </h4> 
                                 <select v-model="group"  id="position" :style="[groupS==false?'border-color: rgb(225 29 72);border-width: 2px;':'']" class="absolute bottom-0  w-full h-[40px]  px-2 bg-gray-300 text-gray-500 rounded-lg focus:outline-0">
                                     <option value="" selected disabled hidden >Group</option>
+                                    <option value="ผู้บริหาร" >ผู้บริหาร</option>
                                     <option value="บริหารจัดการองค์กร" >บริหารจัดการองค์กร</option>
                                     <option value="นโยบายและยุทธศาสตร์" >นโยบายและยุทธศาสตร์</option>
                                     <option value="วิจัยนวัตกรรมและระบบพฤติกรรมไทย" >วิจัยนวัตกรรมและระบบพฤติกรรมไทย</option>
@@ -431,5 +468,9 @@ const goRotate =()=>{
     
     }
  100%{transform: v-bind(degree_end);}
+}
+
+@keyframes tada {
+    
 }
 </style>
