@@ -185,7 +185,7 @@ const submitt=async()=>{
 
 </script>
 <template>
-<div class="overflow-y-auto ">
+<div class="overflow-y-auto show_up">
     <div>
         <div>
             <!-- header -->
