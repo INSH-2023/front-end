@@ -36,7 +36,7 @@ onBeforeMount(()=>{
 })
 </script>
 <template>
-<div class="overflow-y-auto relative">
+<div class="overflow-y-auto relative show_up">
     <div class="">
         <div class="">
             
