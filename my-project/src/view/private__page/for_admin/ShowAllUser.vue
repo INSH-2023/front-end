@@ -71,6 +71,19 @@ const getUsers =async()=>{
     }
 }
 
+// delete user
+const deleteUser =async(v)=>{
+    const res = await fetch(`${userLink}/${v}`,{
+        method:'DELETE'
+    })
+    if(res.status==200){
+        console.log('user delete successful')
+        getUsers()
+    }else{
+        console.log('error something cannot delete user')
+    }
+}
+
 onBeforeMount(()=>{
     getUsers()
 })
@@ -78,14 +91,14 @@ onBeforeMount(()=>{
 
 </script>
 <template>
-<div class="overflow-y-auto relative">
+<div class="overflow-y-auto relative show_up">
     <div class="">
         <div class="">
             
             <div class=" bg-white w-full mx-auto  h-fit ">
                 <div class="w-full text-center font-semibold text-[40px] pt-6">
                     <div class="flex w-fit mx-auto">
-                        <img src="../../../assets/vue.svg" alt="users_icon" class="w-[40px] mr-4">
+                        <img src="../../../assets/admin_page/allUser.png" alt="users_icon" class="w-[40px] h-[40px] my-auto mr-4">
                         All User
                     </div>
 
@@ -142,7 +155,7 @@ onBeforeMount(()=>{
                                 Reposibility
                             </th>
                             <th scope="col" class="py-3 px-6">
-                                Reposibility
+                                
                             </th>
                             
                             
@@ -176,8 +189,8 @@ onBeforeMount(()=>{
                             </td>
                             <td class="w-[130px] px-6 py-4 font-semibold">
                                 <div class="flex w-fit mx-auto truncate ">
-                                    <img src="../../../assets/vue.svg" alt="delete_icon" class="w-[28px] m-2">
-                                    <img src="../../../assets/vue.svg" alt="delete_icon" class="w-[28px] m-2">
+                                    <img src="../../../assets/admin_page/edit.png" alt="delete_icon" class="w-[28px] m-2">
+                                    <img @click="deleteUser(data.id)" src="../../../assets/admin_page/bin.png" alt="delete_icon" class="w-[28px] m-2">
                                 </div>
 
                             </td>
