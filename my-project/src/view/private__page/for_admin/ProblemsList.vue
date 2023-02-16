@@ -254,7 +254,7 @@ const subjectCh=(event)=>{
                         <!-- <h4 class="text-white my-auto">
                             name : 
                         </h4> -->
-                        <input v-model="name" type="text" class="bg-gray-300 pl-2 p-1 rounded-l-xl focus:outline-0" />
+                        <input v-model="name" type="text" class=" bg-gray-300 pl-2 p-1 rounded-l-xl focus:outline-0" />
                         <!-- <button class="bg-gray-300 text-sm p-1 font-semibold">
                             UPLOAD ICON
                         </button> -->
