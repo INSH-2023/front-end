@@ -50,9 +50,13 @@ const sIsF=ref(false)
 const statusCh=ref(undefined)
 const changeST =(v)=>{
     statusCh.value=''
+    // status request
     sIsR.value=false
+    // status open case
     sIsO.value=false
+    // status in progress
     sIsI.value=false
+    // status finish
     sIsF.value=false
     if(v=='request'){
         sIsR.value=true
@@ -302,31 +306,31 @@ onBeforeMount(()=>{
         <div class="w-[1200px] mx-auto  h-[450px] mt-16"> 
             <hr class="mt-3 bg-gray-700  w-[1170px] h-[3px]">
             <div class="overflow-y-auto mx-auto h-[100%] w-[100%] ">
-                <table class="relative w-full text-sm text-center text-gray-800 ">
+                <table class="relative w-full table-fixed text-sm text-center text-gray-800 ">
                     <thead class="absolute bg-white text-lg sticky top-0 z-10">
                         <tr class="">
-                            <th scope="col" class="py-3 px-6 ">
+                            <th scope="col" class="p-2">
                                 User
                             </th>
-                            <th scope="col" class="py-3 px-6">
+                            <th scope="col" class="p-2">
                                 Group
                             </th>
-                            <th scope="col" class="py-3 px-6">
+                            <th scope="col" class="p-2">
                                 Type
                             </th>
-                            <th scope="col" class="py-3 px-6">
+                            <th scope="col" class="p-2">
                                 Subject
                             </th>
-                            <th scope="col" class="py-3 px-2">
+                            <th scope="col" class="p-2">
                                 Data
                             </th>
-                            <th scope="col" class="p-3">
+                            <th scope="col" class="p-2">
                                 Status
                             </th>
-                            <th scope="col" class="p-3">
+                            <th scope="col" class="p-2">
                                Assign
                             </th>
-                            <th scope="col" class="p-3">
+                            <th scope="col" class="p-2">
                               
                             </th>
                         </tr>                        
@@ -338,46 +342,46 @@ onBeforeMount(()=>{
                     <tbody class="z-0"> <!-- @click="clickedInfo" -->
                         <tr  v-for="(data,index) in eventList" :key="index" class="relative text-[15px]  bg-white border-b-2 border-gray-300 hover:border-gray-400 z-1">
                             
-                            <td class="w-[140px]   font-medium px-6 py-4 text-left">
-                            <div class="w-[130px] font-semibold truncate ">
-                                {{data.full_name}}
-                            </div>
-                            <div class="w-[130px] text-[10px] truncate">
-                                {{ data.email }}
-                            </div> 
+                            <td class=" font-medium p-2 text-left">
+                                <div class=" font-semibold truncate ">
+                                    {{data.full_name}}
+                                </div>
+                                <div class=" text-[10px] truncate">
+                                    {{ data.email }}
+                                </div> 
                             </td>
-                            <td class="w-[130px] px-6 py-4 font-semibold">
+                            <td class=" p-2font-semibold">
                                 <div class="w-[120px] truncate">
-                                {{data.group_work}}
+                                    {{data.group_work}}
                                 </div>
                             </td>
-                            <td class="w-[90px] px-6 py-4 font-semibold">
+                            <td class=" p-2 font-semibold">
                                 <div :style="[changeColorBy(data.service_type)] " class="w-[90px] truncate">
-                                {{data.service_type}}
-                            </div>
+                                    {{data.service_type}}
+                                </div>
                             </td>
-                            <td class="w-[90px] px-6 py-4 font-semibold">
-                                <div class="w-[90px] truncate">
-                                {{data.subject}}                                    
+                            <td class=" p-2 font-semibold">
+                                <div class=" truncate">
+                                    {{data.subject}}                                    
                                 </div>
 
                             </td>
-                            <td class="w-[70px] px-6 py-4 font-semibold">
-                                <div class="w-[70px] ">
-                                {{data.date}}
+                            <td class="  p-2 font-semibold">
+                                <div class=" ">
+                                    {{data.date}}
                                 </div>
                             </td>
-                            <td class="w-[130px] px-3 py-4 text-center ">
+                            <td class=" p-2 text-center ">
                                 <div :style="[changeColorBy(data.status)]" class="w-[120px] mx-auto static  py-[4px] px-[8px] rounded-2xl text-[15px] font-semibold ">
                                     {{data.status}}
                                 </div> 
                             </td>
-                            <td class="w-[130px] px-6 py-4 font-semibold">
-                                <div class="w-[120px] ">
-                                {{data.assign}}
+                            <td class=" p-2 font-semibold">
+                                <div class=" ">
+                                    {{data.assign}}
                                 </div>
                             </td>                            
-                            <td class="w-[130px] px-6 py-4 font-semibold">
+                            <td class=" p-2 font-semibold">
                                 <div class="flex w-fit mx-auto  ">
                                     <a    class="goInfo ">
                                         <button @click="showInfoByID(data.id,index)">
