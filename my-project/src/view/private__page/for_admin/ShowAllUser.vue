@@ -1,7 +1,10 @@
 <script setup>
 import{ref,computed, onBeforeMount}from'vue'
 
-const userLink ='http://localhost:3000/users'
+// const userLink ='http://localhost:3000/users'
+const userLink ='http://localhost:5000/api/users'
+// const userLink =`${import.meta.env.BASE_URL}`
+
 const userList =ref([])
 
 const sampleData=ref([
@@ -169,31 +172,31 @@ const showInfoByID=async(v,index)=>{
             <div class="overflow-y-auto mx-auto h-[100%] w-[100%] ">
                 <table class="w-full table-fixed text-sm text-center text-gray-800 ">
                     <thead class="bg-white text-lg sticky top-0">
-                        <tr class="text-[25px] text-gray-500">
-                            <th scope="col" class="py-2 px-2 ">
+                        <tr class="text-[20px] text-gray-500">
+                            <th scope="col"  class="w-[150px] py-2 px-2  pl-[40px]">
                                 Name
                             </th>
-                            <th scope="col" class=" py-2 px-2">
+                            <th scope="col" class="w-[250px] py-2 px-2">
                                 Group
                             </th>
-                            <th scope="col" class="py-2 px-2">
+                            <th scope="col" class="w-[100px] py-2 px-2">
                                 Active
                             </th>
-                            <th scope="col" class="py-2 px-2">
+                            <th scope="col" class="w-[100px] py-2 px-2">
                                 Reposibility
                             </th>
-                            <th scope="col" class="py-2 px-2">
-                                
+                            <th scope="col" class=" w-[150px] py-2 px-2">
+                                Detail
                             </th>
                             
                             
                         </tr>                        
                     </thead>
                     <tbody>
-                        <tr v-for="(data,index) in userList" :key="index"  class="text-[15px] cursor-pointer bg-white border-b-2 border-gray-300 hover:border-gray-400 hover:bg-gray-400">
+                        <tr v-for="(data,index) in userList" :key="index"  class="text-[15px] cursor-default bg-white border-b-2 border-gray-300  hover:border-gray-400 hover:bg-gray-400">
                             <td class="] text-left    px-2 py-2 font-medium text-left">
                                 <div class="ml-4">
-                                    <div class="w-full ml-3 text-[18px] font-semibold truncate mx-auto">
+                                    <div class="w-full ml-3 text-[18px] font-light truncate mx-auto">
                                         {{data.first_name}} {{ data.last_name }}
                                     </div>
                                     <div class="w-full ml-3 text-[10px] truncate mx-auto">
@@ -202,18 +205,18 @@ const showInfoByID=async(v,index)=>{
                                 </div>
 
                             </td>
-                            <td class=" text-[15px] px-2 py-2 font-semibold ">
+                            <td class=" text-[15px] px-2 py-2 font-light text-l">
                                 <div class="w-full truncate mx-auto">
                                     {{data.group_work}}
                                 </div>
                             </td>
-                            <td class=" px-2 py-2 text-[22px] font-semibold ">
+                            <td class=" px-2 py-2 text-[20px] font-semibold ">
                                 <div class="w-full truncate mx-auto" :style="data.status=='Active'?'color:green':'color:red'">
                                     {{data.status}}                                    
                                 </div>
 
                             </td>
-                            <td class=" px-2 py-2 text-[22px] font-semibold ">
+                            <td class=" px-2 py-2 text-[20px] font-light">
                                 <div class=" mx-auto truncate">
                                 {{data.role}}
                                 </div>
@@ -221,11 +224,11 @@ const showInfoByID=async(v,index)=>{
                             <td class=" px-2 py-2 font-semibold">
                                 <div class="flex w-fit mx-auto truncate ">
                                     <a    class="goInfo w-[28px] m-2 ">
-                                        <button @click="showInfoByID(data.id,index)">
+                                        <button @click="showInfoByID(data.userId,index)">
                                             <img src="../../../assets/admin_page/edit.png" alt="edit_icon" >
                                         </button>
                                     </a>                                    
-                                    <img @click="deleteUser(data.id)" src="../../../assets/admin_page/bin.png" alt="delete_icon" class="w-[28px] h-[28px] m-2">
+                                    <img @click="deleteUser(data.userId)" src="../../../assets/admin_page/bin.png" alt="delete_icon" class="w-[28px] h-[28px] m-2 cursor-pointer">
                                 </div>
 
                             </td>
@@ -248,69 +251,66 @@ const showInfoByID=async(v,index)=>{
 
                 <!-- table -->
                 <div>
-                    <table class="table-auto mx-auto mt-10 text-[20px]">
-                       <tbody>
+                    <table class="w-full table-fixed mx-auto mt-10 text-[20px]">
+
                         <tr>
-                            <td class="text-right font-normal">
-                                Name :
-                            </td>
-                            <td class="indent-[5px] font-light text-gray-600">
+                            <th  class="table_header w-[120px] h-fit pt-2 text-right font-normal">
+                                Name
+                            </th>
+                            <td class="pt-2 pl-2 indent-[5px] font-light text-gray-600">
                                 {{ user.first_name }} {{ user.last_name }}
                             </td>
                         </tr>
                         
                         <!-- email -->
                         <tr>
-                            <td class="text-right font-normal">
-                                E-mail :
-                            </td>
-                            <td class="indent-[5px] font-light text-gray-600">
+                            <th class="table_header w-[120px] h-fit pt-2 text-right font-normal">
+                                E-mail
+                            </th>
+                            <td class="pt-2 pl-2 indent-[5px] font-light text-gray-600">
                                 {{ user.email }}
                             </td>
                         </tr>
 
                         <!-- role -->
                         <tr>
-                            <td class="text-right font-normal">
-                                Role :
-                            </td>
-                            <td class="indent-[5px] font-light text-gray-600">
+                            <th class="table_header w-[120px] h-fit pt-2 text-right font-normal">
+                                Role
+                            </th>
+                            <td class="pt-2 pl-2 indent-[5px] font-light text-gray-600">
                                 {{ user.role }}
                             </td>
                         </tr>
 
                         <!-- office -->
                         <tr>
-                            <td class="text-right font-normal">
-                                Office :
-                            </td>
-                            <td class="indent-[5px] font-light text-gray-600">
+                            <th class="table_header w-[120px] h-fit pt-2 text-right font-normal">
+                                Office
+                            </th>
+                            <td class="pt-2 pl-2 indent-[5px] font-light text-gray-600">
                                 {{ user.office }}
                             </td>
                         </tr>
 
                         <!-- group -->
                         <tr>
-                            <td class="text-right font-normal" >
-                                Group :
-                            </td>
-                            <td class="indent-[5px] font-light text-gray-600">
+                            <th class="table_header w-[120px] text-right  font-normal" >
+                                Group
+                            </th>
+                            <td class="pt-2 pl-2 indent-[5px]  font-light text-gray-600">
                                 {{ user.group_work }}
                             </td>
                         </tr>
 
                         <!-- position -->
                         <tr>
-                            <td class="text-right">
-                                Position :
-                            </td>
-                            <td class="indent-[5px] font-light text-gray-600">
+                            <th class="table_header w-[120px] h-fit  text-right font-normal">
+                                Position
+                            </th>
+                            <td class="w-[100px] h-fit pt-2 pl-2 indent-[5px] font-light text-gray-600">
                                 {{ user.position }}
                             </td>
                         </tr>
-
-
-                       </tbody>
                     </table>
                 </div>
 
@@ -358,12 +358,12 @@ const showInfoByID=async(v,index)=>{
   margin-top: 6%;
   /* overflow-y: auto; */
   padding: 35px;
-  padding-top: 20px;
+  padding-top: 35px;
   padding-left: 30px;
   padding-right: 16px;
   background: #fff;
-  width: 40%;
-  height: 450px;
+  width: 45%;
+  height: 520px;
   border-radius: 20px;
   position: relative;
   transition: all 5s ease-in-out;
@@ -382,5 +382,9 @@ const showInfoByID=async(v,index)=>{
   .option {
     width: 20%;
   }
+}
+
+.table_header::after{
+    content: ':';
 }
 </style>
