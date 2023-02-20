@@ -2,6 +2,7 @@
 import{ref,computed,onBeforeMount}from'vue'
 import BaseLoading from '../../../components/BaseLoading.vue';
 const requestLink="http://localhost:3000/events"
+const linkTesting=`$${import.meta.env.BASE_URL}`
 const isFilter=ref(false)
 const eventList=ref([])
 const assignCh =ref('')
@@ -200,6 +201,7 @@ const deleteItem =async (v)=>{
 
 onBeforeMount(()=>{
     getEvents()
+    console.log(linkTesting)
 })
 </script>
 <template>
@@ -309,28 +311,28 @@ onBeforeMount(()=>{
                 <table class="relative w-full table-fixed text-sm text-center text-gray-800 ">
                     <thead class="absolute bg-white text-lg sticky top-0 z-10">
                         <tr class="">
-                            <th scope="col" class="p-2">
+                            <th scope="col" class="w-[180px] p-2">
                                 User
                             </th>
-                            <th scope="col" class="p-2">
+                            <th scope="col" class="w-[200px] p-2">
                                 Group
                             </th>
-                            <th scope="col" class="p-2">
+                            <th scope="col" class="w-[120px] p-2">
                                 Type
                             </th>
-                            <th scope="col" class="p-2">
+                            <th scope="col" class="w-[150px] p-2">
                                 Subject
                             </th>
-                            <th scope="col" class="p-2">
-                                Data
+                            <th scope="col" class="w-[120px] p-2">
+                                Date
                             </th>
-                            <th scope="col" class="p-2">
+                            <th scope="col" class="w-[150px] p-2">
                                 Status
                             </th>
-                            <th scope="col" class="p-2">
+                            <th scope="col" class="w-[120px] p-2">
                                Assign
                             </th>
-                            <th scope="col" class="p-2">
+                            <th scope="col" class="w-[100px] p-2">
                               
                             </th>
                         </tr>                        
@@ -340,33 +342,33 @@ onBeforeMount(()=>{
 
                     <!-- have data -->
                     <tbody class="z-0"> <!-- @click="clickedInfo" -->
-                        <tr  v-for="(data,index) in eventList" :key="index" class="relative text-[15px]  bg-white border-b-2 border-gray-300 hover:border-gray-400 z-1">
+                        <tr  v-for="(data,index) in eventList" :key="index" class="relative text-[15px]  bg-white border-b-2 border-gray-300 cursor-default hover:border-gray-400 z-1">
                             
-                            <td class=" font-medium p-2 text-left">
+                            <td class=" font-medium py-3 px-2 text-left">
                                 <div class=" font-semibold truncate ">
                                     {{data.full_name}}
                                 </div>
-                                <div class=" text-[10px] truncate">
+                                <div class=" text-[10px] truncate font-light">
                                     {{ data.email }}
                                 </div> 
                             </td>
-                            <td class=" p-2font-semibold">
-                                <div class="w-[120px] truncate">
+                            <td class=" py-3 px-2 font-light">
+                                <div class="w-full truncate">
                                     {{data.group_work}}
                                 </div>
                             </td>
-                            <td class=" p-2 font-semibold">
-                                <div :style="[changeColorBy(data.service_type)] " class="w-[90px] truncate">
+                            <td class=" py-3 px-2 font-semibold">
+                                <div :style="[changeColorBy(data.service_type)] " class="w-[100px] text-center mx-auto truncate">
                                     {{data.service_type}}
                                 </div>
                             </td>
-                            <td class=" p-2 font-semibold">
+                            <td class=" py-3 px-2 font-semibold">
                                 <div class=" truncate">
                                     {{data.subject}}                                    
                                 </div>
 
                             </td>
-                            <td class="  p-2 font-semibold">
+                            <td class=" py-3 px-2 font-light">
                                 <div class=" ">
                                     {{data.date}}
                                 </div>
@@ -413,48 +415,76 @@ onBeforeMount(()=>{
 
                 <!-- first -->
                 <table class="w-full   mt-10  text-[20px] font-semibold ">
-                   <tbody >
+
+                        <!-- username -->
                         <tr >
-                            <td class="text-right w-[130px]">
-                                ของผู้ใช้ :
-                            </td>
-                            <td class="indent-[5px] truncate w-[]">
+                            <th class="table_header text-right w-[115px]">
+                                ของผู้ใช้
+                            </th>
+                            <td class=" indent-[5px] truncate font-normal">
                                 {{ event.full_name }}
                             </td>
                         </tr>
-                        <tr>
-                            <td class="text-right w-[130px]" >
-                                Service : 
+
+                        <!-- email -->
+                        <tr >
+                            <th class="table_header text-right w-[115px]">
+                                Email
+                            </th>
+                            <td class=" indent-[5px] truncate font-normal">
+                                {{ event.email }}
                             </td>
-                            <td :style="[changeColorBy(event.service_type)]" class="indent-[5px]">
+                        </tr>
+
+                        <!-- group -->
+                        <tr >
+                            <th class="table_header text-right w-[115px]">
+                                Group
+                            </th>
+                            <td class=" indent-[5px] truncate font-normal">
+                                {{ event.group_work }}
+                            </td>
+                        </tr>
+
+                        <!-- service -->
+                        <tr>
+                            <th class="table_header text-right w-[115px]" >
+                                Service
+                            </th>
+                            <td :style="[changeColorBy(event.service_type)]" class="indent-[5px] font-normal">
                                 {{ event.service_type }}
                             </td>
                         </tr>
+
+                        <!-- is OR or SF -->
                         <tr v-show="event.service_type=='IT_Service'">
-                            <td class="text-right">
-                                ประเภทของ :
-                            </td>
-                            <td class="indent-[5px]">
+                            <th class="table_header text-right w-[115px]">
+                                ประเภทของ
+                            </th>
+                            <td class="indent-[5px] font-normal">
                                 {{event.useT=='or'?'เป็นขององค์กร':'เป็นของส่วนตัว'}}
                             </td>
                         </tr>
+
+                        <!-- brand -->
                         <tr v-show="event.service_type=='IT_Service'">
-                            <td class="text-right">
-                                ยี่ห้อ : 
-                            </td>
-                            <td class="indent-[5px]">
+                            <th class="table_header text-right w-[115px]">
+                                ยี่ห้อ
+                            </th>
+                            <td class="indent-[5px] font-normal">
                                 {{event.brand}}
                             </td>
                         </tr>
+
+                        <!-- number -->
                         <tr v-show="event.service_type=='IT_Service'">
-                            <td class="text-right">
-                                S/N :
-                            </td>
-                            <td class="indent-[5px]">
+                            <th class="table_header text-right w-[115px]">
+                                S/N
+                            </th>
+                            <td class="indent-[5px] font-normal">
                                 {{event.sn}}
                             </td>
                         </tr>
-                   </tbody>
                 </table>
                 
                 <!-- <div  class="mt-10  text-[20px] font-semibold ">
@@ -643,6 +673,11 @@ onBeforeMount(()=>{
 
 </template>
 <style scoped>
+::selection{
+    background-color: black;
+    color:white;
+    text-transform: uppercase;
+}
 
 /* info detail */
 /* submit */
@@ -744,5 +779,8 @@ onBeforeMount(()=>{
     border-bottom-right-radius: 20px;
 }
 
+.table_header::after{
+    content: ':';
+}
 
 </style>
