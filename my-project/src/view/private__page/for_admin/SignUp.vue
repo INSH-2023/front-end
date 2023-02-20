@@ -1,7 +1,9 @@
 <script setup>
 import {ref,computed} from 'vue'
 
-const userLink ='http://localhost:3000/users'
+// const userLink ='http://localhost:3000/users'
+const userLink ='http://localhost:5000/api/users'
+
 
 const fName=ref('')
 const lName =ref('')
@@ -173,6 +175,8 @@ const submittform =async()=>{
             passW:passW.value.trim(),
             group_work:group.value.trim(),
             status:'inActive',
+
+            
         })
     })
     if(res.status==201){
