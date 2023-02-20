@@ -156,6 +156,10 @@ onBeforeMount(()=>{
             </div>
             <!-- menu username -->
             <div class="flex mr-[20px]">
+                <!-- <audio   autoplay >
+                    <source src="../assets/bp.mp3" type="audio/mpeg">
+                    Your browser does not support the audio element.
+                </audio> -->
                 <img src="../assets/alert.png" alt="alert" class="mx-3 w-[25px] m-auto">
                 <h3 class="m-auto mb-2 mx-1 text-[14px] text-white font-medium">
                     สวัสดี!
