@@ -1,12 +1,16 @@
 <script setup>
 import{ref,computed,onBeforeMount}from'vue'
+import { useRouter } from 'vue-router';
 import BaseLoading from '../../../components/BaseLoading.vue';
 const requestLink="http://localhost:3000/events"
-const linkTesting=`$${import.meta.env.BASE_URL}`
+// const requestLink="${import.meta.env.VITE_BACK_END}/events"
+// const linkTesting=`${import.meta.env.VITE_BACK_END}/`
+const myRouter = useRouter()
 const isFilter=ref(false)
 const eventList=ref([])
 const assignCh =ref('')
 const commentCh =ref('')
+const commentArr =ref([])
 // bg color status
 const changeColorBy=(v)=>{
     let style=[]
@@ -87,6 +91,7 @@ const showInfoByID=async(v,index)=>{
     statusCh.value=undefined
     assignCh.value=''
     commentCh.value=''
+    commentArr.value=[]
     let detail =document.getElementsByClassName("goInfo")
     console.log('this is index:',index)
 
@@ -108,8 +113,9 @@ const showInfoByID=async(v,index)=>{
 }
 
 // edit by id
-const editInfo = async(v)=>{
-    let S =undefined
+const editInfo = async(v,l)=>{
+    console.log('this is location form submit-e : ',l)
+    // let S =undefined
     let res =await fetch(`${requestLink}/${v}`,{
         method:'PUT',
         headers:{
@@ -131,7 +137,7 @@ const editInfo = async(v)=>{
             problems:event.value.problems,
             other:event.value.other,
             massage:event.value.massage,
-            commentCh:commentCh.value
+            commentCh:commentArr.value
         })
     })
     if(res.status==200){
@@ -143,6 +149,7 @@ const editInfo = async(v)=>{
         console.log(commentCh.value)
         close.click()
         getEvents()
+        closeP(l)
     }else{
         console.log('can not edit error something 😂')
     }
@@ -164,6 +171,7 @@ const getEvents =async(v)=>{
         console.log('get event already')
         eventList.value=await res.json()
         eventStatus.value=true
+        console.log(requestLink)
        
     }else{
         console.log('error something can not get events')
@@ -172,7 +180,7 @@ const getEvents =async(v)=>{
 }
 
 // edit event
-const submitt =(v)=>{
+const submitt =(v,l)=>{
     if(statusCh.value == undefined){
         console.log(statusCh.value)
 
@@ -180,29 +188,54 @@ const submitt =(v)=>{
     if(assignCh.value==''){
         console.log(assignCh.value)
     }else{
-        editInfo(v)
+        editInfo(v,l)
     }
    
 
 }
 
 // delete
-const deleteItem =async (v)=>{
+const deleteItem =async (v,l)=>{
+    console.log('this is location delete : ',l)
     let res = await fetch(`${requestLink}/${v}`,{
         method:'DELETE'
     })
     if(res.status==200){
         console.log('delete success')
         getEvents()
+        closeP(l)
     }else{
         console.log('can not delete data error something')
     }
 }
 
+// add comment
+const addComment =()=>{
+    let date =new Date()
+    let timeDate =`${date.getHours()}:${date.getMinutes()} ${date.getDate()}/${date.getMonth()}/${date.getFullYear()}`
+    
+    if(commentCh.value.length!=0){
+        commentArr.value.push({date:timeDate,comment:commentCh.value})
+        console.log('add new comment successful ✅')
+        console.log(commentArr.value)
+        // editInfo()
+        commentCh.value=''
+    }else{
+        console.log('input ur comment first ❌')
+    }
+    
+}
+
 onBeforeMount(()=>{
     getEvents()
-    console.log(linkTesting)
 })
+
+// close pop up
+const closeP =(id)=>{
+    let button =document.getElementById(id)
+    button.setAttribute("href","#")
+    button.click()
+}
 </script>
 <template>
 <div class="overflow-y-auto relative">
@@ -314,13 +347,13 @@ onBeforeMount(()=>{
                             <th scope="col" class="w-[180px] p-2">
                                 User
                             </th>
-                            <th scope="col" class="w-[200px] p-2">
+                            <!-- <th scope="col" class="w-[200px] p-2">
                                 Group
-                            </th>
-                            <th scope="col" class="w-[120px] p-2">
+                            </th> -->
+                            <th scope="col" class="w-[100px] p-2">
                                 Type
                             </th>
-                            <th scope="col" class="w-[150px] p-2">
+                            <th scope="col" class="w-[100px] p-2">
                                 Subject
                             </th>
                             <th scope="col" class="w-[120px] p-2">
@@ -330,10 +363,10 @@ onBeforeMount(()=>{
                                 Status
                             </th>
                             <th scope="col" class="w-[120px] p-2">
-                               Assign
+                                Assign
                             </th>
                             <th scope="col" class="w-[100px] p-2">
-                              
+                                Details
                             </th>
                         </tr>                        
                     </thead>
@@ -344,19 +377,19 @@ onBeforeMount(()=>{
                     <tbody class="z-0"> <!-- @click="clickedInfo" -->
                         <tr  v-for="(data,index) in eventList" :key="index" class="relative text-[15px]  bg-white border-b-2 border-gray-300 cursor-default hover:border-gray-400 z-1">
                             
-                            <td class=" font-medium py-3 px-2 text-left">
-                                <div class=" font-semibold truncate ">
+                            <td class=" font-medium py-3 px-2 text-center">
+                                <div class="  font-semibold truncate ">
                                     {{data.full_name}}
                                 </div>
                                 <div class=" text-[10px] truncate font-light">
                                     {{ data.email }}
                                 </div> 
                             </td>
-                            <td class=" py-3 px-2 font-light">
+                            <!-- <td class=" py-3 px-2 font-light">
                                 <div class="w-full truncate">
                                     {{data.group_work}}
                                 </div>
-                            </td>
+                            </td> -->
                             <td class=" py-3 px-2 font-semibold">
                                 <div :style="[changeColorBy(data.service_type)] " class="w-[100px] text-center mx-auto truncate">
                                     {{data.service_type}}
@@ -390,7 +423,7 @@ onBeforeMount(()=>{
                                             <img src="../../../assets/admin_page/edit.png" alt="edit_icon" class="w-[28px] h-[28px] mr-2 ">
                                         </button>
                                     </a>
-                                    <img id="delete" @click="deleteItem(data.id)" src="../../../assets/admin_page/bin.png" alt="delete_icon" class="w-[28px] h-[28px] mx-1 hover:bg-rose-300 rounded ">
+                                    <!-- <img id="delete" @click="deleteItem(data.id)" src="../../../assets/admin_page/bin.png" alt="delete_icon" class="w-[28px] h-[28px] mx-1 hover:bg-rose-300 rounded "> -->
                                 </div>
                             </td>
                             
@@ -584,16 +617,16 @@ onBeforeMount(()=>{
                                 Status
                             </h5>
                             <div class="grid grid-cols-2 gap-y-2 gap-x-2 mt-1 text-[15px] font-bold">
-                                <button id="request" name="status" @click="changeST('request')" :style="[sIsR==true?changeColorBy('request'):'']" class="bg-gray-600 text-gray-300 p-2 text-center hover:bg-gray-300 hover:text-gray-600">
+                                <button id="request" name="status" @click="changeST('request')" :style="[sIsR==true?changeColorBy('request'):'']" class="bg-gray-600 text-gray-300 p-2 text-center rounded-lg hover:bg-gray-300 hover:text-gray-600">
                                     Request
                                 </button>
-                                <button id="open_case" name="status" @click="changeST('open_case')" :style="[sIsO==true?changeColorBy('open_case'):'']" class="bg-gray-600 text-gray-300 p-2 text-center hover:bg-gray-300 hover:text-gray-600">
+                                <button id="open_case" name="status" @click="changeST('open_case')" :style="[sIsO==true?changeColorBy('open_case'):'']" class="bg-gray-600 text-gray-300 p-2 text-center rounded-lg hover:bg-gray-300 hover:text-gray-600">
                                     Open Case
                                 </button>
-                                <button id="in_progress" name="status" @click="changeST('in_progress')" :style="[sIsI==true?changeColorBy('in_progress'):'']" class="bg-gray-600 text-gray-300 p-2 text-center hover:bg-gray-300 hover:text-gray-600">
+                                <button id="in_progress" name="status" @click="changeST('in_progress')" :style="[sIsI==true?changeColorBy('in_progress'):'']" class="bg-gray-600 text-gray-300 p-2 text-center rounded-lg hover:bg-gray-300 hover:text-gray-600">
                                     In Progress
                                 </button>
-                                <button id="finish" name="status" @click="changeST('finish')" :style="[sIsF==true?changeColorBy('finish'):'']" class="bg-gray-600 text-gray-300 p-2 text-center hover:bg-gray-300 hover:text-gray-600">
+                                <button id="finish" name="status" @click="changeST('finish')" :style="[sIsF==true?changeColorBy('finish'):'']" class="bg-gray-600 text-gray-300 p-2 text-center rounded-lg hover:bg-gray-300 hover:text-gray-600">
                                     Finish
                                 </button>
                             </div>
@@ -616,12 +649,24 @@ onBeforeMount(()=>{
                 </div>
                 
                 <!-- button -->
-                <div v-show="statusCh != undefined &&statusCh != 'request'&& assignCh.length>0 " class="w-fit mx-auto mt-10">
-                    <button @click="submitt(event.id)" class="w-[130px] mx-3 p-2 font-semibold bg-violet-500  text-white rounded-xl">
-                        <h4>
-                            ทำการแก้ไข
-                        </h4>
-                    </button>
+                <div  class="w-fit flex mx-auto mt-10">
+                    <!-- ลบข้อมูล -->
+                    <a href="#dele">
+                        <button  class="w-[130px] mx-3 p-2 font-normal bg-gray-300  text-rose-400 rounded-xl hover:text-gray-200 hover:bg-rose-400">
+                            <h4>
+                                ลบคำร้องนี้
+                            </h4>
+                        </button>                        
+                    </a>
+
+                    <!-- แก้ไขข้อมูล -->
+                    <a href="#veri">
+                        <button v-show="statusCh != undefined &&statusCh != 'request'&& assignCh.length>0 "  class="w-[130px] mx-3 p-2 font-normal bg-gray-300  text-[#64B5F6] rounded-xl hover:bg-[#64B5F6] hover:text-gray-200">
+                            <h4>
+                                ทำการแก้ไข
+                            </h4>
+                        </button>
+                    </a>
                 </div>
 
                 <hr class="w-full h-[10px] mt-10">
@@ -638,12 +683,14 @@ onBeforeMount(()=>{
                     <div class="comment_old w-[540px] h-[300px] mt-3 mx-auto  overflow-y-auto bg-gray-500 rounded-t-lg">
                         <div class="w-[530px] h-fit  pt-3 px-3">
                             <!-- comment -->
-                            <div class=" pt-3 p-2 pb-4 mb-4 bg-[#1976D2] text-[#BBDEFB] rounded-lg">
+                            <div v-for="(com,index) in commentArr" class="w-full   pt-3 p-2 pb-4 mb-4 bg-[#1976D2] text-[#BBDEFB] rounded-lg">
                                 <h5 class=" pl-2 text-sm text-[#64B5F6] font-semibold italic">
-                                    13:56 13/2/2566
+                                    <!-- 13:56 13/2/2566 -->
+                                    {{ com.date }}
                                 </h5>
                                 <p class="indent-[10px] pl-4 font-light">
-                                    นี่เป็นการทดสอบนะครับและทดสอบเพื่อที่เราตะได้รู้ว่าเรานั้นสามารถทำการทดสอบกับข้อความของข้อความเหล่านี้ได้และเราจะไม่หยุดทดสอบจนกว่าจะได้ทดสอบเพื่อที่จะไม่โดนหักคะแนน
+                                    <!-- นี่เป็นการทดสอบนะครับและทดสอบเพื่อที่เราตะได้รู้ว่าเรานั้นสามารถทำการทดสอบกับข้อความของข้อความเหล่านี้ได้และเราจะไม่หยุดทดสอบจนกว่าจะได้ทดสอบเพื่อที่จะไม่โดนหักคะแนน -->
+                                    {{ com.comment }}
                                 </p>                                
                             </div>
                         </div>
@@ -654,7 +701,7 @@ onBeforeMount(()=>{
 
                         <textarea v-model="commentCh"  name="other" id="other_1" placeholder="text something ....."  class="w-full h-[70px] resize-none pt-[10px] block  bg-gray-300 p-2  focus:outline-0 " ></textarea>                  
 
-                        <button v-show="commentCh.length!=0" class="comment_new_button w-full h-[40px]  bg-[#2196F3] text-white font-light rounded-b-xl ">
+                        <button @click="addComment" v-show="commentCh.length!=0" class="comment_new_button w-full h-[40px]  bg-[#2196F3] text-white font-light rounded-b-xl ">
                             Post Comment
                         </button>                            
                     </div>
@@ -665,6 +712,47 @@ onBeforeMount(()=>{
                 <a id="close_info" href="#">
                     <img src="../../../assets/admin_page/close.png" alt="close_icon" class="w-[20px]">
                 </a>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- verify -->
+    <div id="veri" class="overlay">
+        <div class=" verify_s h-96 ">
+            <h2 class="w-fit mx-auto text-[20px]">
+                คุณต้องการที่จะแก้ไขข้อมูลใช่หรือไม่ ?
+            </h2>
+            <div class=" absolute bottom-0 w-full  flex m-auto">
+                <button @click="myRouter.go(-1)" class="w-full h-fit text-center mx-auto p-2 bg-gray-300 hover:bg-rose-300">
+                    ย้อนกลับ
+                </button>
+                <a id="submit_edit" class="w-full h-fit text-center mx-auto p-2 bg-gray-300 hover:bg-green-300">
+                    <button @click="submitt(event.id,'submit_edit')" >
+                        ทำการแก้ไข
+                    </button>                    
+                </a>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- delete -->
+    <div id="dele" class="overlay">
+        <div class=" verify_d h-96 ">
+            <h2 class="w-fit mx-auto text-[20px]">
+                คุณต้องการที่จะลบข้อมูลนี้หรือไม่ ?
+            </h2>
+            <div class=" absolute bottom-0 w-full  flex m-auto">
+                <button @click="myRouter.go(-1)" class="w-full h-fit text-center mx-auto p-2 bg-gray-300 hover:bg-rose-300">
+                    ย้อนกลับ
+                </button>
+                <a id="submit_delete" class="w-full h-fit text-center mx-auto p-2 bg-gray-300 hover:bg-green-300">
+                    <button @click="deleteItem(event.id,'submit_delete')" >
+                        ลบเลย !!
+                    </button>                    
+                </a>
+
             </div>
         </div>
     </div>
@@ -723,10 +811,59 @@ onBeforeMount(()=>{
   .popup2 {
     width: 70%;
   }
+  .verify_s {
+    width: 70%;
+  }
   .option {
     width: 20%;
   }
 }
+
+.verify_s {
+  margin: auto;
+  margin-top: 20%;
+  /* overflow-y: auto; */
+  /* padding: 2px; */
+   padding-top: 2px;
+  /*padding-left: 30px;
+  padding-right: 16px; */
+  background: #fff;
+  width: 20%;
+  height: 150px;
+  /* border-radius: 20px; */
+  position: relative;
+  transition: all 5s ease-in-out;
+}
+.verify_s h2 {
+  margin-top: 30px;
+  color: #333;
+}
+/* .verify .option {
+  bottom: 0;
+} */
+
+
+/* delete */
+.verify_d {
+  margin: auto;
+  margin-top: 20%;
+  /* overflow-y: auto; */
+  /* padding: 2px; */
+   padding-top: 2px;
+  /*padding-left: 30px;
+  padding-right: 16px; */
+  background: #fff;
+  width: 20%;
+  height: 150px;
+  /* border-radius: 20px; */
+  position: relative;
+  transition: all 5s ease-in-out;
+}
+.verify_d h2 {
+  margin-top: 30px;
+  color: #333;
+}
+
 
 .comment_new{
     position: relative;
