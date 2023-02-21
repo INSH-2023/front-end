@@ -1,30 +1,32 @@
 <script setup>
 import{ref,computed, onBeforeMount}from'vue'
+import {useRouter} from 'vue-router'
 
-// const userLink ='http://localhost:3000/users'
-const userLink ='http://localhost:5000/api/users'
+const myRouter =useRouter()
+const userLink ='http://localhost:3000/users'
+// const userLink ='http://localhost:5000/api/users'
 // const userLink =`${import.meta.env.BASE_URL}`
 
 const userList =ref([])
 
-const sampleData=ref([
-    {
-        "id":1,
-        "user":"นักรับ ทมิฬ",
-        "email":"testingEmail@testingmain.com",
-        "group":"วิจัยและวัฒนะธรรม",
-        "active":false,
-        "respo":"administrator",
-    },{
-        "id":2,
-        "user":"ทมิฬ นักรับ ",
-        "email":"testingEmail@testingmain.com",
-        "group":"วิจัยและวัฒนะธรรม",
-        "active":true,
-        "respo":"administrator",
-    },
+// const sampleData=ref([
+//     {
+//         "id":1,
+//         "user":"นักรับ ทมิฬ",
+//         "email":"testingEmail@testingmain.com",
+//         "group":"วิจัยและวัฒนะธรรม",
+//         "active":false,
+//         "respo":"administrator",
+//     },{
+//         "id":2,
+//         "user":"ทมิฬ นักรับ ",
+//         "email":"testingEmail@testingmain.com",
+//         "group":"วิจัยและวัฒนะธรรม",
+//         "active":true,
+//         "respo":"administrator",
+//     },
     
-])
+// ])
 const isFilter=ref(false)
 
 // bg color status
@@ -62,26 +64,49 @@ const changeColorBy=(v)=>{
 }
 
 // get user
-const getUsers =async()=>{
-    const res =await fetch(userLink,{
-        method:'GET'
-    })
-    if(res.status==200){
-        userList.value=await res.json()
-        console.log('get data successfull')
-    }else{
-        console.log('cannot get user list')
+const getUsers =async(id)=>{
+    let status=undefined
+
+    if(id==undefined){
+        const res =await fetch(userLink,{
+            method:'GET'
+        })
+        if(res.status==200){
+            userList.value=await res.json()
+            status = true
+            console.log('get data successfull')
+        }else{
+            status= false
+            console.log('cannot get user list')
+        }    
+    }else if(id != undefined){
+        const res= await fetch(`${userLink}/${id}`,{
+            method:'GET'
+        })
+        if(res.status==200){
+             console.log('get user successful')
+        user.value=await res.json()
+        console.log(user.value)
+        // changeST(user.value.status)
+        // user.value.assign==''?assignCh.value='': assignCh.value = event.value.assign
+        }else{
+            status= false
+            console.log('error cannot get user by id')
+        }  
     }
+    return status
 }
 
 // delete user
-const deleteUser =async(v)=>{
+const deleteUser =async(v,l)=>{
+    console.log('this is location delete :'+l)
     const res = await fetch(`${userLink}/${v}`,{
         method:'DELETE'
     })
     if(res.status==200){
         console.log('user delete successful')
         getUsers()
+        closeP(l)
     }else{
         console.log('error something cannot delete user')
     }
@@ -91,11 +116,11 @@ onBeforeMount(()=>{
     getUsers()
 })
 
-const userCh=ref({})
+
 const user=ref({})
 // showInfo
-const showInfoByID=async(v,index)=>{
-    user.value=[]
+const showInfoByID=(v,index)=>{
+    user.value={}
     console.log('value : ',v)
     console.log('index : ',index)
     // statusCh.value=undefined
@@ -104,21 +129,95 @@ const showInfoByID=async(v,index)=>{
     let detail =document.getElementsByClassName("goInfo")
     console.log('this is index:',index)
 
-    let res=await fetch(`${userLink}/${v}`,{
-        method:'GET'
-    })
-    if(res.status==200){
-        console.log('get user successful')
-        user.value=await res.json()
-        userCh.value=user.value
-        console.log(user.value)
-        // changeST(user.value.status)
-        // user.value.assign==''?assignCh.value='': assignCh.value = event.value.assign
+    // console.log(getUsers(v))
+
+    
+    if( getUsers(v)){
         detail[index].setAttribute("href","#showInfo")
         detail[index].click()
     }else{
-        console.log('error to get event')
+        console.log('error to show detail of user')
     }
+}
+
+
+// edit
+const eName =ref('')
+const eEmail =ref('')
+const eRole =ref('')
+const eOffice =ref('')
+const eGroup =ref('')
+const ePosition =ref('')
+const eStatus =ref('')
+
+const isEdit=ref(false)
+const editDetail =(b)=>{
+    
+    if(user.value.lenght!=0){
+        if(b==true){
+            isEdit.value=b
+            eName.value=`${user.value.first_name} ${user.value.last_name}`
+            eEmail.value=user.value.email
+            eRole.value=user.value.role
+            eOffice.value=user.value.office
+            eGroup.value=user.value.group_work
+            ePosition.value=user.value.position
+            eStatus.value=user.value.status
+            console.log('open edit mode')
+        }else if(b==false){
+            isEdit.value=b
+            eName.value=''
+            eEmail.value=''
+            eRole.value=''
+            eOffice.value=''
+            eGroup.value=''
+            ePosition.value=''
+            eStatus.value=''
+            console.log('close edit mode')
+        }
+    }else{
+        console.log('cannot open edit mode')
+    }
+}
+
+const submitEdit =async(id,l)=>{
+    console.log('this is location edit:'+l)
+    let name =eName.value.split(' ')
+    let res = await fetch(`${userLink}/${id}`,{
+        method:'PUT',
+        headers:{
+            "content-type": "application/json"
+        },
+        body:JSON.stringify({
+        
+        first_name: name[0],
+        last_name: name[1],
+        email: eEmail.value,
+        role: eRole.value,
+        office: eOffice.value,
+        position:ePosition.value,
+        passW: user.value.passW,
+        group_work: eGroup.value,
+        status: user.value.status,
+        })
+    })
+    if(res.status==200){
+        console.log('update successful user')
+        editDetail(false)
+        await getUsers()
+        closeP("submit_edit")
+    }else{
+        console.log('error cannot update user')
+    }
+    
+}
+
+
+// close pop up
+const closeP =(id)=>{
+    let button =document.getElementById(id)
+    button.setAttribute("href","#")
+    button.click()
 }
 </script>
 <template>
@@ -194,7 +293,7 @@ const showInfoByID=async(v,index)=>{
                     </thead>
                     <tbody>
                         <tr v-for="(data,index) in userList" :key="index"  class="text-[15px] cursor-default bg-white border-b-2 border-gray-300  hover:border-gray-400 hover:bg-gray-400">
-                            <td class="] text-left    px-2 py-2 font-medium text-left">
+                            <td class="]     px-2 py-2 font-medium ">
                                 <div class="ml-4">
                                     <div class="w-full ml-3 text-[18px] font-light truncate mx-auto">
                                         {{data.first_name}} {{ data.last_name }}
@@ -224,13 +323,12 @@ const showInfoByID=async(v,index)=>{
                             <td class=" px-2 py-2 font-semibold">
                                 <div class="flex w-fit mx-auto truncate ">
                                     <a    class="goInfo w-[28px] m-2 ">
-                                        <button @click="showInfoByID(data.userId,index)">
+                                        <button @click="showInfoByID(data.id,index)">
                                             <img src="../../../assets/admin_page/edit.png" alt="edit_icon" >
                                         </button>
                                     </a>                                    
-                                    <img @click="deleteUser(data.userId)" src="../../../assets/admin_page/bin.png" alt="delete_icon" class="w-[28px] h-[28px] m-2 cursor-pointer">
+                                    <!-- <img @click="deleteUser(data.userId)" src="../../../assets/admin_page/bin.png" alt="delete_icon" class="w-[28px] h-[28px] m-2 cursor-pointer"> -->
                                 </div>
-
                             </td>
                         </tr>      
                     </tbody>
@@ -249,86 +347,228 @@ const showInfoByID=async(v,index)=>{
                     </h4>                    
                 </div>
 
-                <!-- table -->
-                <div>
-                    <table class="w-full table-fixed mx-auto mt-10 text-[20px]">
+                <!-- detail -->
+                <div v-if="isEdit==false">
+                    <!-- table -->
+                    <div>
+                        <table class="w-full table-fixed mx-auto mt-6 text-[20px]">
 
-                        <tr>
-                            <th  class="table_header w-[120px] h-fit pt-2 text-right font-normal">
-                                Name
-                            </th>
-                            <td class="pt-2 pl-2 indent-[5px] font-light text-gray-600">
-                                {{ user.first_name }} {{ user.last_name }}
-                            </td>
-                        </tr>
-                        
-                        <!-- email -->
-                        <tr>
-                            <th class="table_header w-[120px] h-fit pt-2 text-right font-normal">
-                                E-mail
-                            </th>
-                            <td class="pt-2 pl-2 indent-[5px] font-light text-gray-600">
-                                {{ user.email }}
-                            </td>
-                        </tr>
+                            <tr>
+                                <th  class="table_header w-[120px] h-fit pt-2 text-right font-normal">
+                                    Name
+                                </th>
+                                <td class="pt-2 pl-2 indent-[5px] font-light text-gray-600">
+                                    {{ user.first_name }} {{ user.last_name }}
+                                </td>
+                            </tr>
+                            
+                            <!-- email -->
+                            <tr>
+                                <th class="table_header w-[120px] h-fit pt-2 text-right font-normal">
+                                    E-mail
+                                </th>
+                                <td class="pt-2 pl-2 indent-[5px] font-light text-gray-600">
+                                    {{ user.email }}
+                                </td>
+                            </tr>
 
-                        <!-- role -->
-                        <tr>
-                            <th class="table_header w-[120px] h-fit pt-2 text-right font-normal">
-                                Role
-                            </th>
-                            <td class="pt-2 pl-2 indent-[5px] font-light text-gray-600">
-                                {{ user.role }}
-                            </td>
-                        </tr>
+                            <!-- role -->
+                            <tr>
+                                <th class="table_header w-[120px] h-fit pt-2 text-right font-normal">
+                                    Role
+                                </th>
+                                <td class="pt-2 pl-2 indent-[5px] font-light text-gray-600">
+                                    {{ user.role }}
+                                </td>
+                            </tr>
 
-                        <!-- office -->
-                        <tr>
-                            <th class="table_header w-[120px] h-fit pt-2 text-right font-normal">
-                                Office
-                            </th>
-                            <td class="pt-2 pl-2 indent-[5px] font-light text-gray-600">
-                                {{ user.office }}
-                            </td>
-                        </tr>
+                            <!-- office -->
+                            <tr>
+                                <th class="table_header w-[120px] h-fit pt-2 text-right font-normal">
+                                    Office
+                                </th>
+                                <td class="pt-2 pl-2 indent-[5px] font-light text-gray-600">
+                                    {{ user.office }}
+                                </td>
+                            </tr>
 
-                        <!-- group -->
-                        <tr>
-                            <th class="table_header w-[120px] text-right  font-normal" >
-                                Group
-                            </th>
-                            <td class="pt-2 pl-2 indent-[5px]  font-light text-gray-600">
-                                {{ user.group_work }}
-                            </td>
-                        </tr>
+                            <!-- group -->
+                            <tr>
+                                <th class="table_header w-[120px] text-right  font-normal" >
+                                    Group
+                                </th>
+                                <td class="pt-2 pl-2 indent-[5px]  font-light text-gray-600">
+                                    {{ user.group_work }}
+                                </td>
+                            </tr>
 
-                        <!-- position -->
-                        <tr>
-                            <th class="table_header w-[120px] h-fit  text-right font-normal">
-                                Position
-                            </th>
-                            <td class="w-[100px] h-fit pt-2 pl-2 indent-[5px] font-light text-gray-600">
-                                {{ user.position }}
-                            </td>
-                        </tr>
-                    </table>
-                </div>
-
-                <!-- button -->
-                <div class="w-full flex mt-10">
-                    <button class="w-[200px] h-[50px] px-5 mx-auto mr-3 text-[20px] font-light bg-rose-400 text-white rounded-2xl">
-                        ลบข้อมูล
-                    </button>
-                    <button class="w-[200px] h-[50px] px-5 text-[20px]  mx-auto ml-3 font-light bg-violet-400 text-white rounded-2xl">
-                        แก้ไขข้อมูล
-                    </button>
-                </div>
+                            <!-- position -->
+                            <tr>
+                                <th class="table_header w-[120px] h-fit  text-right font-normal">
+                                    Position
+                                </th>
+                                <td class="w-[100px] h-fit pt-2 pl-2 indent-[5px] font-light text-gray-600">
+                                    {{ user.position }}
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
                 
+
+                    <!-- button -->
+                    <div class="w-full flex mt-6 mb-1.5">
+                        <a href="#dele" class="w-[200px] h-[50px] px-5 mx-auto mr-3 text-[15px] font-light text-rose-400 bg-gray-300 rounded-2xl hover:bg-rose-400 hover:text-gray-200">
+                            <button class="w-full h-full ">
+                                ลบข้อมูล
+                            </button>                            
+                        </a>
+                        
+                        <button @click="editDetail(true)" class="w-[200px] h-[50px] px-5 text-[15px]  mx-auto ml-3 font-light text-[#1565C0] bg-gray-300 rounded-2xl hover:bg-[#90CAF9] hover:text-gray-200">
+                            แก้ไขข้อมูล
+                        </button>
+                    </div>
+                    
+                    
+                </div>
+
+                <!-- edit detail  -->
+                <div v-else-if="isEdit==true" class="w-[400px] mx-auto">
+                    <!-- full name -->
+                    <div class="relative w-full h-[50px] ">
+                        <h4 class="ml-2 text-sm font-light text-gray-500">
+                            Name
+                        </h4>
+                        <input v-model="eName" type="text" class="absolute bottom-0 w-full h-[30px] px-2 bg-sky-300 font-light text-gray-600 rounded-lg focus:outline-0">
+                    </div>
+
+                    <!-- email -->
+                    <div class="relative w-full h-[50px] mt-1">
+                        <h4 class="ml-2 text-sm font-light text-gray-500">
+                            E-mail
+                        </h4>
+                        <input v-model="eEmail" type="text" class="absolute bottom-0 w-full h-[30px] px-2 bg-sky-300 font-light text-gray-600 rounded-lg focus:outline-0">
+                    </div>
+
+                    <!-- role -->
+                    <div class="relative w-full h-[50px] mt-1 text-sm">
+                        <h4 class="ml-2  font-light text-gray-500">
+                            Role
+                        </h4>
+                        <select v-model="eRole" name="role" id="role" class="absolute bottom-0 w-full h-[30px] px-2 bg-sky-300 font-light text-gray-600 rounded-lg focus:outline-0">
+                            <option value="user">User</option>
+                            <option value="admin_it">Admin_IT</option>
+                            <option value="admin_pr">Admin_PR</option>
+                        </select>
+                        <!-- <input type="text" class="absolute bottom-0 w-full h-[30px] p-2 bg-sky-300 font-light text-gray-600 rounded-lg focus:outline-0"> -->
+                    </div>
+
+                    <!-- office -->
+                    <div class="relative w-full h-[50px] mt-1">
+                        <h4 class="ml-2 text-sm font-light text-gray-500">
+                            Office
+                        </h4>
+                        <select v-model="eOffice" name="office" id="office"  class="absolute bottom-0 w-full h-[30px] px-2 bg-sky-300 font-light text-gray-600 rounded-lg focus:outline-0">
+                            <option value="" selected disabled hidden >Office</option>
+                                    <option value="ผู้บริหาร" >ผู้บริหาร</option>
+                                    <option value="สำนักส่งเสริมและขับเคลื่อนเครือข่ายทางสังคม" >สำนักส่งเสริมและขับเคลื่อนเครือข่ายทางสังคม</option>
+                                    <option value="สำนักบริหารจัดการองค์กรและยุทธศาสตร์" >สำนักบริหารจัดการองค์กรและยุทธศาสตร์</option>
+                                    <option value="สำนักพัฒนาองค์ความรู้นวัตกรรมและสื่อสารสนเทศ" >สำนักพัฒนาองค์ความรู้นวัตกรรมและสื่อสารสนเทศ</option>
+                                    <option value="งานตรวจสอบภายใน" >งานตรวจสอบภายใน</option>
+                        </select>
+                        <!-- <input type="text" class="absolute bottom-0 w-full h-[30px] p-2 bg-sky-300 font-light text-gray-600 rounded-lg focus:outline-0"> -->
+                    </div>
+
+                    <!-- group -->
+                    <div class="relative w-full h-[50px] mt-1">
+                        <h4 class="ml-2 text-sm font-light text-gray-500">
+                            Group
+                        </h4>
+                        <select v-model="eGroup" name="group" id="group"  class="absolute bottom-0 w-full h-[30px] px-2 bg-sky-300 font-light text-gray-600 rounded-lg focus:outline-0">
+                            <option value="" selected disabled hidden >Group</option>
+                                    <option value="ผู้บริหาร" >ผู้บริหาร</option>
+                                    <option value="บริหารจัดการองค์กร" >บริหารจัดการองค์กร</option>
+                                    <option value="นโยบายและยุทธศาสตร์" >นโยบายและยุทธศาสตร์</option>
+                                    <option value="วิจัยนวัตกรรมและระบบพฤติกรรมไทย" >วิจัยนวัตกรรมและระบบพฤติกรรมไทย</option>
+                                    <option value="สื่อสารและรณรงค์ทางสังคม" >สื่อสารและรณรงค์ทางสังคม</option>
+                                    <option value="ศูนย์ข้อมูลและเทคโนโลยีสารสนเทศ" >ศูนย์ข้อมูลและเทคโนโลยีสารสนเทศ</option>
+                                    <option value="สมัชชาคุณธรรมและความร่วมมือนานาชาติ" >สมัชชาคุณธรรมและความร่วมมือนานาชาติ</option>
+                                    <option value="ส่งเสริมคุณธรรมเครือข่ายทางสังคม" >ส่งเสริมคุณธรรมเครือข่ายทางสังคม</option>
+                        </select>
+                        <!-- <input type="text" class="absolute bottom-0 w-full h-[30px] p-2 bg-sky-300 font-light text-gray-600 rounded-lg focus:outline-0"> -->
+                    </div>
+
+                    <!-- position -->
+                    <div class="relative w-full h-[50px] mt-1">
+                        <h4 class="ml-2 text-sm font-light text-gray-500">
+                            Position
+                        </h4>
+                        <input v-model="ePosition" type="text" class="absolute bottom-0 w-full h-[30px] p-2 bg-sky-300 font-light text-gray-600 rounded-lg focus:outline-0">
+                    </div>
+
+                    <!-- button -->
+                    <div class="mt-6 mb-1.5">
+                        <a href="#veri" id="editD">
+                            <button class="w-[250px] h-fit bg-violet-300 p-2 text-gray-600 rounded-lg hover:bg-gray-600 hover:text-violet-300">
+                                ทำการแก้ไข ->                                
+                            </button>
+                        </a>
+                    </div>
+
+                    <!-- back -->
+                    <div class="absolute top-[20px] left-[15px] font-light text-[20px]">
+                        <button @click="editDetail(false)" class="flex rounded-full pr-2 hover:bg-gray-400">
+                            <img src="../../../assets/left-arrow.svg" alt="left-arrow" class="w-[30px] h-[30px] p-1.5 ">
+                            <h4 class="my-auto text-[15px]">ย้อนกลับ</h4>
+                        </button>
+                    </div>
+                </div>
+
                 <div class="absolute top-[15px] right-[15px] font-bold text-[30px]">
-                    <a id="close_info" href="#">
+                    <a @click="editDetail(false)" id="close_info" href="#" class="">
                         <img src="../../../assets/admin_page/close.png" alt="close_icon" class="w-[20px]">
                     </a>
                 </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- verify -->
+    <div id="veri" class="overlay">
+        <div class=" verify_s h-96 ">
+            <h2 class="w-fit mx-auto text-[20px]">
+                คุณต้องการที่จะแก้ไขข้อมูลใช่หรือไม่ ?
+            </h2>
+            <div class=" absolute bottom-0 w-full  flex m-auto">
+                <button @click="myRouter.go(-1)" class="w-full h-fit text-center mx-auto p-2 bg-gray-300 hover:bg-rose-300">
+                    ย้อนกลับ
+                </button>
+                <a id="submit_edit" class="w-full h-fit text-center mx-auto p-2 bg-gray-300 hover:bg-green-300">
+                    <button @click="submitEdit(user.id,'submit_edit')" >
+                        ทำการแก้ไข
+                    </button>                    
+                </a>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- delete -->
+    <div id="dele" class="overlay">
+        <div class=" verify_d h-96 ">
+            <h2 class="w-fit mx-auto text-[20px]">
+                คุณต้องการที่จะลบข้อมูลนี้หรือไม่ ?
+            </h2>
+            <div class=" absolute bottom-0 w-full  flex m-auto">
+                <button @click="myRouter.go(-1)" class="w-full h-fit text-center mx-auto p-2 bg-gray-300 hover:bg-rose-300">
+                    ย้อนกลับ
+                </button>
+                <a id="submit_delete" class="w-full h-fit text-center mx-auto p-2 bg-gray-300 hover:bg-green-300">
+                    <button @click="deleteUser(user.id,'submit_delete')" >
+                        ลบเลย !!
+                    </button>                    
+                </a>
+
             </div>
         </div>
     </div>
@@ -357,13 +597,13 @@ const showInfoByID=async(v,index)=>{
   margin: auto;
   margin-top: 6%;
   /* overflow-y: auto; */
-  padding: 35px;
-  padding-top: 35px;
+  padding: 30px;
+  padding-top: 30px;
   padding-left: 30px;
   padding-right: 16px;
   background: #fff;
   width: 45%;
-  height: 520px;
+  height: fit-content;
   border-radius: 20px;
   position: relative;
   transition: all 5s ease-in-out;
@@ -379,9 +619,57 @@ const showInfoByID=async(v,index)=>{
   .popup2 {
     width: 70%;
   }
+  .verify {
+    width: 70%;
+  }
   .option {
     width: 20%;
   }
+}
+
+.verify_s {
+  margin: auto;
+  margin-top: 20%;
+  /* overflow-y: auto; */
+  /* padding: 2px; */
+   padding-top: 2px;
+  /*padding-left: 30px;
+  padding-right: 16px; */
+  background: #fff;
+  width: 20%;
+  height: 150px;
+  /* border-radius: 20px; */
+  position: relative;
+  transition: all 5s ease-in-out;
+}
+.verify_s h2 {
+  margin-top: 30px;
+  color: #333;
+}
+/* .verify .option {
+  bottom: 0;
+} */
+
+
+/* delete */
+.verify_d {
+  margin: auto;
+  margin-top: 20%;
+  /* overflow-y: auto; */
+  /* padding: 2px; */
+   padding-top: 2px;
+  /*padding-left: 30px;
+  padding-right: 16px; */
+  background: #fff;
+  width: 20%;
+  height: 150px;
+  /* border-radius: 20px; */
+  position: relative;
+  transition: all 5s ease-in-out;
+}
+.verify_d h2 {
+  margin-top: 30px;
+  color: #333;
 }
 
 .table_header::after{
