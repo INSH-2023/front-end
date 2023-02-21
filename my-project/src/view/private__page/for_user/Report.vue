@@ -374,8 +374,8 @@ const submitt = async()=>{
                 </div>
 
                 <div  class="grid grid-cols-6 gap-y-2 gap-x-2 mt-4 text-[15px] font-medium">
-                    <!-- notebook -->
-                    <button  v-for="(value,index) in sampleData" :key="index" @click="addP(value.name)" :style="[value.selection==true?'background-color:#1E88E5;color:#E3F2FD':'']" class="w-[150px] mx-auto p-2 hover:bg-gray-300 bg-gray-200 rounded-xl">
+                    <!-- problems -->
+                    <button  v-for="(value,index) in sampleData" :key="index" @click="addP(value.name)" draggable="false" :style="[value.selection==true?'background-color:#1E88E5;color:#E3F2FD':'']" class="w-[150px] mx-auto p-2 hover:bg-gray-300 bg-gray-200 rounded-xl">
                         <img src="../../../assets/vue.svg" alt="NoteBook" class="w-[80px] mx-auto">
                         <h3 class="w-fit mx-auto">
                             {{value.name}}
@@ -571,7 +571,7 @@ const submitt = async()=>{
                 
                 <div class="grid grid-cols-6 gap-y-2 gap-x-2 mt-4 text-[15px] font-medium">
                     
-                    <div v-for="(data,index) in problems" :key="index" class="w-[150px] mx-auto p-2 bg-gray-200 rounded-xl ">
+                    <div v-for="(data,index) in problems" :key="index"  class="w-[150px] mx-auto p-2 bg-gray-200 rounded-xl ">
                         <img src="../../../assets/vue.svg" alt="NoteBook" class="w-[80px] mx-auto">
                         <h3 class="w-fit mx-auto">
                            {{data}}
