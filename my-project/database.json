@@ -37,16 +37,16 @@
       "id": 5
     },
     {
-      "first_name": "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTT",
-      "last_name": "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTT",
-      "email": "TTTTTT@moralcenter.or.th",
+      "first_name": "123",
+      "last_name": "123",
+      "email": "123@moralcenter.or.th",
       "role": "user",
-      "office": "ผู้บริหาร",
-      "position": "TTTTTTTTTTTTTTTTTTTTTTTTTTT",
+      "office": "สำนักส่งเสริมและขับเคลื่อนเครือข่ายทางสังคม",
+      "position": "123",
       "passW": "123",
-      "group_work": "ผู้บริหาร",
+      "group_work": "นโยบายและยุทธศาสตร์",
       "status": "inActive",
-      "id": 6
+      "id": 7
     }
   ],
   "events": [
@@ -249,48 +249,6 @@
       "other": "ปริ้นสีดำเป็นเส้น",
       "massage": "",
       "id": 11
-    },
-    {
-      "full_name": "Testing Testing",
-      "email": "testingTestingTesing@mail.com",
-      "group_work": "วิจัยและวัฒนะธรรม",
-      "service_type": "IT_Service",
-      "subject": "application",
-      "status": "request",
-      "date": "15:59:51",
-      "assign": "Not_assign",
-      "useT": "",
-      "sn": "20a20345",
-      "brand": "",
-      "typeM": "",
-      "problems": [
-        "หน้าจอไม่ติด",
-        "ลำโพงไม่ดัง"
-      ],
-      "other": "",
-      "massage": "testing  application subject",
-      "id": 12
-    },
-    {
-      "full_name": "Testing Testing",
-      "email": "testingTestingTesing@mail.com",
-      "group_work": "วิจัยและวัฒนะธรรม",
-      "service_type": "IT_Service",
-      "subject": "hardware",
-      "status": "request",
-      "date": "14:43:01",
-      "assign": "Not_assign",
-      "useT": "or",
-      "sn": "20a20345",
-      "brand": "",
-      "typeM": "NoteBook",
-      "problems": [
-        "ลำโพงไม่ดัง",
-        "กล้องไม่ติด"
-      ],
-      "other": "cdfggdfgh",
-      "massage": "dfghdfgh",
-      "id": 13
     }
   ],
   "problems": [
