@@ -1,8 +1,8 @@
 <script setup>
 import {ref,computed} from 'vue'
 
-// const userLink ='http://localhost:3000/users'
-const userLink ='http://localhost:5000/api/users'
+const userLink ='http://localhost:3000/users'
+// const userLink ='http://localhost:5000/api/users'
 
 
 const fName=ref('')
@@ -14,6 +14,7 @@ const office =ref('')
 const role =ref('')
 const passW = ref('')
 const cPassW = ref('')
+const organization ='@moralcenter.or.th'
 
 // lenght
 const fNameL=30
@@ -45,6 +46,7 @@ const validate=()=>{
     positionS.value=undefined
     officeS.value =undefined
     roleS.value =undefined
+    email.value=email.value+organization
 
     if(fName.value.length==0){
         console.log('Please input ur first name')
@@ -146,10 +148,10 @@ const valFormEmail = (input) => {
 }
 
 // modify email
-const emailM=(event)=>{
-    let emailM =event.target.value
-    email.value = emailM+'@moralcenter.or.th'
-}
+// const emailM=(event)=>{
+//     let emailM =event.target.value
+//     email.value = emailM+'@moralcenter.or.th'
+// }
 
 // submit
 const submittS =ref(undefined)
@@ -315,7 +317,7 @@ const goRotate =()=>{
                             </span>
                         </h4> 
                         <div :style="[emailS==false?'border-color: rgb(225 29 72);border-width: 2px;':'']" class="absolute bottom-0 flex w-full h-[40px]  p-1 bg-gray-300 rounded-lg">
-                            <input @change="emailM" placeholder="Email" id="email" type="text" :maxlength="emailL"   class="w-full h-full mx-1   bg-transparent text-gray-500 focus:outline-0" >
+                            <input v-model="email" placeholder="Email" id="email" type="text" :maxlength="emailL"   class="w-full h-full mx-1   bg-transparent text-gray-500 focus:outline-0" >
                             <h4 class="w-fit my-auto mx-2 font-semibold text-[15px] text-gray-500">
                                 @moralcenter.or.th
                             </h4>
@@ -338,7 +340,7 @@ const goRotate =()=>{
                                     <option value="" selected disabled hidden >Role</option>
                                     <option value="user" >User</option>
                                     <option value="admin_it" >Admin IT</option>
-                                    <option value="admin_PR" >Admin PR</option>
+                                    <option value="admin_pr" >Admin PR</option>
 
 
                                 </select>                                
