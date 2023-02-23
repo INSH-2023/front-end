@@ -1,6 +1,7 @@
 <script setup>
 import{ref,computed, onBeforeMount}from'vue'
 import {useRouter} from 'vue-router'
+import toBackEnd from'../../../JS/fetchToBack.js'
 
 const myRouter =useRouter()
 const userLink ='http://localhost:3000/users'
@@ -65,6 +66,7 @@ const changeColorBy=(v)=>{
 
 // get user
 const getUsers =async(id)=>{
+    
     let status=undefined
 
     if(id==undefined){
@@ -94,7 +96,11 @@ const getUsers =async(id)=>{
             console.log('error cannot get user by id')
         }  
     }
-    return status
+    // return status
+
+
+
+
 }
 
 // delete user
@@ -113,6 +119,8 @@ const deleteUser =async(v,l)=>{
 }
 
 onBeforeMount(()=>{
+    // fn.greeting('hellowwwwwwww')
+    // toBackEnd.getData('user',userLink)
     getUsers()
 })
 
@@ -149,6 +157,9 @@ const eOffice =ref('')
 const eGroup =ref('')
 const ePosition =ref('')
 const eStatus =ref('')
+const eCPw =ref('')
+const ePw =ref('')
+
 
 const isEdit=ref(false)
 const editDetail =(b)=>{
@@ -163,6 +174,7 @@ const editDetail =(b)=>{
             eGroup.value=user.value.group_work
             ePosition.value=user.value.position
             eStatus.value=user.value.status
+            ePw.value=user.value.passW
             console.log('open edit mode')
         }else if(b==false){
             isEdit.value=b
@@ -173,6 +185,7 @@ const editDetail =(b)=>{
             eGroup.value=''
             ePosition.value=''
             eStatus.value=''
+            ePw.value=''
             console.log('close edit mode')
         }
     }else{
@@ -182,35 +195,141 @@ const editDetail =(b)=>{
 
 const submitEdit =async(id,l)=>{
     console.log('this is location edit:'+l)
-    let name =eName.value.split(' ')
-    let res = await fetch(`${userLink}/${id}`,{
-        method:'PUT',
-        headers:{
-            "content-type": "application/json"
-        },
-        body:JSON.stringify({
-        
-        first_name: name[0],
-        last_name: name[1],
-        email: eEmail.value,
-        role: eRole.value,
-        office: eOffice.value,
-        position:ePosition.value,
-        passW: user.value.passW,
-        group_work: eGroup.value,
-        status: user.value.status,
+
+    // if(validate()){
+        // eEmail.value=email.value+organization
+        let name =eName.value.split(' ')
+        let res = await fetch(`${userLink}/${id}`,{
+            method:'PUT',
+            headers:{
+                "content-type": "application/json"
+            },
+            body:JSON.stringify({
+            
+            first_name: name[0],
+            last_name: name[1],
+            email: eEmail.value,
+            role: eRole.value,
+            office: eOffice.value,
+            position:ePosition.value,
+            passW: ePw.value,
+            group_work: eGroup.value,
+            status: eStatus.value,
+            })
         })
-    })
-    if(res.status==200){
-        console.log('update successful user')
-        editDetail(false)
-        await getUsers()
-        closeP("submit_edit")
-    }else{
-        console.log('error cannot update user')
-    }
+        if(res.status==200){
+            console.log('update successful user')
+            editDetail(false)
+            await getUsers()
+            closeP("submit_edit")
+        }else{
+            console.log('error cannot update user')
+        }        
+    // }else{
+    //     console.log('error something cannot edit and not into fetch Put method')
+    // }
+   
     
 }
+
+// lenght
+// const fNameL=30
+const nameL=61
+const emailL=30
+const pwL=14
+
+const organization ='@moralcenter.or.th'
+// validate
+// const validate=()=>{
+//     let vStatus =false
+//     let email = eEmail.value+organization
+//     // fNameS.value=undefined
+//     // eNameS.value=undefined
+//     // emailS.value=undefined
+//     // groupS.value =undefined
+//     // passWS.value =undefined
+//     // cPassWS.value =undefined
+//     // positionS.value=undefined
+//     // officeS.value =undefined
+//     // roleS.value =undefined
+//     // eEmail.value=email.value+organization
+
+    
+//     if(eName.value.length==0){
+//         console.log('Please input ur last name')
+//         // lNameS.value=false
+//         vStatus =true
+//     }
+//     if(email.value.length==0){
+//         console.log('Please input ur email')
+//         // emailS.value=false
+//         vStatus =true
+//     }
+//     if(eGroup.value.length==0){
+//         console.log('Please input ur group')
+//         // groupS.value=false
+//         vStatus =true
+//     }
+//     if(ePosition.value.length==0){
+//         console.log('Please input ur position')
+//         // positionS.value=false
+//         vStatus =true
+//     }
+//     if(eOffice.value.length==0){
+//         console.log('Please input ur office')
+//         // officeS.value=false
+//         vStatus =true
+//     }
+//     if(eRole.value.length==0){
+//         console.log('Please input ur role')
+//         // roleS.value=false
+//         vStatus =true
+//     }
+//     if(ePw.value.length==0){
+//         console.log('Please input ur password')
+//         // passWS.value=false
+//         vStatus =true
+//     }
+//     if(eCPw.value.length==0){
+//         console.log('Please input ur confirm password')
+//         // cPassWS.value=false
+//         vStatus =true
+//     }
+//     if(eName.length>nameL){
+//         console.log(`lenght of last name more then ${nameL}`)
+//         //lNameS.value=false
+//         vStatus =true
+//     }
+//     if(email.length>emailL){
+//         console.log(`lenght of email more then ${emailL}`)
+//         //emailS.value=false
+//         vStatus =true
+//     }
+//     if(valFormEmail(email)==false){
+//         console.log('this email invalid')
+//         //emailS.value=false
+//         vStatus =true
+//     }
+//     if(ePw.value.length>pwL){
+//         console.log(`lenght of password more then ${passWL}`)
+//         //passWS.value=false
+//         vStatus =true
+//     }
+//     if(eCPw.value.length>pwL){
+//         console.log(`lenght of password more then ${passWL}`)
+//         // cPassWS.value=false
+//         vStatus =true
+//     }  
+//     if(ePw.value !=eCPw.value){
+//         console.log('password not match')
+//         // passWS.value=false
+//         // cPassWS.value=false
+//         vStatus =true
+//     }
+
+//     return vStatus
+// }
+
 
 
 // close pop up
@@ -218,6 +337,23 @@ const closeP =(id)=>{
     let button =document.getElementById(id)
     button.setAttribute("href","#")
     button.click()
+}
+
+
+// change status 
+const isActive=ref(false)
+const change_s=()=>{
+    isActive.value = !isActive.value
+    // eStatus.value= !eStatus.value
+    if(isActive.value==true){
+        console.log('status is :',eStatus.value)
+        eStatus.value='active'
+        
+    }else
+    if(isActive.value==false){
+        console.log('status is :',eStatus.value)
+        eStatus.value='inactive'
+    }
 }
 </script>
 <template>
@@ -310,7 +446,7 @@ const closeP =(id)=>{
                                 </div>
                             </td>
                             <td class=" px-2 py-2 text-[20px] font-semibold ">
-                                <div class="w-full truncate mx-auto" :style="data.status=='Active'?'color:green':'color:red'">
+                                <div class="w-full truncate mx-auto" :style="data.status=='active'?'color:green':'color:red'">
                                     {{data.status}}                                    
                                 </div>
 
@@ -352,10 +488,20 @@ const closeP =(id)=>{
                     <!-- table -->
                     <div>
                         <table class="w-full table-fixed mx-auto mt-6 text-[20px]">
-
+                            <tr>
+                                <th  class="table_header w-[120px] h-fit pt-2 text-right font-normal">
+                                    Status 
+                                </th>
+                                <td :style="[user.status=='inactive'?'color:red':'color: green']" class="pt-2 pl-2 indent-[5px] font-semibold text-gray-600 ">
+                                    {{ user.status }}
+                                </td>
+                            </tr>
                             <tr>
                                 <th  class="table_header w-[120px] h-fit pt-2 text-right font-normal">
                                     Name
+                                    <span> 
+                                        {{  }}
+                                    </span>
                                 </th>
                                 <td class="pt-2 pl-2 indent-[5px] font-light text-gray-600">
                                     {{ user.first_name }} {{ user.last_name }}
@@ -432,13 +578,51 @@ const closeP =(id)=>{
                 </div>
 
                 <!-- edit detail  -->
-                <div v-else-if="isEdit==true" class="w-[400px] mx-auto">
-                    <!-- full name -->
-                    <div class="relative w-full h-[50px] ">
-                        <h4 class="ml-2 text-sm font-light text-gray-500">
-                            Name
-                        </h4>
-                        <input v-model="eName" type="text" class="absolute bottom-0 w-full h-[30px] px-2 bg-sky-300 font-light text-gray-600 rounded-lg focus:outline-0">
+                <div v-else-if="isEdit==true" class="w-[500px] mx-auto">
+                       
+                    <!-- active -->
+                    <div class="relative w-full h-[35px] mt-3">
+                        <button @click="change_s" id="container_active" class="relative w-[150px] h-[30px] bg-gray-700 text-gray-100 text-[15px] z-0 rounded-lg">
+                            <div v-show="isActive==true" id="active" class="w-full h-full z-10 flex ">
+                                <div class="w-[75px] h-full bg-green-300 rounded-l-lg">
+                                </div>                            
+                                <div class="w-[75px] h-fit m-auto ">
+                                        active
+                                </div>
+
+                            </div>
+                            <div v-show="isActive==false" id="inactive" class="w-full h-full z-10 flex ">
+                                <div class="w-[75px] h-fit m-auto ">
+                                        inactive
+                                </div>
+                                <div class="w-[75px] h-full bg-rose-300 rounded-r-lg">
+                                </div>
+                            </div>
+                        </button>                        
+                    </div>
+
+
+                    <!-- full name  and role-->
+                    <div class="relative flex w-[500px]">
+                        <!-- name -->
+                        <div class="relative w-[338px]  h-[50px]  text-sm">
+                            <h4 class="ml-2 text-sm font-light text-gray-500">
+                                Name
+                            </h4>
+                            <input v-model="eName" type="text" class="absolute bottom-0 w-full h-[30px] px-2 bg-sky-300 font-light text-[20px] text-gray-600 rounded-lg focus:outline-0">                              
+                        </div>
+                        <!-- role -->
+                        <div class="relative w-[160px] h-[50px] ml-[2px] text-sm">
+                            <h4 class="ml-2  font-light text-gray-500">
+                                Role
+                            </h4>
+                            <select v-model="eRole" name="role" id="role" class="absolute bottom-0 w-full h-[30px] px-2 bg-sky-300 font-light text-[20px] text-gray-600 rounded-lg focus:outline-0">
+                                <option value="user">User</option>
+                                <option value="admin_it">Admin_IT</option>
+                                <option value="admin_pr">Admin_PR</option>
+                            </select>
+                            <!-- <input type="text" class="absolute bottom-0 w-full h-[30px] p-2 bg-sky-300 font-light text-gray-600 rounded-lg focus:outline-0"> -->
+                        </div>
                     </div>
 
                     <!-- email -->
@@ -446,28 +630,17 @@ const closeP =(id)=>{
                         <h4 class="ml-2 text-sm font-light text-gray-500">
                             E-mail
                         </h4>
-                        <input v-model="eEmail" type="text" class="absolute bottom-0 w-full h-[30px] px-2 bg-sky-300 font-light text-gray-600 rounded-lg focus:outline-0">
+                        <input v-model="eEmail" type="text" class="absolute bottom-0 w-full h-[30px] px-2 bg-sky-300 font-light text-[20px] text-gray-600 rounded-lg focus:outline-0">
                     </div>
 
-                    <!-- role -->
-                    <div class="relative w-full h-[50px] mt-1 text-sm">
-                        <h4 class="ml-2  font-light text-gray-500">
-                            Role
-                        </h4>
-                        <select v-model="eRole" name="role" id="role" class="absolute bottom-0 w-full h-[30px] px-2 bg-sky-300 font-light text-gray-600 rounded-lg focus:outline-0">
-                            <option value="user">User</option>
-                            <option value="admin_it">Admin_IT</option>
-                            <option value="admin_pr">Admin_PR</option>
-                        </select>
-                        <!-- <input type="text" class="absolute bottom-0 w-full h-[30px] p-2 bg-sky-300 font-light text-gray-600 rounded-lg focus:outline-0"> -->
-                    </div>
+                    
 
                     <!-- office -->
                     <div class="relative w-full h-[50px] mt-1">
                         <h4 class="ml-2 text-sm font-light text-gray-500">
                             Office
                         </h4>
-                        <select v-model="eOffice" name="office" id="office"  class="absolute bottom-0 w-full h-[30px] px-2 bg-sky-300 font-light text-gray-600 rounded-lg focus:outline-0">
+                        <select v-model="eOffice" name="office" id="office"  class="absolute bottom-0 w-full h-[30px] px-2 px- bg-sky-300 font-light text-[20px] text-gray-600 rounded-lg focus:outline-0">
                             <option value="" selected disabled hidden >Office</option>
                                     <option value="ผู้บริหาร" >ผู้บริหาร</option>
                                     <option value="สำนักส่งเสริมและขับเคลื่อนเครือข่ายทางสังคม" >สำนักส่งเสริมและขับเคลื่อนเครือข่ายทางสังคม</option>
@@ -483,7 +656,7 @@ const closeP =(id)=>{
                         <h4 class="ml-2 text-sm font-light text-gray-500">
                             Group
                         </h4>
-                        <select v-model="eGroup" name="group" id="group"  class="absolute bottom-0 w-full h-[30px] px-2 bg-sky-300 font-light text-gray-600 rounded-lg focus:outline-0">
+                        <select v-model="eGroup" name="group" id="group"  class="absolute bottom-0 w-full h-[30px] px-2 bg-sky-300 font-light text-[20px] text-gray-600 rounded-lg focus:outline-0">
                             <option value="" selected disabled hidden >Group</option>
                                     <option value="ผู้บริหาร" >ผู้บริหาร</option>
                                     <option value="บริหารจัดการองค์กร" >บริหารจัดการองค์กร</option>
@@ -502,13 +675,29 @@ const closeP =(id)=>{
                         <h4 class="ml-2 text-sm font-light text-gray-500">
                             Position
                         </h4>
-                        <input v-model="ePosition" type="text" class="absolute bottom-0 w-full h-[30px] p-2 bg-sky-300 font-light text-gray-600 rounded-lg focus:outline-0">
+                        <input v-model="ePosition" type="text" class="absolute bottom-0 w-full h-[30px] p-2 bg-sky-300 font-light text-[20px] text-gray-600 rounded-lg focus:outline-0">
                     </div>
+
+                    <!-- password -->
+                    <div class="relative w-[500px] flex h-[50px] mt-1">
+                        <div class="relative w-[249px]">
+                            <h4  h4 class="ml-2 text-sm font-light text-gray-500">
+                                Password
+                            </h4>
+                            <input v-model="ePw" type="text" class="absolute bottom-0 w-full h-[30px] p-2 bg-sky-300 font-light text-[20px] text-gray-600 rounded-lg focus:outline-0">                     
+                        </div>
+                        <div class="relative w-[249px] ml-[2px]">
+                            <h4  h4 class="ml-2 text-sm font-light text-gray-500">
+                                Confirm Password
+                            </h4>
+                            <input v-model="eCPw" type="text" class="absolute bottom-0 w-full h-[30px] p-2 bg-sky-300 font-light text-[20px] text-gray-600 rounded-lg focus:outline-0">                                                 
+                        </div>
+                   </div>                    
 
                     <!-- button -->
                     <div class="mt-6 mb-1.5">
                         <a href="#veri" id="editD">
-                            <button class="w-[250px] h-fit bg-violet-300 p-2 text-gray-600 rounded-lg hover:bg-gray-600 hover:text-violet-300">
+                            <button class="w-[250px] h-fit bg-gray-600 p-2 text-[#90CAF9] rounded-lg hover:bg-[#90CAF9] hover:text-gray-600">
                                 ทำการแก้ไข ->                                
                             </button>
                         </a>
@@ -516,7 +705,7 @@ const closeP =(id)=>{
 
                     <!-- back -->
                     <div class="absolute top-[20px] left-[15px] font-light text-[20px]">
-                        <button @click="editDetail(false)" class="flex rounded-full pr-2 hover:bg-gray-400">
+                        <button @click="editDetail(false)" class="flex rounded-full pr-3 hover:bg-[#90CAF9] hover:text-[#E3F2FD]">
                             <img src="../../../assets/left-arrow.svg" alt="left-arrow" class="w-[30px] h-[30px] p-1.5 ">
                             <h4 class="my-auto text-[15px]">ย้อนกลับ</h4>
                         </button>
