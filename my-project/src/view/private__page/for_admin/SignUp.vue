@@ -176,7 +176,7 @@ const submittform =async()=>{
             position:position.value.trim(),
             passW:passW.value.trim(),
             group_work:group.value.trim(),
-            status:'inActive',
+            status:'inactive',
 
             
         })

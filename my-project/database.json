@@ -9,7 +9,7 @@
       "position": "ผู้อำนวยการ",
       "passW": "Moral122022",
       "group_work": "ผู้บริหาร",
-      "status": "inActive",
+      "status": "inactive",
       "id": 3
     },
     {
@@ -21,7 +21,7 @@
       "position": "หัวหน้ากลุ่มงานสมัชชาคุณธรรมและความร่วมมือนานาชาติ",
       "passW": "Moral122022",
       "group_work": "สมัชชาคุณธรรมและความร่วมมือนานาชาติ",
-      "status": "inActive",
+      "status": "inactive",
       "id": 4
     },
     {
@@ -33,19 +33,19 @@
       "position": "หัวหน้ากลุ่มงานส่งเสริมคุณธรรมเครือข่ายทางสังคม",
       "passW": "Moral122022",
       "group_work": "ส่งเสริมคุณธรรมเครือข่ายทางสังคม",
-      "status": "inActive",
+      "status": "inactive",
       "id": 5
     },
     {
-      "first_name": "123",
-      "last_name": "123",
-      "email": "123@moralcenter.or.th",
-      "role": "user",
-      "office": "สำนักส่งเสริมและขับเคลื่อนเครือข่ายทางสังคม",
+      "first_name": "change",
+      "last_name": "toAdmin_it",
+      "email": "testing@moralcenter.or.th",
+      "role": "admin_it",
+      "office": "ผู้บริหาร",
       "position": "123",
       "passW": "123",
-      "group_work": "นโยบายและยุทธศาสตร์",
-      "status": "inActive",
+      "group_work": "ผู้บริหาร",
+      "status": "active",
       "id": 7
     }
   ],
