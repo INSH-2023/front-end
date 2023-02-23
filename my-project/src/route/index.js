@@ -27,7 +27,7 @@ import ProblemsList from '../view/private__page/for_admin/ProblemsList.vue'
 // public
 import SignIn from '../view/public__page/SignIn.vue'
 import Home from '../view/public__page/Home.vue'
-import NotFound from '../view/Notfound.vue'
+import NotFound from '../view/NotFound.vue'
 import Main_public from '../view/public__page/Main_public.vue'
 
 const history=createWebHistory()
