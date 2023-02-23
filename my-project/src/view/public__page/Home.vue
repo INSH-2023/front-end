@@ -1,7 +1,7 @@
 <script setup>
 import { useRouter } from 'vue-router';
 const myRouter =useRouter()
-const goSignIn=()=>myRouter.push({name:'signIn'})
+const goService =()=>myRouter.push({name:'services'})
 </script>
 <template>
 <div class="flex w-full h-[90%] font-mono ">
@@ -17,7 +17,7 @@ const goSignIn=()=>myRouter.push({name:'signIn'})
          เว็บไซต์การให้บริการสำหรับแจ้งปัญหาเกี่ยวกับด้านไอทีภายองค์กร
       </div>
       <div class="mt-6 w-fit m-auto ml-[170px]">
-         <button @click="goSignIn()" class=" bg-gray-300 p-3">
+         <button @click="goService" class=" bg-gray-300 p-3">
             เริ่มต้นใช้งาน
          </button>
       </div>
