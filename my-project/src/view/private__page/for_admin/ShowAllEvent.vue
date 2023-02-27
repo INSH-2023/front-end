@@ -378,7 +378,7 @@ const closeP =(id)=>{
                         <tr  v-for="(data,index) in eventList" :key="index" class="relative text-[15px]  bg-white border-b-2 border-gray-300 cursor-default hover:border-gray-400 z-1">
                             
                             <td class=" font-medium py-3 px-2 text-center">
-                                <div class="  font-semibold truncate ">
+                                <div class="  font-normal truncate ">
                                     {{data.full_name}}
                                 </div>
                                 <div class=" text-[10px] truncate font-light">
@@ -411,7 +411,7 @@ const closeP =(id)=>{
                                     {{data.status}}
                                 </div> 
                             </td>
-                            <td class=" p-2 font-semibold">
+                            <td class=" p-2 font-normal">
                                 <div class=" ">
                                     {{data.assign}}
                                 </div>
