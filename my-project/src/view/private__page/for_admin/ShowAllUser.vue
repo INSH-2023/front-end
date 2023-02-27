@@ -1,34 +1,77 @@
 <script setup>
+import { EMPTY_ARR } from '@vue/shared';
 import{ref,computed, onBeforeMount}from'vue'
-import {useRouter} from 'vue-router'
+import {useLink, useRouter} from 'vue-router'
 import toBackEnd from'../../../JS/fetchToBack.js'
+import validate from'../../../JS/validate.js'
+
+
+onBeforeMount(()=>{
+    closeDetail()
+    getUsers()
+})
+
+//variable 
 
 const myRouter =useRouter()
 const userLink ='http://localhost:3000/users'
 // const userLink ='http://localhost:5000/api/users'
-// const userLink =`${import.meta.env.BASE_URL}`
+// const userLink =`${import.meta.env.BASE_URL}api/users`
 
 const userList =ref([])
+const user=ref({})
+const f_userList=ref([])
+const show_userList=ref([])
 
-// const sampleData=ref([
-//     {
-//         "id":1,
-//         "user":"นักรับ ทมิฬ",
-//         "email":"testingEmail@testingmain.com",
-//         "group":"วิจัยและวัฒนะธรรม",
-//         "active":false,
-//         "respo":"administrator",
-//     },{
-//         "id":2,
-//         "user":"ทมิฬ นักรับ ",
-//         "email":"testingEmail@testingmain.com",
-//         "group":"วิจัยและวัฒนะธรรม",
-//         "active":true,
-//         "respo":"administrator",
-//     },
-    
-// ])
+const eFName =ref('')
+const eLName =ref('')
+const eEmail =ref('')
+const eRole =ref('')
+const eOffice =ref('')
+const eGroup =ref('')
+const ePosition =ref('')
+const eStatus =ref('')
+const eCPw =ref('')
+const ePw =ref('')
+
+const user_id =ref(undefined)
+
+const lenghtOfInput={
+    fnameL: 30,
+    lnameL: 61,
+    emailL: 30,
+    passwordL: 14,
+    cPasswordL: 14
+}
+
+const f_name =ref('')
+const f_email =ref('')
+const f_status =ref('')
+const f_reposibility =ref('')
+
+
+// const organization ='@moralcenter.or.th'
+
 const isFilter=ref(false)
+const isEdit=ref(false)
+const isActive=ref(false)
+
+let dataCh =computed(()=>{
+    return{
+        first_name: eFName.value,
+        last_name: eLName.value,
+        email: eEmail.value,
+        role: eRole.value,
+        office: eOffice.value,
+        position: ePosition.value,
+        passW: ePw.value,
+        group_work: eGroup.value,
+        status: eStatus.value,
+        cPassW: eCPw.value
+    }
+
+    })
+
 
 // bg color status
 const changeColorBy=(v)=>{
@@ -65,70 +108,49 @@ const changeColorBy=(v)=>{
 }
 
 // get user
-const getUsers =async(id)=>{
-    
-    let status=undefined
+const getUsers =async(id=undefined)=>{
 
+    let status=false
     if(id==undefined){
-        const res =await fetch(userLink,{
-            method:'GET'
-        })
-        if(res.status==200){
-            userList.value=await res.json()
-            status = true
-            console.log('get data successfull')
-        }else{
-            status= false
-            console.log('cannot get user list')
-        }    
-    }else if(id != undefined){
-        const res= await fetch(`${userLink}/${id}`,{
-            method:'GET'
-        })
-        if(res.status==200){
-             console.log('get user successful')
-        user.value=await res.json()
-        console.log(user.value)
-        // changeST(user.value.status)
-        // user.value.assign==''?assignCh.value='': assignCh.value = event.value.assign
-        }else{
-            status= false
-            console.log('error cannot get user by id')
-        }  
+        let [data,s] = await toBackEnd.getData('user',userLink)
+        // console.log(data)
+        // console.log(status)
+        if(s==200)status = true
+        
+        userList.value=data
+
+        show_userList.value = userList.value
+        
+    }else{
+        let [data,s] = await toBackEnd.getDataBy('user',userLink,id)
+        if(s==200)status = true
+        user.value=data
     }
-    // return status
 
-
-
-
+    return status
 }
+
 
 // delete user
-const deleteUser =async(v,l)=>{
-    console.log('this is location delete :'+l)
-    const res = await fetch(`${userLink}/${v}`,{
-        method:'DELETE'
-    })
-    if(res.status==200){
-        console.log('user delete successful')
-        getUsers()
-        closeP(l)
+const deleteUser =async(v)=>{
+    
+    let status = toBackEnd.delete('user',userLink,v)
+    
+    if(status==200?true:false){
+        await getUsers()
+        closeDetail()
+        // status something
     }else{
-        console.log('error something cannot delete user')
+        // status something
     }
 }
 
-onBeforeMount(()=>{
-    // fn.greeting('hellowwwwwwww')
-    // toBackEnd.getData('user',userLink)
-    getUsers()
-})
 
-
-const user=ref({})
 // showInfo
-const showInfoByID=(v,index)=>{
+const showInfoByID=async(v,index)=>{
     user.value={}
+    user_id.value=v
+    let status =false
     console.log('value : ',v)
     console.log('index : ',index)
     // statusCh.value=undefined
@@ -138,9 +160,10 @@ const showInfoByID=(v,index)=>{
     console.log('this is index:',index)
 
     // console.log(getUsers(v))
-
+    console.log('is user obj is empty ? : '+isEmptyOBJ.value)
+    status = await getUsers(user_id.value)
     
-    if( getUsers(v)){
+    if( status && isEmptyOBJ.value !=true){
         detail[index].setAttribute("href","#showInfo")
         detail[index].click()
     }else{
@@ -149,25 +172,12 @@ const showInfoByID=(v,index)=>{
 }
 
 
-// edit
-const eName =ref('')
-const eEmail =ref('')
-const eRole =ref('')
-const eOffice =ref('')
-const eGroup =ref('')
-const ePosition =ref('')
-const eStatus =ref('')
-const eCPw =ref('')
-const ePw =ref('')
-
-
-const isEdit=ref(false)
-const editDetail =(b)=>{
-    
+const assignDetail =(b)=>{
     if(user.value.lenght!=0){
         if(b==true){
             isEdit.value=b
-            eName.value=`${user.value.first_name} ${user.value.last_name}`
+            eFName.value=user.value.first_name
+            eLName.value=user.value.last_name
             eEmail.value=user.value.email
             eRole.value=user.value.role
             eOffice.value=user.value.office
@@ -175,10 +185,13 @@ const editDetail =(b)=>{
             ePosition.value=user.value.position
             eStatus.value=user.value.status
             ePw.value=user.value.passW
+            eCPw.value=user.value.passW
+            isActive.value=user.value.status=='active'?true:false
             console.log('open edit mode')
         }else if(b==false){
             isEdit.value=b
-            eName.value=''
+            eFName.value=''
+            eLName.value=''
             eEmail.value=''
             eRole.value=''
             eOffice.value=''
@@ -186,6 +199,7 @@ const editDetail =(b)=>{
             ePosition.value=''
             eStatus.value=''
             ePw.value=''
+            eCPw.value=''
             console.log('close edit mode')
         }
     }else{
@@ -193,167 +207,112 @@ const editDetail =(b)=>{
     }
 }
 
-const submitEdit =async(id,l)=>{
-    console.log('this is location edit:'+l)
 
-    // if(validate()){
-        // eEmail.value=email.value+organization
-        let name =eName.value.split(' ')
-        let res = await fetch(`${userLink}/${id}`,{
-            method:'PUT',
-            headers:{
-                "content-type": "application/json"
-            },
-            body:JSON.stringify({
-            
-            first_name: name[0],
-            last_name: name[1],
-            email: eEmail.value,
-            role: eRole.value,
-            office: eOffice.value,
-            position:ePosition.value,
-            passW: ePw.value,
-            group_work: eGroup.value,
-            status: eStatus.value,
-            })
-        })
-        if(res.status==200){
-            console.log('update successful user')
-            editDetail(false)
-            await getUsers()
-            closeP("submit_edit")
-        }else{
-            console.log('error cannot update user')
-        }        
+
+const submitEdit =async(id)=>{
+
+    // if(validate.vUserCreate(dataCh.value,lenghtOfInput) !=true){
+        let status = await toBackEnd.editData('user',userLink,id,dataCh.value)
+            console.log(status)
+            if(status==200?true:false){
+                await getUsers()
+                closeDetail()
+                assignDetail(false)
+                
+                // status something
+            }else{
+                closeDetail()
+                // status something
+            }        
     // }else{
-    //     console.log('error something cannot edit and not into fetch Put method')
+    //     // status something
+    //     console.log('error validate input value')
+    //     window.location.href = "#showInfo"
     // }
-   
-    
+
+
 }
 
-// lenght
-// const fNameL=30
-const nameL=61
-const emailL=30
-const pwL=14
 
-const organization ='@moralcenter.or.th'
-// validate
-// const validate=()=>{
-//     let vStatus =false
-//     let email = eEmail.value+organization
-//     // fNameS.value=undefined
-//     // eNameS.value=undefined
-//     // emailS.value=undefined
-//     // groupS.value =undefined
-//     // passWS.value =undefined
-//     // cPassWS.value =undefined
-//     // positionS.value=undefined
-//     // officeS.value =undefined
-//     // roleS.value =undefined
-//     // eEmail.value=email.value+organization
-
-    
-//     if(eName.value.length==0){
-//         console.log('Please input ur last name')
-//         // lNameS.value=false
-//         vStatus =true
-//     }
-//     if(email.value.length==0){
-//         console.log('Please input ur email')
-//         // emailS.value=false
-//         vStatus =true
-//     }
-//     if(eGroup.value.length==0){
-//         console.log('Please input ur group')
-//         // groupS.value=false
-//         vStatus =true
-//     }
-//     if(ePosition.value.length==0){
-//         console.log('Please input ur position')
-//         // positionS.value=false
-//         vStatus =true
-//     }
-//     if(eOffice.value.length==0){
-//         console.log('Please input ur office')
-//         // officeS.value=false
-//         vStatus =true
-//     }
-//     if(eRole.value.length==0){
-//         console.log('Please input ur role')
-//         // roleS.value=false
-//         vStatus =true
-//     }
-//     if(ePw.value.length==0){
-//         console.log('Please input ur password')
-//         // passWS.value=false
-//         vStatus =true
-//     }
-//     if(eCPw.value.length==0){
-//         console.log('Please input ur confirm password')
-//         // cPassWS.value=false
-//         vStatus =true
-//     }
-//     if(eName.length>nameL){
-//         console.log(`lenght of last name more then ${nameL}`)
-//         //lNameS.value=false
-//         vStatus =true
-//     }
-//     if(email.length>emailL){
-//         console.log(`lenght of email more then ${emailL}`)
-//         //emailS.value=false
-//         vStatus =true
-//     }
-//     if(valFormEmail(email)==false){
-//         console.log('this email invalid')
-//         //emailS.value=false
-//         vStatus =true
-//     }
-//     if(ePw.value.length>pwL){
-//         console.log(`lenght of password more then ${passWL}`)
-//         //passWS.value=false
-//         vStatus =true
-//     }
-//     if(eCPw.value.length>pwL){
-//         console.log(`lenght of password more then ${passWL}`)
-//         // cPassWS.value=false
-//         vStatus =true
-//     }  
-//     if(ePw.value !=eCPw.value){
-//         console.log('password not match')
-//         // passWS.value=false
-//         // cPassWS.value=false
-//         vStatus =true
-//     }
-
-//     return vStatus
-// }
+// check obj empty
+const isEmptyOBJ =computed(()=> {
+    let boolean = Object.keys(user.value).length === 0 && user.value.constructor ===Object
+    console.log(boolean)
+    return boolean
+})
 
 
+// validate input
+const checkInput =()=>{
+    if(validate.vUserCreate(dataCh.value,lenghtOfInput) !=true){
+        window.location.href='#veri'
+    }else{
+        console.log('input invalid value pls fix it 😂')
+    }
+}
 
-// close pop up
-const closeP =(id)=>{
-    let button =document.getElementById(id)
-    button.setAttribute("href","#")
-    button.click()
+
+// close detail every reload
+const closeDetail=()=>{
+    window.location.href = '#'
 }
 
 
 // change status 
-const isActive=ref(false)
 const change_s=()=>{
     isActive.value = !isActive.value
     // eStatus.value= !eStatus.value
     if(isActive.value==true){
-        console.log('status is :',eStatus.value)
         eStatus.value='active'
-        
+        console.log('status is :',eStatus.value)
     }else
     if(isActive.value==false){
-        console.log('status is :',eStatus.value)
         eStatus.value='inactive'
+        console.log('status is :',eStatus.value)
     }
+}
+
+
+
+// filter 
+const resetF=()=>{
+    f_name.value= ''
+    f_email.value= ''
+    f_status.value= ''
+    f_reposibility.value= ''
+    show_userList.value = userList.value
+}
+
+
+const searchByKeyW=()=>{
+    f_userList.value=[]
+    // name
+    if(f_name.value.length != 0){
+        f_userList.value = userList.value.filter(u=>{
+        let name =`${u.first_name} ${u.last_name}`
+        return name.toLowerCase().includes(f_name.value.toLowerCase())
+    })
+        console.log('this name filter : '+f_name.value)
+    }
+
+    // email
+    else if(f_email.value.length != 0){
+        f_userList.value = userList.value.filter(u=>u.email.toLowerCase().includes(f_email.value.toLowerCase()))
+        console.log('this  email filter : '+f_email.value)
+    }
+    // status
+    else if(f_status.value.length != 0){
+        f_userList.value = userList.value.filter(u=>u.status==f_status.value)
+        console.log('this status filter : '+f_status.value)
+    }
+    // reposibility
+    else if(f_reposibility.value.length != 0){
+        f_userList.value = userList.value.filter(u=>u.role.toLowerCase()==f_reposibility.value.toLowerCase())
+        console.log('this role filter : '+f_reposibility.value)
+    }
+
+    show_userList.value = f_userList.value
+    console.log(f_userList.value)
 }
 </script>
 <template>
@@ -369,32 +328,68 @@ const change_s=()=>{
                     </div>
 
                 </div>
-                <!-- button -->
-                <div class="   right-[80px] top-[115px]  absolute">
-                    <button @click="isFilter= !isFilter" class="flex w-fit">
-                        <span class="font-semibold my-auto">
-                            ตัวกรอง
-                        </span> 
-                        <img src="../../../assets/vue.svg" alt="icon" class="w-[20px] ml-[5px] my-auto">                                
-                    </button>
-                </div>
+
 
                 <!-- filter -->
-                <div v-show="isFilter==true" class="w-fit mx-auto absolute">
-                    <div class="flex ">
-                        <div class="p-3">
-                            testing filter
-                        </div>
-                        <div class="p-3">
-                            testing filter
-                        </div>
-                        <div class="p-3">
-                            testing filter
-                        </div>
-                        <div class="p-3">
-                            testing filter
+                <div  class="relative w-[1200px] h-[70px] pl-4 mx-auto ">
+                    <div v-show="isFilter==true" class="absolute w-fit h-fit bottom-0">
+                        <div class="flex ">
+
+                            <!-- name -->
+                            <div class="px-2 ">
+                                <input v-model="f_name" placeholder="Name" type="text" class="px-3 py-[4px] bg-[#E3F2FD] text-gray-600 rounded-xl focus:outline-0">
+                            </div>
+
+                            <!-- email -->
+                            <div class="px-2">
+                                <input v-model="f_email" placeholder="E-mail" type="text" class="px-3 py-[4px] bg-[#E3F2FD] text-gray-600 rounded-xl focus:outline-0">
+                            </div>
+
+                            <!-- status -->
+                            <div class="px-2">
+                                <!-- <input placeholder="" type="text" class="bg-gray-300"> -->
+                                <select v-model="f_status" name="status" id="status" class="px-3 py-[4px] bg-[#E3F2FD] text-gray-600 rounded-xl focus:outline-0">
+                                    <option value="" selected hidden> Select status </option>
+                                    <option value="active"> active </option>
+                                    <option value="inactive"> inactive</option>
+
+                                </select>
+                            </div>
+
+                            <div class="px-2">
+                                <!-- <input placeholder="" type="text" class="px-3 py-[4px] bg-gray-300 rounded-xl"> -->
+                                <select v-model="f_reposibility" name="reposibility" id="reposibility" class="px-3 py-[4px] bg-[#E3F2FD] text-gray-600 rounded-xl focus:outline-0">
+                                    <option value="" selected hidden>Select Reposibility</option>
+                                    <option value="user">user</option>
+                                    <option value="admin_pr">Admin PR</option>
+                                    <option value="admin_it">Admin IT</option>
+
+                                </select>
+                            </div>
+
+                            <div class="flex px-3 font-light">
+                                <button @click="resetF" class="px-3 mx-1 bg-gray-500 text-rose-300  rounded-xl hover:text-gray-500 hover:bg-rose-300">
+                                    รีเซต
+                                </button>
+
+                                <button @click="searchByKeyW" class="px-3 mx-1 bg-gray-300 rounded-xl">
+                                    ค้นหา
+                                </button>
+                            </div>
                         </div>
                     </div>
+
+
+                    <!-- button -->
+                    <div class="   right-[70px] bottom-0  absolute">
+                        <button @click="isFilter= !isFilter" class="flex w-fit">
+                            <span class="font-semibold my-auto">
+                                ตัวกรอง
+                            </span> 
+                            <img src="../../../assets/admin_page/filter.png" alt="icon" class="w-[20px] ml-[5px] my-auto">                                
+                        </button>
+                    </div>
+
                 </div>
             </div>
                 
@@ -402,7 +397,7 @@ const change_s=()=>{
 
         
               <!-- table -->    
-        <div class="w-[1200px] mx-auto  h-[450px] mt-16"> 
+        <div class="w-[1200px] mx-auto  h-[450px] mt-2"> 
             <hr class="mt-3 bg-gray-700  w-[1170px] h-[3px]">
             <div class="overflow-y-auto mx-auto h-[100%] w-[100%] ">
                 <table class="w-full table-fixed text-sm text-center text-gray-800 ">
@@ -415,7 +410,7 @@ const change_s=()=>{
                                 Group
                             </th>
                             <th scope="col" class="w-[100px] py-2 px-2">
-                                Active
+                                Status
                             </th>
                             <th scope="col" class="w-[100px] py-2 px-2">
                                 Reposibility
@@ -428,7 +423,7 @@ const change_s=()=>{
                         </tr>                        
                     </thead>
                     <tbody>
-                        <tr v-for="(data,index) in userList" :key="index"  class="text-[15px] cursor-default bg-white border-b-2 border-gray-300  hover:border-gray-400 hover:bg-gray-400">
+                        <tr v-for="(data,index) in show_userList" :key="index"  class="text-[15px] cursor-default bg-white border-b-2 border-gray-300  hover:border-gray-400 hover:bg-gray-400">
                             <td class="]     px-2 py-2 font-medium ">
                                 <div class="ml-4">
                                     <div class="w-full ml-3 text-[18px] font-light truncate mx-auto">
@@ -569,7 +564,7 @@ const change_s=()=>{
                             </button>                            
                         </a>
                         
-                        <button @click="editDetail(true)" class="w-[200px] h-[50px] px-5 text-[15px]  mx-auto ml-3 font-light text-[#1565C0] bg-gray-300 rounded-2xl hover:bg-[#90CAF9] hover:text-gray-200">
+                        <button @click="assignDetail(true)" class="w-[200px] h-[50px] px-5 text-[15px]  mx-auto ml-3 font-light text-[#1565C0] bg-gray-300 rounded-2xl hover:bg-[#90CAF9] hover:text-gray-200">
                             แก้ไขข้อมูล
                         </button>
                     </div>
@@ -581,9 +576,9 @@ const change_s=()=>{
                 <div v-else-if="isEdit==true" class="w-[500px] mx-auto">
                        
                     <!-- active -->
-                    <div class="relative w-full h-[35px] mt-3">
-                        <button @click="change_s" id="container_active" class="relative w-[150px] h-[30px] bg-gray-700 text-gray-100 text-[15px] z-0 rounded-lg">
-                            <div v-show="isActive==true" id="active" class="w-full h-full z-10 flex ">
+                    <div class="relative flex t  w-full h-[40px] mt-3">
+                        <button @click="change_s" id="container_active" class="relative w-[150px] h-[30px] my-auto bg-gray-700 text-gray-100 text-[15px] z-0 rounded-lg">
+                            <div v-if="isActive==true" id="active" class="w-full h-full z-10 flex ">
                                 <div class="w-[75px] h-full bg-green-300 rounded-l-lg">
                                 </div>                            
                                 <div class="w-[75px] h-fit m-auto ">
@@ -591,36 +586,48 @@ const change_s=()=>{
                                 </div>
 
                             </div>
-                            <div v-show="isActive==false" id="inactive" class="w-full h-full z-10 flex ">
+                            <div v-else-if="isActive==false" id="inactive" class="w-full h-full z-10 flex ">
                                 <div class="w-[75px] h-fit m-auto ">
                                         inactive
                                 </div>
                                 <div class="w-[75px] h-full bg-rose-300 rounded-r-lg">
                                 </div>
                             </div>
-                        </button>                        
-                    </div>
-
-
-                    <!-- full name  and role-->
-                    <div class="relative flex w-[500px]">
-                        <!-- name -->
-                        <div class="relative w-[338px]  h-[50px]  text-sm">
-                            <h4 class="ml-2 text-sm font-light text-gray-500">
-                                Name
-                            </h4>
-                            <input v-model="eName" type="text" class="absolute bottom-0 w-full h-[30px] px-2 bg-sky-300 font-light text-[20px] text-gray-600 rounded-lg focus:outline-0">                              
-                        </div>
-                        <!-- role -->
-                        <div class="relative w-[160px] h-[50px] ml-[2px] text-sm">
-                            <h4 class="ml-2  font-light text-gray-500">
+                        </button>
+                        
+                        <!-- <div class="flex  w-[160px] h-full  text-sm">
+                            <h4 class=" my-auto  font-light text-gray-500">
                                 Role
                             </h4>
-                            <select v-model="eRole" name="role" id="role" class="absolute bottom-0 w-full h-[30px] px-2 bg-sky-300 font-light text-[20px] text-gray-600 rounded-lg focus:outline-0">
+                            <select v-model="eRole" name="role" id="role" class=" bottom-0 w-full h-[30px] px-2 ml-2 my-auto bg-sky-300 font-light text-s, text-gray-600 rounded-lg focus:outline-0">
                                 <option value="user">User</option>
                                 <option value="admin_it">Admin_IT</option>
                                 <option value="admin_pr">Admin_PR</option>
                             </select>
+                        </div> -->
+                    </div>
+
+
+                    <!-- first name  and last name-->
+                    <div class="relative flex w-[500px]">
+                        <!-- name -->
+                        <div class="relative w-[250px]  h-[50px]  text-sm">
+                            <h4 class="ml-2 text-sm font-light text-gray-500">
+                                First Name
+                            </h4>
+                            <input v-model="eFName" type="text" class="absolute bottom-0 w-full h-[30px] px-2 bg-sky-300 font-light text-[20px] text-gray-600 rounded-lg focus:outline-0">                              
+                        </div>
+                        <!-- role -->
+                        <div class="relative w-[250px] h-[50px] ml-[2px] text-sm">
+                            <h4 class="ml-2  font-light text-gray-500">
+                                Last Name
+                            </h4>
+                            <input v-model="eLName" type="text" class="absolute bottom-0 w-full h-[30px] px-2 bg-sky-300 font-light text-[20px] text-gray-600 rounded-lg focus:outline-0">
+                            <!-- <select v-model="eRole" name="role" id="role" class="absolute bottom-0 w-full h-[30px] px-2 bg-sky-300 font-light text-[20px] text-gray-600 rounded-lg focus:outline-0">
+                                <option value="user">User</option>
+                                <option value="admin_it">Admin_IT</option>
+                                <option value="admin_pr">Admin_PR</option>
+                            </select> -->
                             <!-- <input type="text" class="absolute bottom-0 w-full h-[30px] p-2 bg-sky-300 font-light text-gray-600 rounded-lg focus:outline-0"> -->
                         </div>
                     </div>
@@ -633,7 +640,17 @@ const change_s=()=>{
                         <input v-model="eEmail" type="text" class="absolute bottom-0 w-full h-[30px] px-2 bg-sky-300 font-light text-[20px] text-gray-600 rounded-lg focus:outline-0">
                     </div>
 
-                    
+                    <!-- role -->
+                    <div class="relative w-full h-[50px] mt-1">
+                        <h4 class="ml-2 text-sm font-light text-gray-500">
+                            Role
+                        </h4>
+                        <select v-model="eRole" name="role" id="role" class="absolute bottom-0 w-full h-[30px] px-2 bg-sky-300 font-light text-[20px] text-gray-600 rounded-lg focus:outline-0">
+                            <option value="user">User</option>
+                            <option value="admin_it">Admin_IT</option>
+                            <option value="admin_pr">Admin_PR</option>
+                        </select>
+                    </div>
 
                     <!-- office -->
                     <div class="relative w-full h-[50px] mt-1">
@@ -696,16 +713,14 @@ const change_s=()=>{
 
                     <!-- button -->
                     <div class="mt-6 mb-1.5">
-                        <a href="#veri" id="editD">
-                            <button class="w-[250px] h-fit bg-gray-600 p-2 text-[#90CAF9] rounded-lg hover:bg-[#90CAF9] hover:text-gray-600">
-                                ทำการแก้ไข ->                                
-                            </button>
-                        </a>
+                        <button @click="checkInput" class="w-[250px] h-fit bg-gray-600 p-2 text-[#90CAF9] rounded-lg hover:bg-[#90CAF9] hover:text-gray-600">
+                            ทำการแก้ไข ->                                
+                        </button>
                     </div>
 
                     <!-- back -->
                     <div class="absolute top-[20px] left-[15px] font-light text-[20px]">
-                        <button @click="editDetail(false)" class="flex rounded-full pr-3 hover:bg-[#90CAF9] hover:text-[#E3F2FD]">
+                        <button @click="assignDetail(false)" class="flex rounded-full pr-3 hover:bg-[#90CAF9] hover:text-[#E3F2FD]">
                             <img src="../../../assets/left-arrow.svg" alt="left-arrow" class="w-[30px] h-[30px] p-1.5 ">
                             <h4 class="my-auto text-[15px]">ย้อนกลับ</h4>
                         </button>
@@ -713,7 +728,7 @@ const change_s=()=>{
                 </div>
 
                 <div class="absolute top-[15px] right-[15px] font-bold text-[30px]">
-                    <a @click="editDetail(false)" id="close_info" href="#" class="">
+                    <a @click="assignDetail(false)" id="close_info" href="#" class="">
                         <img src="../../../assets/admin_page/close.png" alt="close_icon" class="w-[20px]">
                     </a>
                 </div>
@@ -723,8 +738,8 @@ const change_s=()=>{
 
 
     <!-- verify -->
-    <div id="veri" class="overlay">
-        <div class=" verify_s h-96 ">
+    <div id="veri" class="overlay ">
+        <div class=" verify_s h-96 overflow-hidden rounded-2xl">
             <h2 class="w-fit mx-auto text-[20px]">
                 คุณต้องการที่จะแก้ไขข้อมูลใช่หรือไม่ ?
             </h2>
@@ -732,19 +747,16 @@ const change_s=()=>{
                 <button @click="myRouter.go(-1)" class="w-full h-fit text-center mx-auto p-2 bg-gray-300 hover:bg-rose-300">
                     ย้อนกลับ
                 </button>
-                <a id="submit_edit" class="w-full h-fit text-center mx-auto p-2 bg-gray-300 hover:bg-green-300">
-                    <button @click="submitEdit(user.id,'submit_edit')" >
-                        ทำการแก้ไข
-                    </button>                    
-                </a>
-
+                <button @click="submitEdit(user.id)" class="w-full h-fit text-center mx-auto p-2 bg-gray-300 hover:bg-green-300">
+                    ทำการแก้ไข
+                </button>                    
             </div>
         </div>
     </div>
 
     <!-- delete -->
     <div id="dele" class="overlay">
-        <div class=" verify_d h-96 ">
+        <div class=" verify_d h-96 overflow-hidden rounded-2xl">
             <h2 class="w-fit mx-auto text-[20px]">
                 คุณต้องการที่จะลบข้อมูลนี้หรือไม่ ?
             </h2>
@@ -752,12 +764,9 @@ const change_s=()=>{
                 <button @click="myRouter.go(-1)" class="w-full h-fit text-center mx-auto p-2 bg-gray-300 hover:bg-rose-300">
                     ย้อนกลับ
                 </button>
-                <a id="submit_delete" class="w-full h-fit text-center mx-auto p-2 bg-gray-300 hover:bg-green-300">
-                    <button @click="deleteUser(user.id,'submit_delete')" >
-                        ลบเลย !!
-                    </button>                    
-                </a>
-
+                <button @click="deleteUser(user.id)" class="w-full h-fit text-center mx-auto p-2 bg-gray-300 hover:bg-green-300">
+                    ลบเลย !!
+                </button>                    
             </div>
         </div>
     </div>
@@ -784,7 +793,7 @@ const change_s=()=>{
 }
 .popup2 {
   margin: auto;
-  margin-top: 6%;
+  margin-top: 3%;
   /* overflow-y: auto; */
   padding: 30px;
   padding-top: 30px;
