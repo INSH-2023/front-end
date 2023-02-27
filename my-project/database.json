@@ -37,16 +37,28 @@
       "id": 5
     },
     {
-      "first_name": "change",
-      "last_name": "toAdmin_it",
-      "email": "testing@moralcenter.or.th",
-      "role": "admin_it",
+      "first_name": "tesitng",
+      "last_name": "tesitng",
+      "email": "tesitng@moralcenter.or.th",
+      "role": "user",
       "office": "ผู้บริหาร",
-      "position": "123",
+      "position": "tesitng",
+      "passW": "tesitng",
+      "group_work": "ผู้บริหาร",
+      "status": "inactive",
+      "id": 6
+    },
+    {
+      "first_name": "1212",
+      "last_name": "1212",
+      "email": "1234@moralcenter.or.th",
+      "role": "user",
+      "office": "ผู้บริหาร",
+      "position": "2345",
       "passW": "123",
       "group_work": "ผู้บริหาร",
       "status": "active",
-      "id": 7
+      "id": 8
     }
   ],
   "events": [
