@@ -1,4 +1,4 @@
-let validate={
+const validate={
     vUserCreate(data,lenghtOfText){
         let vStatus=false
         let organization ='@moralcenter.or.th'
