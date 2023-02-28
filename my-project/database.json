@@ -261,6 +261,95 @@
       "other": "ปริ้นสีดำเป็นเส้น",
       "massage": "",
       "id": 11
+    },
+    {
+      "full_name": "Testing Testing",
+      "email": "testingTestingTesing@mail.com",
+      "group_work": "วิจัยและวัฒนะธรรม",
+      "service_type": "IT_Service",
+      "subject": "hardware",
+      "status": "request",
+      "date": "13:43:52",
+      "assign": "Not_assign",
+      "useT": "sf",
+      "sn": "20a20345",
+      "brand": "testing",
+      "typeM": "Smart_Phone",
+      "problems": [
+        "ชาร์จแบตไม่เข้า",
+        "กล้องไม่ติด"
+      ],
+      "other": "sdfsdfdsf",
+      "massage": "",
+      "id": 12
+    },
+    {
+      "full_name": "Testing Testing",
+      "email": "testingTestingTesing@mail.com",
+      "group_work": "วิจัยและวัฒนะธรรม",
+      "service_type": "IT_Service",
+      "subject": "hardware",
+      "status": "finish",
+      "date": "13:44:08",
+      "assign": "Testing_Tseing ",
+      "useT": "or",
+      "sn": "20a20345",
+      "brand": "",
+      "typeM": "PC",
+      "problems": [
+        "กล้องไม่ติด",
+        "ชาร์จแบตไม่เข้า",
+        "ช่อง USB"
+      ],
+      "other": "",
+      "massage": "",
+      "commentCh": [],
+      "id": 13
+    },
+    {
+      "full_name": "Testing Testing",
+      "email": "testingTestingTesing@mail.com",
+      "group_work": "วิจัยและวัฒนะธรรม",
+      "service_type": "IT_Service",
+      "subject": "website",
+      "status": "request",
+      "date": "14:10:39",
+      "assign": "Not_assign",
+      "useT": "",
+      "sn": "20a20345",
+      "brand": "",
+      "typeM": "",
+      "problems": [
+        "หน้าจอไม่ติด",
+        "ลำโพงไม่ดัง",
+        "กล้องไม่ติด"
+      ],
+      "other": "",
+      "massage": "",
+      "id": 14
+    },
+    {
+      "full_name": "Testing Testing",
+      "email": "testingTestingTesing@mail.com",
+      "group_work": "วิจัยและวัฒนะธรรม",
+      "service_type": "IT_Service",
+      "subject": "website",
+      "status": "open_case",
+      "date": "14:11:18",
+      "assign": "Testing_Tseing ",
+      "useT": "",
+      "sn": "20a20345",
+      "brand": "",
+      "typeM": "",
+      "problems": [
+        "หน้าจอไม่ติด",
+        "ลำโพงไม่ดัง",
+        "กล้องไม่ติด"
+      ],
+      "other": "",
+      "massage": "",
+      "commentCh": [],
+      "id": 15
     }
   ],
   "problems": [
