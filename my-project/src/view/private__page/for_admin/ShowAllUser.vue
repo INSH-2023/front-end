@@ -156,16 +156,17 @@ const showInfoByID=async(v,index)=>{
     // statusCh.value=undefined
     // assignCh.value=''
     // commentCh.value=''
-    let detail =document.getElementsByClassName("goInfo")
+    // let detail =document.getElementsByClassName("goInfo")
     console.log('this is index:',index)
 
     // console.log(getUsers(v))
-    console.log('is user obj is empty ? : '+isEmptyOBJ.value)
+    // console.log('is user obj is empty ? : '+isEmptyOBJ.value)
     status = await getUsers(user_id.value)
     
     if( status && isEmptyOBJ.value !=true){
-        detail[index].setAttribute("href","#showInfo")
-        detail[index].click()
+        window.location.href='#showInfo'
+        // detail[index].setAttribute("href","#showInfo")
+        // detail[index].click()
     }else{
         console.log('error to show detail of user')
     }
