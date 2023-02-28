@@ -4,7 +4,7 @@ import {useRouter,useRoute} from 'vue-router'
 
 const myRouter = useRouter()
 const goBack=()=> myRouter.go(-1)
-const goMain=()=>myRouter.push({name:'booking'})
+const goMain=()=>myRouter.push({name:'services'})
 const eventLink ="http://localhost:3000/events"
 const problemsLink = "http://localhost:3000/problems"
 
