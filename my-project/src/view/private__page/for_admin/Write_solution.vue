@@ -225,7 +225,7 @@ const submitt=async()=>{
                                 {{tag.length}}/{{tagL}}
                             </span>
                             <span class="ml-[20px] text-gray-300">
-                                (sample : tag1 tag2 tag3)
+                                (sample : tag1,tag2,tag3)
                             </span>
                         </h4>                        
                         <input v-model="tag" placeholder="Tag" id="tag" type="text" :maxlength="tagL" :style="[tagS==false?'border-color: rgb(225 29 72);border-width: 2px;':'']" class="absolute bottom-0 w-full h-[40px] bg-gray-300 text-gray-500  px-2 py-2 rounded-lg focus:outline-0" >
@@ -244,7 +244,7 @@ const submitt=async()=>{
                     </div>
 
                     <!-- icon -->
-                    <div :style="[icon!= undefined ? 'background-color: rgb(209 213 219); ':'']" class="relative w-full h-fit mt-4  rounded-lg">
+                    <div :style="[icon!= undefined ? 'background-color: rgb(209 213 219); ':'']" class="relative w-full h-fit mt-4 overflow-hidden rounded-lg">
                         <img v-show="icon!= undefined" id="previewIcon" src="#" alt="show image" class="w-[80px] mx-auto mt-3 py-3"/>
                         <div :style="[icon != undefined? 'width: 100%;border-bottom-right-radius: 8px;border-bottom-left-radius: 8px;':'width: fit-content; border-radius:8px']" class=" mx-auto p-1.5 bg-gray-400  font-light text-center">
                             <label  for="file" class="w-fit text-white cursor-pointer ">
