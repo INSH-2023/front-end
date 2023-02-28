@@ -23,7 +23,7 @@ let toBackEnd={
    async getData(name,link){
       let return_data =[]
       let status = undefined
-      
+         
          //get add data
          console.log(name);
          console.log(link);
@@ -39,7 +39,7 @@ let toBackEnd={
             console.log('cannot get data')
             status = res.status
          }
-
+      console.log(`status ${status} of ${name}`)
       return_data.push(status)
       return return_data
          
@@ -67,6 +67,7 @@ let toBackEnd={
             console.log('cannot get data')
             status =res.status
          }
+      console.log(`status ${status} of ${name}`)
       return_data.push(status)
       return return_data
    },
@@ -74,19 +75,19 @@ let toBackEnd={
    async editData(name,link,id,data){
       let ss =undefined
       // let name =eName.value.split(' ')
-      console.log(name)
-
-      let {
-         first_name:first_name,
-         last_name:last_name,
-         email:email,
-         role:role,
-         office:office,
-         position:position,
-         passW:passW,
-         group_work:group_work,
-         status:status
-      }=data
+      console.log('this is edit-data : '+name)
+      console.log('this is data of edit-data: '+data)
+      // let {
+      //    first_name:first_name,
+      //    last_name:last_name,
+      //    email:email,
+      //    role:role,
+      //    office:office,
+      //    position:position,
+      //    passW:passW,
+      //    group_work:group_work,
+      //    status:status
+      // }=data
       // let {fname,lname,email,role,office,position,passW,group,s}=data
 
         let res = await fetch(`${link}/${id}`,{
@@ -94,17 +95,7 @@ let toBackEnd={
             headers:{
                 "content-type": "application/json"
             },
-            body:JSON.stringify({
-               first_name: first_name,
-               last_name: last_name,
-               email: email,
-               role: role,
-               office: office,
-               position: position,
-               passW: passW,
-               group_work: group_work,
-               status: status
-            })
+            body:JSON.stringify(data)
         })
         if(res.status==200){
             console.log('update successful user')
