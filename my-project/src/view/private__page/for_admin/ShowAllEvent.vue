@@ -2,15 +2,64 @@
 import{ref,computed,onBeforeMount}from'vue'
 import { useRouter } from 'vue-router';
 import BaseLoading from '../../../components/BaseLoading.vue';
+import toBackEnd from '../../../JS/fetchToBack';
+
 const requestLink="http://localhost:3000/events"
 // const requestLink="${import.meta.env.VITE_BACK_END}/events"
 // const linkTesting=`${import.meta.env.VITE_BACK_END}/`
+
 const myRouter = useRouter()
 const isFilter=ref(false)
 const eventList=ref([])
+const f_eventList=ref([])
+const show_eventList=ref([])
 const assignCh =ref('')
 const commentCh =ref('')
 const commentArr =ref([])
+
+const event_id=ref(undefined)
+
+const eventch=ref({})
+const event=ref({})
+
+const eventStatus =ref(undefined)
+const statusCh=ref(undefined)
+
+// change status
+const sIsR=ref(false)
+const sIsO=ref(false)
+const sIsI=ref(false)
+const sIsF=ref(false)
+
+const dataCh =computed(()=>{
+    return{
+            full_name:event.value.full_name,
+            email:event.value.email,
+            group_work:event.value.group_work,
+            service_type:event.value.service_type,
+            subject:event.value.subject,
+            status:statusCh.value,
+            date:event.value.date,
+            assign:assignCh.value,
+            useT:event.value.useT,
+            sn:event.value.sn,
+            brand:event.value.brand,
+            typeM:event.value.typeM,
+            problems:event.value.problems,
+            other:event.value.other,
+            massage:event.value.massage,
+            commentCh:commentArr.value
+        }
+})
+
+const f_name=ref('')
+const f_email=ref('')
+const f_type=ref('')
+const f_subject=ref('')
+const f_status=ref('')
+
+
+
 // bg color status
 const changeColorBy=(v)=>{
     let style=[]
@@ -46,13 +95,13 @@ const changeColorBy=(v)=>{
 }
 
 
-// change status
-const sIsR=ref(false)
-const sIsO=ref(false)
-const sIsI=ref(false)
-const sIsF=ref(false)
+onBeforeMount(()=>{
+    navigation()
+    getEvents()
+    
+})
 
-const statusCh=ref(undefined)
+
 const changeST =(v)=>{
     statusCh.value=''
     // status request
@@ -83,75 +132,47 @@ const changeST =(v)=>{
     // rStatus.value=v
 }
 
-const eventch=ref({})
-const event=ref({})
+
 // showInfo
 const showInfoByID=async(v,index)=>{
-    event.value=[]
+    let status=false
+    event_id.value=v
+    event.value={}
+    
     statusCh.value=undefined
     assignCh.value=''
     commentCh.value=''
     commentArr.value=[]
-    let detail =document.getElementsByClassName("goInfo")
+    // let detail =document.getElementsByClassName("goInfo")
     console.log('this is index:',index)
-
-    let res=await fetch(`${requestLink}/${v}`,{
-        method:'GET'
-    })
-    if(res.status==200){
-        console.log('get event successful')
-        event.value=await res.json()
+    status = await getEvents(event_id.value)
+    
+    if(status && isEmptyOBJ.value !=true){
         eventch.value=event.value
-        console.log(event.value)
         changeST(event.value.status)
         event.value.assign==''?assignCh.value='': assignCh.value = event.value.assign
-        detail[index].setAttribute("href","#showInfo")
-        detail[index].click()
+        navigation('#showInfo')
+        // window.location.href='#summaryInfo'
     }else{
-        console.log('error to get event')
+        navigation()
+        // status something
     }
 }
 
 // edit by id
-const editInfo = async(v,l)=>{
-    console.log('this is location form submit-e : ',l)
+const editInfo = async(v)=>{
+    
     // let S =undefined
-    let res =await fetch(`${requestLink}/${v}`,{
-        method:'PUT',
-        headers:{
-            "content-type": "application/json"
-        },
-        body:JSON.stringify({
-            full_name:event.value.full_name,
-            email:event.value.email,
-            group_work:event.value.group_work,
-            service_type:event.value.service_type,
-            subject:event.value.subject,
-            status:statusCh.value,
-            date:event.value.date,
-            assign:assignCh.value,
-            useT:event.value.useT,
-            sn:event.value.sn,
-            brand:event.value.brand,
-            typeM:event.value.typeM,
-            problems:event.value.problems,
-            other:event.value.other,
-            massage:event.value.massage,
-            commentCh:commentArr.value
-        })
-    })
-    if(res.status==200){
-        // console.log('edit successful')
-        let close = document.getElementById('close_info')
-        console.log('edit is submitt ✅')
+    let ss =await toBackEnd.editData('request',requestLink,v,dataCh.value)
+    if(ss==200){
         console.log(statusCh.value)
         console.log(assignCh.value)
         console.log(commentCh.value)
-        close.click()
-        getEvents()
-        closeP(l)
+        await getEvents()
+        navigation()
+        //status something
     }else{
-        console.log('can not edit error something 😂')
+        //status something
     }
 }
 
@@ -161,23 +182,43 @@ const clickedInfo =()=>{
     console.log('Show all detail')
 }
 
-const eventStatus =ref(undefined)
-// getInfo
-const getEvents =async(v)=>{
-    let res = await fetch(requestLink,{
-        method:'GET'
-    })
-    if(res.status==200){
-        console.log('get event already')
-        eventList.value=await res.json()
-        eventStatus.value=true
-        console.log(requestLink)
-       
+
+// get event
+const getEvents =async(id=undefined)=>{
+
+    let status = false
+
+    if(id==undefined){
+        let [data,s] =await toBackEnd.getData('request',requestLink)
+        if(s==200){
+            status=true
+            eventList.value= data
+            show_eventList.value=data
+            eventStatus.value=true
+            // status something
+        }
+        else {
+            eventStatus.value=false
+             // status something
+        }
+
     }else{
-        console.log('error something can not get events')
-        eventStatus.value=false
+        let [data,s]= await toBackEnd.getDataBy('request',requestLink,id)
+        if(s==200){
+            status=true
+            event.value= data
+            eventStatus.value=true
+             // status something
+        }
+        else{
+            eventStatus.value=false
+             // status something
+        }
     }
+    
+    return status
 }
+
 
 // edit event
 const submitt =(v,l)=>{
@@ -190,24 +231,22 @@ const submitt =(v,l)=>{
     }else{
         editInfo(v,l)
     }
-   
-
 }
+
 
 // delete
-const deleteItem =async (v,l)=>{
-    console.log('this is location delete : ',l)
-    let res = await fetch(`${requestLink}/${v}`,{
-        method:'DELETE'
-    })
-    if(res.status==200){
-        console.log('delete success')
-        getEvents()
-        closeP(l)
+const deleteItem =async (v)=>{
+    
+    let ss = await toBackEnd.delete('request',requestLink,v)
+    if(ss==200){
+        await getEvents()
+        navigation()
+        // status something
     }else{
-        console.log('can not delete data error something')
+        // status something
     }
 }
+
 
 // add comment
 const addComment =()=>{
@@ -226,15 +265,64 @@ const addComment =()=>{
     
 }
 
-onBeforeMount(()=>{
-    getEvents()
+
+// check obj empty
+const isEmptyOBJ =computed(()=> {
+    let boolean = Object.keys(event.value).length === 0 && event.value.constructor ===Object
+    console.log(boolean)
+    return boolean
 })
 
+
 // close pop up
-const closeP =(id)=>{
-    let button =document.getElementById(id)
-    button.setAttribute("href","#")
-    button.click()
+const navigation =(p='#')=>window.location.href=p
+
+
+
+//filter
+const resetF=()=>{
+    f_name.value=''
+    f_email.value=''
+    f_type.value=''
+    f_subject.value=''
+    f_status.value=''
+    show_eventList.value=eventList.value
+}
+
+const searchByKeyW=()=>{
+    // f_eventList.value=[]
+    console.log(f_status.value)
+    // name
+    if(f_name.value.length != 0){
+        f_eventList.value = eventList.value.filter(e=>{
+        return e.full_name.toLowerCase().includes(f_name.value.toLowerCase())
+    })
+        console.log('this name filter : '+f_name.value)
+    }
+
+    // email
+    else if(f_email.value.length != 0){
+        f_eventList.value = eventList.value.filter(e=>e.email.toLowerCase().includes(f_email.value.toLowerCase()))
+        console.log('this  email filter : '+f_email.value)
+    }
+
+    // service
+    else if(f_type.value.length !=0){
+        f_eventList.value = eventList.value.filter(e=>e.service_type.toLowerCase()==f_type.value.toLowerCase())
+    }
+
+    // service
+    else if(f_subject.value.length !=0){
+        f_eventList.value = eventList.value.filter(e=>e.subject.toLowerCase()==f_subject.value.toLowerCase())
+    }
+
+    // stauts
+    else if(f_status.value.length !=0){
+        f_eventList.value = eventList.value.filter(e=>e.status.toLowerCase() == f_status.value.toLowerCase())
+    }
+
+    show_eventList.value = f_eventList.value
+    console.log(f_eventList.value)
 }
 </script>
 <template>
@@ -305,32 +393,86 @@ const closeP =(id)=>{
                         Request
                     </div>
                 </div>
-                <!-- button -->
-                <div class="   right-[80px] top-[115px]  absolute">
-                    <button @click="isFilter= !isFilter" class="flex w-fit">
-                        <span class="font-semibold my-auto">
-                            ตัวกรอง
-                        </span> 
-                        <img src="../../../assets/admin_page/filter.png" alt="icon" class="w-[20px] ml-[5px] my-auto">                                
-                    </button>
-                </div>
+                
 
                 <!-- filter -->
-                <div v-show="isFilter==true" class="w-fit mx-auto absolute">
-                    <div class="flex ">
-                        <div class="p-3">
-                            testing filter
-                        </div>
-                        <div class="p-3">
-                            testing filter
-                        </div>
-                        <div class="p-3">
-                            testing filter
-                        </div>
-                        <div class="p-3">
-                            testing filter
+                <div  class="relative w-[1200px] h-[70px]  mx-auto ">
+                    <div v-show="isFilter==true" class="absolute w-fit h-fit bottom-0">
+                        <div class="flex ">
+                            
+                            <!-- name -->
+                            <div class="px-2 ">
+                                <input v-model="f_name" placeholder="Name" type="text" class="px-3 py-[4px] bg-[#E3F2FD] text-gray-600 rounded-xl focus:outline-0">
+                            </div>
+
+                            <!-- email -->
+                            <div class="px-2">
+                                <input v-model="f_email" placeholder="E-mail" type="text" class="px-3 py-[4px] bg-[#E3F2FD] text-gray-600 rounded-xl focus:outline-0">
+                            </div>
+
+                            <!-- type -->
+                            <div class="px-2">
+                                <select v-model="f_type" name="status" id="status" class="px-3 py-[4px] bg-[#E3F2FD] text-gray-600 rounded-xl focus:outline-0">
+                                    <option value="" selected hidden> Service type </option>
+                                    <option value="IT_Service" class="bg-gray-100 text-[#0ea5e9] "> IT Service </option>
+                                    <option value="PR_Service" class="bg-gray-100 text-[#d97706]"> PR Service </option>
+
+                                </select>
+                            </div>
+
+                            <!-- Subject -->
+                            <div class="px-2">
+                                <select v-model="f_subject" name="Subject" id="Subject" class="px-3 py-[4px] bg-[#E3F2FD] text-gray-600 rounded-xl focus:outline-0">
+                                    <option value="" selected hidden> Select Subject </option>
+                                    <option value="hardware"> hardware </option>
+                                    <option value="software"> software </option>
+                                    <option value="internet"> internet </option>
+                                    <option value="printer"> printer </option>
+                                    <option value="website"> website </option>
+                                    <option value="meeting"> meeting </option>
+                                    <option value="application"> application </option>
+                                    <option value="other"> other </option>
+
+                                </select>
+                            </div>
+
+                            <!-- status -->
+                            <div class="px-2">
+                                <select v-model="f_status" name="status" id="status" class="px-3 py-[4px] bg-[#E3F2FD] text-gray-600 rounded-xl focus:outline-0">
+                                    <option value="" selected hidden> Select Status </option>
+                                    <option value="request"     class="bg-"> request </option>
+                                    <option value="open_case"   class="bg-"> open case </option>
+                                    <option value="in_progress" class="bg- "> in progress </option>
+                                    <option value="finish"      class="bg-"> finish </option>
+
+                                </select>
+                            </div>
+
+                            
+
+                            <div class="flex px-2 font-light">
+                                <button @click="resetF" class="px-3 mx-1 bg-gray-500 text-rose-300  rounded-xl hover:text-gray-500 hover:bg-rose-300">
+                                    รีเซต
+                                </button>
+
+                                <button @click="searchByKeyW()" class="px-3 mx-1 bg-gray-300 rounded-xl">
+                                    ค้นหา
+                                </button>
+                            </div>
                         </div>
                     </div>
+
+
+                    <!-- button -->
+                    <div class="   right-[20px] bottom-0  absolute">
+                        <button @click="isFilter= !isFilter" class="flex w-fit">
+                            <span class="font-semibold my-auto">
+                                ตัวกรอง
+                            </span> 
+                            <img src="../../../assets/admin_page/filter.png" alt="icon" class="w-[20px] ml-[5px] my-auto">                                
+                        </button>
+                    </div>
+
                 </div>
             </div>
                 
@@ -338,7 +480,7 @@ const closeP =(id)=>{
 
         
               <!-- table -->    
-        <div class="w-[1200px] mx-auto  h-[450px] mt-16"> 
+        <div class="w-[1200px] mx-auto  h-[450px] mt-2"> 
             <hr class="mt-3 bg-gray-700  w-[1170px] h-[3px]">
             <div class="overflow-y-auto mx-auto h-[100%] w-[100%] ">
                 <table class="relative w-full table-fixed text-sm text-center text-gray-800 ">
@@ -375,7 +517,7 @@ const closeP =(id)=>{
 
                     <!-- have data -->
                     <tbody class="z-0"> <!-- @click="clickedInfo" -->
-                        <tr  v-for="(data,index) in eventList" :key="index" class="relative text-[15px]  bg-white border-b-2 border-gray-300 cursor-default hover:border-gray-400 z-1">
+                        <tr  v-for="(data,index) in show_eventList" :key="index" class="relative text-[15px]  bg-white border-b-2 border-gray-300 cursor-default hover:border-gray-400 z-1">
                             
                             <td class=" font-medium py-3 px-2 text-center">
                                 <div class="  font-normal truncate ">
@@ -651,17 +793,15 @@ const closeP =(id)=>{
                 <!-- button -->
                 <div  class="w-fit flex mx-auto mt-10">
                     <!-- ลบข้อมูล -->
-                    <a href="#dele">
-                        <button  class="w-[130px] mx-3 p-2 font-normal bg-gray-300  text-rose-400 rounded-xl hover:text-gray-200 hover:bg-rose-400">
+                        <button @click="navigation('#dele')"  class="w-[130px] mx-3 p-2 font-normal bg-gray-300  text-rose-400 rounded-xl hover:text-gray-200 hover:bg-rose-400">
                             <h4>
                                 ลบคำร้องนี้
                             </h4>
                         </button>                        
-                    </a>
 
                     <!-- แก้ไขข้อมูล -->
                     <a href="#veri">
-                        <button v-show="statusCh != undefined &&statusCh != 'request'&& assignCh.length>0 "  class="w-[130px] mx-3 p-2 font-normal bg-gray-300  text-[#64B5F6] rounded-xl hover:bg-[#64B5F6] hover:text-gray-200">
+                        <button v-show="statusCh != undefined &&statusCh != 'request'&& assignCh.length >0 "  class="w-[130px] mx-3 p-2 font-normal bg-gray-300  text-[#64B5F6] rounded-xl hover:bg-[#64B5F6] hover:text-gray-200">
                             <h4>
                                 ทำการแก้ไข
                             </h4>
@@ -708,18 +848,16 @@ const closeP =(id)=>{
                 </div>
             </div>
 
-            <div class="absolute top-[15px] right-[15px] font-bold text-[30px]">
-                <a id="close_info" href="#">
-                    <img src="../../../assets/admin_page/close.png" alt="close_icon" class="w-[20px]">
-                </a>
-            </div>
+            <button @click="navigation()" class="absolute top-[15px] right-[15px] font-bold text-[30px]">
+                <img src="../../../assets/admin_page/close.png" alt="close_icon" class="w-[20px]">
+            </button>
         </div>
     </div>
 
 
     <!-- verify -->
     <div id="veri" class="overlay">
-        <div class=" verify_s h-96 ">
+        <div class=" verify_s h-96 overflow-hidden rounded-2xl">
             <h2 class="w-fit mx-auto text-[20px]">
                 คุณต้องการที่จะแก้ไขข้อมูลใช่หรือไม่ ?
             </h2>
@@ -727,19 +865,16 @@ const closeP =(id)=>{
                 <button @click="myRouter.go(-1)" class="w-full h-fit text-center mx-auto p-2 bg-gray-300 hover:bg-rose-300">
                     ย้อนกลับ
                 </button>
-                <a id="submit_edit" class="w-full h-fit text-center mx-auto p-2 bg-gray-300 hover:bg-green-300">
-                    <button @click="submitt(event.id,'submit_edit')" >
-                        ทำการแก้ไข
-                    </button>                    
-                </a>
-
+                <button @click="submitt(event.id)" class="w-full h-fit text-center mx-auto p-2 bg-gray-300 hover:bg-green-300" >
+                    ทำการแก้ไข
+                </button>                    
             </div>
         </div>
     </div>
 
     <!-- delete -->
     <div id="dele" class="overlay">
-        <div class=" verify_d h-96 ">
+        <div class=" verify_d h-96 overflow-hidden rounded-2xl ">
             <h2 class="w-fit mx-auto text-[20px]">
                 คุณต้องการที่จะลบข้อมูลนี้หรือไม่ ?
             </h2>
@@ -747,12 +882,9 @@ const closeP =(id)=>{
                 <button @click="myRouter.go(-1)" class="w-full h-fit text-center mx-auto p-2 bg-gray-300 hover:bg-rose-300">
                     ย้อนกลับ
                 </button>
-                <a id="submit_delete" class="w-full h-fit text-center mx-auto p-2 bg-gray-300 hover:bg-green-300">
-                    <button @click="deleteItem(event.id,'submit_delete')" >
-                        ลบเลย !!
-                    </button>                    
-                </a>
-
+                <button @click="deleteItem(event.id)" class="w-full h-fit text-center mx-auto p-2 bg-gray-300 hover:bg-green-300">
+                    ลบเลย !!
+                </button>                    
             </div>
         </div>
     </div>
