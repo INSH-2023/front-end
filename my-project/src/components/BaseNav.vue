@@ -1,9 +1,9 @@
 <script setup>
 import {useRouter} from 'vue-router'
-import {ref,onBeforeMount} from 'vue'
+import {ref,onBeforeMount, useCssModule} from 'vue'
 import User from '../icon/User.svg'
 defineProps({
-    isPublic:{
+    role:{
         type:Boolean,
         default:false
     }
@@ -25,7 +25,7 @@ const goService =()=>myRouter.push({name:'services'})
 
 
 // get role from local
-const role =ref(undefined)
+ const role =ref(undefined)
 const getRole=()=>{
     isAdmin.value=localStorage.getItem('isAdmin')==='false'?false:true
     role.value=localStorage.getItem('role')
