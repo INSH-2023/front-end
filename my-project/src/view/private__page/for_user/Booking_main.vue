@@ -2,7 +2,9 @@
 import {onBeforeMount, ref,computed}from'vue'
 import {useRouter,useRoute} from 'vue-router'
 import BaseStatus from '../../../components/BaseStatus.vue'
-const solutionLink='http://localhost:3000/solutions'
+// const solutionLink='http://localhost:3000/solutions'
+const solutionLink =`${import.meta.env.VITE_BACK_END_HOST}/solutions`
+
 
 const {params}=useRoute()
 
@@ -66,7 +68,9 @@ let res =await fetch(solutionLink,{
 })
 if(res.status==200){
    solutionList.value = await res.json()
-   await randomAricle(4,solutionList.value.length,solutionList.value)
+   if(solutionList.value.length!=0){
+       await randomAricle(4,solutionList.value.length,solutionList.value)
+   }
     console.log(solutionList.value)
 }
 }
