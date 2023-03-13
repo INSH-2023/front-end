@@ -14,9 +14,9 @@ onBeforeMount(()=>{
 //variable 
 
 const myRouter =useRouter()
-const userLink ='http://localhost:3000/users'
+// const userLink ='http://localhost:3000/users'
 // const userLink ='http://localhost:5000/api/users'
-// const userLink =`${import.meta.env.BASE_URL}api/users`
+const userLink =`${import.meta.env.VITE_BACK_END_HOST}/users`
 
 const userList =ref([])
 const user=ref({})

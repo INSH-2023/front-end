@@ -2,7 +2,9 @@
 import { onBeforeMount,ref } from 'vue';
 
 
-const datalink ='http://localhost:3000/events'
+// const datalink ='http://localhost:3000/events'
+const datalink =`${import.meta.env.VITE_BACK_END_HOST}/requests`
+
 const data = ref([])
 
 const getData = async()=>{

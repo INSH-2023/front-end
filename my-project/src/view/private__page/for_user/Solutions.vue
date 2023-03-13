@@ -9,7 +9,9 @@ const goMain =()=> myRouter.go(-1)
 
 console.log(params)
 const id = params.id
-const infoLink = "http://localhost:3000/solutions"
+// const infoLink = "http://localhost:3000/solutions"
+const infoLink = `${import.meta.env.VITE_BACK_END_HOST}/solutions`
+
 
 
 

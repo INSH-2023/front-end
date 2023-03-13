@@ -1,7 +1,9 @@
 <script setup>
 import {ref} from 'vue' 
 
-const solutionLink ='http://localhost:3000/solutions'
+// const solutionLink ='http://localhost:3000/solutions'
+const solutionLink =`${import.meta.env.VITE_BACK_END_HOST}/solutions`
+
 
 const title=ref('')
 const tag =ref('')

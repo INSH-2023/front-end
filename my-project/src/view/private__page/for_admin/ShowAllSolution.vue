@@ -2,7 +2,9 @@
 import{ref, onBeforeMount}from'vue'
 const isFilter=ref(false)
 const solutionList =ref([])
-const solutionLink ='http://localhost:3000/solutions'
+// const solutionLink ='http://localhost:3000/solutions'
+const solutionLink =`${import.meta.env.VITE_BACK_END_HOST}/solutions`
+
 
 // get solution 
 const getSolu =async()=>{

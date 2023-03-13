@@ -1,7 +1,8 @@
 <script setup>
 import {ref,computed} from 'vue'
 
-const userLink ='http://localhost:3000/users'
+// const userLink ='http://localhost:3000/users'
+const userLink =`${import.meta.env.VITE_BACK_END_HOST}/users`
 // const userLink ='http://localhost:5000/api/users'
 
 

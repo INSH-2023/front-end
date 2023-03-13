@@ -5,7 +5,7 @@ import BaseLoading from '../../../components/BaseLoading.vue';
 import toBackEnd from '../../../JS/fetchToBack';
 
 const requestLink="http://localhost:3000/events"
-// const requestLink="${import.meta.env.VITE_BACK_END}/events"
+// const requestLink=`${import.meta.env.VITE_BACK_END_HOST}/requests`
 // const linkTesting=`${import.meta.env.VITE_BACK_END}/`
 
 const myRouter = useRouter()
