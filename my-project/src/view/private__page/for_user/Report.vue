@@ -5,8 +5,10 @@ import {useRouter,useRoute} from 'vue-router'
 const myRouter = useRouter()
 const goBack=()=> myRouter.go(-1)
 const goMain=()=>myRouter.push({name:'services'})
-const eventLink ="http://localhost:3000/events"
-const problemsLink = "http://localhost:3000/problems"
+// const eventLink ="http://localhost:3000/events"
+// const problemsLink = "http://localhost:3000/problems"
+const eventLink =`${import.meta.env.VITE_BACK_END_HOST}/requests`
+const problemsLink = `${import.meta.env.VITE_BACK_END_HOST}/problems`
 
 const {params} = useRoute()
 const typeP =params.id
