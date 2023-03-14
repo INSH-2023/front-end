@@ -4,8 +4,8 @@ import { useRouter } from 'vue-router';
 import BaseLoading from '../../../components/BaseLoading.vue';
 import toBackEnd from '../../../JS/fetchToBack';
 
-const requestLink="http://localhost:3000/events"
-// const requestLink=`${import.meta.env.VITE_BACK_END_HOST}/requests`
+// const requestLink="http://localhost:3000/events"
+const requestLink=`${import.meta.env.VITE_BACK_END_HOST}/requests`
 // const linkTesting=`${import.meta.env.VITE_BACK_END}/`
 
 const myRouter = useRouter()
@@ -31,26 +31,24 @@ const sIsO=ref(false)
 const sIsI=ref(false)
 const sIsF=ref(false)
 
-const dataCh =computed(()=>{
-    return{
-            full_name:event.value.full_name,
-            email:event.value.email,
-            group_work:event.value.group_work,
-            service_type:event.value.service_type,
-            subject:event.value.subject,
-            status:statusCh.value,
-            date:event.value.date,
-            assign:assignCh.value,
-            useT:event.value.useT,
-            sn:event.value.sn,
-            brand:event.value.brand,
-            typeM:event.value.typeM,
-            problems:event.value.problems,
-            other:event.value.other,
-            massage:event.value.massage,
-            commentCh:commentArr.value
-        }
-})
+const dataCh =ref({})
+            // full_name:event.value.full_name,
+            // email:event.value.email,
+            // group_work:event.value.group_work,
+            // service_type:event.value.service_type,
+            // subject:event.value.subject,
+            // status:statusCh.value,
+            // date:event.value.date,
+            // assign:assignCh.value,
+            // useT:event.value.useT,
+            // sn:event.value.sn,
+            // brand:event.value.brand,
+            // typeM:event.value.typeM,
+            // problems:event.value.problems,
+            // other:event.value.other,
+            // massage:event.value.massage,
+            // commentCh:commentArr.value
+
 
 const f_name=ref('')
 const f_email=ref('')
@@ -148,9 +146,12 @@ const showInfoByID=async(v,index)=>{
     status = await getEvents(event_id.value)
     
     if(status && isEmptyOBJ.value !=true){
-        eventch.value=event.value
-        changeST(event.value.status)
-        event.value.assign==''?assignCh.value='': assignCh.value = event.value.assign
+        eventch.value = event.value
+        // console.log(eventch.value)
+        changeST(eventch.value.request_status)
+        assignCh.value = eventch.value.request_assign
+        console.log(assignCh.value)
+        // event.value.assign = await event.value.assign==''?assignCh.value='': assignCh.value = event.value.assign
         navigation('#showInfo')
         // window.location.href='#summaryInfo'
     }else{
@@ -163,8 +164,12 @@ const showInfoByID=async(v,index)=>{
 const editInfo = async(v)=>{
     
     // let S =undefined
-    let ss =await toBackEnd.editData('request',requestLink,v,dataCh.value)
-    if(ss==200){
+    dataCh.value={
+        request_status:statusCh.value,
+        request_assign:assignCh.value,
+    }
+    let [status,data] =await toBackEnd.editData('request',requestLink,v,dataCh.value)
+    if(status==200){
         console.log(statusCh.value)
         console.log(assignCh.value)
         console.log(commentCh.value)
@@ -173,13 +178,9 @@ const editInfo = async(v)=>{
         //status something
     }else{
         //status something
+        console.log(data)
+        myRouter.go(-1)
     }
-}
-
-// show Info
-const clickedInfo =()=>{
-    document.getElementById('goInfo').click()
-    console.log('Show all detail')
 }
 
 
@@ -207,6 +208,7 @@ const getEvents =async(id=undefined)=>{
         if(s==200){
             status=true
             event.value= data
+            console.log(data)
             eventStatus.value=true
              // status something
         }
@@ -293,32 +295,33 @@ const searchByKeyW=()=>{
     // f_eventList.value=[]
     console.log(f_status.value)
     // name
-    if(f_name.value.length != 0){
-        f_eventList.value = eventList.value.filter(e=>{
-        return e.full_name.toLowerCase().includes(f_name.value.toLowerCase())
-    })
-        console.log('this name filter : '+f_name.value)
-    }
+    // if(f_name.value.length != 0){
+    //     f_eventList.value = eventList.value.filter(e=>{
+    //         let full_name=`${e.request_first_name} ${e.request_last_name}`
+    //     return full_name.toLowerCase().includes(f_name.value.toLowerCase())
+    // })
+    //     console.log('this name filter : '+f_name.value)
+    // }
 
     // email
-    else if(f_email.value.length != 0){
-        f_eventList.value = eventList.value.filter(e=>e.email.toLowerCase().includes(f_email.value.toLowerCase()))
+    if(f_email.value.length != 0){
+        f_eventList.value = eventList.value.filter(e=>e.request_email.toLowerCase().includes(f_email.value.toLowerCase()))
         console.log('this  email filter : '+f_email.value)
     }
 
     // service
     else if(f_type.value.length !=0){
-        f_eventList.value = eventList.value.filter(e=>e.service_type.toLowerCase()==f_type.value.toLowerCase())
+        f_eventList.value = eventList.value.filter(e=>e.request_service_type.toLowerCase()==f_type.value.toLowerCase())
     }
 
     // service
     else if(f_subject.value.length !=0){
-        f_eventList.value = eventList.value.filter(e=>e.subject.toLowerCase()==f_subject.value.toLowerCase())
+        f_eventList.value = eventList.value.filter(e=>e.request_subject.toLowerCase()==f_subject.value.toLowerCase())
     }
 
     // stauts
     else if(f_status.value.length !=0){
-        f_eventList.value = eventList.value.filter(e=>e.status.toLowerCase() == f_status.value.toLowerCase())
+        f_eventList.value = eventList.value.filter(e=>e.request_status.toLowerCase() == f_status.value.toLowerCase())
     }
 
     show_eventList.value = f_eventList.value
@@ -401,9 +404,9 @@ const searchByKeyW=()=>{
                         <div class="flex ">
                             
                             <!-- name -->
-                            <div class="px-2 ">
+                            <!-- <div class="px-2 ">
                                 <input v-model="f_name" placeholder="Name" type="text" class="px-3 py-[4px] bg-[#E3F2FD] text-gray-600 rounded-xl focus:outline-0">
-                            </div>
+                            </div> -->
 
                             <!-- email -->
                             <div class="px-2">
@@ -521,10 +524,16 @@ const searchByKeyW=()=>{
                             
                             <td class=" font-medium py-3 px-2 text-center">
                                 <div class="  font-normal truncate ">
-                                    {{data.full_name}}
+                                    <span class="">
+                                        {{data.request_first_name}}
+                                    </span>
+                                    <span class=" pl-3">
+                                        {{ data.request_last_name }}
+                                    </span>
+                                    
                                 </div>
                                 <div class=" text-[10px] truncate font-light">
-                                    {{ data.email }}
+                                    {{ data.request_email }}
                                 </div> 
                             </td>
                             <!-- <td class=" py-3 px-2 font-light">
@@ -533,35 +542,35 @@ const searchByKeyW=()=>{
                                 </div>
                             </td> -->
                             <td class=" py-3 px-2 font-semibold">
-                                <div :style="[changeColorBy(data.service_type)] " class="w-[100px] text-center mx-auto truncate">
-                                    {{data.service_type}}
+                                <div :style="[changeColorBy(data.request_service_type)] " class="w-[100px] text-center mx-auto truncate">
+                                    {{data.request_service_type}}
                                 </div>
                             </td>
                             <td class=" py-3 px-2 font-semibold">
                                 <div class=" truncate">
-                                    {{data.subject}}                                    
+                                    {{data.request_subject}}                                    
                                 </div>
 
                             </td>
                             <td class=" py-3 px-2 font-light">
                                 <div class=" ">
-                                    {{data.date}}
+                                    {{data.request_req_date}}
                                 </div>
                             </td>
                             <td class=" p-2 text-center ">
-                                <div :style="[changeColorBy(data.status)]" class="w-[120px] mx-auto static  py-[4px] px-[8px] rounded-2xl text-[15px] font-semibold ">
-                                    {{data.status}}
+                                <div :style="[changeColorBy(data.request_status)]" class="w-[120px] mx-auto static  py-[4px] px-[8px] rounded-2xl text-[15px] font-semibold ">
+                                    {{data.request_status}}
                                 </div> 
                             </td>
                             <td class=" p-2 font-normal">
                                 <div class=" ">
-                                    {{data.assign}}
+                                    {{data.request_assign}}
                                 </div>
                             </td>                            
                             <td class=" p-2 font-semibold">
                                 <div class="flex w-fit mx-auto  ">
                                     <a    class="goInfo ">
-                                        <button @click="showInfoByID(data.id,index)">
+                                        <button @click="showInfoByID(data.requestId,index)">
                                             <img src="../../../assets/admin_page/edit.png" alt="edit_icon" class="w-[28px] h-[28px] mr-2 ">
                                         </button>
                                     </a>
@@ -589,7 +598,7 @@ const searchByKeyW=()=>{
                 </div>
 
                 <!-- first -->
-                <table class="w-full   mt-10  text-[20px] font-semibold ">
+                <table  class="w-full   mt-10  text-[20px] font-semibold ">
 
                         <!-- username -->
                         <tr >
@@ -597,7 +606,12 @@ const searchByKeyW=()=>{
                                 ของผู้ใช้
                             </th>
                             <td class=" indent-[5px] truncate font-normal">
-                                {{ event.full_name }}
+                                <span>
+                                    {{ event.request_first_name }}
+                                </span>
+                                <span class="pl-2">
+                                    {{ event.request_last_name }}
+                                </span>
                             </td>
                         </tr>
 
@@ -607,7 +621,7 @@ const searchByKeyW=()=>{
                                 Email
                             </th>
                             <td class=" indent-[5px] truncate font-normal">
-                                {{ event.email }}
+                                {{ event.request_email }}
                             </td>
                         </tr>
 
@@ -617,7 +631,7 @@ const searchByKeyW=()=>{
                                 Group
                             </th>
                             <td class=" indent-[5px] truncate font-normal">
-                                {{ event.group_work }}
+                                {{ event.request_group }}
                             </td>
                         </tr>
 
@@ -626,38 +640,38 @@ const searchByKeyW=()=>{
                             <th class="table_header text-right w-[115px]" >
                                 Service
                             </th>
-                            <td :style="[changeColorBy(event.service_type)]" class="indent-[5px] font-normal">
-                                {{ event.service_type }}
+                            <td :style="[changeColorBy(event.request_service_type)]" class="indent-[5px] font-normal">
+                                {{ event.request_service_type }}
                             </td>
                         </tr>
 
                         <!-- is OR or SF -->
-                        <tr v-show="event.service_type=='IT_Service'">
+                        <tr v-show="event.request_service_type=='IT_Service'">
                             <th class="table_header text-right w-[115px]">
                                 ประเภทของ
                             </th>
                             <td class="indent-[5px] font-normal">
-                                {{event.useT=='or'?'เป็นขององค์กร':'เป็นของส่วนตัว'}}
+                                {{event.request_use_type=='or'?'เป็นขององค์กร':'เป็นของส่วนตัว'}}
                             </td>
                         </tr>
 
                         <!-- brand -->
-                        <tr v-show="event.service_type=='IT_Service'">
+                        <tr v-show="event.request_service_type=='IT_Service'">
                             <th class="table_header text-right w-[115px]">
                                 ยี่ห้อ
                             </th>
                             <td class="indent-[5px] font-normal">
-                                {{event.brand}}
+                                {{event.request_brand}}
                             </td>
                         </tr>
 
                         <!-- number -->
-                        <tr v-show="event.service_type=='IT_Service'">
+                        <tr v-show="event.request_service_type=='IT_Service'">
                             <th class="table_header text-right w-[115px]">
                                 S/N
                             </th>
                             <td class="indent-[5px] font-normal">
-                                {{event.sn}}
+                                {{event.request_sn}}
                             </td>
                         </tr>
                 </table>
@@ -680,7 +694,7 @@ const searchByKeyW=()=>{
                 </div> -->
 
                 <!-- second  -->
-                <div v-show="event.service_type=='IT_Service'&& (event.subject=='hardware'||event.subject=='software'||event.subject=='internet')" class="mt-4 ">
+                <div v-show="event.request_service_type=='IT_Service'&& (event.request_subject=='hardware'||event.request_subject=='software'||event.request_subject=='internet')" class="mt-4 ">
                     <div class="text-[20px] font-semibold">
                         <h3 >
                         ชนิดของ Hardware 
@@ -689,12 +703,12 @@ const searchByKeyW=()=>{
                     </div>
 
                     
-                    <div v-if="event.subject=='software'||event.subject=='hardware'||event.subject=='internet'" class=" mt-4 text-[15px] font-medium">
+                    <div v-if="event.request_subject=='software'||event.request_subject=='hardware'||event.request_subject=='internet'" class=" mt-4 text-[15px] font-medium">
                         <!-- notebook -->
                         <div class="w-[85px]  p-2 bg-gray-200 rounded-xl ">
                             <img src="../../../assets/vue.svg" alt="NoteBook" class="w-[40px] mx-auto">
                             <h3 class="w-fit mx-auto text-[4px]">
-                            {{event.typeM}}
+                            {{event.request_type_matchine}}
                             </h3>
                         </div >
                     </div>
@@ -703,24 +717,24 @@ const searchByKeyW=()=>{
                 <!-- problem -->
                 <div   class="mt-4 " >
                     <div class="text-[20px] font-semibold">
-                        <h3 v-show="event.service_type=='IT_Service'">
-                            อาการของ {{event.subject}} ที่พบ
+                        <h3 v-show="event.request_service_type=='IT_Service'">
+                            อาการของ {{event.request_subject}} ที่พบ
                         </h3>  
-                        <h3 v-show="event.service_type=='PR_Service'">
-                            ความช่วยเหลือที่ต้องการเกี่ยวกับ<span class="text-rose-500 pl-2">{{event.subject}}</span> 
+                        <h3 v-show="event.request_service_type=='PR_Service'">
+                            ความช่วยเหลือที่ต้องการเกี่ยวกับ<span class="text-rose-500 pl-2">{{event.request_subject}}</span> 
                         </h3> 
                     </div>
 
                     
                     <div class="w-full grid grid-cols-6 gap-y-2 gap-x-2 mt-4 text-[15px] font-medium">
                         
-                        <div  v-for="data in event.problems" class="w-[85px] mx-auto p-2 bg-gray-200 rounded-xl ">
+                        <div v-for="(data,index) of event.request_problems" :key="index"  class="w-[85px] mx-auto p-2 bg-gray-200 rounded-xl ">
                             <img src="../../../assets/vue.svg" alt="NoteBook" class="w-[40px] mx-auto">
                             <h3 class="w-fit mx-auto text-[8px]">
                             {{data}}
                             </h3>
                         </div >
-                        <div v-if="event.other!=''"  class="w-[70px] mx-auto p-2 bg-gray-200 rounded-xl ">
+                        <div v-if="event.request_other!=''"  class="w-[70px] mx-auto p-2 bg-gray-200 rounded-xl ">
                             <img src="../../../assets/vue.svg" alt="NoteBook" class="w-[40px] mx-auto">
                             <h3 class="w-fit mx-auto text-[8px]">
                             other
@@ -732,19 +746,19 @@ const searchByKeyW=()=>{
 
                 <!-- massage other -->
                 <div   class=" w-full mt-10 ">
-                    <div v-show="event.other!=''"  class="">
+                    <div v-show="event.request_other!=''"  class="">
                         <label for="other_1" class="ml-2 text-[17px] font-semibold inline-b">
                             กรณีเลือก<span class="text-rose-500 pl-2">อื่นๆโปรดระบุ</span>
                         </label>
                         <span class="text-[13px] ml-2">(กรณีไม่พบปัญหาข้างต้น)</span>
-                        <textarea v-model="event.other"  name="other" id="other_1"  disabled class="w-full h-[100px] resize-none pt-[10px] block rounded-xl bg-gray-300 p-2 focus:outline-0" ></textarea>
+                        <textarea v-model="event.request_other"  name="other" id="other_1"  disabled class="w-full h-[100px] resize-none pt-[10px] block rounded-xl bg-gray-300 p-2 focus:outline-0" ></textarea>
                     </div>
                     
-                    <div v-show="event.massage!=''" class="mt-3">
+                    <div v-show="event.request_message!=''" class="mt-3">
                         <label for="other_2" class="ml-2 text-[17px] font-semibold">
                             ระบุรายละเอียดของปัญหาที่พบ (ถ้ามี)
                         </label>
-                        <textarea v-model="event.massage"  name="other" id="other_2"  disabled class="w-full h-[100px] resize-none block bg-gray-300 rounded-xl p-2 focus:outline-0"></textarea>
+                        <textarea v-model="event.request_message"  name="other" id="other_2"  disabled class="w-full h-[100px] resize-none block bg-gray-300 rounded-xl p-2 focus:outline-0"></textarea>
                     </div>
                     <div>
 
@@ -779,7 +793,7 @@ const searchByKeyW=()=>{
                                 Assign
                             </h5>
                             <select v-model="assignCh" name="assign" id="assign" class="w-[200px] mt-2 p-1 bg-gray-400 text-gray-700 font-semibold  rounded">
-                                <option value='Not_assign' selected disabled>เลือกผู้รับผิดชอบ</option>
+                                <option value="Not_assign" selected disabled>เลือกผู้รับผิดชอบ</option>
                                 <option value="Testing_Tseing " class="font-semibold bg-gray-300">Testing Tseing</option>
                                 <option value="gnitset_testing" class="font-semibold bg-gray-300">gnitset testing</option>
                                 <option value="Testing_Tseing " class="font-semibold bg-gray-300">Testing Tseing</option>
@@ -812,31 +826,31 @@ const searchByKeyW=()=>{
                 <hr class="w-full h-[10px] mt-10">
 
                 <!-- comment -->
-                <div   class=" w-full mt-4 ">
+                <!-- <div   class=" w-full mt-4 ">
 
 
                     <label for="other_1" class="ml-2 text-[20px] font-light inline-b">
                             Comment
                     </label>
 
-                    <!-- old comments -->
+                    old comments
                     <div class="comment_old w-[540px] h-[300px] mt-3 mx-auto  overflow-y-auto bg-gray-500 rounded-t-lg">
                         <div class="w-[530px] h-fit  pt-3 px-3">
-                            <!-- comment -->
+                            comment
                             <div v-for="(com,index) in commentArr" class="w-full   pt-3 p-2 pb-4 mb-4 bg-[#1976D2] text-[#BBDEFB] rounded-lg">
                                 <h5 class=" pl-2 text-sm text-[#64B5F6] font-semibold italic">
-                                    <!-- 13:56 13/2/2566 -->
+                                    13:56 13/2/2566
                                     {{ com.date }}
                                 </h5>
                                 <p class="indent-[10px] pl-4 font-light">
-                                    <!-- นี่เป็นการทดสอบนะครับและทดสอบเพื่อที่เราตะได้รู้ว่าเรานั้นสามารถทำการทดสอบกับข้อความของข้อความเหล่านี้ได้และเราจะไม่หยุดทดสอบจนกว่าจะได้ทดสอบเพื่อที่จะไม่โดนหักคะแนน -->
+                                    นี่เป็นการทดสอบนะครับและทดสอบเพื่อที่เราตะได้รู้ว่าเรานั้นสามารถทำการทดสอบกับข้อความของข้อความเหล่านี้ได้และเราจะไม่หยุดทดสอบจนกว่าจะได้ทดสอบเพื่อที่จะไม่โดนหักคะแนน
                                     {{ com.comment }}
                                 </p>                                
                             </div>
                         </div>
                     </div>
 
-                    <!-- new comment -->
+                    new comment
                     <div  class="comment_new w-[540px] h-fit  mx-auto ">
 
                         <textarea v-model="commentCh"  name="other" id="other_1" placeholder="text something ....."  class="w-full h-[70px] resize-none pt-[10px] block  bg-gray-300 p-2  focus:outline-0 " ></textarea>                  
@@ -845,7 +859,7 @@ const searchByKeyW=()=>{
                             Post Comment
                         </button>                            
                     </div>
-                </div>
+                </div> -->
             </div>
 
             <button @click="navigation()" class="absolute top-[15px] right-[15px] font-bold text-[30px]">
@@ -865,7 +879,7 @@ const searchByKeyW=()=>{
                 <button @click="myRouter.go(-1)" class="w-full h-fit text-center mx-auto p-2 bg-gray-300 hover:bg-rose-300">
                     ย้อนกลับ
                 </button>
-                <button @click="submitt(event.id)" class="w-full h-fit text-center mx-auto p-2 bg-gray-300 hover:bg-green-300" >
+                <button @click="submitt(event.requestId)" class="w-full h-fit text-center mx-auto p-2 bg-gray-300 hover:bg-green-300" >
                     ทำการแก้ไข
                 </button>                    
             </div>
@@ -882,7 +896,7 @@ const searchByKeyW=()=>{
                 <button @click="myRouter.go(-1)" class="w-full h-fit text-center mx-auto p-2 bg-gray-300 hover:bg-rose-300">
                     ย้อนกลับ
                 </button>
-                <button @click="deleteItem(event.id)" class="w-full h-fit text-center mx-auto p-2 bg-gray-300 hover:bg-green-300">
+                <button @click="deleteItem(event.requestId)" class="w-full h-fit text-center mx-auto p-2 bg-gray-300 hover:bg-green-300">
                     ลบเลย !!
                 </button>                    
             </div>
