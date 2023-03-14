@@ -51,22 +51,22 @@ const goProblemsList =()=>myRouter.push({name:'problemsList'})
                         <hr class="full border-[1px] mt-2 border-gray-400">
                         
                     </li>
-                    <li class="mt-3">
+                    <!-- <li class="mt-3">
                         <button @click="goWriteS" class="flex w-fit  font-semibold text-gray-800 ">
                             <img src="../assets/admin_page/new-document.png" alt="" class="w-[28px] h-[28] my-auto">
                             <span class="ml-3">Write solutions</span> 
                         </button>
                         <hr class="full border-[1px] mt-2 border-gray-400">
                         
-                    </li>
-                    <li class="mt-3">
+                    </li> -->
+                    <!-- <li class="mt-3">
                         <button @click="goShowAllSolution" class="flex w-fit  font-semibold text-gray-800 ">
                             <img src="../assets/admin_page/dashboard.png" alt="" class="w-[28px] h-[28] my-auto">
                             <span class="ml-3">All Solution</span> 
                         </button>
                         <hr class="full border-[1px] mt-2 border-gray-400">
                         
-                    </li>
+                    </li> -->
                     <li class="mt-3">
                         <button @click="goProblemsList" class="flex w-fit  font-semibold text-gray-800 ">
                             <img src="../assets/admin_page/dashboard.png" alt="" class="w-[28px] h-[28] my-auto">
