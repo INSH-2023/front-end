@@ -1,111 +1,144 @@
 let toBackEnd={
 
    async delete(name,link,id){
+      // variable
+      let return_data =[]
       let status =undefined
-         console.log('this delete function name :'+name);
-         console.log('this delete function link :'+link);
-         console.log('this delete function id :'+id)
+      // show log
+      console.log(`delete ${name} : ${id} => ${link}`);
+      // fetch
+      let res = await fetch(`${link}/${id}`,{
+         method:'DELETE'
+      })
+      if(res.status==200){
+         status=res.status
+         console.log(`delete ${name} sucessful by ${id} `)
+      }else{
+         status=res.status
+         console.log(`cannot delete ${name} by ${id}`)
+      }
+      return_data.push(status)
+      return_data.push(await res.json())
 
-         let res = await fetch(`${link}/${id}`,{
-            method:'DELETE'
-        })
-        if(res.status==200){
-            status=res.status
-            console.log('delete sucessful by ID : '+id)
-        }else{
-            status=res.status
-            console.log('error cannot delete data by ID :'+id)
-        }
-      
       return status
    },
 
    async getData(name,link){
+      // variable
       let return_data =[]
       let status = undefined
-         
-         //get add data
-         console.log(name);
-         console.log(link);
-         let res =await fetch(link,{
-            method:'GET'
-         })
-         if(res.status==200){
-            status =res.status
-            return_data.push(await res.json())
-            console.log(`get data ${name} successfull`)
-            console.log(return_data)
-         }else{
-            console.log('cannot get data')
-            status = res.status
-         }
-      console.log(`status ${status} of ${name}`)
-      return_data.push(status)
+      // show log
+      console.log(`get data ${name} => ${link}`)
+      // fetch
+      let res =await fetch(link,{
+         method:'GET'
+      })
+      if(res.status==200){
+         let data = await res.json()
+         status =res.status
+         return_data.push(status)
+         return_data.push(data)
+         console.log(`get data ${name} successfull`)
+         console.log(data)
+         // console.log(return_data)
+      }else{
+         console.log(`cannot get data ${name}`)
+         status = res.status
+         return_data.push(status)
+         return_data.push(await res.json())
+      }
+      
+
       return return_data
          
    },
 
    async getDataBy(name,link,id){
+      // variable
       let return_data =[]
       let status = undefined
-         // get data by id
-         let data = {}
-         console.log(name);
-         console.log(link);
-         console.log(id);
-         
-         let res = await fetch(`${link}/${id}`,{
-            method:'GET'
-         })
-         if(res.status==200){
-            data = await res.json()
-            status =res.status
-            return_data.push(data)
-            console.log(`get data ${name} by ${id} successfull`)
-            console.log(return_data)
-         }else{
-            console.log('cannot get data')
-            status =res.status
+      // show log
+      console.log(`get data ${name} : ${id} => ${link}`);
+      // fetch    
+      let res = await fetch(`${link}/${id}`,{
+         method:'GET'
+      })
+      if(res.status==200){
+         let [data] = await res.json()
+
+         if(name=='request'){
+            if(data.request_problems.match(","))data.request_problems = data.request_problems.split(",")
+            else data.request_problems=[data.request_problems]               
          }
-      console.log(`status ${status} of ${name}`)
-      return_data.push(status)
+
+         status =res.status
+         return_data.push(status)
+         return_data.push(data)
+         console.log(`get data ${name} by ${id} successfull`)
+         console.log(return_data)
+      }else{
+         console.log(`cannot get data ${name} by ${id}`)
+         status =res.status
+         return_data.push(status)
+         return_data.push(await res.json())
+      }
+      
+
       return return_data
    },
 
    async editData(name,link,id,data){
-      let ss =undefined
+      // variable
+      let return_data =[]
+      let status =undefined
       // let name =eName.value.split(' ')
-      console.log('this is edit-data : '+name)
-      console.log('this is data of edit-data: '+data)
-      // let {
-      //    first_name:first_name,
-      //    last_name:last_name,
-      //    email:email,
-      //    role:role,
-      //    office:office,
-      //    position:position,
-      //    passW:passW,
-      //    group_work:group_work,
-      //    status:status
-      // }=data
-      // let {fname,lname,email,role,office,position,passW,group,s}=data
+      // show log
+      console.log(`edit ${name} : ${id} => ${link}`)
+      // fetch
+      let res = await fetch(`${link}/${id}`,{
+         method:'PUT',
+         headers:{ "content-type": "application/json"},
+         body:JSON.stringify(data)
+      })
 
-        let res = await fetch(`${link}/${id}`,{
-            method:'PUT',
-            headers:{
-                "content-type": "application/json"
-            },
-            body:JSON.stringify(data)
-        })
-        if(res.status==200){
-            console.log('update successful user')
-            ss=res.status
-        }else{
-            console.log('error cannot update user')
-            ss=res.status
-        }
-      
-      return ss
+      if(res.status==200){
+         console.log(`update ${name} successful`)
+         status=res.status
+      }else{
+         console.log(`error cannot update ${name}`)
+         status=res.status
+      }
+      return_data.push(status)
+      return_data.push(await res.json())
+
+      return return_data
+   },
+
+   async createData(name,link,data){
+      // variable
+      let return_data =[]
+      let status =undefined
+      console.log(`create data ${name} => ${link}`)
+      // show log
+      console.log(`${name} => ${link}`)
+      // fetch
+      let res = await fetch(link,{
+         method:'POST',
+         headers:{ "content-type": "application/json"},
+         body:JSON.stringify(data)
+      })
+
+      if(res.status==200){
+         status=res.status
+         console.log(`create ${name} successful`)
+      }else{
+         status=res.status
+         console.log(`error cannot create ${name}`)
+      }
+      return_data.push(status)
+      return_data.push(await res.json())
+
+      return return_data
    }
 }
 
