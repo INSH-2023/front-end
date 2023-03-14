@@ -58,16 +58,16 @@ const isActive=ref(false)
 
 let dataCh =computed(()=>{
     return{
-        first_name: eFName.value,
-        last_name: eLName.value,
-        email: eEmail.value,
-        role: eRole.value,
-        office: eOffice.value,
-        position: ePosition.value,
-        passW: ePw.value,
-        group_work: eGroup.value,
-        status: eStatus.value,
-        cPassW: eCPw.value
+        user_first_name: eFName.value,
+        user_last_name: eLName.value,
+        user_email: eEmail.value,
+        user_role: eRole.value,
+        user_office: eOffice.value,
+        user_position: ePosition.value,
+        user_password: ePw.value,
+        user_group: eGroup.value,
+        user_status: eStatus.value,
+        user_cPassW: eCPw.value
     }
 
     })
@@ -125,6 +125,7 @@ const getUsers =async(id=undefined)=>{
         let [data,s] = await toBackEnd.getDataBy('user',userLink,id)
         if(s==200)status = true
         user.value=data
+        console.log(user.value)
     }
 
     return status
@@ -150,6 +151,7 @@ const deleteUser =async(v)=>{
 const showInfoByID=async(v,index)=>{
     user.value={}
     user_id.value=v
+
     let status =false
     console.log('value : ',v)
     console.log('index : ',index)
@@ -162,8 +164,9 @@ const showInfoByID=async(v,index)=>{
     // console.log(getUsers(v))
     // console.log('is user obj is empty ? : '+isEmptyOBJ.value)
     status = await getUsers(user_id.value)
-    
+    console.log('helloworld')
     if( status && isEmptyOBJ.value !=true){
+
         window.location.href='#showInfo'
         // detail[index].setAttribute("href","#showInfo")
         // detail[index].click()
@@ -177,17 +180,17 @@ const assignDetail =(b)=>{
     if(user.value.lenght!=0){
         if(b==true){
             isEdit.value=b
-            eFName.value=user.value.first_name
-            eLName.value=user.value.last_name
-            eEmail.value=user.value.email
-            eRole.value=user.value.role
-            eOffice.value=user.value.office
-            eGroup.value=user.value.group_work
-            ePosition.value=user.value.position
-            eStatus.value=user.value.status
-            ePw.value=user.value.passW
-            eCPw.value=user.value.passW
-            isActive.value=user.value.status=='active'?true:false
+            eFName.value=user.value.user_first_name
+            eLName.value=user.value.user_last_name
+            eEmail.value=user.value.user_email
+            eRole.value=user.value.user_role
+            eOffice.value=user.value.user_office
+            eGroup.value=user.value.user_group
+            ePosition.value=user.value.user_position
+            eStatus.value=user.value.user_status
+            ePw.value=user.value.user_password
+            eCPw.value=user.value.user_password
+            isActive.value=user.value.user_status=='active'?true:false
             console.log('open edit mode')
         }else if(b==false){
             isEdit.value=b
@@ -213,7 +216,7 @@ const assignDetail =(b)=>{
 const submitEdit =async(id)=>{
 
     // if(validate.vUserCreate(dataCh.value,lenghtOfInput) !=true){
-        let status = await toBackEnd.editData('user',userLink,id,dataCh.value)
+        let [status,data] = await toBackEnd.editData('user',userLink,id,dataCh.value)
             console.log(status)
             if(status==200?true:false){
                 await getUsers()
@@ -223,6 +226,7 @@ const submitEdit =async(id)=>{
                 // status something
             }else{
                 closeDetail()
+                console.log(data)
                 // status something
             }        
     // }else{
@@ -288,27 +292,27 @@ const resetF=()=>{
 const searchByKeyW=()=>{
     f_userList.value=[]
     // name
-    if(f_name.value.length != 0){
-        f_userList.value = userList.value.filter(u=>{
-        let name =`${u.first_name} ${u.last_name}`
-        return name.toLowerCase().includes(f_name.value.toLowerCase())
-    })
-        console.log('this name filter : '+f_name.value)
-    }
+    // if(f_name.value.length != 0){
+    //     f_userList.value = userList.value.filter(u=>{
+    //     let name =`${u.first_name} ${u.last_name}`
+    //     return name.toLowerCase().includes(f_name.value.toLowerCase())
+    // })
+    //     console.log('this name filter : '+f_name.value)
+    // }
 
     // email
-    else if(f_email.value.length != 0){
-        f_userList.value = userList.value.filter(u=>u.email.toLowerCase().includes(f_email.value.toLowerCase()))
+    if(f_email.value.length != 0){
+        f_userList.value = userList.value.filter(u=>u.user_email.toLowerCase().includes(f_email.value.toLowerCase()))
         console.log('this  email filter : '+f_email.value)
     }
     // status
     else if(f_status.value.length != 0){
-        f_userList.value = userList.value.filter(u=>u.status==f_status.value)
+        f_userList.value = userList.value.filter(u=>u.user_status==f_status.value)
         console.log('this status filter : '+f_status.value)
     }
     // reposibility
     else if(f_reposibility.value.length != 0){
-        f_userList.value = userList.value.filter(u=>u.role.toLowerCase()==f_reposibility.value.toLowerCase())
+        f_userList.value = userList.value.filter(u=>u.user_role.toLowerCase()==f_reposibility.value.toLowerCase())
         console.log('this role filter : '+f_reposibility.value)
     }
 
@@ -337,9 +341,9 @@ const searchByKeyW=()=>{
                         <div class="flex ">
 
                             <!-- name -->
-                            <div class="px-2 ">
+                            <!-- <div class="px-2 ">
                                 <input v-model="f_name" placeholder="Name" type="text" class="px-3 py-[4px] bg-[#E3F2FD] text-gray-600 rounded-xl focus:outline-0">
-                            </div>
+                            </div> -->
 
                             <!-- email -->
                             <div class="px-2">
@@ -428,34 +432,34 @@ const searchByKeyW=()=>{
                             <td class="]     px-2 py-2 font-medium ">
                                 <div class="ml-4">
                                     <div class="w-full ml-3 text-[18px] font-light truncate mx-auto">
-                                        {{data.first_name}} {{ data.last_name }}
+                                        {{data.user_first_name}} {{ data.user_last_name }}
                                     </div>
                                     <div class="w-full ml-3 text-[10px] truncate mx-auto">
-                                        {{ data.email }}
+                                        {{ data.user_email }}
                                     </div>                                     
                                 </div>
 
                             </td>
                             <td class=" text-[15px] px-2 py-2 font-light text-l">
                                 <div class="w-full truncate mx-auto">
-                                    {{data.group_work}}
+                                    {{data.user_group}}
                                 </div>
                             </td>
                             <td class=" px-2 py-2 text-[20px] font-semibold ">
-                                <div class="w-full truncate mx-auto" :style="data.status=='active'?'color:green':'color:red'">
-                                    {{data.status}}                                    
+                                <div class="w-full truncate mx-auto" :style="data.user_status=='active'?'color:green':'color:red'">
+                                    {{data.user_status}}                                    
                                 </div>
 
                             </td>
                             <td class=" px-2 py-2 text-[20px] font-light">
                                 <div class=" mx-auto truncate">
-                                {{data.role}}
+                                {{data.user_role}}
                                 </div>
                             </td>
                             <td class=" px-2 py-2 font-semibold">
                                 <div class="flex w-fit mx-auto truncate ">
                                     <a    class="goInfo w-[28px] m-2 ">
-                                        <button @click="showInfoByID(data.id,index)">
+                                        <button @click="showInfoByID(data.userId,index)">
                                             <img src="../../../assets/admin_page/edit.png" alt="edit_icon" >
                                         </button>
                                     </a>                                    
@@ -488,19 +492,19 @@ const searchByKeyW=()=>{
                                 <th  class="table_header w-[120px] h-fit pt-2 text-right font-normal">
                                     Status 
                                 </th>
-                                <td :style="[user.status=='inactive'?'color:red':'color: green']" class="pt-2 pl-2 indent-[5px] font-semibold text-gray-600 ">
-                                    {{ user.status }}
+                                <td :style="[user.user_status=='inactive'?'color:red':'color: green']" class="pt-2 pl-2 indent-[5px] font-semibold text-gray-600 ">
+                                    {{ user.user_status }}
                                 </td>
                             </tr>
                             <tr>
                                 <th  class="table_header w-[120px] h-fit pt-2 text-right font-normal">
                                     Name
-                                    <span> 
+                                    <!-- <span> 
                                         {{  }}
-                                    </span>
+                                    </span> -->
                                 </th>
                                 <td class="pt-2 pl-2 indent-[5px] font-light text-gray-600">
-                                    {{ user.first_name }} {{ user.last_name }}
+                                    {{ user.user_first_name }} {{ user.user_last_name }}
                                 </td>
                             </tr>
                             
@@ -510,7 +514,7 @@ const searchByKeyW=()=>{
                                     E-mail
                                 </th>
                                 <td class="pt-2 pl-2 indent-[5px] font-light text-gray-600">
-                                    {{ user.email }}
+                                    {{ user.user_email }}
                                 </td>
                             </tr>
 
@@ -520,7 +524,7 @@ const searchByKeyW=()=>{
                                     Role
                                 </th>
                                 <td class="pt-2 pl-2 indent-[5px] font-light text-gray-600">
-                                    {{ user.role }}
+                                    {{ user.user_role }}
                                 </td>
                             </tr>
 
@@ -530,7 +534,7 @@ const searchByKeyW=()=>{
                                     Office
                                 </th>
                                 <td class="pt-2 pl-2 indent-[5px] font-light text-gray-600">
-                                    {{ user.office }}
+                                    {{ user.user_office }}
                                 </td>
                             </tr>
 
@@ -540,7 +544,7 @@ const searchByKeyW=()=>{
                                     Group
                                 </th>
                                 <td class="pt-2 pl-2 indent-[5px]  font-light text-gray-600">
-                                    {{ user.group_work }}
+                                    {{ user.user_group}}
                                 </td>
                             </tr>
 
@@ -550,7 +554,7 @@ const searchByKeyW=()=>{
                                     Position
                                 </th>
                                 <td class="w-[100px] h-fit pt-2 pl-2 indent-[5px] font-light text-gray-600">
-                                    {{ user.position }}
+                                    {{ user.user_position }}
                                 </td>
                             </tr>
                         </table>
@@ -748,7 +752,7 @@ const searchByKeyW=()=>{
                 <button @click="myRouter.go(-1)" class="w-full h-fit text-center mx-auto p-2 bg-gray-300 hover:bg-rose-300">
                     ย้อนกลับ
                 </button>
-                <button @click="submitEdit(user.id)" class="w-full h-fit text-center mx-auto p-2 bg-gray-300 hover:bg-green-300">
+                <button @click="submitEdit(user.userId)" class="w-full h-fit text-center mx-auto p-2 bg-gray-300 hover:bg-green-300">
                     ทำการแก้ไข
                 </button>                    
             </div>
@@ -765,7 +769,7 @@ const searchByKeyW=()=>{
                 <button @click="myRouter.go(-1)" class="w-full h-fit text-center mx-auto p-2 bg-gray-300 hover:bg-rose-300">
                     ย้อนกลับ
                 </button>
-                <button @click="deleteUser(user.id)" class="w-full h-fit text-center mx-auto p-2 bg-gray-300 hover:bg-green-300">
+                <button @click="deleteUser(user.userId)" class="w-full h-fit text-center mx-auto p-2 bg-gray-300 hover:bg-green-300">
                     ลบเลย !!
                 </button>                    
             </div>
