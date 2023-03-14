@@ -1,6 +1,6 @@
 <script setup>
 import {ref,computed,onBeforeMount} from 'vue'
-
+import toBackEnd from '../../../JS/fetchToBack';
 // const problemsLink='http://localhost:3000/problems'
 const problemsLink=`${import.meta.env.VITE_BACK_END_HOST}/problems`
 
@@ -13,31 +13,31 @@ const subjectCr=ref('none')
 const isEdit =ref(false)
 // get  problem
 const getP =async(v)=>{
-    if(v != undefined){
-    const res = await fetch(`${problemsLink}/${v}`,{
-        method:'GET'
-    })
-    if(res.status==200){
-        problemList.value=await res.json()
-        splitProblems(currentPage.value)
-        console.log('get problems by value successful')
-        console.log(v)
-    }else{
-        console.log('error something cannot get data by value successful')
-    }
-    }else
+
+    console.log(`id : ${v}`)
+
     if(v == undefined){
-        const res = await fetch(problemsLink,{
-        method:'GET'
-    })
-    if(res.status==200){
-        problemList.value=await res.json()
-        splitProblems(currentPage.value)
-        console.log('get problems successful')
-        console.log(v)
-    }else{
-        console.log('error something cannot get data')
-    }
+
+        const [status,data]=await toBackEnd.getData('problem',problemsLink)
+        if(status==200){
+            problemList.value=data
+            splitProblems(currentPage.value)
+            console.log(data)
+        }else{
+            //status something
+            console.log(data)
+        }
+    }else
+    if(v != undefined){
+
+        const [status,data] = await toBackEnd.getDataBy('problem',problemsLink,v)
+        if(status==200){
+            problemList.value=data
+            splitProblems(currentPage.value)
+            console.log(data)
+        }else{
+            console.log(data)
+        }
     }
 
 }
@@ -163,7 +163,7 @@ const subjectCh=(event)=>{
     let type =event.target.value.trim()
     if(type != subjectCr.value){
         subjectCr.value=type
-        console.log('hello world from change subject',subjectCr.value)
+        console.log('change from subject',subjectCr.value)
         // getP(type)    
     }else 
     if(type == subjectCr.value){
@@ -270,10 +270,10 @@ const subjectCh=(event)=>{
                 <div class=" grid grid-cols-4 gap-4 mt-[15px] ml-10 text-center">
                     <div :id="`card_${index}`" @mouseover="hoverFn(true,index)" @mouseleave="hoverFn(false,index)"   v-for="(p,index) in problemSplit" :key="index" class="card block w-full h-[175px] mx-auto bg-[#EAE0D5] rounded-lg">
                         <div :id="`info_${index}`" class="info ">
-                            <img :src="p.img" alt="logo" class="w-[80px] mx-auto mt-6 ">
+                            <img src="../../../assets/vue.svg" alt="logo" class="w-[80px] mx-auto mt-6 ">
                             <!-- ชื่อ -->
                             <h4 class="text-[20px] mt-6 font-light">
-                                {{ p.name }}
+                                {{ p.problem_problem }}
                             </h4>                           
                         </div>
                         <div :id="`edit_${index}`" style="display: none;" class="edit  mt-[20px] ">
