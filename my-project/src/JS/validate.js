@@ -6,19 +6,19 @@ const validate={
         console.log(data)
         console.log(lenghtOfText)
         
-        let {first_name:fname,
-            last_name:lname,
-            email:email,
-            role:role,
-            office:office,
-            position:position,
-            passW:password,
-            group_work:group,
-            status:status,
-            cPassW:cPassword
+        let {user_first_name:fname,
+            user_last_name:lname,
+            user_email:email,
+            user_role:role,
+            user_office:office,
+            user_position:position,
+            user_password:password,
+            user_group:group,
+            user_status:status,
+            user_cPassW:cPassword
             } = data
         
-        let {fnameL,lnameL,emailL,passwordL,cPasswordL}= lenghtOfText
+        let {fnameL,lnameL,emailL,passwordL,empCodeL}= lenghtOfText
     //     let email = eEmail.value+organization
     //     // fNameS.value=undefined
     //     // eNameS.value=undefined
@@ -31,7 +31,10 @@ const validate={
     //     // roleS.value =undefined
     //     // eEmail.value=email.value+organization
         
-        
+        // if(empCode.length == 0){
+        //     console.log('Please input ur employee code')
+        //     vStatus =true
+        // }
         if(fname.length == 0){
             console.log('Please input ur first name')
             vStatus =true
@@ -68,12 +71,16 @@ const validate={
             console.log('Please input ur confirm password')
             vStatus =true
         }
-        if(status.length==0){
-            console.log('Please input ur confirm password')
-            vStatus =true
-        }
+        // if(status.length==0){
+        //     console.log('Please input ur confirm password')
+        //     vStatus =true
+        // }
+        // if(empCode.length>empCodeL){
+        //     console.log(`lenght of employee code more then ${empCodeL}`)
+        //     vStatus =true
+        // }
         if(fname.length>fnameL){
-            console.log(`lenght of last name more then ${fnameL}`)
+            console.log(`lenght of first name more then ${fnameL}`)
             vStatus =true
         }
         if(lname.length>lnameL){
@@ -84,7 +91,7 @@ const validate={
             console.log(`lenght of email more then ${emailL}`)
             vStatus =true
         }
-        if(this.vEmail(email+organization)){
+        if(!this.vEmail(email)){
             console.log('this email invalid')
             vStatus =true
         }
@@ -92,8 +99,8 @@ const validate={
             console.log(`lenght of password more then ${passwordL}`)
             vStatus =true
         }
-        if(cPassword.length>cPasswordL){
-            console.log(`lenght of password more then ${cPasswordL}`)
+        if(cPassword.length>passwordL){
+            console.log(`lenght of password more then ${passwordL}`)
             vStatus =true
         }  
         if(password !=cPassword){
@@ -112,6 +119,10 @@ const validate={
         } else {
             return false;
         }
+    },
+    splitProblem (problem){
+        let problemArr = problem.split(",")
+        return problemArr
     }
 
 }
