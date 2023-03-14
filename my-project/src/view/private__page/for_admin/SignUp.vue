@@ -1,11 +1,13 @@
 <script setup>
 import {ref,computed} from 'vue'
-
+import validate from '../../../JS/validate';
+import toBackEnd from '../../../JS/fetchToBack'
+import BaseHeader from '../../../components/BaseHeader.vue';
 // const userLink ='http://localhost:3000/users'
 const userLink =`${import.meta.env.VITE_BACK_END_HOST}/users`
 // const userLink ='http://localhost:5000/api/users'
 
-
+const empCode=ref('')
 const fName=ref('')
 const lName =ref('')
 const email = ref('')
@@ -18,12 +20,21 @@ const cPassW = ref('')
 const organization ='@moralcenter.or.th'
 
 // lenght
-const fNameL=30
-const lNameL=30
-const emailL=30
-const passWL=14
 
+// const fNameL=30
+// const lNameL=30
+// const emailL=30
+// const passWL=14
+
+const lenghtOfInput={
+    fNameL:100,
+    lNameL:100,
+    emailL:100,
+    passWL:14,
+    empCodeL:100
+}
 // style
+const empCodeS=ref(undefined)
 const fNameS=ref(undefined)
 const lNameS=ref(undefined)
 const emailS=ref(undefined)
@@ -34,119 +45,24 @@ const roleS =ref(undefined)
 const passWS =ref(undefined)
 const cPassWS =ref(undefined)
 
-// validate
-const validate=()=>{
-    let vStatus =false
-
-    fNameS.value=undefined
-    lNameS.value=undefined
-    emailS.value=undefined
-    groupS.value =undefined
-    passWS.value =undefined
-    cPassWS.value =undefined
-    positionS.value=undefined
-    officeS.value =undefined
-    roleS.value =undefined
-    email.value=email.value+organization
-
-    if(fName.value.length==0){
-        console.log('Please input ur first name')
-        fNameS.value=false
-        vStatus =true
-        
-    }
-    if(lName.value.length==0){
-        console.log('Please input ur last name')
-        lNameS.value=false
-        vStatus =true
-    }
-    if(email.value.length==0){
-        console.log('Please input ur email')
-        emailS.value=false
-        vStatus =true
-    }
-    if(group.value.length==0){
-        console.log('Please input ur group')
-        groupS.value=false
-        vStatus =true
-    }
-    if(position.value.length==0){
-        console.log('Please input ur position')
-        positionS.value=false
-        vStatus =true
-    }
-    if(office.value.length==0){
-        console.log('Please input ur office')
-        officeS.value=false
-        vStatus =true
-    }
-    if(role.value.length==0){
-        console.log('Please input ur role')
-        roleS.value=false
-        vStatus =true
-    }
-    if(passW.value.length==0){
-        console.log('Please input ur password')
-        passWS.value=false
-        vStatus =true
-    }
-    if(cPassW.value.length==0){
-        console.log('Please input ur confirm password')
-        cPassWS.value=false
-        vStatus =true
-    }
-    if(fName.value.length>fNameL){
-        console.log(`lenght of first name more then ${fNameL}`)
-        fNameS.value=false
-        vStatus =true
-    }
-    if(lName.value.length>lNameL){
-        console.log(`lenght of last name more then ${lNameL}`)
-        lNameS.value=false
-        vStatus =true
-    }
-    if(email.value.length>emailL){
-        console.log(`lenght of email more then ${emailL}`)
-        emailS.value=false
-        vStatus =true
-    }
-    if(valFormEmail(email.value)==false){
-        console.log('this email invalid')
-        emailS.value=false
-        vStatus =true
-    }
-    if(passW.value.length>passWL){
-        console.log(`lenght of password more then ${passWL}`)
-        passWS.value=false
-        vStatus =true
-    }
-    if(cPassW.value.length>passWL){
-        console.log(`lenght of password more then ${passWL}`)
-        cPassWS.value=false
-        vStatus =true
-    }  
-    if(passW.value !=cPassW.value){
-        console.log('password not match')
-        passWS.value=false
-        cPassWS.value=false
-        vStatus =true
+let dataCh =computed(()=>{
+    return{
+        user_emp_code:empCode.value,
+        user_first_name: fName.value,
+        user_last_name: lName.value,
+        user_email: `${email.value}${organization}`,
+        user_role: role.value,
+        user_office: office.value,
+        user_position: position.value,
+        user_password: passW.value,
+        user_group: group.value,
+        user_status: 'inactive',
+        user_cPassW: cPassW.value
     }
 
-    return vStatus
-}
+})
 
-// re
 
-// validate email
-const valFormEmail = (input) => {
-    let valid =
-      /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
-    if (input.match(valid)) {
-      return true;
-    } else {
-      return false;
-    }
-}
 
 // modify email
 // const emailM=(event)=>{
@@ -159,35 +75,15 @@ const submittS =ref(undefined)
 const submittform =async()=>{
     // let status=undefined
     // goRotate()
-    if(validate()){
+    if(validate.vUserCreate(dataCh.value,lenghtOfInput)){
         console.log('cannot create new user')
     }else{
-        
-    const res =await fetch(userLink,{
-        method:'POST',
-        headers:{
-            "content-type": "application/json"
-        },
-        body:JSON.stringify({
-            first_name:fName.value.trim(),
-            last_name:lName.value.trim(),
-            email:email.value.trim(),
-            role:role.value.trim(),
-            office:office.value.trim(),
-            position:position.value.trim(),
-            passW:passW.value.trim(),
-            group_work:group.value.trim(),
-            status:'inactive',
-
-            
-        })
-    })
-    if(res.status==201){
-        console.log('form is create user successfull')
-        clear()
-    }else{
-        console.log('error something maybe try again later')
-    } 
+        let [status,data]=await toBackEnd.createData('signUp',userLink,dataCh.value)
+        if(status==200){
+            console.log(data)
+        }else{
+            console.log(data)
+        }
     }
     
 }
@@ -207,6 +103,7 @@ const clear=()=>{
     cPassW.value =''
 
     // status
+    empCode.value=undefined
     fNameS.value=undefined
     lNameS.value=undefined
     emailS.value=undefined
@@ -267,17 +164,22 @@ const goRotate =()=>{
     <div>
         <div>
             <!-- header -->
-            <div class="w-full text-center font-semibold text-[40px] pt-6">
-                <div class="flex w-fit mx-auto">
-                    <img src="../../../assets/admin_page/addUser.png" alt="users_icon" class="w-[50px] h-[50px] mr-4 my-auto">
-                    Add User
-                </div>
-                <hr class="mt-3 bg-gray-700  w-[1170px] h-[3px]">
-            </div>
+            <BaseHeader title="addUser" path ="vue.svg" />
 
             <!-- body -->
-            <div class="w-[1200px] mt-10">
+            <div class="w-[1200px] mt-4">
                 <div class=" w-[600px] mx-auto p-1 text-[22px]">
+                    <!-- Employee code -->
+                    <div class="relative h-[60px]">
+                        <h4 v-show="empCode.length>0" class="text-sm font-semibold text-gray-500 mx-2  transition-opacity fade-in delay-150">
+                            Employee code
+                            <span class="" :style="[empCode.length>=lenghtOfInput.empCodeL?'color: rgb(225 29 72);':'']">
+                                {{empCode.length}}/{{lenghtOfInput.empCodeL}}
+                            </span>
+                        </h4>
+                        <input v-model="empCode" placeholder="Employee code" id="empCode" type="text" :maxlength="lenghtOfInput.fNameL" :style="[empCodeS==false?'border-color: rgb(225 29 72);border-width: 2px;':'']" class="absolute bottom-0 w-full h-[40px]  bg-gray-300 text-gray-500   px-2 rounded-lg focus:outline-0" >
+                    </div>
+
                     <!-- first name -->
                     <div class="relative h-[60px]">
                         <!-- <label for="fName" class="w-[120px] font-semibold m-2">
@@ -285,11 +187,11 @@ const goRotate =()=>{
                         </label> -->
                         <h4 v-show="fName.length>0" class="text-sm font-semibold text-gray-500 mx-2  transition-opacity fade-in delay-150">
                             First Name
-                            <span class="" :style="[fName.length==fNameL?'color: rgb(225 29 72);':'']">
-                                {{fName.length}}/{{fNameL}}
+                            <span class="" :style="[fName.length>=lenghtOfInput.fNameL?'color: rgb(225 29 72);':'']">
+                                {{fName.length}}/{{lenghtOfInput.fNameL}}
                             </span>
                         </h4>
-                        <input v-model="fName" placeholder="First Name" id="fName" type="text" :maxlength="fNameL" :style="[fNameS==false?'border-color: rgb(225 29 72);border-width: 2px;':'']" class="absolute bottom-0 w-full h-[40px]  bg-gray-300 text-gray-500   px-2 rounded-lg focus:outline-0" >
+                        <input v-model="fName" placeholder="First Name" id="fName" type="text" :maxlength="lenghtOfInput.fNameL" :style="[fNameS==false?'border-color: rgb(225 29 72);border-width: 2px;':'']" class="absolute bottom-0 w-full h-[40px]  bg-gray-300 text-gray-500   px-2 rounded-lg focus:outline-0" >
                     </div>
 
                     <!-- last name -->
@@ -299,11 +201,11 @@ const goRotate =()=>{
                         </label> -->
                         <h4 v-show="lName.length>0" class="text-sm font-semibold text-gray-500 mx-2">
                             Last Name
-                            <span class="" :style="[lName.length==fNameL?'color: rgb(225 29 72);':'']">
-                                {{lName.length}}/{{lNameL}}
+                            <span class="" :style="[lName.length>=lenghtOfInput.fNameL?'color: rgb(225 29 72);':'']">
+                                {{lName.length}}/{{lenghtOfInput.lNameL}}
                             </span>
                         </h4>                        
-                        <input v-model="lName" placeholder="Last Name" id="lName" type="text" :maxlength="lNameL" :style="[lNameS==false?'border-color: rgb(225 29 72);border-width: 2px;':'']" class="absolute bottom-0 w-full h-[40px] bg-gray-300 text-gray-500    px-2 rounded-lg focus:outline-0" >
+                        <input v-model="lName" placeholder="Last Name" id="lName" type="text" :maxlength="lenghtOfInput.lNameL" :style="[lNameS==false?'border-color: rgb(225 29 72);border-width: 2px;':'']" class="absolute bottom-0 w-full h-[40px] bg-gray-300 text-gray-500    px-2 rounded-lg focus:outline-0" >
                     </div>
 
                     <!-- email -->
@@ -313,12 +215,12 @@ const goRotate =()=>{
                         </label> -->
                         <h4 v-show="email.length>0" class="text-sm font-semibold text-gray-500 mx-2">
                             Email
-                            <span class="" :style="[email.length==emailL?'color: rgb(225 29 72);':'']">
-                                {{email.length}}/{{emailL}}
+                            <span class="" :style="[email.length>=lenghtOfInput.emailL?'color: rgb(225 29 72);':'']">
+                                {{email.length}}/{{lenghtOfInput.emailL}}
                             </span>
                         </h4> 
                         <div :style="[emailS==false?'border-color: rgb(225 29 72);border-width: 2px;':'']" class="absolute bottom-0 flex w-full h-[40px]  p-1 bg-gray-300 rounded-lg">
-                            <input v-model="email" placeholder="Email" id="email" type="text" :maxlength="emailL"   class="w-full h-full mx-1   bg-transparent text-gray-500 focus:outline-0" >
+                            <input v-model="email" placeholder="Email" id="email" type="email" :maxlength="lenghtOfInput.emailL"   class="w-full h-full mx-1   bg-transparent text-gray-500 focus:outline-0" >
                             <h4 class="w-fit my-auto mx-2 font-semibold text-[15px] text-gray-500">
                                 @moralcenter.or.th
                             </h4>
@@ -417,7 +319,7 @@ const goRotate =()=>{
                         </h4>
                         <div class="absolute w-full bottom-0">
                             <div class="relative  ">
-                                <input v-model="passW" placeholder="Password" id="pw" type="password" :maxlength="passWL" :style="[passWS==false?'border-color: rgb(225 29 72);border-width: 2px;':'']" class="w-full h-[40px] bg-gray-300 text-gray-500  px-2 rounded-lg focus:outline-0" >
+                                <input v-model="passW" placeholder="Password" id="pw" type="password" :maxlength="lenghtOfInput.passWL" :style="[passWS==false?'border-color: rgb(225 29 72);border-width: 2px;':'']" class="w-full h-[40px] bg-gray-300 text-gray-500  px-2 rounded-lg focus:outline-0" >
                                 <img v-show="passW.length>0" @click="showPd" src="../../../assets/vue.svg" alt="eye"  class="absolute top-[10px] right-[15px] w-[20px] cursor-pointer ">
                             </div>                            
                         </div> 
@@ -436,7 +338,7 @@ const goRotate =()=>{
                                 {{cPassW.length}}/14
                             </span>
                         </h4> 
-                        <input v-model="cPassW" placeholder="Confirm Password"  id="cPd" type="password" :maxlength="passWL" :style="[cPassWS==false?'border-color: rgb(225 29 72);border-width: 2px;':'']" class="absolute bottom-0 w-full h-[40px] text-gray-500 bg-gray-300   px-2 rounded-lg focus:outline-0" >
+                        <input v-model="cPassW" placeholder="Confirm Password"  id="cPd" type="password" :maxlength="lenghtOfInput.passWL" :style="[cPassWS==false?'border-color: rgb(225 29 72);border-width: 2px;':'']" class="absolute bottom-0 w-full h-[40px] text-gray-500 bg-gray-300   px-2 rounded-lg focus:outline-0" >
                     </div>
 
 
