@@ -1,6 +1,6 @@
 <script setup>
 import {useRouter} from 'vue-router'
-import {ref,onBeforeMount, useCssModule} from 'vue'
+import {ref,onBeforeMount, onBeforeUpdate} from 'vue'
 import User from '../icon/User.svg'
 defineProps({
     role:{
@@ -60,10 +60,12 @@ const toAdmin =()=>{
     }
 
 }
-
+onBeforeUpdate(()=>{
+    getRole()
+})
 onBeforeMount(()=>{
     getRole()
-    })
+})
 </script>
 <template>
     <!-- new apdate -->
