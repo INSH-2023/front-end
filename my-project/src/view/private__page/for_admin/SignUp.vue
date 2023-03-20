@@ -78,9 +78,20 @@ const submittform =async()=>{
     if(validate.vUserCreate(dataCh.value,lenghtOfInput)){
         console.log('cannot create new user')
     }else{
-        let [status,data]=await toBackEnd.createData('signUp',userLink,dataCh.value)
+        let [status,data]=await toBackEnd.postData('signUp',userLink,dataCh.value)
         if(status==200){
             console.log(data)
+            // clear()
+            empCode.value=''
+            fName.value =''
+            lName.value =''
+            email.value = ''
+            group.value = ''
+            position.value= ''
+            office.value = ''
+            role.value = ''
+            passW.value = ''
+            cPassW.value =''
         }else{
             console.log(data)
         }
@@ -173,7 +184,7 @@ const goRotate =()=>{
                     <div class="relative h-[60px]">
                         <h4 v-show="empCode.length>0" class="text-sm font-semibold text-gray-500 mx-2  transition-opacity fade-in delay-150">
                             Employee code
-                            <span class="" :style="[empCode.length>=lenghtOfInput.empCodeL?'color: rgb(225 29 72);':'']">
+                            <span class="" :style="[empCode.length==lenghtOfInput.empCodeL?'color: rgb(225 29 72);':'']">
                                 {{empCode.length}}/{{lenghtOfInput.empCodeL}}
                             </span>
                         </h4>
@@ -187,7 +198,7 @@ const goRotate =()=>{
                         </label> -->
                         <h4 v-show="fName.length>0" class="text-sm font-semibold text-gray-500 mx-2  transition-opacity fade-in delay-150">
                             First Name
-                            <span class="" :style="[fName.length>=lenghtOfInput.fNameL?'color: rgb(225 29 72);':'']">
+                            <span class="" :style="[fName.length==lenghtOfInput.fNameL?'color: rgb(225 29 72);':'']">
                                 {{fName.length}}/{{lenghtOfInput.fNameL}}
                             </span>
                         </h4>
@@ -201,7 +212,7 @@ const goRotate =()=>{
                         </label> -->
                         <h4 v-show="lName.length>0" class="text-sm font-semibold text-gray-500 mx-2">
                             Last Name
-                            <span class="" :style="[lName.length>=lenghtOfInput.fNameL?'color: rgb(225 29 72);':'']">
+                            <span class="" :style="[lName.length==lenghtOfInput.fNameL?'color: rgb(225 29 72);':'']">
                                 {{lName.length}}/{{lenghtOfInput.lNameL}}
                             </span>
                         </h4>                        
@@ -215,7 +226,7 @@ const goRotate =()=>{
                         </label> -->
                         <h4 v-show="email.length>0" class="text-sm font-semibold text-gray-500 mx-2">
                             Email
-                            <span class="" :style="[email.length>=lenghtOfInput.emailL?'color: rgb(225 29 72);':'']">
+                            <span class="" :style="[email.length==lenghtOfInput.emailL?'color: rgb(225 29 72);':'']">
                                 {{email.length}}/{{lenghtOfInput.emailL}}
                             </span>
                         </h4> 
