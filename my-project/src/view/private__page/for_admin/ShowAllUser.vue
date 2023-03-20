@@ -18,11 +18,13 @@ const myRouter =useRouter()
 // const userLink ='http://localhost:5000/api/users'
 const userLink =`${import.meta.env.VITE_BACK_END_HOST}/users`
 
+// get variable
 const userList =ref([])
+const showList = ref([])
+const filterList = ref([])
 const user=ref({})
-const f_userList=ref([])
-const show_userList=ref([])
 
+// put variable
 const eFName =ref('')
 const eLName =ref('')
 const eEmail =ref('')
@@ -33,29 +35,6 @@ const ePosition =ref('')
 const eStatus =ref('')
 const eCPw =ref('')
 const ePw =ref('')
-
-const user_id =ref(undefined)
-
-const lenghtOfInput={
-    fnameL: 30,
-    lnameL: 61,
-    emailL: 30,
-    passwordL: 14,
-    cPasswordL: 14
-}
-
-const f_name =ref('')
-const f_email =ref('')
-const f_status =ref('')
-const f_reposibility =ref('')
-
-
-// const organization ='@moralcenter.or.th'
-
-const isFilter=ref(false)
-const isEdit=ref(false)
-const isActive=ref(false)
-
 let dataCh =computed(()=>{
     return{
         user_first_name: eFName.value,
@@ -69,60 +48,63 @@ let dataCh =computed(()=>{
         user_status: eStatus.value,
         user_cPassW: eCPw.value
     }
+})
 
-    })
+// delete
+const user_id=ref(undefined)
 
-
-// bg color status
-const changeColorBy=(v)=>{
-    let style=[]
-    
-    if(v=='Request'){
-        style.push('background-color:rgb(31 41 55)')
-        style.push('color: rgb(255 255 255);')
-        
-    }else
-    if(v=='Open_Case'){
-        style.push('background-color:rgb(245 158 11)')
-        style.push('color: rgb(255 255 255);')
-    }else
-    if(v=='In_Progress'){
-        style.push('background-color:rgb(56 189 248)')
-        style.push('color: rgb(255 255 255);')
-    }else
-    if(v=='Finish'){
-        style.push('background-color: rgb(45 212 191)')
-        style.push('color: rgb(255 255 255);')
-    }
-
-    if(v=='IT_Service'){
-        style.push('color: rgb(14 165 233);')
-        
-    }else
-    if(v=='PR_Service'){
-        style.push('color: rgb(217 119 6);')
-        
-    }
-
-    return style
+const lenghtOfInput={
+    fnameL: 30,
+    lnameL: 61,
+    emailL: 30,
+    passwordL: 14,
+    // cPasswordL: 14
 }
+
+
+// old version
+// const userList =ref([])
+// const user=ref({})
+// const filterList=ref([])
+// const show_userList=ref([])
+
+
+
+// const user_id =ref(undefined)
+
+
+// filter
+// const f_name =ref('')
+const f_email =ref('')
+const f_status =ref('')
+const f_reposibility =ref('')
+
+
+// const organization ='@moralcenter.or.th'
+// status
+const get_status=ref(undefined)
+const delete_status=ref(undefined)
+const put_status=ref(undefined)
+
+const is_filter_open=ref(false)
+const is_edit_open=ref(false)
+const is_active_open=ref(false)
+
 
 // get user
 const getUsers =async(id=undefined)=>{
 
     let status=false
     if(id==undefined){
-        let [data,s] = await toBackEnd.getData('user',userLink)
-        // console.log(data)
-        // console.log(status)
+        let [s,data] = await toBackEnd.getData('user',userLink)
         if(s==200)status = true
         
         userList.value=data
 
-        show_userList.value = userList.value
+        showList.value = userList.value
         
     }else{
-        let [data,s] = await toBackEnd.getDataBy('user',userLink,id)
+        let [s,data] = await toBackEnd.getDataBy('user',userLink,id)
         if(s==200)status = true
         user.value=data
         console.log(user.value)
@@ -135,7 +117,7 @@ const getUsers =async(id=undefined)=>{
 // delete user
 const deleteUser =async(v)=>{
     
-    let status = toBackEnd.delete('user',userLink,v)
+    let status = await toBackEnd.delete('user',userLink,v)
     
     if(status==200?true:false){
         await getUsers()
@@ -179,7 +161,7 @@ const showInfoByID=async(v,index)=>{
 const assignDetail =(b)=>{
     if(user.value.lenght!=0){
         if(b==true){
-            isEdit.value=b
+            is_edit_open.value=b
             eFName.value=user.value.user_first_name
             eLName.value=user.value.user_last_name
             eEmail.value=user.value.user_email
@@ -190,10 +172,10 @@ const assignDetail =(b)=>{
             eStatus.value=user.value.user_status
             ePw.value=user.value.user_password
             eCPw.value=user.value.user_password
-            isActive.value=user.value.user_status=='active'?true:false
+            is_active_open.value=user.value.user_status=='active'?true:false
             console.log('open edit mode')
         }else if(b==false){
-            isEdit.value=b
+            is_edit_open.value=b
             eFName.value=''
             eLName.value=''
             eEmail.value=''
@@ -265,13 +247,13 @@ const closeDetail=()=>{
 
 // change status 
 const change_s=()=>{
-    isActive.value = !isActive.value
+    is_active_open.value = !is_active_open.value
     // eStatus.value= !eStatus.value
-    if(isActive.value==true){
+    if(is_active_open.value==true){
         eStatus.value='active'
         console.log('status is :',eStatus.value)
     }else
-    if(isActive.value==false){
+    if(is_active_open.value==false){
         eStatus.value='inactive'
         console.log('status is :',eStatus.value)
     }
@@ -281,19 +263,19 @@ const change_s=()=>{
 
 // filter 
 const resetF=()=>{
-    f_name.value= ''
+    // f_name.value= ''
     f_email.value= ''
     f_status.value= ''
     f_reposibility.value= ''
-    show_userList.value = userList.value
+    showList.value = userList.value
 }
 
 
 const searchByKeyW=()=>{
-    f_userList.value=[]
+    filterList.value=[]
     // name
     // if(f_name.value.length != 0){
-    //     f_userList.value = userList.value.filter(u=>{
+    //     filterList.value = userList.value.filter(u=>{
     //     let name =`${u.first_name} ${u.last_name}`
     //     return name.toLowerCase().includes(f_name.value.toLowerCase())
     // })
@@ -302,22 +284,22 @@ const searchByKeyW=()=>{
 
     // email
     if(f_email.value.length != 0){
-        f_userList.value = userList.value.filter(u=>u.user_email.toLowerCase().includes(f_email.value.toLowerCase()))
+        filterList.value = userList.value.filter(u=>u.user_email.toLowerCase().includes(f_email.value.toLowerCase()))
         console.log('this  email filter : '+f_email.value)
     }
     // status
     else if(f_status.value.length != 0){
-        f_userList.value = userList.value.filter(u=>u.user_status==f_status.value)
+        filterList.value = userList.value.filter(u=>u.user_status==f_status.value)
         console.log('this status filter : '+f_status.value)
     }
     // reposibility
     else if(f_reposibility.value.length != 0){
-        f_userList.value = userList.value.filter(u=>u.user_role.toLowerCase()==f_reposibility.value.toLowerCase())
+        filterList.value = userList.value.filter(u=>u.user_role.toLowerCase()==f_reposibility.value.toLowerCase())
         console.log('this role filter : '+f_reposibility.value)
     }
 
-    show_userList.value = f_userList.value
-    console.log(f_userList.value)
+    showList.value = filterList.value
+    console.log(filterList.value)
 }
 </script>
 <template>
@@ -337,7 +319,7 @@ const searchByKeyW=()=>{
 
                 <!-- filter -->
                 <div  class="relative w-[1200px] h-[70px] pl-4 mx-auto ">
-                    <div v-show="isFilter==true" class="absolute w-fit h-fit bottom-0">
+                    <div v-show="is_filter_open==true" class="absolute w-fit h-fit bottom-0">
                         <div class="flex ">
 
                             <!-- name -->
@@ -387,7 +369,7 @@ const searchByKeyW=()=>{
 
                     <!-- button -->
                     <div class="   right-[70px] bottom-0  absolute">
-                        <button @click="isFilter= !isFilter" class="flex w-fit">
+                        <button @click="is_filter_open= !is_filter_open" class="flex w-fit">
                             <span class="font-semibold my-auto">
                                 ตัวกรอง
                             </span> 
@@ -428,7 +410,7 @@ const searchByKeyW=()=>{
                         </tr>                        
                     </thead>
                     <tbody>
-                        <tr v-for="(data,index) in show_userList" :key="index"  class="text-[15px] cursor-default bg-white border-b-2 border-gray-300  hover:border-gray-400 hover:bg-gray-400">
+                        <tr v-for="(data,index) in showList" :key="index"  class="text-[15px] cursor-default bg-white border-b-2 border-gray-300  hover:border-gray-400 hover:bg-gray-400">
                             <td class="]     px-2 py-2 font-medium ">
                                 <div class="ml-4">
                                     <div class="w-full ml-3 text-[18px] font-light truncate mx-auto">
@@ -484,7 +466,7 @@ const searchByKeyW=()=>{
                 </div>
 
                 <!-- detail -->
-                <div v-if="isEdit==false">
+                <div v-if="is_edit_open==false">
                     <!-- table -->
                     <div>
                         <table class="w-full table-fixed mx-auto mt-6 text-[20px]">
@@ -578,12 +560,12 @@ const searchByKeyW=()=>{
                 </div>
 
                 <!-- edit detail  -->
-                <div v-else-if="isEdit==true" class="w-[500px] mx-auto">
+                <div v-else-if="is_edit_open==true" class="w-[500px] mx-auto">
                        
                     <!-- active -->
                     <div class="relative flex t  w-full h-[40px] mt-3">
                         <button @click="change_s" id="container_active" class="relative w-[150px] h-[30px] my-auto bg-gray-700 text-gray-100 text-[15px] z-0 rounded-lg">
-                            <div v-if="isActive==true" id="active" class="w-full h-full z-10 flex ">
+                            <div v-if="is_active_open==true" id="active" class="w-full h-full z-10 flex ">
                                 <div class="w-[75px] h-full bg-green-300 rounded-l-lg">
                                 </div>                            
                                 <div class="w-[75px] h-fit m-auto ">
@@ -591,7 +573,7 @@ const searchByKeyW=()=>{
                                 </div>
 
                             </div>
-                            <div v-else-if="isActive==false" id="inactive" class="w-full h-full z-10 flex ">
+                            <div v-else-if="is_active_open==false" id="inactive" class="w-full h-full z-10 flex ">
                                 <div class="w-[75px] h-fit m-auto ">
                                         inactive
                                 </div>
