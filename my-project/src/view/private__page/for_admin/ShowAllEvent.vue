@@ -3,27 +3,158 @@ import{ref,computed,onBeforeMount}from'vue'
 import { useRouter } from 'vue-router';
 import BaseLoading from '../../../components/BaseLoading.vue';
 import toBackEnd from '../../../JS/fetchToBack';
+import validate from '../../../JS//validate'
 
 // const requestLink="http://localhost:3000/events"
 const requestLink=`${import.meta.env.VITE_BACK_END_HOST}/requests`
 // const linkTesting=`${import.meta.env.VITE_BACK_END}/`
 
 const myRouter = useRouter()
-const isFilter=ref(false)
-const eventList=ref([])
-const f_eventList=ref([])
-const show_eventList=ref([])
-const assignCh =ref('')
+
+onBeforeMount(()=>{
+    navigation()
+    getEvents()
+})
+
+// get variable
+const requestList=ref([])
+const showList =ref([])
+const filterList=ref([])
+const request=ref({})
+
+// edit variable
+const assign_ch=ref("")
+const status_ch=ref("")
+const data_ch=computed(()=>{
+    return{
+        request_status:status_ch.value,
+        request_assign:assign_ch.value        
+    }
+})
+
+// delete variable
+const request_id=ref(undefined)
+
+// status
+const get_status=ref(undefined)
+const Delete_status = ref(undefined)
+const edit_status = ref(undefined)
+
+const is_filter_open=ref(false)
+
+
+// get data
+const getEvents =async(id=undefined)=>{
+
+    let status = false
+
+    if(id==undefined){
+        let [s,data] =await toBackEnd.getData('request',requestLink)
+        if(s==200){
+
+            status=true
+            requestList.value = data
+            showList.value = data
+            get_status.value=true
+            // status something
+        }
+        else {
+            get_status.value=false
+            // status something
+        }
+
+    }else{
+        let [s,data]= await toBackEnd.getDataBy('request',requestLink,id)
+        if(s==200){
+            
+            status=true
+            request.value= data
+            console.log(data)
+            get_status.value=true
+            // status something
+        }
+        else{
+            get_status.value=false
+            // status something
+        }
+    }
+
+    return status
+}
+
+// edit by id
+const editInfo = async(v)=>{
+
+    let [ss,data] =await toBackEnd.editData('request',requestLink,v,data_ch.value)
+    if(ss==200){
+        edit_status.value=true
+        console.log(data)
+        await getEvents()
+        navigation()
+        //status something
+    }else{
+        //status something
+        edit_status.value=false
+        console.log(data)
+        myRouter.go(-1)
+    }
+}
+
+// delete
+const deleteItem =async (v)=>{
+    
+    let ss = await toBackEnd.delete('request',requestLink,v)
+    if(ss==200){
+        edit_status=true
+        await getEvents()
+        navigation()
+        // status something
+    }else{
+        // status something
+        edit_status=false
+    }
+}
+
+// callback
+
+// edit request
+const submitt =(v)=>{
+    if(validate.vRequestEdit(data_ch.value)){
+        // return something
+    }
+    else{
+        editInfo(v)
+    }
+}
+
+
+// showInfo
+const showInfoByID=async(v,index)=>{
+    let status=false
+    request_id.value=v
+    request.value={}
+    console.log(v,index)
+    status_ch.value=""
+    assign_ch.value=""
+ 
+    status = await getEvents(request_id.value)
+    
+    if(status && isEmptyOBJ.value !=true){
+
+        changeST(request.value.request_status)
+        assign_ch.value = request.value.request_assign
+        console.log(assign_ch.value)
+        navigation('#showInfo')
+    }else{
+        navigation()
+        // status something
+    }
+}
+
+
+// old version
 const commentCh =ref('')
 const commentArr =ref([])
-
-const event_id=ref(undefined)
-
-const eventch=ref({})
-const event=ref({})
-
-const eventStatus =ref(undefined)
-const statusCh=ref(undefined)
 
 // change status
 const sIsR=ref(false)
@@ -31,25 +162,7 @@ const sIsO=ref(false)
 const sIsI=ref(false)
 const sIsF=ref(false)
 
-const dataCh =ref({})
-            // full_name:event.value.full_name,
-            // email:event.value.email,
-            // group_work:event.value.group_work,
-            // service_type:event.value.service_type,
-            // subject:event.value.subject,
-            // status:statusCh.value,
-            // date:event.value.date,
-            // assign:assignCh.value,
-            // useT:event.value.useT,
-            // sn:event.value.sn,
-            // brand:event.value.brand,
-            // typeM:event.value.typeM,
-            // problems:event.value.problems,
-            // other:event.value.other,
-            // massage:event.value.massage,
-            // commentCh:commentArr.value
-
-
+// variable filter
 const f_name=ref('')
 const f_email=ref('')
 const f_type=ref('')
@@ -93,15 +206,11 @@ const changeColorBy=(v)=>{
 }
 
 
-onBeforeMount(()=>{
-    navigation()
-    getEvents()
-    
-})
+
 
 
 const changeST =(v)=>{
-    statusCh.value=''
+    status_ch.value=''
     // status request
     sIsR.value=false
     // status open case
@@ -112,142 +221,24 @@ const changeST =(v)=>{
     sIsF.value=false
     if(v=='request'){
         sIsR.value=true
-        statusCh.value=v
+        status_ch.value=v
     }
     else if(v=='open_case'){
         sIsO.value=true
-        statusCh.value=v
+        status_ch.value=v
     }
     else if(v=='in_progress'){
         sIsI.value=true
-        statusCh.value=v
+        status_ch.value=v
     }
     else if(v=='finish'){
         sIsF.value=true
-        statusCh.value=v
+        status_ch.value=v
     }
-    console.log(statusCh.value)
+    console.log(status_ch.value)
     // rStatus.value=v
 }
 
-
-// showInfo
-const showInfoByID=async(v,index)=>{
-    let status=false
-    event_id.value=v
-    event.value={}
-    
-    statusCh.value=undefined
-    assignCh.value=''
-    commentCh.value=''
-    commentArr.value=[]
-    // let detail =document.getElementsByClassName("goInfo")
-    console.log('this is index:',index)
-    status = await getEvents(event_id.value)
-    
-    if(status && isEmptyOBJ.value !=true){
-        eventch.value = event.value
-        // console.log(eventch.value)
-        changeST(eventch.value.request_status)
-        assignCh.value = eventch.value.request_assign
-        console.log(assignCh.value)
-        // event.value.assign = await event.value.assign==''?assignCh.value='': assignCh.value = event.value.assign
-        navigation('#showInfo')
-        // window.location.href='#summaryInfo'
-    }else{
-        navigation()
-        // status something
-    }
-}
-
-// edit by id
-const editInfo = async(v)=>{
-    
-    // let S =undefined
-    dataCh.value={
-        request_status:statusCh.value,
-        request_assign:assignCh.value,
-    }
-    let [status,data] =await toBackEnd.editData('request',requestLink,v,dataCh.value)
-    if(status==200){
-        console.log(statusCh.value)
-        console.log(assignCh.value)
-        console.log(commentCh.value)
-        await getEvents()
-        navigation()
-        //status something
-    }else{
-        //status something
-        console.log(data)
-        myRouter.go(-1)
-    }
-}
-
-
-// get event
-const getEvents =async(id=undefined)=>{
-
-    let status = false
-
-    if(id==undefined){
-        let [data,s] =await toBackEnd.getData('request',requestLink)
-        if(s==200){
-            status=true
-            eventList.value= data
-            show_eventList.value=data
-            eventStatus.value=true
-            // status something
-        }
-        else {
-            eventStatus.value=false
-             // status something
-        }
-
-    }else{
-        let [data,s]= await toBackEnd.getDataBy('request',requestLink,id)
-        if(s==200){
-            status=true
-            event.value= data
-            console.log(data)
-            eventStatus.value=true
-             // status something
-        }
-        else{
-            eventStatus.value=false
-             // status something
-        }
-    }
-    
-    return status
-}
-
-
-// edit event
-const submitt =(v,l)=>{
-    if(statusCh.value == undefined){
-        console.log(statusCh.value)
-
-    }else
-    if(assignCh.value==''){
-        console.log(assignCh.value)
-    }else{
-        editInfo(v,l)
-    }
-}
-
-
-// delete
-const deleteItem =async (v)=>{
-    
-    let ss = await toBackEnd.delete('request',requestLink,v)
-    if(ss==200){
-        await getEvents()
-        navigation()
-        // status something
-    }else{
-        // status something
-    }
-}
 
 
 // add comment
@@ -270,7 +261,7 @@ const addComment =()=>{
 
 // check obj empty
 const isEmptyOBJ =computed(()=> {
-    let boolean = Object.keys(event.value).length === 0 && event.value.constructor ===Object
+    let boolean = Object.keys(request.value).length === 0 && request.value.constructor ===Object
     console.log(boolean)
     return boolean
 })
@@ -288,44 +279,35 @@ const resetF=()=>{
     f_type.value=''
     f_subject.value=''
     f_status.value=''
-    show_eventList.value=eventList.value
+    showList.value=requestList.value
 }
 
 const searchByKeyW=()=>{
-    // f_eventList.value=[]
     console.log(f_status.value)
-    // name
-    // if(f_name.value.length != 0){
-    //     f_eventList.value = eventList.value.filter(e=>{
-    //         let full_name=`${e.request_first_name} ${e.request_last_name}`
-    //     return full_name.toLowerCase().includes(f_name.value.toLowerCase())
-    // })
-    //     console.log('this name filter : '+f_name.value)
-    // }
 
     // email
     if(f_email.value.length != 0){
-        f_eventList.value = eventList.value.filter(e=>e.request_email.toLowerCase().includes(f_email.value.toLowerCase()))
+        filterList.value = requestList.value.filter(e=>e.request_email.toLowerCase().includes(f_email.value.toLowerCase()))
         console.log('this  email filter : '+f_email.value)
     }
 
     // service
     else if(f_type.value.length !=0){
-        f_eventList.value = eventList.value.filter(e=>e.request_service_type.toLowerCase()==f_type.value.toLowerCase())
+        filterList.value = requestList.value.filter(e=>e.request_service_type.toLowerCase()==f_type.value.toLowerCase())
     }
 
     // service
     else if(f_subject.value.length !=0){
-        f_eventList.value = eventList.value.filter(e=>e.request_subject.toLowerCase()==f_subject.value.toLowerCase())
+        filterList.value = requestList.value.filter(e=>e.request_subject.toLowerCase()==f_subject.value.toLowerCase())
     }
 
     // stauts
     else if(f_status.value.length !=0){
-        f_eventList.value = eventList.value.filter(e=>e.request_status.toLowerCase() == f_status.value.toLowerCase())
+        filterList.value = requestList.value.filter(e=>e.request_status.toLowerCase() == f_status.value.toLowerCase())
     }
 
-    show_eventList.value = f_eventList.value
-    console.log(f_eventList.value)
+    showList.value = filterList.value
+    console.log(filterList.value)
 }
 </script>
 <template>
@@ -333,7 +315,7 @@ const searchByKeyW=()=>{
     <div class="">
 
         <!-- wait -->
-        <div v-if="eventStatus==undefined">
+        <div v-if="get_status==undefined">
             <div class=" bg-white w-full mx-auto  h-fit ">
                 <div class="w-full text-center font-semibold text-[40px]">
                     <div class="my-auto w-fit mx-auto mt-[250px]">
@@ -348,7 +330,7 @@ const searchByKeyW=()=>{
             </div>
         </div>
         <!-- no data -->
-        <div v-else-if="eventStatus==false">
+        <div v-else-if="get_status==false">
             <div class=" bg-white w-full mx-auto  h-fit ">
                 <div class="w-full text-center font-semibold text-[40px]">
                     <div class="my-auto w-fit mx-auto mt-[250px]">
@@ -366,7 +348,7 @@ const searchByKeyW=()=>{
         </div>
         
         <!-- can get data but no data (clean) -->
-        <div v-else-if="eventStatus==false ||eventList.length==0" class="show_up">
+        <div v-else-if="get_status==false ||requestList.length==0" class="show_up">
             <div class=" bg-white w-full mx-auto  h-fit ">
                 <div class="w-full text-center font-semibold text-[40px]">
                     <div class="my-auto w-fit mx-auto mt-[250px]">
@@ -388,7 +370,7 @@ const searchByKeyW=()=>{
                 
 
         <!-- have data -->
-        <div v-else-if="eventStatus==true" class="show_request show_up">
+        <div v-else-if="get_status==true" class="show_request show_up">
             <div class=" bg-white w-full mx-auto  h-fit ">
                 <div class="w-full text-center font-semibold text-[40px] pt-6">
                     <div class="flex w-fit mx-auto">
@@ -400,7 +382,7 @@ const searchByKeyW=()=>{
 
                 <!-- filter -->
                 <div  class="relative w-[1200px] h-[70px]  mx-auto ">
-                    <div v-show="isFilter==true" class="absolute w-fit h-fit bottom-0">
+                    <div v-show="is_filter_open==true" class="absolute w-fit h-fit bottom-0">
                         <div class="flex ">
                             
                             <!-- name -->
@@ -468,7 +450,7 @@ const searchByKeyW=()=>{
 
                     <!-- button -->
                     <div class="   right-[20px] bottom-0  absolute">
-                        <button @click="isFilter= !isFilter" class="flex w-fit">
+                        <button @click="is_filter_open= !is_filter_open" class="flex w-fit">
                             <span class="font-semibold my-auto">
                                 ตัวกรอง
                             </span> 
@@ -520,7 +502,7 @@ const searchByKeyW=()=>{
 
                     <!-- have data -->
                     <tbody class="z-0"> <!-- @click="clickedInfo" -->
-                        <tr  v-for="(data,index) in show_eventList" :key="index" class="relative text-[15px]  bg-white border-b-2 border-gray-300 cursor-default hover:border-gray-400 z-1">
+                        <tr  v-for="(data,index) in showList" :key="index" class="relative text-[15px]  bg-white border-b-2 border-gray-300 cursor-default hover:border-gray-400 z-1">
                             
                             <td class=" font-medium py-3 px-2 text-center">
                                 <div class="  font-normal truncate ">
@@ -607,10 +589,10 @@ const searchByKeyW=()=>{
                             </th>
                             <td class=" indent-[5px] truncate font-normal">
                                 <span>
-                                    {{ event.request_first_name }}
+                                    {{ request.request_first_name }}
                                 </span>
                                 <span class="pl-2">
-                                    {{ event.request_last_name }}
+                                    {{ request.request_last_name }}
                                 </span>
                             </td>
                         </tr>
@@ -621,7 +603,7 @@ const searchByKeyW=()=>{
                                 Email
                             </th>
                             <td class=" indent-[5px] truncate font-normal">
-                                {{ event.request_email }}
+                                {{ request.request_email }}
                             </td>
                         </tr>
 
@@ -631,7 +613,7 @@ const searchByKeyW=()=>{
                                 Group
                             </th>
                             <td class=" indent-[5px] truncate font-normal">
-                                {{ event.request_group }}
+                                {{ request.request_group }}
                             </td>
                         </tr>
 
@@ -640,38 +622,38 @@ const searchByKeyW=()=>{
                             <th class="table_header text-right w-[115px]" >
                                 Service
                             </th>
-                            <td :style="[changeColorBy(event.request_service_type)]" class="indent-[5px] font-normal">
-                                {{ event.request_service_type }}
+                            <td :style="[changeColorBy(request.request_service_type)]" class="indent-[5px] font-normal">
+                                {{ request.request_service_type }}
                             </td>
                         </tr>
 
                         <!-- is OR or SF -->
-                        <tr v-show="event.request_service_type=='IT_Service'">
+                        <tr v-show="request.request_service_type=='IT_Service'">
                             <th class="table_header text-right w-[115px]">
                                 ประเภทของ
                             </th>
                             <td class="indent-[5px] font-normal">
-                                {{event.request_use_type=='or'?'เป็นขององค์กร':'เป็นของส่วนตัว'}}
+                                {{request.request_use_type=='or'?'เป็นขององค์กร':'เป็นของส่วนตัว'}}
                             </td>
                         </tr>
 
                         <!-- brand -->
-                        <tr v-show="event.request_service_type=='IT_Service'">
+                        <tr v-show="request.request_service_type=='IT_Service'">
                             <th class="table_header text-right w-[115px]">
                                 ยี่ห้อ
                             </th>
                             <td class="indent-[5px] font-normal">
-                                {{event.request_brand}}
+                                {{request.request_brand}}
                             </td>
                         </tr>
 
                         <!-- number -->
-                        <tr v-show="event.request_service_type=='IT_Service'">
+                        <tr v-show="request.request_service_type=='IT_Service'">
                             <th class="table_header text-right w-[115px]">
                                 S/N
                             </th>
                             <td class="indent-[5px] font-normal">
-                                {{event.request_sn}}
+                                {{request.request_sn}}
                             </td>
                         </tr>
                 </table>
@@ -694,7 +676,7 @@ const searchByKeyW=()=>{
                 </div> -->
 
                 <!-- second  -->
-                <div v-show="event.request_service_type=='IT_Service'&& (event.request_subject=='hardware'||event.request_subject=='software'||event.request_subject=='internet')" class="mt-4 ">
+                <div v-show="request.request_service_type=='IT_Service'&& (request.request_subject=='hardware'||request.request_subject=='software'||request.request_subject=='internet')" class="mt-4 ">
                     <div class="text-[20px] font-semibold">
                         <h3 >
                         ชนิดของ Hardware 
@@ -703,12 +685,12 @@ const searchByKeyW=()=>{
                     </div>
 
                     
-                    <div v-if="event.request_subject=='software'||event.request_subject=='hardware'||event.request_subject=='internet'" class=" mt-4 text-[15px] font-medium">
+                    <div v-if="request.request_subject=='software'||request.request_subject=='hardware'||request.request_subject=='internet'" class=" mt-4 text-[15px] font-medium">
                         <!-- notebook -->
                         <div class="w-[85px]  p-2 bg-gray-200 rounded-xl ">
                             <img src="../../../assets/vue.svg" alt="NoteBook" class="w-[40px] mx-auto">
                             <h3 class="w-fit mx-auto text-[4px]">
-                            {{event.request_type_matchine}}
+                            {{request.request_type_matchine}}
                             </h3>
                         </div >
                     </div>
@@ -717,24 +699,24 @@ const searchByKeyW=()=>{
                 <!-- problem -->
                 <div   class="mt-4 " >
                     <div class="text-[20px] font-semibold">
-                        <h3 v-show="event.request_service_type=='IT_Service'">
-                            อาการของ {{event.request_subject}} ที่พบ
+                        <h3 v-show="request.request_service_type=='IT_Service'">
+                            อาการของ {{request.request_subject}} ที่พบ
                         </h3>  
-                        <h3 v-show="event.request_service_type=='PR_Service'">
-                            ความช่วยเหลือที่ต้องการเกี่ยวกับ<span class="text-rose-500 pl-2">{{event.request_subject}}</span> 
+                        <h3 v-show="request.request_service_type=='PR_Service'">
+                            ความช่วยเหลือที่ต้องการเกี่ยวกับ<span class="text-rose-500 pl-2">{{request.request_subject}}</span> 
                         </h3> 
                     </div>
 
                     
                     <div class="w-full grid grid-cols-6 gap-y-2 gap-x-2 mt-4 text-[15px] font-medium">
                         
-                        <div v-for="(data,index) of event.request_problems" :key="index"  class="w-[85px] mx-auto p-2 bg-gray-200 rounded-xl ">
+                        <div v-for="(data,index) of request.request_problems" :key="index"  class="w-[85px] mx-auto p-2 bg-gray-200 rounded-xl ">
                             <img src="../../../assets/vue.svg" alt="NoteBook" class="w-[40px] mx-auto">
                             <h3 class="w-fit mx-auto text-[8px]">
                             {{data}}
                             </h3>
                         </div >
-                        <div v-if="event.request_other!=''"  class="w-[70px] mx-auto p-2 bg-gray-200 rounded-xl ">
+                        <div v-if="request.request_other!=''"  class="w-[70px] mx-auto p-2 bg-gray-200 rounded-xl ">
                             <img src="../../../assets/vue.svg" alt="NoteBook" class="w-[40px] mx-auto">
                             <h3 class="w-fit mx-auto text-[8px]">
                             other
@@ -746,19 +728,19 @@ const searchByKeyW=()=>{
 
                 <!-- massage other -->
                 <div   class=" w-full mt-10 ">
-                    <div v-show="event.request_other!=''"  class="">
+                    <div v-show="request.request_other!=''"  class="">
                         <label for="other_1" class="ml-2 text-[17px] font-semibold inline-b">
                             กรณีเลือก<span class="text-rose-500 pl-2">อื่นๆโปรดระบุ</span>
                         </label>
                         <span class="text-[13px] ml-2">(กรณีไม่พบปัญหาข้างต้น)</span>
-                        <textarea v-model="event.request_other"  name="other" id="other_1"  disabled class="w-full h-[100px] resize-none pt-[10px] block rounded-xl bg-gray-300 p-2 focus:outline-0" ></textarea>
+                        <textarea v-model="request.request_other"  name="other" id="other_1"  disabled class="w-full h-[100px] resize-none pt-[10px] block rounded-xl bg-gray-300 p-2 focus:outline-0" ></textarea>
                     </div>
                     
-                    <div v-show="event.request_message!=''" class="mt-3">
+                    <div v-show="request.request_message!=''" class="mt-3">
                         <label for="other_2" class="ml-2 text-[17px] font-semibold">
                             ระบุรายละเอียดของปัญหาที่พบ (ถ้ามี)
                         </label>
-                        <textarea v-model="event.request_message"  name="other" id="other_2"  disabled class="w-full h-[100px] resize-none block bg-gray-300 rounded-xl p-2 focus:outline-0"></textarea>
+                        <textarea v-model="request.request_message"  name="other" id="other_2"  disabled class="w-full h-[100px] resize-none block bg-gray-300 rounded-xl p-2 focus:outline-0"></textarea>
                     </div>
                     <div>
 
@@ -792,7 +774,7 @@ const searchByKeyW=()=>{
                             <h5 class="font-semibold">
                                 Assign
                             </h5>
-                            <select v-model="assignCh" name="assign" id="assign" class="w-[200px] mt-2 p-1 bg-gray-400 text-gray-700 font-semibold  rounded">
+                            <select v-model="assign_ch" name="assign" id="assign" class="w-[200px] mt-2 p-1 bg-gray-400 text-gray-700 font-semibold  rounded">
                                 <option value="Not_assign" selected disabled>เลือกผู้รับผิดชอบ</option>
                                 <option value="Testing_Tseing " class="font-semibold bg-gray-300">Testing Tseing</option>
                                 <option value="gnitset_testing" class="font-semibold bg-gray-300">gnitset testing</option>
@@ -815,7 +797,7 @@ const searchByKeyW=()=>{
 
                     <!-- แก้ไขข้อมูล -->
                     <a href="#veri">
-                        <button v-show="statusCh != undefined &&statusCh != 'request'&& assignCh.length >0 "  class="w-[130px] mx-3 p-2 font-normal bg-gray-300  text-[#64B5F6] rounded-xl hover:bg-[#64B5F6] hover:text-gray-200">
+                        <button v-show="status_ch != undefined &&status_ch != 'request'&& assign_ch.length >0 "  class="w-[130px] mx-3 p-2 font-normal bg-gray-300  text-[#64B5F6] rounded-xl hover:bg-[#64B5F6] hover:text-gray-200">
                             <h4>
                                 ทำการแก้ไข
                             </h4>
@@ -879,7 +861,7 @@ const searchByKeyW=()=>{
                 <button @click="myRouter.go(-1)" class="w-full h-fit text-center mx-auto p-2 bg-gray-300 hover:bg-rose-300">
                     ย้อนกลับ
                 </button>
-                <button @click="submitt(event.requestId)" class="w-full h-fit text-center mx-auto p-2 bg-gray-300 hover:bg-green-300" >
+                <button @click="submitt(request.requestId)" class="w-full h-fit text-center mx-auto p-2 bg-gray-300 hover:bg-green-300" >
                     ทำการแก้ไข
                 </button>                    
             </div>
@@ -896,7 +878,7 @@ const searchByKeyW=()=>{
                 <button @click="myRouter.go(-1)" class="w-full h-fit text-center mx-auto p-2 bg-gray-300 hover:bg-rose-300">
                     ย้อนกลับ
                 </button>
-                <button @click="deleteItem(event.requestId)" class="w-full h-fit text-center mx-auto p-2 bg-gray-300 hover:bg-green-300">
+                <button @click="deleteItem(request.requestId)" class="w-full h-fit text-center mx-auto p-2 bg-gray-300 hover:bg-green-300">
                     ลบเลย !!
                 </button>                    
             </div>
