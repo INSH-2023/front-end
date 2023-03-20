@@ -7,38 +7,66 @@ const problemsLink=`${import.meta.env.VITE_BACK_END_HOST}/problems`
 const problemList=ref([])
 const name=ref('')
 
-
-const subjectCr=ref('none')
+const data_ch=computed(()=>{
+    return{
+        problem_problem:name.value,
+        problem_type:subjectCr.value
+    }
+})
+const subjectCr=ref('hardware')
 
 const isEdit =ref(false)
 // get  problem
 const getP =async(v)=>{
 
-    console.log(`id : ${v}`)
+    let status =undefined
 
     if(v == undefined){
-
-        const [status,data]=await toBackEnd.getData('problem',problemsLink)
-        if(status==200){
+        const [ss,data]=await toBackEnd.getData('problem',problemsLink)
+        if(ss==200){
+            status=true
             problemList.value=data
             splitProblems(currentPage.value)
             console.log(data)
         }else{
             //status something
+            status=false
             console.log(data)
         }
     }else
     if(v != undefined){
 
-        const [status,data] = await toBackEnd.getDataBy('problem',problemsLink,v)
-        if(status==200){
-            problemList.value=data
+        console.log(v)
+        let res=await fetch(problemsLink,{
+            method:'GET',
+            headers:{
+                "subject_type":`${v}`
+            }
+        })
+
+        if(res.status==200){
+            status=true
+            problemList.value=await res.json()
             splitProblems(currentPage.value)
-            console.log(data)
+            console.log(problemList.value)
         }else{
-            console.log(data)
+            status=false
+            console.log(await res.json())
         }
+        // const [ss,data] = await toBackEnd.getDataBy('problem',problemsLink,v)
+        // if(ss==200){
+        //     status=true
+        //     problemList.value=data
+        //     splitProblems(currentPage.value)
+        //     console.log(data)
+        // }else{
+        //     // status something
+        //     status=false
+        //     console.log(data)
+        // }
     }
+
+    return status
 
 }
 
@@ -113,38 +141,30 @@ const hoverFn =(b,n)=>{
 
 // add new problem
 const addProblem =async()=>{
-    let res =await fetch(problemsLink,{
-        method:'POST',
-        headers:{
-            "content-type": "application/json"
-        },
-        body:JSON.stringify({
-            img:"../../../src/assets/vue.svg",
-            subject:subject.value,
-            name:name.value
-        })
-    })
-    if(res.status==201){
+
+    let [status,data]=await toBackEnd.postData('problem',problemsLink,data_ch.value)
+    
+    if(status==200){
         console.log('add problem success 😏')
-        getP()
+        console.log(data)
+        getP(subjectCr.value)
     }else{
-        console.log('error cannot add new poblem')
+        console.log(data)
     }
 }
 
 // delete problems
-const removeProblem = async (n)=>{
-    let res =await fetch(`${problemsLink}/${n}`,{
-        method:'DELETE'
-    })
-    if(res.status==200){
-        console.log('delete problem success')
-        await getP()
+const removeProblem = async (id)=>{
+    console.log(id)
+    let [status,data]= await toBackEnd.delete("problem",problemsLink,id)
+    if(status==200){
+        console.log(data)
+        getP(subjectCr.value)
         if(problemList.value.length<=maxOfPage.value){
             splitProblems(1)
         }
     }else{
-        console.log('error cannot delete problem')
+        console.log(data)
     }
 }
 
@@ -154,7 +174,7 @@ const editProblem =()=>{
 }
 
 onBeforeMount(()=>{
-    getP()
+    getP(subjectCr.value)
 })
 
 
@@ -164,7 +184,7 @@ const subjectCh=(event)=>{
     if(type != subjectCr.value){
         subjectCr.value=type
         console.log('change from subject',subjectCr.value)
-        // getP(type)    
+        getP(type)    
     }else 
     if(type == subjectCr.value){
         console.log('subject not change :' ,subjectCr.value)
@@ -226,8 +246,8 @@ const subjectCh=(event)=>{
                             Type of subject
                         </h4>
                         <select @change="subjectCh" name="subject" id="subject" class="absolute bottom-0 w-[200px] bg-[#C6AC8F] text-[#0A0908] text-[20px] font-light rounded-lg p-[1px]  px-[10px]">
-                            <option value="none" selected hidden>Type of subject</option>
-                            <option value="hardware" >Hardware</option>
+                            <!-- <option value="none" selected hidden>Type of subject</option> -->
+                            <option value="hardware" selected>Hardware</option>
                             <option value="software" >Software</option>
                             <option value="internet" >Internet</option>
                             <option value="printer" >Printer</option>
@@ -278,7 +298,7 @@ const subjectCh=(event)=>{
                         </div>
                         <div :id="`edit_${index}`" style="display: none;" class="edit  mt-[20px] ">
                             <h4 class="w-full font-semibold text-[#FFFFFF] cursor-default">
-                                {{ p.name }}                              
+                                {{ p.problem_problem}}                              
                             </h4>
                             <!-- edit button -->
                             <div class="w-full h-fit mt-3">
@@ -289,7 +309,7 @@ const subjectCh=(event)=>{
 
                             <!-- delete card -->
                             <div class="w-full h-fit mt-2">
-                                <button @click="removeProblem(p.id)" class=" bg-[#C1121F] text-[#FDF0D5] text-[14px] px-3 py-1 font-light hover:bg-rose-300 hover:text-gray-600 rounded-lg">
+                                <button @click="removeProblem(p.problemId)" class=" bg-[#C1121F] text-[#FDF0D5] text-[14px] px-3 py-1 font-light hover:bg-rose-300 hover:text-gray-600 rounded-lg">
                                     ลบข้อมูล
                                 </button>                                
                             </div>
