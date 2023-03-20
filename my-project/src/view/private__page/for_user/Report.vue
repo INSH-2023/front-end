@@ -1,25 +1,63 @@
 <script setup>
 import{ref,computed,onBeforeMount} from 'vue'
 import {useRouter,useRoute} from 'vue-router'
-
+import toBackEnd from '../../../JS/fetchToBack'
 const myRouter = useRouter()
 const goBack=()=> myRouter.go(-1)
 const goMain=()=>myRouter.push({name:'services'})
-// const eventLink ="http://localhost:3000/events"
+// const requestLink ="http://localhost:3000/events"
 // const problemsLink = "http://localhost:3000/problems"
-const eventLink =`${import.meta.env.VITE_BACK_END_HOST}/requests`
+const requestLink =`${import.meta.env.VITE_BACK_END_HOST}/requests`
 const problemsLink = `${import.meta.env.VITE_BACK_END_HOST}/problems`
 
 const {params} = useRoute()
 const typeP =params.id
 const service=params.service
 
+
 // ทำ alert
 // ส่งออกข้อมูล
+// get date time
+const Timestamp=()=>{
+    let dateTime =new Date()
+    const is_lessthen_ten =(v)=>v<10?'0'+v:v
+    let date=`${dateTime.getFullYear()}-${is_lessthen_ten(dateTime .getMonth()) }-${is_lessthen_ten(dateTime .getDate()) }`
+    let time=`${is_lessthen_ten(dateTime.getHours())}:${is_lessthen_ten(dateTime.getMinutes())}:${is_lessthen_ten(dateTime.getSeconds())}`
+    return `${date} ${time}`
+}
 
+const data_ch=computed(()=>{
+    return{
+        request_first_name:"TESTING",
+        request_last_name:"TESTING",
+        request_email:"testingTestingTesing@mail.com",
+        request_group:"วิจัยและวัฒนะธรรม",
+        request_service_type:`${service.toUpperCase()}_Service`,
+        request_subject:typeP,
+        request_status:"request",
+        request_req_date:Timestamp(),
+        request_assign:'Not_assign',
+        request_use_type:typeU.value,
+        request_sn:'20a20345',
+        request_brand:brand.value,
+        request_type_matchine:typeM.value,
+        request_other:others.value,
+        request_problems:problem_to_text.value,
+        request_message:massage.value,
+            
 
-// sample data
-const sampleData =ref([])
+        }
+})
+
+// problem list
+const problemList =ref([])
+
+// get data
+const fname=ref('')
+const lname=ref('')
+const email=ref('')
+const group=ref('')
+const sn=ref('')
 
 // first
 const typeU = ref('')
@@ -28,7 +66,12 @@ const brand =ref('')
 const typeM =ref('')
 // third
 const problems =ref([])
-
+const problem_to_text=computed(()=>{
+    let problemT=problems.value.reduce((value,c)=>value+','+c,"")
+    console.log(problemT)
+    problemT=problemT.substring(1)
+    return problemT
+})
 // other
 const others=ref('')
 const massage=ref('')
@@ -113,25 +156,26 @@ const addP =(v)=>{
         // console.log(problems.value)
 
         // animation
-        for(let value2 of sampleData.value){
-            if(value2.name==v){
+        for(let value2 of problemList.value){
+            if(value2.problem_problem==v){
                 value2.selection= !value2.selection
             }
             
         }
         check=false
+        console.log(problems.value)
     }
     else if(check==false){
         problems.value.push(v)
 
         // animation
-        for(let value2 of sampleData.value){
-            if(value2.name==v){
+        for(let value2 of problemList.value){
+            if(value2.problem_problem==v){
                 value2.selection= !value2.selection
             }
             
         }
-        console.log(sampleData.value)
+        // console.log(problemList.value)
         console.log(problems.value)
     }
     
@@ -144,20 +188,30 @@ const isSummary=ref(false)
 
 // get problems
 const getProblems=async()=>{
-    const res = await fetch(problemsLink,{
-        method:'GET'
-    })
-    if(res.status==200){
-        sampleData.value=await res.json()
-        console.log('get problems successful')        
-        await addProperty(sampleData.value)
+    let[status,data]=await toBackEnd.getData('report',problemsLink,typeP)
+    if(status==200){
+        problemList.value=data
+        console.log(data)        
+        addProperty(problemList.value)
     }else{
-        console.log('error something cannot get data')
+        console.log(data)
     }
 }
 
+// get user detail
+const getUser=async()=>{
+    let user =JSON.parse(getDataFromLocal())
+    let [status,data]=await toBackEnd.getDataBy('report',userLink,user)
+    if(status==200){
+        console.log(data)
+    }else{
+        console.log(data)
+    }
+}
+
+
 // add property
-const addProperty =async(v)=>{
+const addProperty =(v)=>{
     for(let data of v){
         data['selection']=false
     }
@@ -167,7 +221,7 @@ const addProperty =async(v)=>{
 onBeforeMount(()=>{
     getProblems()
 // sample data from back-end
-//  sampleData.value=[
+//  problemList.value=[
 //     {
 //         "id":1,
 //         "problems":'NoteBook1'
@@ -197,61 +251,29 @@ onBeforeMount(()=>{
 //         "problems":'NoteBook7'
 //     }]
 
-        // console.log(sampleData.value)
+        // console.log(problemList.value)
     //     createdOBJ.value={}
     //     createdOBJ.value[`${data.problems}`]=false
     //     selectioned.value.push()
 })
 
 // save from
-const saveToLocal=()=>{
-    localStorage.setItem("form",{
-"typeU":typeU.value ,
-"brand":brand.value,
-"typeM":typeM.value,
-"problems":problems.value,
-"others":others.value,
-"massage":massage.value
-    })
+const getDataFromLocal=()=>{
+    return localStorage.getItem('user_info')
 }
 
 // send form
 const isSubmitt=ref(false)
 const submitt = async()=>{
-    let res=await fetch(eventLink ,{
-        method:'POST',
-        headers:{
-            "Content-Type":"application/json"
-        },
-        body:JSON.stringify({
-            full_name:"Testing Testing",
-            email:"testingTestingTesing@mail.com",
-            group_work:"วิจัยและวัฒนะธรรม",
-            service_type:`${service.toUpperCase()}_Service`,
-            subject:typeP,
-            status:"request",
-            date:`${parseInt(new Date().getHours())<10?'0'+(new Date().getHours()):new Date().getHours()}:${parseInt(new Date().getMinutes())<10?'0'+new Date().getMinutes():new Date().getMinutes()}:${parseInt(new Date().getSeconds())<10?'0'+new Date().getSeconds():new Date().getSeconds()}`,
-            assign:'Not_assign',
-            useT:typeU.value,
-            sn:'20a20345',
-            brand:brand.value,
-            typeM:typeM.value,
-            problems:problems.value,
-            other:others.value,
-            massage:massage.value,
-            
-
-        })
-        
-        
-    })
-    if(res.status==201){
-        console.log('post event successful')
+    console.log(data_ch.value)
+    let [status,data]=await toBackEnd.postData('report',requestLink,data_ch.value)
+    if(status==200){
         isSummary.value=undefined
         isSubmitt.value=true
         setTimeout(goMain,5000)
+        console.log(data)
     }else{
-        console.log('error somthing can not post ')
+        console.log(data)
     }
     
     
@@ -377,10 +399,10 @@ const submitt = async()=>{
 
                 <div  class="grid grid-cols-6 gap-y-2 gap-x-2 mt-4 text-[15px] font-medium">
                     <!-- problems -->
-                    <button  v-for="(value,index) in sampleData" :key="index" @click="addP(value.name)" draggable="false" :style="[value.selection==true?'background-color:#1E88E5;color:#E3F2FD':'']" class="w-[150px] mx-auto p-2 hover:bg-gray-300 bg-gray-200 rounded-xl">
+                    <button  v-for="(value,index) in problemList" :key="index" @click="addP(value.problem_problem)" draggable="false" :style="[value.selection==true?'background-color:#1E88E5;color:#E3F2FD':'']" class="w-[150px] mx-auto p-2 hover:bg-gray-300 bg-gray-200 rounded-xl">
                         <img src="../../../assets/vue.svg" alt="NoteBook" class="w-[80px] mx-auto">
                         <h3 class="w-fit mx-auto">
-                            {{value.name}}
+                            {{value.problem_problem}}
                         </h3>
                     </button>
  
