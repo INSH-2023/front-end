@@ -1,7 +1,34 @@
 <script setup>
-import{ref}from'vue'
+import{ref,computed}from'vue'
+import { useRouter } from 'vue-router';
+import toBackEnd from '../../JS/fetchToBack'
+const myRouter = useRouter()
+const goMain=()=>myRouter.push({name:'services'})
+
+const loginLink =`${import.meta.env.VITE_BACK_END_HOST}/authentication`
 const email=ref('')
 const pw=ref('')
+const data_ch =computed(()=>{
+    return{
+        email:email.value,
+        password:pw.value
+    }
+})
+const logIn=async()=>{
+    // console.log(data_ch.value)
+    let [status,data]=await toBackEnd.postData('login',loginLink,data_ch.value)
+    if(status==200){
+        console.log(data)
+        localStorage.setItem('user_info',setLocal(data.data))
+        goMain()
+    }else{
+        console.log(data)
+    }
+}
+
+const setLocal=(data)=>{
+    return JSON.stringify(data)
+}
 
 // testing button
 const isEmailTesting=ref(false)
@@ -16,7 +43,7 @@ const isEmailTesting=ref(false)
             <!-- input zone -->
             <div class=" w-full h-fit border-2 border-gray-400 rounded-[10px]">
                 <div class="flex px-2 py-1.5">
-                    <input type="text" placeholder="E-mail" class="w-[90%] focus:outline-0 my-auto">
+                    <input v-model="email" type="text" placeholder="E-mail" class="w-[90%] focus:outline-0 my-auto">
                     <button @click="isEmailTesting=true" class="w-[10%] ml-[2px] mx-auto">
                        <h2 v-show="isEmailTesting==false" class="p-[1px] mx-auto rounded-full border-2 border-gray-500 text-gray-500 w-[30px]" >
                          > 
@@ -26,7 +53,7 @@ const isEmailTesting=ref(false)
                 </div>
                 <hr v-show="isEmailTesting==true" class="w-[100%] h-[3px]   bg-gray-400 ">
                 <div v-show="isEmailTesting==true" class="flex px-2 py-1.5  ">
-                    <input type="text" placeholder="Password" class="w-[90%]  focus:outline-0 my-auto">
+                    <input v-model="pw" type="text" placeholder="Password" class="w-[90%]  focus:outline-0 my-auto">
                     <!-- <button class="w-[10%] ml-[2px] mx-auto">
                         <h2 class="p-[1px] mx-auto rounded-full border-2 border-gray-500 text-gray-500 w-[30px]" >
                          > 
@@ -42,7 +69,7 @@ const isEmailTesting=ref(false)
 
        <!-- button submit -->
        <div v-show="isEmailTesting==true" class="w-fit mx-auto mt-3">
-            <button class="bg-sky-500 px-[100px] py-[10px] rounded-2xl text-white">
+            <button @click="logIn" class="bg-sky-500 px-[100px] py-[10px] rounded-2xl text-white">
                 login
             </button>
        </div>
