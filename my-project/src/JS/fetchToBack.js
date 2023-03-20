@@ -11,28 +11,45 @@ let toBackEnd={
          method:'DELETE'
       })
       if(res.status==200){
+         
          status=res.status
          console.log(`delete ${name} sucessful by ${id} `)
+         return_data.push(status)
+         return_data.push(await res.json())
       }else{
          status=res.status
          console.log(`cannot delete ${name} by ${id}`)
+         return_data.push(status)
+         return_data.push(await res.json())
       }
-      return_data.push(status)
-      return_data.push(await res.json())
+      
+   
 
-      return status
+      return return_data
    },
 
-   async getData(name,link){
+   async getData(name,link,header=undefined){
       // variable
       let return_data =[]
       let status = undefined
+      let res
       // show log
       console.log(`get data ${name} => ${link}`)
       // fetch
-      let res =await fetch(link,{
-         method:'GET'
-      })
+      if(header==undefined||header==null||header==''){
+         res =await fetch(link,{
+         method:'GET',
+
+         })
+      }else{
+         res =await fetch(link,{
+            method:'GET',
+            headers:{
+               "subject_type":`${header}`
+            }
+         })
+      }
+      
       if(res.status==200){
          let data = await res.json()
          status =res.status
@@ -114,13 +131,13 @@ let toBackEnd={
       return return_data
    },
 
-   async createData(name,link,data){
+   async postData(name,link,data){
       // variable
       let return_data =[]
       let status =undefined
-      console.log(`create data ${name} => ${link}`)
+      console.log(data)
       // show log
-      console.log(`${name} => ${link}`)
+      console.log(`post data ${name} => ${link}`)
       // fetch
       let res = await fetch(link,{
          method:'POST',
@@ -130,10 +147,10 @@ let toBackEnd={
 
       if(res.status==200){
          status=res.status
-         console.log(`create ${name} successful`)
+         console.log(`post ${name} successful`)
       }else{
          status=res.status
-         console.log(`error cannot create ${name}`)
+         console.log(`error cannot post ${name}`)
       }
       return_data.push(status)
       return_data.push(await res.json())
