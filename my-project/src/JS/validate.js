@@ -124,7 +124,28 @@ const validate={
         let problemArr = problem.split(",")
         return problemArr
     }
+    ,
+    vRequestEdit(data){
+        let status=undefined
+        let { 
+            request_status:status_ch,
+            request_assign:assign_ch    
+        }=data
 
+        if(status_ch.length==0 || status_ch==null || status_ch == undefined){
+            
+            console.log("request status_ch invalid")
+            return status=true
+    
+        }else
+        if(assign_ch.length==0 || assign_ch==null || assign_ch==undefined){
+            
+            console.log("request assign_ch invalid")
+            return status=true
+        }
+        status =false
+        return status
+    }
 }
 
 export default validate
