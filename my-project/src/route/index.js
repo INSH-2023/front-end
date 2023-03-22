@@ -47,157 +47,157 @@ const routes=[
                 path:'sign-in',
                 name:'signIn',
                 component:SignIn
-            },
-            {
-                path:'account/admin',
-                name:'mainPrivateAdmin',
-                component:Main_private_admin,
-                children:[
-
-                    {
-                        path:'request',
-                        name:'showAllEvents',
-                        component:ShowAllEvent
-                    },
-                    {
-                        path:'register',
-                        name:'signUp',
-                        component:SignUp                        
-                    },
-                    {
-                        path:'all-users',
-                        name:'showAllUser',
-                        component:ShowAllUser                        
-                    },
-                    {
-                        path:'write-solutions',
-                        name:'writeS',
-                        component:WriteSolutions                        
-                    },
-                    {
-                        path:'all-solution',
-                        name:'showAllSolution',
-                        component:ShowAllSolution                        
-                    },
-                    {
-                        path:'add-problems',
-                        name:'problemsList',
-                        component:ProblemsList                        
-                    }
-                ]
-            },
-            {
-                path:'account/user',
-                name:'mainPrivateUser',
-                component:Main_private_user,
-                children:[   
-                    
-                    {
-                        path:'services',
-                        name:'services',
-                        component:Services
-                    },
-                    {
-                        path:'services/:service',
-                        name:'booking',
-                        component: Booking_main
-                    },
-                    {
-                        path:'services/history',
-                        name:'history',
-                        component: History
-                    },
-                    {
-                        path:'services/:service?/report-problem/:id?',
-                        name:'report',
-                        component: Report
-                    },
-                    {
-                        path:'solution/:id?',
-                        name:'solution',
-                        component: Solutions
-                    }
-                ]          
             }
+    //         {
+    //             path:'account/admin',
+    //             name:'mainPrivateAdmin',
+    //             component:Main_private_admin,
+    //             children:[
+
+    //                 {
+    //                     path:'request',
+    //                     name:'showAllEvents',
+    //                     component:ShowAllEvent
+    //                 },
+    //                 {
+    //                     path:'register',
+    //                     name:'signUp',
+    //                     component:SignUp                        
+    //                 },
+    //                 {
+    //                     path:'all-users',
+    //                     name:'showAllUser',
+    //                     component:ShowAllUser                        
+    //                 },
+    //                 {
+    //                     path:'write-solutions',
+    //                     name:'writeS',
+    //                     component:WriteSolutions                        
+    //                 },
+    //                 {
+    //                     path:'all-solution',
+    //                     name:'showAllSolution',
+    //                     component:ShowAllSolution                        
+    //                 },
+    //                 {
+    //                     path:'add-problems',
+    //                     name:'problemsList',
+    //                     component:ProblemsList                        
+    //                 }
+    //             ]
+    //         },
+    //         {
+    //             path:'account/user',
+    //             name:'mainPrivateUser',
+    //             component:Main_private_user,
+    //             children:[   
+                    
+    //                 {
+    //                     path:'services',
+    //                     name:'services',
+    //                     component:Services
+    //                 },
+    //                 {
+    //                     path:'services/:service',
+    //                     name:'booking',
+    //                     component: Booking_main
+    //                 },
+    //                 {
+    //                     path:'services/history',
+    //                     name:'history',
+    //                     component: History
+    //                 },
+    //                 {
+    //                     path:'services/:service?/report-problem/:id?',
+    //                     name:'report',
+    //                     component: Report
+    //                 },
+    //                 {
+    //                     path:'solution/:id?',
+    //                     name:'solution',
+    //                     component: Solutions
+    //                 }
+    //             ]          
+    //         }
 
 
 
         ]
     },
-    // {
-    //     path:'/account/admin/service',
-    //     name:'mainPrivateAdmin',
-    //     component:Main_private_admin,
-    //     children:[
+    {
+        path:'/account/admin/service',
+        name:'mainPrivateAdmin',
+        component:Main_private_admin,
+        children:[
             
-    //         {
-    //             path:'/account/admin/request',
-    //             name:'showAllEvents',
-    //             component:ShowAllEvent
-    //         },
-    //         {
-    //             path:'/account/admin/register',
-    //             name:'signUp',
-    //             component:SignUp
-    //         },
-    //         {
-    //             path:'/account/admin/all-users',
-    //             name:'showAllUser',
-    //             component:ShowAllUser
-    //         },
-    //         {
-    //             path:'/account/admin/write-solutions',
-    //             name:'writeS',
-    //             component:WriteSolutions
-    //         },
-    //         {
-    //             path:'/account/admin/all-solution',
-    //             name:'showAllSolution',
-    //             component:ShowAllSolution
-    //         },
-    //         {
-    //             path:'/account/admin/add-problems',
-    //             name:'problemsList',
-    //             component:ProblemsList
-    //         }
-    //     ]
+            {
+                path:'request',
+                name:'showAllEvents',
+                component:ShowAllEvent
+            },
+            {
+                path:'register',
+                name:'signUp',
+                component:SignUp
+            },
+            {
+                path:'all-users',
+                name:'showAllUser',
+                component:ShowAllUser
+            },
+            {
+                path:'write-solutions',
+                name:'writeS',
+                component:WriteSolutions
+            },
+            {
+                path:'all-solution',
+                name:'showAllSolution',
+                component:ShowAllSolution
+            },
+            {
+                path:'add-problems',
+                name:'problemsList',
+                component:ProblemsList
+            }
+        ]
 
-    // },
-    // {
-    //     path:'/account/user/services',
-    //     name:'mainPrivateUser',
-    //     component:Main_private_user,
-    //     children:[
-    //         {
-    //             path:'/account/user/services',
-    //             name:'services',
-    //             component:Services
-    //         },
-    //         {
-    //             path:'/account/user/services/:service',
-    //             name:'booking',
-    //             component: Booking_main
-    //         },
-    //         {
-    //             path:'/account/user/services/history',
-    //             name:'history',
-    //             component: History
-    //         },
-    //         {
-    //             path:'/account/user/services/:service?/report-problem/:id?',
-    //             name:'report',
-    //             component: Report
-    //         },
-    //         // {
-    //         //     path:'/account/user/report-problem/:id?/summary'
-    //         // },
-    //         {
-    //             path:'/account/user/solution/:id?',
-    //             name:'solution',
-    //             component: Solutions
-    //         }
-    //     ]
-    // },
+    },
+    {
+        path:'/account/user/services',
+        name:'mainPrivateUser',
+        component:Main_private_user,
+        children:[
+            {
+                path:'',
+                name:'services',
+                component:Services
+            },
+            {
+                path:':service',
+                name:'booking',
+                component: Booking_main
+            },
+            {
+                path:'history',
+                name:'history',
+                component: History
+            },
+            {
+                path:':service?/report-problem/:id?',
+                name:'report',
+                component: Report
+            },
+            // {
+            //     path:'/account/user/report-problem/:id?/summary'
+            // },
+            {
+                path:'solution/:id?',
+                name:'solution',
+                component: Solutions
+            }
+        ]
+    },
     {
         path:'/:NoPage(.*)',
         name:'notFound',
