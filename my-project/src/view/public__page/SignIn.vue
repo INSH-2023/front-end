@@ -18,7 +18,7 @@ const logIn=async()=>{
     // console.log(data_ch.value)
     let [status,data]=await toBackEnd.postData('login',loginLink,data_ch.value)
     if(status==200){
-        console.log(data)
+        console.log('login',data)
         localStorage.setItem('user_info',setLocal(data.data))
         goMain()
     }else{
