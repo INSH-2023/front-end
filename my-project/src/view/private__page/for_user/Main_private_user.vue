@@ -4,7 +4,7 @@ import BaseNav from '../../../components/BaseNav.vue';
 </script>
 <template>
 
-    <!-- <BaseNav  class="h-fit  w-full"/> -->
+    <BaseNav  class="h-fit  w-full"/>
 
     <router-view class="w-[100vw] h-[90%]"/>    
 
