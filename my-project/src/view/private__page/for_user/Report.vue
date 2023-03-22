@@ -2,6 +2,10 @@
 import{ref,computed,onBeforeMount} from 'vue'
 import {useRouter,useRoute} from 'vue-router'
 import toBackEnd from '../../../JS/fetchToBack'
+import BaseProgress from '../../../components/report/BaseProgress.vue';
+import TypeOfUse from '../../../components/report/TypeOfUse.vue';
+import TypeOfMachine from '../../../components/report/TypeOfMachine.vue';
+import Problem from '../../../components/report/Problem.vue';
 const myRouter = useRouter()
 const goBack=()=> myRouter.go(-1)
 const goMain=()=>myRouter.push({name:'services'})
@@ -9,14 +13,14 @@ const goMain=()=>myRouter.push({name:'services'})
 // const problemsLink = "http://localhost:3000/problems"
 const requestLink =`${import.meta.env.VITE_BACK_END_HOST}/requests`
 const problemsLink = `${import.meta.env.VITE_BACK_END_HOST}/problems`
+const itemLink =`${import.meta.env.VITE_BACK_END_HOST}/items`
 
 const {params} = useRoute()
 const typeP =params.id
 const service=params.service
 
+const progress_status=undefined
 
-// ทำ alert
-// ส่งออกข้อมูล
 // get date time
 const Timestamp=()=>{
     let dateTime =new Date()
@@ -27,64 +31,49 @@ const Timestamp=()=>{
 }
 
 const data_ch=computed(()=>{
+
+    
     return{
-        request_first_name:"TESTING",
-        request_last_name:"TESTING",
-        request_email:"testingTestingTesing@mail.com",
-        request_group:"วิจัยและวัฒนะธรรม",
+        request_first_name:user.value.first_name,
+        request_last_name:user.value.last_name,
+        request_email:user.value.email,
+        request_group:user.value.group,
         request_service_type:`${service.toUpperCase()}_Service`,
         request_subject:typeP,
         request_status:"request",
         request_req_date:Timestamp(),
         request_assign:'Not_assign',
         request_use_type:typeU.value,
-        request_sn:'20a20345',
-        request_brand:brand.value,
+        request_sn:typeU.value=='or'?item_or.value.number:'',
+        request_brand:typeU.value=='or'?item_or.value.name:item_sf.value.name,
         request_type_matchine:typeM.value,
         request_other:others.value,
         request_problems:problem_to_text.value,
         request_message:massage.value,
-            
-
-        }
+    }
+   
 })
 
+
+
+const item_or =ref({
+    name:'',
+    number:'',
+    type:'',
+})
+const user=ref({
+    first_name:'',
+    last_name:'',
+    email:'',
+    group:''
+})
+
+const item_sf=ref({
+    name:'',
+    type:'',
+})
 // problem list
 const problemList =ref([])
-
-// get data
-const fname=ref('')
-const lname=ref('')
-const email=ref('')
-const group=ref('')
-const sn=ref('')
-
-// first
-const typeU = ref('')
-const brand =ref('')
-// second
-const typeM =ref('')
-// third
-const problems =ref([])
-const problem_to_text=computed(()=>{
-    let problemT=problems.value.reduce((value,c)=>value+','+c,"")
-    console.log(problemT)
-    problemT=problemT.substring(1)
-    return problemT
-})
-// other
-const others=ref('')
-const massage=ref('')
-
-// compute selection
-const selectioned=ref([])
-const createdOBJ =ref({})
-
-
-// validation
-const vd_typeU=ref(undefined)
-const vd_brand=ref(undefined)
-const vd_typeM =ref(undefined)
 
 const summaryInfo=()=>{
 // console.log(service)
@@ -92,7 +81,7 @@ const summaryInfo=()=>{
         if(typeU.value == ''&&typeP =='hardware'&&typeP =='software'&&typeP =='internet'){
             console.log('please select ur type of use')
         }else
-        if(typeU.value=='sf'&&brand.value.length==0){
+        if(typeU.value=='sf'&&item_sf.value.name.length==0){
             console.log('please input ur device')
         }else 
         if(typeM.value == ''&&typeP =='hardware'&&typeP =='software'&&typeP =='internet'){
@@ -125,14 +114,50 @@ const summaryInfo=()=>{
             nextB.click()
             isSummary.value=true
         }
-        // console.log(service)
     }
-    
-    
 }
-    
-// go back to main service
-// const goBack=(v)=>myRouter.push({path:`/account/user/services/${v}`})
+
+
+
+
+
+
+
+// get data
+const fname=ref('')
+const lname=ref('')
+const email=ref('')
+const group=ref('')
+const sn=ref('')
+
+// first
+const typeU = ref('')
+// const brand =ref('')
+// second
+const typeM =ref('')
+// third
+const problems =ref([])
+const problem_to_text=computed(()=>{
+    let problemT=problems.value.reduce((value,c)=>value+','+c,"")
+    console.log(problemT)
+    problemT=problemT.substring(1)
+    return problemT
+})
+// other
+const others=ref('')
+const massage=ref('')
+
+// compute selection
+const selectioned=ref([])
+const createdOBJ =ref({})
+
+
+// validation
+const vd_typeU=ref(undefined)
+const vd_brand=ref(undefined)
+const vd_typeM =ref(undefined)
+
+
 
 // for other button
 const isOther =ref(false)
@@ -178,7 +203,6 @@ const addP =(v)=>{
         // console.log(problemList.value)
         console.log(problems.value)
     }
-    
 }
 
 
@@ -191,19 +215,46 @@ const getProblems=async()=>{
     let[status,data]=await toBackEnd.getData('report',problemsLink,typeP)
     if(status==200){
         problemList.value=data
-        console.log(data)        
+        // console.log(data)        
         addProperty(problemList.value)
     }else{
         console.log(data)
     }
 }
 
-// get user detail
-const getUser=async()=>{
-    let user =JSON.parse(getDataFromLocal())
-    let [status,data]=await toBackEnd.getDataBy('report',userLink,user)
+// get item_or detail
+const getItem=async()=>{
+    // let userId =JSON.parse(localStorage.getItem('user_info')).userId
+    // console.log(userId)
+    // let [status,data]=await toBackEnd.getDataBy('report',userLink,user)
+    let [status,data]=await toBackEnd.getData('report',itemLink)
     if(status==200){
-        console.log(data)
+        let [{item_name,item_number,item_type,user_first_name,user_last_name,user_email,user_group}]= await data
+        console.log('data :',data)
+        user.value.first_name= user_first_name
+        user.value.last_name= user_last_name
+        user.value.email= user_email
+        user.value.group= user_group
+
+        item_or.value.name= item_name
+        item_or.value.type= item_type
+        item_or.value.number= item_number
+        typeM.value = item_or.value.type
+        // if(data.length!=0){
+        //     fname.value=data.user_first_name
+        //     lname.value=data.user_last_name
+        //     email.value=data.user_email
+        //     sn.value=data.item_number
+        //     brand.value=data.item_name
+        // }
+        // let {user_first_name,user_last_name,user_sn,user_email,user_group}=data
+        // email.value=data.user_email
+        // fname.value=user_first_name
+        // lname.value = user_last_name
+        // group.value=user_group
+        // sn.value=user_sn
+        console.log(user.value)
+        console.log(item_or.value)
     }else{
         console.log(data)
     }
@@ -215,52 +266,15 @@ const addProperty =(v)=>{
     for(let data of v){
         data['selection']=false
     }
-    console.log(v)
+    // console.log(v)
 }
 
 onBeforeMount(()=>{
     getProblems()
-// sample data from back-end
-//  problemList.value=[
-//     {
-//         "id":1,
-//         "problems":'NoteBook1'
-//     },
-//     {
-//         "id":2,
-//         "problems":'NoteBook2'
-//     },
-//     {
-//         "id":3,
-//         "problems":'NoteBook3'
-//     },
-//     {
-//         "id":4,
-//         "problems":'NoteBook4'
-//     },
-//     {
-//         "id":5,
-//         "problems":'NoteBook5'
-//     },
-//     {
-//         "id":6,
-//         "problems":'NoteBook6'
-//     },
-//     {
-//         "id":7,
-//         "problems":'NoteBook7'
-//     }]
-
-        // console.log(problemList.value)
-    //     createdOBJ.value={}
-    //     createdOBJ.value[`${data.problems}`]=false
-    //     selectioned.value.push()
+    getItem()
 })
 
-// save from
-const getDataFromLocal=()=>{
-    return localStorage.getItem('user_info')
-}
+
 
 // send form
 const isSubmitt=ref(false)
@@ -275,53 +289,77 @@ const submitt = async()=>{
     }else{
         console.log(data)
     }
-    
-    
-   
 }
 
+
+const countNumber=ref(0)
+const ttesting=ref('')
+const testingData =(value)=>{
+    console.log('report',value)
+    ttesting.value=value
+}
 </script>
 <template>
 <div class="overflow-auto">
     <div class="pt-3">
-
+       
         <!-- for write report -->
         <div v-if="isSummary==false"  class="w-[1000px] mx-auto">
             
+
+            <!-- header -->
+            <div class="w-fit h-fit mx-auto my-3 text-[36px]">
+                <h3 class="font-semibold">
+                    รายงานปัญหาเกี่ยวกับ <span class="font-light">{{ typeP }}</span>
+                </h3>
+            </div>
+
+            <div class="w-[400px] h-fit mx-auto my-3">
+                <BaseProgress :stage="countNumber" :full_stage="3"/>
+            </div>
+            <button @click="countNumber++">add</button>
+            <button @click="countNumber--">remove</button>
+
+            <div v-if="typeP=='hardware'||typeP=='software'||typeP=='internet'" class="w-[400px] h-fit mt-5 mx-auto text-center">
+                <TypeOfUse @get-type-of-use="testingData" />
+            </div>
+
             <!-- first -->
-            <div v-if="typeP=='hardware'||typeP=='software'||typeP=='internet'" class="mt-5 ">
-                <div class="text-[20px] font-semibold">
+            <!-- <div v-if="typeP=='hardware'||typeP=='software'||typeP=='internet'" class="w-[400px] h-fit mt-5 mx-auto text-center">
+                <div class="text-[25px] font-normal">
                     <h3 >
                         1. เลือก <span class="text-rose-500">ประเภท</span> อุปกรณ์ ของคุณ
                     </h3>                    
                 </div>
 
                 
-                <div class="flex text-[15px] font-medium">
-                    <div class="flex m-2" >
-                        <input v-model="typeU" id="Organization" type="radio" name="hardware_of" value="or" class="m-auto mr-3"> 
-                        <label for="Organization" class="m-auto">
-                            NoteBook / PC :ของสำนักงาน
+                <div class="h-[80px] mt-3 text-[20px] flex justify-between flex-col  font-medium">
+                    <div class="flex ml-14 " >
+                        <input v-model="typeU" id="Organization" type="radio" name="hardware_of" value="or" class="w-[15px] "> 
+                        <label for="Organization" class="ml-4">
+                            ของสำนักงาน
                         </label>                       
                     </div>
-                    <div class="flex m-2">
-                        <input v-model="typeU" id="Self" type="radio" name="hardware_of" value="sf" class="m-auto mr-3">
-                        <label for="Self" class="m-auto">
-                            NoteBook / PC :ของส่วนตัวโปรดระบุ ยี้ห้อ / รุ่น
+                    <div class="flex ml-14 ">
+                        <input v-model="typeU" id="Self" type="radio" name="hardware_of" value="sf" class="w-[15px]">
+                        <label for="Self" class="ml-4">
+                            ของส่วนตัวโปรดระบุ ยี้ห้อ / รุ่น
                         </label>
                         
                     </div>
                     
                 </div>  
                 
-                <div v-if="typeU=='sf'" class=" m-2">
-                        <input v-model="brand" id="Self" type="text" placeholder="ระบุยี้ห้อของคุณที่นี้." name="input_type"  class="resize-none  m-auto w-[300px] mr-3 bg-gray-300 p-1.5 rounded-lg focus:outline-0">
+                <div v-if="typeU=='sf'" class="w-full h-[100px] m-auto mt-3">
+                        <textarea v-model="item_sf.name" id="Self" type="text" placeholder="ระบุยี้ห้อของคุณที่นี้." name="input_type"  class="resize-none w-full h-full   p-2  bg-gray-200 text-[20px] font-light  rounded-lg focus:outline-0"></textarea>
                 </div>
-            </div>
+            </div> -->
 
             <!-- second type of matchine -->
             <div v-if="typeP=='hardware'||typeP=='software'||typeP=='internet'" class="mt-4">
-                <div class="text-[20px] font-semibold">
+                
+                <TypeOfMachine @get-type-of-m="testingData" />
+                <!-- <div class="text-[20px] font-semibold">
                     <h3 >
                         2. เลือก <span class="text-rose-500">ชนิด</span> อุปกรณ์ของคุณ
                     </h3>                    
@@ -329,7 +367,7 @@ const submitt = async()=>{
 
                 
                 <div class="grid grid-cols-6 gap-y-2 gap-x-2 mt-4 text-[15px] font-medium">
-                    <!-- notebook -->
+                    notebook
                     <button @click="typeM='NoteBook'" name="problem" :style="[typeM=='NoteBook'?'background-color:#1E88E5;color:#E3F2FD':'']" class="w-[150px] mx-auto p-2 bg-gray-200 rounded-xl hover:bg-gray-300">
                         <img src="../../../assets/machine/laptop.png" alt="NoteBook" class="w-[80px] mx-auto">
                         <h3 class="w-fit mx-auto">
@@ -337,7 +375,7 @@ const submitt = async()=>{
                         </h3>
                     </button>
 
-                    <!-- PC -->
+                    PC
                     <button @click="typeM='PC'" name="problem" :style="[typeM=='PC'?'background-color:#1E88E5;color:#E3F2FD':'']" class="w-[150px] mx-auto p-2 bg-gray-200 rounded-xl hover:bg-gray-300">
                         <img src="../../../assets/machine/pc.png" alt="NoteBook" class="w-[80px] mx-auto">
                         <h3 class="w-fit mx-auto ">
@@ -345,7 +383,7 @@ const submitt = async()=>{
                         </h3>
                     </button>
                     
-                    <!-- Smart Phone -->
+                    Smart Phone
                     <button @click="typeM='Smart_Phone'" name="problem" :style="[typeM=='Smart_Phone'?'background-color:#1E88E5;color:#E3F2FD':'']" class="w-[150px] mx-auto p-2 bg-gray-200 rounded-xl hover:bg-gray-300">
                         <img src="../../../assets/machine/phone.png" alt="NoteBook" class="w-[80px] mx-auto">
                         <h3 class="w-fit mx-auto text-[14px]">
@@ -353,14 +391,14 @@ const submitt = async()=>{
                         </h3>
                     </button>
 
-                    <!-- Tablet -->
+                    Tablet
                     <button @click="typeM='Tablet'" name="problem" :style="[typeM=='Tablet'?'background-color:#1E88E5;color:#E3F2FD':'']" class="w-[150px] mx-auto p-2 bg-gray-200 rounded-xl hover:bg-gray-300">
                         <img src="../../../assets/machine/tablet.png" alt="NoteBook" class="w-[80px] mx-auto">
                         <h3 class="w-fit mx-auto">
                             Tablet
                         </h3>
                     </button>
-                </div>
+                </div> -->
                
 
             </div>
@@ -398,22 +436,23 @@ const submitt = async()=>{
                 </div>
 
                 <div  class="grid grid-cols-6 gap-y-2 gap-x-2 mt-4 text-[15px] font-medium">
-                    <!-- problems -->
+                    <Problem @get-problem-selected="testingData" :typeP="typeP" />
+                    <!-- problems
                     <button  v-for="(value,index) in problemList" :key="index" @click="addP(value.problem_problem)" draggable="false" :style="[value.selection==true?'background-color:#1E88E5;color:#E3F2FD':'']" class="w-[150px] mx-auto p-2 hover:bg-gray-300 bg-gray-200 rounded-xl">
                         <img src="../../../assets/vue.svg" alt="NoteBook" class="w-[80px] mx-auto">
                         <h3 class="w-fit mx-auto">
                             {{value.problem_problem}}
                         </h3>
                     </button>
- 
 
-                    <!-- other -->
+
+                    other
                     <button  @click="otherF" class="w-[150px] mx-auto p-2 bg-gray-200 rounded-xl hover:bg-gray-300">
                         <img src="../../../assets/report_icon/other.png" alt="other" class="w-[80px] mx-auto">
                         <h3 class="w-fit mx-auto">
                             อื่นๆโปรดระบุ
                         </h3>
-                    </button> 
+                    </button>  -->
                 </div>
             </div>
 
@@ -521,7 +560,7 @@ const submitt = async()=>{
                                 ยี่ห้อ : 
                             </td>
                             <td>
-                                {{brand}}
+                                {{item_or.name}}
                             </td>
                         </tr>
                         <tr >
@@ -530,7 +569,8 @@ const submitt = async()=>{
                             </td>
                             <td>
                                 <!-- {{sn}} -->
-                                123128234
+                                <!-- 123128234 -->
+                                {{ item_or.number }}
                             </td>
                         </tr>
                    </tbody>
