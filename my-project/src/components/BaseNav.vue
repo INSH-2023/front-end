@@ -1,6 +1,6 @@
 <script setup>
 import {useRouter} from 'vue-router'
-import {ref,onBeforeMount, onBeforeUpdate} from 'vue'
+import {ref,onBeforeMount} from 'vue'
 import User from '../icon/User.svg'
 defineProps({
     role:{
@@ -26,10 +26,11 @@ const goService =()=>myRouter.push({name:'services'})
 
 // get role from local
  const role =ref(undefined)
-const getRole=()=>{
+const getRole=(data)=>{
     isAdmin.value=localStorage.getItem('isAdmin')==='false'?false:true
-    role.value=localStorage.getItem('role')
+    role.value=data.user_role
     console.log(role.value)
+    userName.value = data.user_email
 }
 
 // set role
@@ -60,11 +61,14 @@ const toAdmin =()=>{
     }
 
 }
-onBeforeUpdate(()=>{
-    getRole()
-})
+
+
+
 onBeforeMount(()=>{
-    getRole()
+    let user_info =JSON.parse(localStorage.getItem('user_info')) 
+    getRole(user_info)
+    
+
 })
 </script>
 <template>
@@ -72,7 +76,7 @@ onBeforeMount(()=>{
 <div class="bg-[#2196F3]">
     <div >
         <!-- default home -->
-        <div v-if="role==null" class=" p-2">
+        <div v-if="role==null||role==undefined" class=" p-2">
             <div class="flex ml-[20px] w-fit">
                 <img src="../assets/Moral_Fainal.png" alt="" class="w-[40px] h-[40px]">
                 <div class="text-[20px] font-bold text-white my-auto m-3 ">
@@ -145,7 +149,7 @@ onBeforeMount(()=>{
         </div>
 
         <!-- admin page -->
-        <div v-else-if="role=='admin'" class="flex justify-between p-2 relative">
+        <div v-else-if="role=='admin_it'||role=='admin_pr'" class="flex justify-between p-2 relative">
             <div class="flex ml-[20px] w-fit ">
                     <img src="../assets/Moral_Fainal.png" alt="" class="w-[40px] h-[40px] my-auto">
                     <div class="text-[20px] font-bold text-white my-auto m-3 ">
