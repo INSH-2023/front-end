@@ -18,7 +18,9 @@ onBeforeMount(()=>{
     countAllStage()
 })
 onMounted(()=>{
-    document.getElementsByClassName('stage_color')[0].classList.add("bg-rose-300")
+    document.getElementsByClassName('stage_color')[0].classList.replace("bg-gray-400","bg-rose-300")
+    
+
 })
 onUpdated(()=>{
     setStage()
@@ -55,13 +57,15 @@ const setStage=()=>{
 
     // check input with stage
     if(number > stage.value && !(number>=full_stage.value)){
-        circle[number].classList.add("bg-rose-300")
+        // circle[number].classList.add("bg-rose-300")
+        circle[number].classList.replace("bg-gray-400","bg-rose-300")
+
         // circle[number-1].classList.remove("bg-rose-300")
         stage.value=number
     }else 
     if(number < stage.value && !(number<=-1)){
         // circle[number].classList.add("bg-rose-300")
-        circle[number+1].classList.remove("bg-rose-300")
+        circle[number+1].classList.replace("bg-rose-300","bg-gray-400")
         stage.value=number
     }
 }
@@ -69,14 +73,13 @@ const setStage=()=>{
 </script>
 <template>
     <!-- progress -->
+    <ul  class=" flex justify-around">
+        <li v-for="index  in full_stage" :key=index>
+            <div  class="stage_color w-[45px] h-[45px] p-1 bg-gray-400 rounded-full">
 
-                <ul  class=" flex justify-around">
-                    <li v-for="index  in full_stage" :key=index>
-                        <div  class="stage_color w-[45px] h-[45px] p-1 bg-gray-400 rounded-full">
-
-                        </div>
-                    </li>
-                </ul>
+            </div>
+        </li>
+    </ul>
 
 </template>
 <style scoped>
