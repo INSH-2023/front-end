@@ -6,6 +6,7 @@ import BaseProgress from '../../../components/report/BaseProgress.vue';
 import TypeOfUse from '../../../components/report/TypeOfUse.vue';
 import TypeOfMachine from '../../../components/report/TypeOfMachine.vue';
 import Problem from '../../../components/report/Problem.vue';
+import OtherAndMessage from '../../../components/report/OtherAndMessage.vue';
 const myRouter = useRouter()
 const goBack=()=> myRouter.go(-1)
 const goMain=()=>myRouter.push({name:'services'})
@@ -32,7 +33,8 @@ const Timestamp=()=>{
 
 const data_ch=computed(()=>{
 
-    
+    let itemList={}
+
     return{
         request_first_name:user.value.first_name,
         request_last_name:user.value.last_name,
@@ -44,15 +46,41 @@ const data_ch=computed(()=>{
         request_req_date:Timestamp(),
         request_assign:'Not_assign',
         request_use_type:typeU.value,
-        request_sn:typeU.value=='or'?item_or.value.number:'',
-        request_brand:typeU.value=='or'?item_or.value.name:item_sf.value.name,
-        request_type_matchine:typeM.value,
+        request_sn:'',
+        request_brand:'',
+        request_type_matchine:'',
         request_other:others.value,
         request_problems:problem_to_text.value,
         request_message:massage.value,
     }
    
 })
+
+// first section
+const typeOfUse=ref({
+    type:'',
+    brand_sf:''
+})
+
+// second section
+const typeOfMachine=ref({
+    typeM:'',
+    brand_or:'',
+    sn:''
+})
+
+// third section
+const problems =ref([])
+
+// fourth section
+const otherAndMsg=ref({
+    msg:'',
+    msg_other:''
+})
+
+
+// check status
+const is_other =ref(false)
 
 
 
@@ -77,44 +105,49 @@ const problemList =ref([])
 
 const summaryInfo=()=>{
 // console.log(service)
-    if(service=='it'){
-        if(typeU.value == ''&&typeP =='hardware'&&typeP =='software'&&typeP =='internet'){
-            console.log('please select ur type of use')
-        }else
-        if(typeU.value=='sf'&&item_sf.value.name.length==0){
-            console.log('please input ur device')
-        }else 
-        if(typeM.value == ''&&typeP =='hardware'&&typeP =='software'&&typeP =='internet'){
-            console.log('please select ur type of matchine')
-        }else
-        if(problems.value.length==0 && isOther.value == false){
-            console.log('please select ur problems')
-        }else
-        if(isOther.value==true&&others.value.length==0){
-            console.log('please input ur orther')
-        }
-        else{
-            console.log('status good')
-            let nextB =document.getElementById('goSummary')
-            nextB.setAttribute('href','#summaryInfo')
-            nextB.click()
-            isSummary.value=true
-        }
-    }else
-    if(service=='pr'){
-        if(problems.value.length==0){
-            console.log('please select ur problems')
-        }else
-        if(isOther.value==true&&others.value==''){
-            console.log('please input ur orther')
-        }else{
-            console.log('status good')
-            let nextB =document.getElementById('goSummary')
-            nextB.setAttribute('href','#summaryInfo')
-            nextB.click()
-            isSummary.value=true
-        }
-    }
+
+
+    // if(typeOfUse.value.type){
+
+    // }
+    // if(service=='it'){
+    //     if(typeU.value == ''&&typeP =='hardware'&&typeP =='software'&&typeP =='internet'){
+    //         console.log('please select ur type of use')
+    //     }else
+    //     if(typeU.value=='sf'&&item_sf.value.name.length==0){
+    //         console.log('please input ur device')
+    //     }else 
+    //     if(typeM.value == ''&&typeP =='hardware'&&typeP =='software'&&typeP =='internet'){
+    //         console.log('please select ur type of matchine')
+    //     }else
+    //     if(problems.value.length==0 && isOther.value == false){
+    //         console.log('please select ur problems')
+    //     }else
+    //     if(isOther.value==true&&others.value.length==0){
+    //         console.log('please input ur orther')
+    //     }
+    //     else{
+    //         console.log('status good')
+    //         // let nextB =document.getElementById('goSummary')
+    //         // nextB.setAttribute('href','#summaryInfo')
+    //         // nextB.click()
+    //         // isSummary.value=true
+    //     }
+    // }else
+    // if(service=='pr'){
+    //     if(problems.value.length==0){
+    //         console.log('please select ur problems')
+    //     }else
+    //     if(isOther.value==true&&others.value==''){
+    //         console.log('please input ur orther')
+    //     }else{
+    //         console.log('status good')
+    //         // let nextB =document.getElementById('goSummary')
+    //         // nextB.setAttribute('href','#summaryInfo')
+    //         // nextB.click()
+    //         // isSummary.value=true
+    //     }
+    // }
 }
 
 
@@ -136,7 +169,7 @@ const typeU = ref('')
 // second
 const typeM =ref('')
 // third
-const problems =ref([])
+// const problems =ref([])
 const problem_to_text=computed(()=>{
     let problemT=problems.value.reduce((value,c)=>value+','+c,"")
     console.log(problemT)
@@ -269,10 +302,43 @@ const addProperty =(v)=>{
     // console.log(v)
 }
 
-onBeforeMount(()=>{
-    getProblems()
-    getItem()
+// onBeforeMount(()=>{
+//     getProblems()
+//     getItem()
+// })
+
+// compute stage report
+const countNumber=ref(0)
+//return value that is the number of all subject stages
+const full_stage=computed(()=>{
+    let all_stage =0
+    if(typeP=='hardware'||typeP=='software'||typeP=='internet') all_stage=5 ;
+    else if(typeP=='printer'||typeP=='website'||typeP=='meeting'||typeP=='application') all_stage=3 ;
+    else if(typeP=='other') all_stage=2;
+      
+
+    return all_stage
 })
+const computeStageReport=(status)=>{
+    
+    if(countNumber.value > full_stage.value-1){
+        countNumber.value=full_stage.value-1
+    }else
+    if(countNumber.value < 0){
+        countNumber.value=0
+    }
+
+    if(status==true&&countNumber.value != full_stage.value-1){
+        //next
+        countNumber.value++
+    }else
+    if(status==false&&countNumber.value !=0){
+        //back
+        countNumber.value--
+    }
+}
+
+
 
 
 
@@ -291,12 +357,39 @@ const submitt = async()=>{
     }
 }
 
+// get data from component
+const getDataFromComponent =(value)=>{
+    let data =value
+    console.log(`${data.name} => ${data}`)
+    // ttesting.value=value
+    
+    if(data.name=='use_type'){
+        typeOfUse.value.type = data.typeU
+        typeOfUse.value.brand_sf = data.brand_sf
 
-const countNumber=ref(0)
-const ttesting=ref('')
-const testingData =(value)=>{
-    console.log('report',value)
-    ttesting.value=value
+        console.log('type of use : ', typeOfUse.value)
+    }else
+    if(data.name=='type_of_machine'){
+        typeOfMachine.value.typeM = data.typeM
+        typeOfMachine.value.brand = data.brand_or
+        typeOfMachine.value.sn = data.sn
+
+        console.log('type of machine : ', typeOfMachine.value)
+
+    }else
+    if(data.name=='problems'){
+        problems.value = data.problems
+        is_other.value = data.other_status
+
+        console.log('problems : ',data.problems)
+        console.log('other status : ',is_other.value)
+    }else
+    if(data.name=='msg'){
+        otherAndMsg.value.msg = data.msg
+        otherAndMsg.value.msg_other = data.other_msg
+
+        console.log('msg and other : ', otherAndMsg.value)
+    }
 }
 </script>
 <template>
@@ -315,13 +408,15 @@ const testingData =(value)=>{
             </div>
 
             <div class="w-[400px] h-fit mx-auto my-3">
-                <BaseProgress :stage="countNumber" :full_stage="3"/>
+                <BaseProgress :stage="countNumber" :full_stage="full_stage"/>
             </div>
-            <button @click="countNumber++">add</button>
-            <button @click="countNumber--">remove</button>
+            <!-- <button @click="countNumber++">add</button>
+            <button @click="countNumber--">remove</button> -->
 
-            <div v-if="typeP=='hardware'||typeP=='software'||typeP=='internet'" class="w-[400px] h-fit mt-5 mx-auto text-center">
-                <TypeOfUse @get-type-of-use="testingData" />
+            <div v-show="(countNumber==0 && (typeP=='hardware'||typeP=='software'||typeP=='internet'))" 
+                v-if="typeP=='hardware'||typeP=='software'||typeP=='internet'" 
+                class="w-[400px] h-fit mt-10 mx-auto ">
+                <TypeOfUse @get-type-of-use="getDataFromComponent" />
             </div>
 
             <!-- first -->
@@ -356,9 +451,10 @@ const testingData =(value)=>{
             </div> -->
 
             <!-- second type of matchine -->
-            <div v-if="typeP=='hardware'||typeP=='software'||typeP=='internet'" class="mt-4">
-                
-                <TypeOfMachine @get-type-of-m="testingData" />
+            <div v-show="(countNumber==1 && (typeP=='hardware'||typeP=='software'||typeP=='internet'))" 
+                v-if="typeP=='hardware'||typeP=='software'||typeP=='internet'" 
+                class="w-[700px] h-fit mx-auto mt-10">
+                <TypeOfMachine  @get-type-of-m="getDataFromComponent" :type-of-use-o-r="typeOfUse.type=='or'?true:false" />
                 <!-- <div class="text-[20px] font-semibold">
                     <h3 >
                         2. เลือก <span class="text-rose-500">ชนิด</span> อุปกรณ์ของคุณ
@@ -404,39 +500,16 @@ const testingData =(value)=>{
             </div>
 
             <!-- third problem -->
-            <div v-if="typeP != 'other'" class="mt-4">
-                <div class="text-[20px] font-semibold">
-                    <h3 v-if="typeP=='hardware'">
-                        3. เลือก <span class="text-rose-500">ปัญหา</span> Hardware ที่ต้องการให้ช่วยเหลือ
-                    </h3>
-                    <h3 v-if="typeP=='software'">
-                        3. เลือก <span class="text-rose-500">ปัญหา</span>Software ที่ต้องการให้ช่วยเหลือ
-                    </h3>
-                    <h3 v-if="typeP=='internet'">
-                        3. เลือก <span class="text-rose-500">ปัญหา</span> Internet ที่ต้องการให้ช่วยเหลือ
-                    </h3>
-                    <h3 v-if="typeP=='printer'">
-                        1. เลือก <span class="text-rose-500">ปัญหา</span> Printer ที่ต้องการให้ช่วยเหลือ
-                    </h3>
-                    <h3 v-if="typeP=='website'">
-                        1. เลือก หัวข้อ <span class="text-rose-500">Website</span> ที่ต้องการให้ช่วยเหลือ
-                    </h3>
-                    <h3 v-if="typeP=='meeting'">
-                        1. เลือก หัวข้อ <span class="text-rose-500">Meeting</span> ที่ต้องการให้ช่วยเหลือ
-                    </h3>
-                    <h3 v-if="typeP=='application'">
-                        1. เลือก หัวข้อ <span class="text-rose-500">Application</span> ที่ต้องการให้ช่วยเหลือ
-                    </h3> 
-                    <h3 v-if="typeP=='media'">
-                        1. เลือก หัวข้อ <span class="text-rose-500">Media</span> ที่ต้องการให้ช่วยเหลือ
-                    </h3>
-                    <h3 v-if="typeP=='news'">
-                        1. เลือก หัวข้อ <span class="text-rose-500">News</span> ที่ต้องการให้ช่วยเหลือ
-                    </h3>                    
-                </div>
+            <div v-show="(countNumber==2 && (typeP=='hardware'||typeP=='software'||typeP=='internet'))
+                        || (countNumber==0 && (typeP=='printer'||typeP=='website'||typeP=='meeting'||typeP=='application'||typeP=='media'||typeP=='news'))" 
+                v-if="typeP != 'other'" 
+                class="w-[700px] h-fit mx-auto mt-10 ">
+                
 
-                <div  class="grid grid-cols-6 gap-y-2 gap-x-2 mt-4 text-[15px] font-medium">
-                    <Problem @get-problem-selected="testingData" :typeP="typeP" />
+                <!-- <div v-show="(countNumber==2 && (typeP=='hardware'||typeP=='software'||typeP=='internet')) 
+                            || (countNumber==0 && (typeP=='printer'||typeP=='website'||typeP=='meeting'||typeP=='application'||typeP=='media'||typeP=='news'))" 
+                    class="grid grid-cols-6 gap-y-2 gap-x-2 mt-4 text-[15px] font-medium"> -->
+                    <Problem @get-problem-selected="getDataFromComponent" :typeP="typeP" />
                     <!-- problems
                     <button  v-for="(value,index) in problemList" :key="index" @click="addP(value.problem_problem)" draggable="false" :style="[value.selection==true?'background-color:#1E88E5;color:#E3F2FD':'']" class="w-[150px] mx-auto p-2 hover:bg-gray-300 bg-gray-200 rounded-xl">
                         <img src="../../../assets/vue.svg" alt="NoteBook" class="w-[80px] mx-auto">
@@ -453,12 +526,21 @@ const testingData =(value)=>{
                             อื่นๆโปรดระบุ
                         </h3>
                     </button>  -->
-                </div>
+                <!-- </div> -->
             </div>
 
                 <!-- fourth -->
-                <div v-if="typeP !='other'"  class="flex flex-nowrap mt-10 mx-auto">
-                    <div v-show="isOther==true" class="mx-4">
+                <!-- <div v-if="typeP !='other'"  class="flex flex-nowrap mt-10 mx-auto"> -->
+                    <OtherAndMessage 
+                        v-show="(countNumber==3 && (typeP=='hardware'||typeP=='software'||typeP=='internet'))
+                                || (countNumber==1 && (typeP=='printer'||typeP=='website'||typeP=='meeting'||typeP=='application'||typeP=='media'||typeP=='news'))
+                                || (countNumber==0 && (typeP=='other'))" 
+                        @get-message="getDataFromComponent" 
+                        :is-type-p_other="typeP == 'other'?true:false" 
+                        :service_it="service=='it'?true:false" 
+                        :is-other="is_other" 
+                    />
+                    <!-- <div v-show="isOther==true" class="mx-4">
                         <label for="other_1" class="ml-3 text-[17px] font-semibold inline-b">
                             กรณีเลือก<span class="text-rose-500 pl-2">อื่นๆโปรดระบุ</span>
                         </label>
@@ -472,12 +554,12 @@ const testingData =(value)=>{
                             <span v-if="service=='pr'">ระบุรายละเอียดเพิ่มเติม (ถ้ามี)</span> 
                         </label>
                         <textarea v-model="massage" name="other" id="other_2" cols="50" rows="10" class="resize-none block bg-gray-300 rounded-xl p-2 focus:outline-0"></textarea>
-                    </div>
-                </div>
+                    </div> -->
+                <!-- </div> -->
 
                 <!-- other -->
-                <div v-else-if="typeP=='other'" class="mt-10 mx-auto w-fit mx-auto">
-                    <div class="mx-4">
+                <!-- <div v-else-if="typeP=='other'" class="mt-10 mx-auto w-fit mx-auto"> -->
+                    <!-- <div class="mx-4">
                         <label for="other_1" class="ml-3 text-[17px] font-semibold inline-b">
                             ระบุ รายละเอียด หรือ ความต้องการของคุณ
                         </label>
@@ -490,20 +572,20 @@ const testingData =(value)=>{
                             หมายเหตุเพิ่มเติม (ถ้ามี)
                         </label>
                         <textarea v-model="massage" name="other" id="other_2"  class="resize-none block w-[700px] h-[150px] bg-gray-300 rounded-xl p-2 focus:outline-0"></textarea>
-                    </div>
-                </div>
+                    </div> -->
+                <!-- </div> -->
 
                 
             
 
             <!-- button -->
             <div class="w-fit mx-auto mt-10">
-                <button @click="goBack" class="w-[130px] mx-3 p-2 font-semibold bg-gray-400 text-white rounded-xl">
+                <button @click="countNumber==0? myRouter.go(-1):computeStageReport(false)" class="w-[130px] mx-3 p-2 font-semibold bg-gray-400 text-white rounded-xl">
                     <h4>
                         ย้อนกลับ
                     </h4>
                 </button>
-                <button @click="summaryInfo()" class="w-[130px] mx-3 p-2 font-semibold bg-rose-400 text-white rounded-xl">
+                <button @click="computeStageReport(true)" class="w-[130px] mx-3 p-2 font-semibold bg-rose-400 text-white rounded-xl">
                     <a id="goSummary">
                         ถัดไป
                     </a>
@@ -560,7 +642,7 @@ const testingData =(value)=>{
                                 ยี่ห้อ : 
                             </td>
                             <td>
-                                {{item_or.name}}
+                                {{typeOfMachine.brand_or}}
                             </td>
                         </tr>
                         <tr >
@@ -570,7 +652,7 @@ const testingData =(value)=>{
                             <td>
                                 <!-- {{sn}} -->
                                 <!-- 123128234 -->
-                                {{ item_or.number }}
+                                {{ typeOfMachine.sn }}
                             </td>
                         </tr>
                    </tbody>
