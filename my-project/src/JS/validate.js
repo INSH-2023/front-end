@@ -145,7 +145,8 @@ const validate={
         }
         status =false
         return status
-    }
+    },
+
 }
 
 export default validate
