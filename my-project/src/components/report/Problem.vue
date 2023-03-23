@@ -6,17 +6,17 @@ const problemsLink = `${import.meta.env.VITE_BACK_END_HOST}/problems`
 const emit =defineEmits(["getProblemSelected"])
 const props = defineProps({
     typeP:{
-        type:Array,
+        type:String,
         required:true
     }
 })
 
-onBeforeMount(async()=>{
+onBeforeMount(()=>{
     getProblems()
 })
 
 onUpdated(()=>{
-    emit('getProblemSelected',{problems:problems.value,other:otherSelection()})
+    emit('getProblemSelected',{name:'problems',problems:problems.value,other_status:is_other.value})
 })
 
 // get from db
@@ -26,9 +26,9 @@ const problems =ref([])
 //check other
 const is_other=ref(false)
 const otherSelection=()=>{
-    let status=is_other.value
+    let status =is_other.value
     is_other.value = !is_other.value
-    status=is_other.value
+    console.log('isother ? ',is_other.value)
     return status
 }
 
@@ -37,7 +37,7 @@ const getProblems=async()=>{
     let[status,data]=await toBackEnd.getData('component_problem',problemsLink,props.typeP)
     if(status==200){
         problemList.value=data
-        // console.log(data)        
+        console.log(data)        
         addProperty(problemList.value)
     }else{
         console.log(data)
@@ -90,22 +90,54 @@ const addP =(v)=>{
 }
 </script>
 <template>
-<!-- problems -->
-    <button  v-for="(value,index) in problemList" :key="index" @click="addP(value.problem_problem)"  :style="[value.selection==true?'background-color:#1E88E5;color:#E3F2FD':'']" class="w-[150px] mx-auto p-2 hover:bg-gray-300 bg-gray-200 rounded-xl">
-        <img src="../../assets/vue.svg" alt="NoteBook" draggable="false" class="w-[80px] mx-auto">
-        <h3 class="w-fit mx-auto">
-            {{value.problem_problem}}
+    <div class="w-full text-[25px] font-normal">
+        <h3 v-if="props.typeP=='hardware'">
+            3. เลือก <span class="text-rose-500">ปัญหา</span> Hardware ที่ต้องการให้ช่วยเหลือ
         </h3>
-    </button>
+        <h3 v-if="props.typeP=='software'">
+            3. เลือก <span class="text-rose-500">ปัญหา</span>Software ที่ต้องการให้ช่วยเหลือ
+        </h3>
+        <h3 v-if="props.typeP=='internet'">
+            3. เลือก <span class="text-rose-500">ปัญหา</span> Internet ที่ต้องการให้ช่วยเหลือ
+        </h3>
+        <h3 v-if="props.typeP=='printer'">
+            1. เลือก <span class="text-rose-500">ปัญหา</span> Printer ที่ต้องการให้ช่วยเหลือ
+        </h3>
+        <h3 v-if="props.typeP=='website'">
+            1. เลือก หัวข้อ <span class="text-rose-500">Website</span> ที่ต้องการให้ช่วยเหลือ
+        </h3>
+        <h3 v-if="props.typeP=='meeting'">
+            1. เลือก หัวข้อ <span class="text-rose-500">Meeting</span> ที่ต้องการให้ช่วยเหลือ
+        </h3>
+        <h3 v-if="props.typeP=='application'">
+            1. เลือก หัวข้อ <span class="text-rose-500">Application</span> ที่ต้องการให้ช่วยเหลือ
+        </h3> 
+        <h3 v-if="props.typeP=='media'">
+            1. เลือก หัวข้อ <span class="text-rose-500">Media</span> ที่ต้องการให้ช่วยเหลือ
+        </h3>
+        <h3 v-if="props.typeP=='news'">
+            1. เลือก หัวข้อ <span class="text-rose-500">News</span> ที่ต้องการให้ช่วยเหลือ
+        </h3>                    
+    </div>
+
+    <div class="grid grid-cols-4 gap-y-2 gap-x-2 mt-4 text-[15px] font-medium">
+    <!-- problems -->
+        <button  v-for="(value,index) in problemList" :key="index" @click="addP(value.problem_problem)"  :style="[value.selection==true?'background-color:#1E88E5;color:#E3F2FD':'']" class="w-[150px] mx-auto p-2 hover:bg-gray-300 bg-gray-200 rounded-xl">
+            <img src="../../assets/vue.svg" alt="NoteBook" draggable="false" class="w-[80px] mx-auto">
+            <h3 class="w-fit mx-auto">
+                {{value.problem_problem}}
+            </h3>
+        </button>
 
 
-    <!-- other -->
-    <button  @click="otherF"  class="w-[150px] mx-auto p-2 bg-gray-200 rounded-xl hover:bg-gray-300">
-        <img src="../../assets/report_icon/other.png" draggable="false" alt="other" class="w-[80px] mx-auto">
-        <h3 class="w-fit mx-auto">
-            อื่นๆโปรดระบุ
-        </h3>
-    </button> 
+        <!-- other -->
+        <button  @click="otherSelection" :style="[is_other==true?'background-color:#1E88E5;color:#E3F2FD':'']"  class="w-[150px] mx-auto p-2 bg-gray-200 rounded-xl hover:bg-gray-300">
+            <img src="../../assets/report_icon/other.png" draggable="false" alt="other" class="w-[80px] mx-auto">
+            <h3 class="w-fit mx-auto">
+                อื่นๆโปรดระบุ
+            </h3>
+        </button> 
+    </div>
 </template>
 <style scoped>
 </style>
