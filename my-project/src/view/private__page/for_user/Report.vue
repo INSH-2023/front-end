@@ -7,6 +7,7 @@ import TypeOfUse from '../../../components/report/TypeOfUse.vue';
 import TypeOfMachine from '../../../components/report/TypeOfMachine.vue';
 import Problem from '../../../components/report/Problem.vue';
 import OtherAndMessage from '../../../components/report/OtherAndMessage.vue';
+import validate from '../../../JS/validate';
 const myRouter = useRouter()
 const goBack=()=> myRouter.go(-1)
 const goMain=()=>myRouter.push({name:'services'})
@@ -15,7 +16,7 @@ const goMain=()=>myRouter.push({name:'services'})
 const requestLink =`${import.meta.env.VITE_BACK_END_HOST}/requests`
 const problemsLink = `${import.meta.env.VITE_BACK_END_HOST}/problems`
 const itemLink =`${import.meta.env.VITE_BACK_END_HOST}/items`
-
+const userLink =`${import.meta.env.VITE_BACK_END_HOST}/users`
 const {params} = useRoute()
 const typeP =params.id
 const service=params.service
@@ -33,7 +34,6 @@ const Timestamp=()=>{
 
 const data_ch=computed(()=>{
 
-    let itemList={}
 
     return{
         request_first_name:user.value.first_name,
@@ -45,13 +45,13 @@ const data_ch=computed(()=>{
         request_status:"request",
         request_req_date:Timestamp(),
         request_assign:'Not_assign',
-        request_use_type:typeU.value,
-        request_sn:'',
-        request_brand:'',
-        request_type_matchine:'',
-        request_other:others.value,
+        request_use_type:typeOfUse.value.type,
+        request_sn:typeOfMachine.value.sn,
+        request_brand:typeOfUse.value.type=='or'?typeOfMachine.value.brand_or:typeOfUse.value.brand_sf,
+        request_type_matchine:typeOfMachine.value.typeM,
+        request_other:otherAndMsg.value.msg_other,
         request_problems:problem_to_text.value,
-        request_message:massage.value,
+        request_message:otherAndMsg.value.msg,
     }
    
 })
@@ -84,29 +84,104 @@ const is_other =ref(false)
 
 
 
-const item_or =ref({
-    name:'',
-    number:'',
-    type:'',
-})
+
+
+
 const user=ref({
     first_name:'',
     last_name:'',
     email:'',
-    group:''
+    group:'',
+    emp_code:''
 })
 
-const item_sf=ref({
-    name:'',
-    type:'',
-})
 // problem list
 const problemList =ref([])
 
-const summaryInfo=()=>{
+const validateReport=(stage)=>{
+
 // console.log(service)
+// console.log(stage)
+    if(typeP=='hardware'||typeP=='software'||typeP=='internet'){
+        if(stage==0 ){
+            // status something
+            if(validate.vSection_I(typeOfUse.value)){
+                computeStageReport(true)
+            }else{
+                // alert error something
+            }
 
 
+        }else
+        if(stage==1){
+            // status something
+            if(validate.vSection_II(typeOfMachine.value,typeOfUse.value,user.value)){
+                computeStageReport(true)   
+            }else{
+                // alert error something
+            }
+            
+
+        }else
+        if(stage==2){
+            // status something
+            if(validate.vSection_III(problems.value,is_other.value)){
+                computeStageReport(true)
+            }else{
+                // alert error something
+            }
+            
+        }else
+        if(stage==3){
+            // status something
+            if(validate.vSection_IIII(otherAndMsg.value,is_other.value)){
+                computeStageReport(true)
+            }else{
+                
+            }
+        }else
+        if(stage==4){
+            console.log(data_ch.value)
+            submitt()
+            // console.log(`
+            // request_first_name:${user.value.first_name},
+            // request_last_name:${user.value.last_name},
+            // request_email:${user.value.email},
+            // request_group:${user.value.group},
+            // request_service_type:${service.toUpperCase()}_Service,
+            // request_subject:${typeP},
+            // request_status:"request",
+            // request_req_date:${Timestamp()},
+            // request_assign:${'Not_assign'},
+            // request_use_type:${typeOfUse.value.type},
+            // request_sn:${typeOfMachine.value.sn},
+            // request_brand:${typeOfUse.value.type=='or'?typeOfMachine.value.brand_or:typeOfUse.value.brand_sf},
+            // request_type_matchine:${typeOfMachine.value.typeM},
+            // request_other:${otherAndMsg.value.msg_other},
+            // request_problems:${problem_to_text.value},
+            // request_message:${otherAndMsg.value.msg},
+            // `)
+        }
+        // console.log(stage)
+
+    }else
+    if(typeP=='printer'||typeP=='website'||typeP=='meeting'||typeP=='application'){
+        if(stage==0){
+            if(problems.value.length==0){
+            console.log('please input ur data section 2')
+
+            }else{
+                computeStageReport(true)
+            }
+        }else
+        if(stage==1){
+
+        }
+
+    }else
+    if(typeP=='other'){
+        
+    }
     // if(typeOfUse.value.type){
 
     // }
@@ -156,12 +231,7 @@ const summaryInfo=()=>{
 
 
 
-// get data
-const fname=ref('')
-const lname=ref('')
-const email=ref('')
-const group=ref('')
-const sn=ref('')
+
 
 // first
 const typeU = ref('')
@@ -180,132 +250,86 @@ const problem_to_text=computed(()=>{
 const others=ref('')
 const massage=ref('')
 
-// compute selection
-const selectioned=ref([])
-const createdOBJ =ref({})
-
-
-// validation
-const vd_typeU=ref(undefined)
-const vd_brand=ref(undefined)
-const vd_typeM =ref(undefined)
 
 
 
-// for other button
-const isOther =ref(false)
-const otherF =()=>{
-    others.value=''
-    console.log(typeP)
-    isOther.value= !isOther.value   
-    
-}
-
-// add problem
-const addP =(v)=>{
-    let check=false
-    for(let value of problems.value){
-        if(value==v)check=true;
-       
-    } 
-    if(check==true){
-        // console.log(problems.value.indexOf(v))
-        problems.value.splice(problems.value.indexOf(v),1)
-        // console.log(problems.value)
-
-        // animation
-        for(let value2 of problemList.value){
-            if(value2.problem_problem==v){
-                value2.selection= !value2.selection
-            }
-            
-        }
-        check=false
-        console.log(problems.value)
-    }
-    else if(check==false){
-        problems.value.push(v)
-
-        // animation
-        for(let value2 of problemList.value){
-            if(value2.problem_problem==v){
-                value2.selection= !value2.selection
-            }
-            
-        }
-        // console.log(problemList.value)
-        console.log(problems.value)
-    }
-}
 
 
 // isSummary
 const isSummary=ref(false)
 
+const getUser= async(user_id)=>{
 
-// get problems
-const getProblems=async()=>{
-    let[status,data]=await toBackEnd.getData('report',problemsLink,typeP)
+    const [status,data]= await toBackEnd.getData('report_user',`${userLink}/${user_id}`)
     if(status==200){
-        problemList.value=data
-        // console.log(data)        
-        addProperty(problemList.value)
+        let [{user_first_name,user_last_name,user_group,user_email}]=data
+        user.value.first_name=user_first_name
+        user.value.last_name=user_last_name
+        user.value.group=user_group
+        user.value.email=user_email
+        console.log(data)
     }else{
         console.log(data)
     }
 }
+// // get problems
+// const getProblems=async()=>{
+//     let[status,data]=await toBackEnd.getData('report',problemsLink,typeP)
+//     if(status==200){
+//         problemList.value=data
+//         // console.log(data)        
+//         addProperty(problemList.value)
+//     }else{
+//         console.log(data)
+//     }
+// }
 
 // get item_or detail
-const getItem=async()=>{
-    // let userId =JSON.parse(localStorage.getItem('user_info')).userId
-    // console.log(userId)
-    // let [status,data]=await toBackEnd.getDataBy('report',userLink,user)
-    let [status,data]=await toBackEnd.getData('report',itemLink)
-    if(status==200){
-        let [{item_name,item_number,item_type,user_first_name,user_last_name,user_email,user_group}]= await data
-        console.log('data :',data)
-        user.value.first_name= user_first_name
-        user.value.last_name= user_last_name
-        user.value.email= user_email
-        user.value.group= user_group
+// const getItem=async()=>{
+//     // let userId =JSON.parse(localStorage.getItem('user_info')).userId
+//     // console.log(userId)
+//     // let [status,data]=await toBackEnd.getDataBy('report',userLink,user)
+//     let [status,data]=await toBackEnd.getData('report',itemLink)
+//     if(status==200){
+//         let [{item_name,item_number,item_type,user_first_name,user_last_name,user_email,user_group}]= await data
+//         console.log('data :',data)
+//         user.value.first_name= user_first_name
+//         user.value.last_name= user_last_name
+//         user.value.email= user_email
+//         user.value.group= user_group
 
-        item_or.value.name= item_name
-        item_or.value.type= item_type
-        item_or.value.number= item_number
-        typeM.value = item_or.value.type
-        // if(data.length!=0){
-        //     fname.value=data.user_first_name
-        //     lname.value=data.user_last_name
-        //     email.value=data.user_email
-        //     sn.value=data.item_number
-        //     brand.value=data.item_name
-        // }
-        // let {user_first_name,user_last_name,user_sn,user_email,user_group}=data
-        // email.value=data.user_email
-        // fname.value=user_first_name
-        // lname.value = user_last_name
-        // group.value=user_group
-        // sn.value=user_sn
-        console.log(user.value)
-        console.log(item_or.value)
-    }else{
-        console.log(data)
-    }
-}
+//         item_or.value.name= item_name
+//         item_or.value.type= item_type
+//         item_or.value.number= item_number
+//         typeM.value = item_or.value.type
+//         // if(data.length!=0){
+//         //     fname.value=data.user_first_name
+//         //     lname.value=data.user_last_name
+//         //     email.value=data.user_email
+//         //     sn.value=data.item_number
+//         //     brand.value=data.item_name
+//         // }
+//         // let {user_first_name,user_last_name,user_sn,user_email,user_group}=data
+//         // email.value=data.user_email
+//         // fname.value=user_first_name
+//         // lname.value = user_last_name
+//         // group.value=user_group
+//         // sn.value=user_sn
+//         console.log(user.value)
+//         console.log(item_or.value)
+//     }else{
+//         console.log(data)
+//     }
+// }
 
 
-// add property
-const addProperty =(v)=>{
-    for(let data of v){
-        data['selection']=false
-    }
-    // console.log(v)
-}
 
-// onBeforeMount(()=>{
-//     getProblems()
-//     getItem()
-// })
+
+onBeforeMount(()=>{
+    getUser(validate.getUserDataFromLocal('user_emp_code'))
+    // getProblems()
+    // getItem()
+})
 
 // compute stage report
 const countNumber=ref(0)
@@ -319,6 +343,8 @@ const full_stage=computed(()=>{
 
     return all_stage
 })
+
+// คำนวณ stage สำหรับกดปุ่มถัดไป
 const computeStageReport=(status)=>{
     
     if(countNumber.value > full_stage.value-1){
@@ -327,7 +353,7 @@ const computeStageReport=(status)=>{
     if(countNumber.value < 0){
         countNumber.value=0
     }
-
+   
     if(status==true&&countNumber.value != full_stage.value-1){
         //next
         countNumber.value++
@@ -348,8 +374,8 @@ const submitt = async()=>{
     console.log(data_ch.value)
     let [status,data]=await toBackEnd.postData('report',requestLink,data_ch.value)
     if(status==200){
-        isSummary.value=undefined
-        isSubmitt.value=true
+        // isSummary.value=undefined
+        // isSubmitt.value=true
         setTimeout(goMain,5000)
         console.log(data)
     }else{
@@ -370,11 +396,21 @@ const getDataFromComponent =(value)=>{
         console.log('type of use : ', typeOfUse.value)
     }else
     if(data.name=='type_of_machine'){
-        typeOfMachine.value.typeM = data.typeM
-        typeOfMachine.value.brand = data.brand_or
-        typeOfMachine.value.sn = data.sn
+        // const {item,user}=data
+        // if(user.value.emp_code==data.user_emp_code){
+            typeOfMachine.value.typeM = data.item.type
+            typeOfMachine.value.brand_or = data.item.brand_or
+            typeOfMachine.value.sn = data.item.sn            
+        // }
+        // else{
+        //     // status something
+        //     console.log('cannot assign report item')
+        // }
+
+
 
         console.log('type of machine : ', typeOfMachine.value)
+
 
     }else
     if(data.name=='problems'){
@@ -391,6 +427,8 @@ const getDataFromComponent =(value)=>{
         console.log('msg and other : ', otherAndMsg.value)
     }
 }
+
+
 </script>
 <template>
 <div class="overflow-auto">
@@ -585,7 +623,7 @@ const getDataFromComponent =(value)=>{
                         ย้อนกลับ
                     </h4>
                 </button>
-                <button @click="computeStageReport(true)" class="w-[130px] mx-3 p-2 font-semibold bg-rose-400 text-white rounded-xl">
+                <button @click="validateReport(countNumber)" class="w-[130px] mx-3 p-2 font-semibold bg-rose-400 text-white rounded-xl">
                     <a id="goSummary">
                         ถัดไป
                     </a>
