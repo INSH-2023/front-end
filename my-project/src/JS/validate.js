@@ -1,3 +1,4 @@
+import {useRouter} from 'vue-router'
 const validate={
     vUserCreate(data,lenghtOfText){
         let vStatus=false
@@ -120,11 +121,7 @@ const validate={
             return false;
         }
     },
-    splitProblem (problem){
-        let problemArr = problem.split(",")
-        return problemArr
-    }
-    ,
+    
     vRequestEdit(data){
         let status=undefined
         let { 
@@ -146,6 +143,93 @@ const validate={
         status =false
         return status
     },
+    vLogin(){
+        let myRouter = useRouter()
+        let status=undefined
+        let user_info =this.getUserDataFromLocal()
+
+        if(user_info==null||user_info==undefined){
+           return myRouter.push({name:'signIn'})
+           status=false
+        }else{
+            status=true
+        }
+        return status
+    },
+    vSection_I(typeOfUse){
+        let status =undefined
+        if(typeOfUse.type==null||typeOfUse.type==undefined||typeOfUse.type.length==0){
+            console.log('please input ur data section 1')
+            status=false
+        }else
+        if((typeOfUse.type=='sf'&& (typeOfUse.brand_sf==null||typeOfUse.brand_sf==undefined|| typeOfUse.brand_sf.length==0))){
+            console.log('please input ur brand name !!')
+            status=false
+        }else{
+            status=true
+        }
+        return status
+    },
+    vSection_II(typeOfMachine,typeOfUse,user){
+        let status = undefined
+        let {first_name,last_name,email,group}=user
+        if(typeOfMachine.typeM.length==0||typeOfMachine.typeM==undefined||typeOfMachine.typeM==null){
+            console.log('please input ur data section 2')
+            status=false
+        }else{
+            if(
+                typeOfUse.type=='or' && 
+                (typeOfMachine.brand_or.length==0 || typeOfMachine.sn.length==0 ) &&
+                (first_name.length==0 ||last_name.length==0 || email.length==0 ||group.length==0)
+            ){
+                status=false
+                console.log('please input ur data section 22')
+            }else{
+                status=true
+            }
+        }
+        return status
+    },
+    vSection_III(problems,is_other){
+        let status=undefined
+        if(problems.length==0&&is_other==false){
+            console.log('please input ur data section 2')
+            status=false
+        }else{
+            status=true
+        }
+        return status
+    },
+    vSection_IIII(otherAndMsg,is_other){
+        let status =undefined
+        if(is_other==true && otherAndMsg.msg_other.length==0){
+            console.log('please input ur data section 2')
+            status=false
+        }else{
+            status=true
+        }
+        return status 
+    },
+    splitProblem (problem){
+        let problemArr = problem.split(",")
+        return problemArr
+    },
+    getUserDataFromLocal(property=undefined){
+        let data = JSON.parse(localStorage.getItem('user_info'))
+        console.log('data : ',data)
+        if(data == null ||data == undefined){
+            console.log("login first !!")
+            return data
+        }else{
+            if(property!=undefined||property!=null){
+                return data[property]
+            }else{
+                return data    
+            }
+        }
+        
+    }
+    
 
 }
 
