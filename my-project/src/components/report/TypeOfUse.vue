@@ -6,7 +6,11 @@ const typeU=ref('')
 const brand_sf =ref('')
 
 onUpdated(()=>{
-    emit("getTypeOfUse",{name:'use_type',typeU:typeU.value,brand_sf:brand_sf.value})
+    emit("getTypeOfUse",{
+        name:'use_type',
+        typeU:typeU.value,
+        brand_sf:brand_sf.value
+    })
 })
 
 const data=computed(()=>{
