@@ -28,6 +28,7 @@ const is_other=ref(false)
 const otherSelection=()=>{
     let status =is_other.value
     is_other.value = !is_other.value
+    addP('other')
     console.log('isother ? ',is_other.value)
     return status
 }
