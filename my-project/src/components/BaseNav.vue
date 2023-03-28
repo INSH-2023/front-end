@@ -1,11 +1,14 @@
 <script setup>
 import {useRouter} from 'vue-router'
 import {ref,onBeforeMount} from 'vue'
-import User from '../icon/User.svg'
-defineProps({
+const props = defineProps({
     role:{
-        type:Boolean,
-        default:false
+        type:String,
+        default:null
+    },
+    userName:{
+        type:String,
+        default:'unknown'
     }
 })
 const isSetting =ref(false)
@@ -26,23 +29,27 @@ const goService =()=>myRouter.push({name:'services'})
 
 // get role from local
  const role =ref(undefined)
-const getRole=(data)=>{
-    isAdmin.value=localStorage.getItem('isAdmin')==='false'?false:true
-    role.value=data.user_role
-    console.log(role.value)
-    userName.value = data.user_email
+const getRole=()=>{
+
+     isAdmin.value = localStorage.getItem('isAdmin')==='false'||localStorage.getItem('isAdmin')==null?false:true
+     userName.value = props.userName
+     role.value=props.role
+
+    
+    // console.log(role.value)
+    // userName.value = data.user_email
 }
 
-// set role
-const setRoleAdmin=()=>{
-    localStorage.setItem('role','admin')
-    goAdmin()
-}
+// // set role
+// const setRoleAdmin=()=>{
+//     localStorage.setItem('role','admin')
+//     goAdmin()
+// }
 
-const setRoleUser=()=>{
-    localStorage.setItem('role','user')
-    goUser()
-}
+// const setRoleUser=()=>{
+//     localStorage.setItem('role','user')
+//     goUser()
+// }
 
 // switch for admin
 const isAdmin=ref(false)
@@ -65,8 +72,8 @@ const toAdmin =()=>{
 
 
 onBeforeMount(()=>{
-    let user_info =JSON.parse(localStorage.getItem('user_info')) 
-    getRole(user_info)
+    // let user_info =JSON.parse(localStorage.getItem('user_info')) 
+    getRole()
     
 
 })
@@ -82,12 +89,12 @@ onBeforeMount(()=>{
                 <div class="text-[20px] font-bold text-white my-auto m-3 ">
                     Zeed web
                 </div>
-                <button @click="setRoleAdmin" class="text-[20px] font-bold text-gray-700 my-auto m-3 ">
+                <!-- <button @click="setRoleAdmin" class="text-[20px] font-bold text-gray-700 my-auto m-3 ">
                     admin
                 </button >
                 <button @click="setRoleUser" class="text-[20px] font-bold text-gray-700 my-auto m-3 ">
                     user
-                </button >
+                </button > -->
             </div>
 
             <div>
