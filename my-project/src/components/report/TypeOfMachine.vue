@@ -1,7 +1,10 @@
 <script setup>
 import {ref,computed,onUpdated,onBeforeMount} from 'vue'
 import toBackEnd from '../../JS/fetchToBack';
+import validate from '../../JS/validate';
 const itemLink =`${import.meta.env.VITE_BACK_END_HOST}/items`
+
+const indexNumber=ref(undefined)
 const props = defineProps({
     typeOfUseOR:{
         type:Boolean,
@@ -14,27 +17,32 @@ const props = defineProps({
 })
 
 const emit=defineEmits(["getTypeOfM"])
-
 onUpdated(()=>{
     emit('getTypeOfM',{
         name:'type_of_machine',
-        typeM:typeM.value,
-        brand_or:brand.value,
-        sn:sn.value
+        item:item.value,
+
     })
 })
 onBeforeMount(()=>{
-    getItem()
+    
+    getItem(validate.getUserDataFromLocal('user_emp_code'))
 })
 
-const typeM=ref('')
-const sn =ref('')
-const brand=ref('')
+// item variable
+const item=ref({
+    type:'',
+    sn:'',
+    brand_or:'',
+    user_emp_code:''
+})
+
+
 
 const itemList=ref([])
 // get item for use type = or
-const getItem=async()=>{
-    let [status,data]= await toBackEnd.getData('component_item',itemLink)
+const getItem=async(emp_code)=>{
+    let [status,data]= await toBackEnd.getData('component_item',`${itemLink}/${emp_code}`)
     if(status==200){
         itemList.value =data
         console.log('data item :',itemList.value)
@@ -45,6 +53,31 @@ const getItem=async()=>{
     }
 }
 
+const setData=(data,index)=>{
+    if(data!=undefined && props.typeOfUseOR==false && typeof(data)=='string'){
+        item.value.type = data
+        console.log('set only type machine : ',data)
+    }else
+    if(data!=undefined && props.typeOfUseOR==true && typeof(index)=='number' && index !=undefined){
+        
+        indexNumber.value = index
+        let {
+            item_name,
+            item_number,
+            item_type,
+            user_emp_code
+        }=data
+        item.value.brand_or=item_name
+        item.value.type=item_type
+        item.value.sn=item_number
+        item.value.user_emp_code = user_emp_code
+
+
+
+        console.log('itemmmm',item.value)
+    }
+    // console.log(data)
+}
 </script>
 <template>
         <div class="w-full text-[25px] font-normal ">
@@ -56,7 +89,7 @@ const getItem=async()=>{
                 
         <div v-if="props.typeOfUseOR==false" class=" grid grid-cols-4 gap-y-2 gap-x-1 mt-4 text-[15px] font-medium">
             <!-- notebook -->
-            <button @click="typeM='NoteBook'" name="machine_sf" :style="[typeM=='NoteBook'?'background-color:#1E88E5;color:#E3F2FD':'']" class="w-[150px] mx-auto p-2 bg-gray-200 rounded-xl hover:bg-gray-300">
+            <button @click="setData('NoteBook')" name="machine_sf" :style="[item.type=='NoteBook'?'background-color:#1E88E5;color:#E3F2FD':'']" class="w-[150px] mx-auto p-2 bg-gray-200 rounded-xl hover:bg-gray-300">
                 <img src="../../assets/machine/laptop.png" draggable="false" alt="NoteBook" class="w-[80px] mx-auto">
                 <h3 class="w-fit mx-auto">
                     NoteBook
@@ -64,7 +97,7 @@ const getItem=async()=>{
             </button>
 
             <!-- PC -->
-            <button @click="typeM='PC'" name="machine_sf" :style="[typeM=='PC'?'background-color:#1E88E5;color:#E3F2FD':'']" class="w-[150px] mx-auto p-2 bg-gray-200 rounded-xl hover:bg-gray-300">
+            <button @click="setData('PC')" name="machine_sf" :style="[item.type=='PC'?'background-color:#1E88E5;color:#E3F2FD':'']" class="w-[150px] mx-auto p-2 bg-gray-200 rounded-xl hover:bg-gray-300">
                 <img src="../../assets/machine/pc.png" draggable="false" alt="NoteBook" class="w-[80px] mx-auto">
                 <h3 class="w-fit mx-auto ">
                     PC
@@ -72,7 +105,7 @@ const getItem=async()=>{
             </button>
                     
             <!-- Smart Phone -->
-            <button @click="typeM='Smart_Phone'" name="machine_sf" :style="[typeM=='Smart_Phone'?'background-color:#1E88E5;color:#E3F2FD':'']" class="w-[150px] mx-auto p-2 bg-gray-200 rounded-xl hover:bg-gray-300">
+            <button @click="setData('Smart_Phone')" name="machine_sf" :style="[item.type=='Smart_Phone'?'background-color:#1E88E5;color:#E3F2FD':'']" class="w-[150px] mx-auto p-2 bg-gray-200 rounded-xl hover:bg-gray-300">
                 <img src="../../assets/machine/phone.png" draggable="false" alt="NoteBook" class="w-[80px] mx-auto">
                 <h3 class="w-fit mx-auto text-[14px]">
                     Smart Phone
@@ -80,7 +113,7 @@ const getItem=async()=>{
             </button>
 
             <!-- Tablet -->
-            <button @click="typeM='Tablet'" name="machine_sf" :style="[typeM=='Tablet'?'background-color:#1E88E5;color:#E3F2FD':'']" class="w-[150px] mx-auto p-2 bg-gray-200 rounded-xl hover:bg-gray-300">
+            <button @click="setData('Tablet')" name="machine_sf" :style="[item.type=='Tablet'?'background-color:#1E88E5;color:#E3F2FD':'']" class="w-[150px] mx-auto p-2 bg-gray-200 rounded-xl hover:bg-gray-300">
                 <img src="../../assets/machine/tablet.png" draggable="false" alt="NoteBook" class="w-[80px] mx-auto">
                 <h3 class="w-fit mx-auto">
                     Tablet
@@ -88,10 +121,20 @@ const getItem=async()=>{
             </button>
         </div>
 
-        <div v-else-if="props.typeOfUseOR==true && itemList.length != 0" class="grid grid-cols-6 gap-y-2 gap-x-2 mt-4 text-[15px] font-medium">
+        <div v-else-if="props.typeOfUseOR==true && itemList.length != 0" class="grid grid-cols-4 gap-y-2 gap-x-2 mt-4 text-[15px] font-medium">
             <!-- item --> <!--need style selection-->
-            <button v-for="(v,index) in itemList" :key="index" @click="typeM=v.item_type ,sn=v.item_number ,brand=v.item_name" name="machine_or"  class="w-[150px] mx-auto p-2 bg-gray-200 rounded-xl hover:bg-gray-300">
-                <img src="../../assets/machine/laptop.png" draggable="false" alt="NoteBook" class="w-[80px] mx-auto">
+            <button v-for="(v,index) in itemList" 
+                :key="index" 
+                @click="setData(v,index)"
+                name="machine_or"  
+                :style="[item.sn==v.item_number?'background-color:#1E88E5;color:#E3F2FD':'']"
+                class="w-[150px] mx-auto p-2 bg-gray-200 rounded-xl hover:bg-gray-300"
+            >
+                <img src="../../assets/machine/laptop.png" 
+                    draggable="false" 
+                    alt="NoteBook" 
+                    class="w-[80px] mx-auto"
+                >
                 <h3 class="w-fit mx-auto">
                     {{v.item_name}}
                 </h3>
