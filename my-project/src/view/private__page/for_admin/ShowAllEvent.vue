@@ -37,7 +37,7 @@ const request_id=ref(undefined)
 
 // status
 const get_status=ref(undefined)
-const Delete_status = ref(undefined)
+const delete_status = ref(undefined)
 const edit_status = ref(undefined)
 
 const is_filter_open=ref(false)
@@ -84,7 +84,7 @@ const getEvents =async(id=undefined)=>{
 
 // edit by id
 const editInfo = async(v)=>{
-
+    edit_status.value=undefined
     let [ss,data] =await toBackEnd.editData('request',requestLink,v,data_ch.value)
     if(ss==200){
         edit_status.value=true
@@ -92,6 +92,8 @@ const editInfo = async(v)=>{
         await getEvents()
         navigation()
         //status something
+        console.log(data)
+
     }else{
         //status something
         edit_status.value=false
@@ -102,16 +104,18 @@ const editInfo = async(v)=>{
 
 // delete
 const deleteItem =async (v)=>{
-    
-    let ss = await toBackEnd.delete('request',requestLink,v)
-    if(ss==200){
-        edit_status=true
+    delete_status.value=undefined
+    let [status,data] = await toBackEnd.delete('request',requestLink,v)
+    if(status==200){
+        delete_status.value=true
         await getEvents()
         navigation()
         // status something
+        console.log(data)
     }else{
         // status something
-        edit_status=false
+        delete_status.value=false
+        console.log(data)
     }
 }
 
@@ -692,6 +696,7 @@ const searchByKeyW=()=>{
                             <h3 class="w-fit mx-auto text-[4px]">
                             {{request.request_type_matchine}}
                             </h3>
+
                         </div >
                     </div>
                 </div>
@@ -716,12 +721,12 @@ const searchByKeyW=()=>{
                             {{data}}
                             </h3>
                         </div >
-                        <div v-if="request.request_other!=''"  class="w-[70px] mx-auto p-2 bg-gray-200 rounded-xl ">
+                        <!-- <div v-if="request.request_other!=''"  class="w-[70px] mx-auto p-2 bg-gray-200 rounded-xl ">
                             <img src="../../../assets/vue.svg" alt="NoteBook" class="w-[40px] mx-auto">
                             <h3 class="w-fit mx-auto text-[8px]">
                             other
                             </h3>
-                        </div >
+                        </div > -->
 
                     </div>
                 </div>
