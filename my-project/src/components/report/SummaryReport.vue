@@ -1,7 +1,66 @@
 <script setup>
+import {ref,onBeforeUpdate} from 'vue'
+const props=defineProps({
+    data:{
+        type:Object,
+        required:true
+    }
+})
+
+// const typeP=ref(props.subject)
+// const data =ref(props.data)
+const subject =ref('')
+const user = ref({
+    first_name:'',
+    last_name:'',
+    email:'',
+    group:'',
+    emp_code:''
+})
+
+const item =ref({
+    brand:'',
+    type:'',
+    sn:''
+})
+
+const useAndOther=ref({
+    type:'',
+    msg:'',
+    msg_other:'',
+    service_type:''
+
+})
+
+const problems=ref([])
+
+onBeforeUpdate(()=>{
+    subject.value = props.data.request_subject
+
+    user.value.first_name = props.data.request_first_name
+    user.value.last_name = props.data.request_last_name
+    user.value.email = props.data.request_email
+    user.value.group = props.data.request_group
+    
+    item.value.brand = props.data.request_brand
+    item.value.type = props.data.request_type_matchine
+    item.value.sn = props.data.request_sn
+
+    useAndOther.value.type = props.data.request_use_type
+    useAndOther.value.msg = props.data.request_message
+    useAndOther.value.msg_other = props.data.request_other
+    useAndOther.value.service_type = props.data.request_service_type
+
+    problems.value= textToArray(props.data.request_problems)
+})
+
+const textToArray=(input)=>{
+    let arr=input.split(",")
+    return arr
+}
 </script>
 <template>
-    <div v-if="isSummary==true" class="w-[1000px] mx-auto">
+        <div  class="w-[700px] mx-auto">
             <div id="summaryInfo" class=" w-fit mx-auto text-[25px] font-semibold">
                 <h3>
                     สรุปข้อมูล
@@ -9,16 +68,16 @@
             </div>
 
             <!-- first -->
-            <div v-if="typeP=='hardware'||typeP=='software'||typeP=='internet'" class="w-full h-fit mt-10  text-[20px] font-semibold">
+            <div v-if="subject=='hardware'||subject=='software'||subject=='internet'" class="w-full h-fit   text-[20px] font-semibold">
                 
-                <table class=" w-fit h-fit   mt-10  text-[20px] font-semibold ">
+                <table class=" w-fit h-fit   mt-6  text-[20px] font-semibold ">
                     <tbody >
                         <tr>
                             <td class="text-right">
                                 1. <span class="text-rose-500">ประเภท</span> ของ Hardware : 
                             </td>
                             <td>
-                                {{typeU=='or'?'เป็นขององค์กร':'เป็นของส่วนตัว'}}
+                                {{useAndOther.type=='or'?'เป็นขององค์กร':'เป็นของส่วนตัว'}}
                             </td>
                         </tr>
                         <tr >
@@ -26,17 +85,25 @@
                                 ยี่ห้อ : 
                             </td>
                             <td>
-                                {{typeOfMachine.brand_or}}
+                                {{item.brand}}
                             </td>
                         </tr>
-                        <tr >
+                        <tr>
+                            <td class="text-right">
+                                ประเภทของอุปกรณ์ :
+                            </td>
+                            <td>
+                                {{ item.type }}
+                            </td>
+                        </tr>
+                        <tr v-show="item.sn.length != 0">
                             <td class="text-right">
                                 S/N :
                             </td>
                             <td>
                                 <!-- {{sn}} -->
                                 <!-- 123128234 -->
-                                {{ typeOfMachine.sn }}
+                                {{item.sn }}
                             </td>
                         </tr>
                    </tbody>
@@ -44,7 +111,7 @@
             </div>
 
             <!-- second  -->
-            <div v-if="typeP=='hardware'||typeP=='software'||typeP=='internet'" class="mt-4">
+            <div v-if="subject=='hardware'||subject=='software'||subject=='internet'" class="mt-4">
                 <div class="text-[20px] font-semibold">
                     <h3 >
                         2. <span class="text-rose-500">ชนิด</span> อุปกรณ์ของคุณ
@@ -53,45 +120,45 @@
                 </div>
 
                 
-                <div class="grid grid-cols-6 gap-y-2 gap-x-2 mt-4 text-[15px] font-medium">
+                <div class="grid grid-cols-4 gap-y-2 gap-x-2 mt-4 text-[15px] font-medium">
                     <!-- notebook -->
                     <div class="w-[150px] mx-auto p-2 bg-gray-200 rounded-xl ">
-                        <img src="../../../assets/vue.svg" alt="NoteBook" class="w-[80px] mx-auto">
+                        <img src="../../assets/vue.svg" alt="NoteBook" class="w-[80px] mx-auto">
                         <h3 class="w-fit mx-auto">
-                            {{typeM}}
+                            {{item.type}}
                         </h3>
                     </div >
                 </div>
             </div>
 
             <!-- third -->
-             <div v-if="typeP!='other'"  class="mt-4">
+             <div v-if="subject!='other'"  class="mt-4">
                 <div class="text-[20px] font-semibold">
-                    <h3 v-if="typeP=='hardware'||typeP=='software'||typeP=='internet'">
+                    <h3 v-if="subject=='hardware'||subject=='software'||subject=='internet'">
                         3. <span class="text-rose-500"> สรุป </span> อาการของ Hardware ของคุณ
                     </h3>   
                     
-                    <h3 v-if="typeP=='printer'">
+                    <h3 v-if="subject=='printer'">
                         1. <span class="text-rose-500"> สรุป </span> ปัญหา Printer ที่คุณต้องการความช่วยเหลือ
                     </h3> 
 
-                    <h3 v-if="typeP=='website'">
+                    <h3 v-if="subject=='website'">
                         1. <span class="text-rose-500"> สรุป </span> ปัญหา Website ที่คุณต้องการความช่วยเหลือ
                     </h3> 
 
-                    <h3 v-if="typeP=='meeting'">
+                    <h3 v-if="subject=='meeting'">
                         1. <span class="text-rose-500"> สรุป </span> หัวข้อ Meeting ที่คุณต้องการความช่วยเหลือ
                     </h3> 
 
-                    <h3 v-if="typeP=='application'">
+                    <h3 v-if="subject=='application'">
                         1. <span class="text-rose-500"> สรุป </span> ปัญหา Application ที่คุณต้องการความช่วยเหลือ
                     </h3> 
 
-                    <h3 v-if="typeP=='media'">
+                    <h3 v-if="subject=='media'">
                         1. <span class="text-rose-500"> สรุป </span> ปัญหาเกี่ยวกับ Media ที่คุณต้องการความช่วยเหลือ
                     </h3> 
 
-                    <h3 v-if="typeP=='news'">
+                    <h3 v-if="subject=='news'">
                         1. <span class="text-rose-500"> สรุป </span> ปัญหาเกี่ยวกับ News ที่คุณต้องการความช่วยเหลือ
                     </h3> 
                     
@@ -99,40 +166,40 @@
                 </div>
 
                 
-                <div class="grid grid-cols-6 gap-y-2 gap-x-2 mt-4 text-[15px] font-medium">
+                <div class="grid grid-cols-4 gap-y-2 gap-x-2 mt-4 text-[15px] font-medium">
                     
                     <div v-for="(data,index) in problems" :key="index"  class="w-[150px] mx-auto p-2 bg-gray-200 rounded-xl ">
-                        <img src="../../../assets/vue.svg" alt="NoteBook" class="w-[80px] mx-auto">
+                        <img src="../../assets/vue.svg" alt="NoteBook" class="w-[80px] mx-auto">
                         <h3 class="w-fit mx-auto">
                            {{data}}
                         </h3>
                     </div >
-                    <div v-show="isOther==true" class="w-[150px] mx-auto p-2 bg-gray-200 rounded-xl ">
+                    <!-- <div v-show="isOther==true" class="w-[150px] mx-auto p-2 bg-gray-200 rounded-xl ">
                         <img src="../../../assets/vue.svg" alt="NoteBook" class="w-[80px] mx-auto">
                         <h3 class="w-fit mx-auto">
                            Other
                         </h3>
-                    </div >
+                    </div > -->
 
                 </div>
             </div>
 
 
             <!-- fourth -->
-            <div v-if="typeP !='other'"  class="flex flex-nowrap w-fit mt-10 ">
-                <div v-show="isOther==true" class="mx-4">
+            <div  v-if="subject!='other'" class="w-full  flex flex-col  mt-6 ">
+                <div v-show="useAndOther.msg_other.length !=0" class=" mx-4">
                     <label for="other_1" class="ml-3 text-[17px] font-semibold inline-b">
                         กรณีเลือก<span class="text-rose-500 pl-2">อื่นๆโปรดระบุ</span>
                     </label>
                     <span class="text-[13px] ml-2">(กรณีไม่พบปัญหาข้างต้น)</span>
-                    <textarea v-model="others" name="other" id="other_1" cols="50" rows="5" disabled class="resize-none pt-[10px] block rounded-xl bg-gray-300 p-2 focus:outline-0" ></textarea>
+                    <textarea v-model="useAndOther.msg_other" name="other" id="other_1"  disabled class="w-full h-[80px] resize-none pt-[10px] block rounded-lg bg-gray-300 font-light  p-2 focus:outline-0" ></textarea>
                 </div>
                 
-                <div v-show="massage.length != 0"  class="mx-4">
+                <div v-show="useAndOther.msg.length !=0" class="mx-4 mt-3">
                     <label for="other_2" class="ml-3 text-[17px] font-semibold">
                         ระบุรายละเอียดของปัญหาที่พบ (ถ้ามี)
                     </label>
-                    <textarea v-model="massage" name="other" id="other_2" cols="50" rows="5" disabled class="resize-none block bg-gray-300 rounded-xl p-2 focus:outline-0"></textarea>
+                    <textarea v-model="useAndOther.msg" name="other" id="other_2"  disabled class="w-full h-[80px] resize-none block bg-gray-300 font-light rounded-lg p-2 focus:outline-0"></textarea>
                 </div>
                 <div>
 
@@ -140,25 +207,25 @@
             </div>
 
             <!-- other -->
-            <div v-else-if="typeP=='other'" class="mt-10 mx-auto w-fit mx-auto">
+            <div v-else-if="subject=='other'" class="mt-10 mx-auto w-fit mx-auto">
                 <div class="mx-4">
                     <label for="other_1" class="ml-3 text-[17px] font-semibold inline-b">
                         ระบุ รายละเอียด หรือ ความต้องการของคุณ
                     </label>
                     <span class="text-[13px] ml-2">(กรณีไม่พบปัญหาข้างต้น)</span>
-                    <textarea v-model="others" name="other" id="other_1"  disabled class="resize-none pt-[10px] block w-[700px] h-[150px] rounded-xl bg-gray-300 p-2 focus:outline-0" ></textarea>
+                    <textarea v-model="useAndOther.msg_other" name="other" id="other_1"  disabled class="resize-none pt-[10px] block w-[700px] h-[150px] font-light  rounded-xl bg-gray-300 p-2 focus:outline-0" ></textarea>
                 </div>
                     
                 <div  class="mx-4 mt-4">
                     <label for="other_2" class="ml-3 text-[17px] font-semibold">
                         หมายเหตุเพิ่มเติม (ถ้ามี)
                     </label>
-                    <textarea v-model="massage" name="other" id="other_2" disabled  class="resize-none block w-[700px] h-[150px] bg-gray-300 rounded-xl p-2 focus:outline-0"></textarea>
+                    <textarea v-model="useAndOther.msg" name="other" id="other_2" disabled  class="resize-none block w-[700px] h-[150px] bg-gray-300 font-light  rounded-xl p-2 focus:outline-0"></textarea>
                 </div>
             </div>
 
             <!-- button -->
-            <div class="w-fit mx-auto mt-10">
+            <!-- <div class="w-fit mx-auto mt-10">
                 <button @click="isSummary=false ,myRouter.go(-1)" class="w-[130px] mx-3 p-2 font-semibold bg-gray-400 text-white rounded-xl">
                     <h4>
                         ย้อนกลับ
@@ -169,12 +236,12 @@
                         ขอรับบริการ
                     </h4>
                 </button>
-            </div>
+            </div> -->
+        </div> 
 
-        </div>
 
         <!-- submit -->
-        <div v-if="isSubmitt==true" class="w-[1000px] mx-auto">
+        <!-- <div v-if="isSubmitt==true" class="w-[1000px] mx-auto">
             <div class="w-fit mx-auto">
                 <img src="../../../assets/check.png" alt="check_icon" class="w-[130px] mt-[60px]">
             </div>
@@ -187,7 +254,7 @@
                 </h3>
             </div>
 
-        </div>
+        </div> -->
 </template>
 <style scoped>
 </style>
