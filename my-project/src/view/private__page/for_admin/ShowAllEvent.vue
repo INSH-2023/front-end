@@ -533,7 +533,7 @@ const searchByKeyW=()=>{
                                 </div>
                             </td>
                             <td class=" py-3 px-2 font-semibold">
-                                <div class=" truncate">
+                                <div class=" truncate capitalize">
                                     {{data.request_subject}}                                    
                                 </div>
 
