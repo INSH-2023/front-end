@@ -8,6 +8,7 @@ import TypeOfMachine from '../../../components/report/TypeOfMachine.vue';
 import Problem from '../../../components/report/Problem.vue';
 import OtherAndMessage from '../../../components/report/OtherAndMessage.vue';
 import validate from '../../../JS/validate';
+import SummaryReport from '../../../components/report/SummaryReport.vue';
 const myRouter = useRouter()
 const goBack=()=> myRouter.go(-1)
 const goMain=()=>myRouter.push({name:'services'})
@@ -33,7 +34,16 @@ const Timestamp=()=>{
 }
 
 const data_ch=computed(()=>{
-
+    
+    if(typeP=='printer'||typeP=='website'||typeP=='meeting'||typeP=='application'){
+        problems.value=[]
+        typeOfUse.value.type='or'
+    }else
+    if(typeP=='other'){
+        problems.value=[]
+        typeOfUse.value.type='or'
+        problems.value.push('other')
+    }
 
     return{
         request_first_name:user.value.first_name,
@@ -43,7 +53,7 @@ const data_ch=computed(()=>{
         request_service_type:`${service.toUpperCase()}_Service`,
         request_subject:typeP,
         request_status:"request",
-        request_req_date:Timestamp(),
+        // request_req_date:Timestamp(),
         request_assign:'Not_assign',
         request_use_type:typeOfUse.value.type,
         request_sn:typeOfMachine.value.sn,
@@ -81,11 +91,6 @@ const otherAndMsg=ref({
 
 // check status
 const is_other =ref(false)
-
-
-
-
-
 
 const user=ref({
     first_name:'',
@@ -136,6 +141,7 @@ const validateReport=(stage)=>{
             // status something
             if(validate.vSection_IIII(otherAndMsg.value,is_other.value)){
                 computeStageReport(true)
+                console.log(data_ch.value)
             }else{
                 
             }
@@ -167,20 +173,42 @@ const validateReport=(stage)=>{
     }else
     if(typeP=='printer'||typeP=='website'||typeP=='meeting'||typeP=='application'){
         if(stage==0){
-            if(problems.value.length==0){
-            console.log('please input ur data section 2')
-
-            }else{
+            if(validate.vSection_III(problems.value,is_other.value)){
                 computeStageReport(true)
+            }else{
+                // alert error something
             }
         }else
         if(stage==1){
 
+            if(validate.vSection_IIII(otherAndMsg.value,is_other.value)){
+                computeStageReport(true)
+                console.log(data_ch.value)
+            }else{
+                // alert error something
+            }
+        }else
+        if(stage==2){
+            console.log(data_ch.value)
+            submitt()
         }
 
     }else
     if(typeP=='other'){
-        
+        if(stage==0){
+            if(validate.vSection_IIII(otherAndMsg.value,is_other.value)){
+                computeStageReport(true)
+                console.log(data_ch.value)
+            }else{
+                // alert error something
+            }    
+        }
+        else 
+        if(stage==1){
+            console.log(data_ch.value)
+            submitt()
+            is
+        }
     }
     // if(typeOfUse.value.type){
 
@@ -256,7 +284,7 @@ const massage=ref('')
 
 
 // isSummary
-const isSummary=ref(false)
+// const isSummary=ref(false)
 
 const getUser= async(user_id)=>{
 
@@ -375,7 +403,7 @@ const submitt = async()=>{
     let [status,data]=await toBackEnd.postData('report',requestLink,data_ch.value)
     if(status==200){
         // isSummary.value=undefined
-        // isSubmitt.value=true
+        isSubmitt.value=true
         setTimeout(goMain,5000)
         console.log(data)
     }else{
@@ -435,7 +463,7 @@ const getDataFromComponent =(value)=>{
     <div class="pt-3">
        
         <!-- for write report -->
-        <div v-if="isSummary==false"  class="w-[1000px] mx-auto">
+        <div v-if="isSubmitt==false" class="w-[1000px] mx-auto">
             
 
             <!-- header -->
@@ -452,7 +480,6 @@ const getDataFromComponent =(value)=>{
             <button @click="countNumber--">remove</button> -->
 
             <div v-show="(countNumber==0 && (typeP=='hardware'||typeP=='software'||typeP=='internet'))" 
-                v-if="typeP=='hardware'||typeP=='software'||typeP=='internet'" 
                 class="w-[400px] h-fit mt-10 mx-auto ">
                 <TypeOfUse @get-type-of-use="getDataFromComponent" />
             </div>
@@ -490,7 +517,6 @@ const getDataFromComponent =(value)=>{
 
             <!-- second type of matchine -->
             <div v-show="(countNumber==1 && (typeP=='hardware'||typeP=='software'||typeP=='internet'))" 
-                v-if="typeP=='hardware'||typeP=='software'||typeP=='internet'" 
                 class="w-[700px] h-fit mx-auto mt-10">
                 <TypeOfMachine  @get-type-of-m="getDataFromComponent" :type-of-use-o-r="typeOfUse.type=='or'?true:false" />
                 <!-- <div class="text-[20px] font-semibold">
@@ -538,10 +564,11 @@ const getDataFromComponent =(value)=>{
             </div>
 
             <!-- third problem -->
-            <div v-show="(countNumber==2 && (typeP=='hardware'||typeP=='software'||typeP=='internet'))
-                        || (countNumber==0 && (typeP=='printer'||typeP=='website'||typeP=='meeting'||typeP=='application'||typeP=='media'||typeP=='news'))" 
-                v-if="typeP != 'other'" 
-                class="w-[700px] h-fit mx-auto mt-10 ">
+            <div v-show="((countNumber==2 && (typeP=='hardware'||typeP=='software'||typeP=='internet'))
+                        || (countNumber==0 && (typeP=='printer'||typeP=='website'||typeP=='meeting'||typeP=='application'||typeP=='media'||typeP=='news')))
+                        && typeP != 'other'" 
+                class="w-[700px] h-fit mx-auto mt-10 "
+            >
                 
 
                 <!-- <div v-show="(countNumber==2 && (typeP=='hardware'||typeP=='software'||typeP=='internet')) 
@@ -569,15 +596,15 @@ const getDataFromComponent =(value)=>{
 
                 <!-- fourth -->
                 <!-- <div v-if="typeP !='other'"  class="flex flex-nowrap mt-10 mx-auto"> -->
-                    <OtherAndMessage 
-                        v-show="(countNumber==3 && (typeP=='hardware'||typeP=='software'||typeP=='internet'))
-                                || (countNumber==1 && (typeP=='printer'||typeP=='website'||typeP=='meeting'||typeP=='application'||typeP=='media'||typeP=='news'))
-                                || (countNumber==0 && (typeP=='other'))" 
-                        @get-message="getDataFromComponent" 
-                        :is-type-p_other="typeP == 'other'?true:false" 
-                        :service_it="service=='it'?true:false" 
-                        :is-other="is_other" 
-                    />
+                <OtherAndMessage 
+                    v-show="(countNumber==3 && (typeP=='hardware'||typeP=='software'||typeP=='internet'))
+                            || (countNumber==1 && (typeP=='printer'||typeP=='website'||typeP=='meeting'||typeP=='application'||typeP=='media'||typeP=='news'))
+                            || (countNumber==0 && (typeP=='other'))" 
+                    @get-message="getDataFromComponent" 
+                    :is-type-p_other="typeP == 'other'?true:false" 
+                    :service_it="service=='it'?true:false" 
+                    :is-other="is_other" 
+                />
                     <!-- <div v-show="isOther==true" class="mx-4">
                         <label for="other_1" class="ml-3 text-[17px] font-semibold inline-b">
                             กรณีเลือก<span class="text-rose-500 pl-2">อื่นๆโปรดระบุ</span>
@@ -613,7 +640,14 @@ const getDataFromComponent =(value)=>{
                     </div> -->
                 <!-- </div> -->
 
-                
+            <!-- for summary -->
+            <div v-show="(countNumber==4 && (typeP=='hardware'||typeP=='software'||typeP=='internet'))
+                    || (countNumber==2 && (typeP=='printer'||typeP=='website'||typeP=='meeting'||typeP=='application'||typeP=='media'||typeP=='news'))
+                    || (countNumber==1 && (typeP=='other'))" class="w-[1000px] mx-auto">
+                <SummaryReport :data="data_ch"  />
+            </div>    
+
+
             
 
             <!-- button -->
@@ -624,211 +658,25 @@ const getDataFromComponent =(value)=>{
                     </h4>
                 </button>
                 <button @click="validateReport(countNumber)" class="w-[130px] mx-3 p-2 font-semibold bg-rose-400 text-white rounded-xl">
-                    <a id="goSummary">
+                    <h4 v-show="(countNumber<4 && (typeP=='hardware'||typeP=='software'||typeP=='internet'))
+                        ||(countNumber<2 && (typeP=='printer'||typeP=='website'||typeP=='meeting'||typeP=='application'||typeP=='media'||typeP=='news')) 
+                        || (countNumber<1 && (typeP=='other'))"
+                    >
                         ถัดไป
-                    </a>
-                </button>
-            </div>
-
-        </div>
-
-
-
-        <!-- for summary -->
-        <div v-if="isSummary==true" class="w-[1000px] mx-auto">
-            <div id="summaryInfo" class=" w-fit mx-auto text-[25px] font-semibold">
-                <h3>
-                    สรุปข้อมูล
-                </h3>
-            </div>
-
-            <!-- first -->
-            <div v-if="typeP=='hardware'||typeP=='software'||typeP=='internet'" class="w-full h-fit mt-10  text-[20px] font-semibold">
-                <!-- <h3 class="w-fit mx-auto mr-2">
-                   1. <span class="text-rose-500">ประเภท</span> ของ Hardware : {{ typeU=='or'?'เครื่องขององค์กร': 'เครื่องของ user'}}
-                </h3> -->
-                
-                <table class=" w-fit h-fit   mt-10  text-[20px] font-semibold ">
-                    <tbody >
-                        <!-- <tr >
-                            <td class="text-right w-[130px]">
-                                ผู้ใช้ :
-                            </td>
-                            <td class="truncate w-[]">
-                                {{ event.full_name }}
-                                testing
-                            </td>
-                        </tr> -->
-                        <!-- <tr>
-                            <td class="text-right w-[130px]" >
-                                Service : 
-                            </td>
-                            <td :style="[changeColorBy(event.service_type)]">
-                                {{ service }}
-                            </td>
-                        </tr> -->
-                        <tr>
-                            <td class="text-right">
-                                1. <span class="text-rose-500">ประเภท</span> ของ Hardware : 
-                            </td>
-                            <td>
-                                {{typeU=='or'?'เป็นขององค์กร':'เป็นของส่วนตัว'}}
-                            </td>
-                        </tr>
-                        <tr >
-                            <td class="text-right">
-                                ยี่ห้อ : 
-                            </td>
-                            <td>
-                                {{typeOfMachine.brand_or}}
-                            </td>
-                        </tr>
-                        <tr >
-                            <td class="text-right">
-                                S/N :
-                            </td>
-                            <td>
-                                <!-- {{sn}} -->
-                                <!-- 123128234 -->
-                                {{ typeOfMachine.sn }}
-                            </td>
-                        </tr>
-                   </tbody>
-                </table>
-            </div>
-
-            <!-- second  -->
-            <div v-if="typeP=='hardware'||typeP=='software'||typeP=='internet'" class="mt-4">
-                <div class="text-[20px] font-semibold">
-                    <h3 >
-                        2. <span class="text-rose-500">ชนิด</span> อุปกรณ์ของคุณ
-                    </h3>
-                                          
-                </div>
-
-                
-                <div class="grid grid-cols-6 gap-y-2 gap-x-2 mt-4 text-[15px] font-medium">
-                    <!-- notebook -->
-                    <div class="w-[150px] mx-auto p-2 bg-gray-200 rounded-xl ">
-                        <img src="../../../assets/vue.svg" alt="NoteBook" class="w-[80px] mx-auto">
-                        <h3 class="w-fit mx-auto">
-                            {{typeM}}
-                        </h3>
-                    </div >
-                </div>
-            </div>
-
-            <!-- third -->
-             <div v-if="typeP!='other'"  class="mt-4">
-                <div class="text-[20px] font-semibold">
-                    <h3 v-if="typeP=='hardware'||typeP=='software'||typeP=='internet'">
-                        3. <span class="text-rose-500"> สรุป </span> อาการของ Hardware ของคุณ
-                    </h3>   
-                    
-                    <h3 v-if="typeP=='printer'">
-                        1. <span class="text-rose-500"> สรุป </span> ปัญหา Printer ที่คุณต้องการความช่วยเหลือ
-                    </h3> 
-
-                    <h3 v-if="typeP=='website'">
-                        1. <span class="text-rose-500"> สรุป </span> ปัญหา Website ที่คุณต้องการความช่วยเหลือ
-                    </h3> 
-
-                    <h3 v-if="typeP=='meeting'">
-                        1. <span class="text-rose-500"> สรุป </span> หัวข้อ Meeting ที่คุณต้องการความช่วยเหลือ
-                    </h3> 
-
-                    <h3 v-if="typeP=='application'">
-                        1. <span class="text-rose-500"> สรุป </span> ปัญหา Application ที่คุณต้องการความช่วยเหลือ
-                    </h3> 
-
-                    <h3 v-if="typeP=='media'">
-                        1. <span class="text-rose-500"> สรุป </span> ปัญหาเกี่ยวกับ Media ที่คุณต้องการความช่วยเหลือ
-                    </h3> 
-
-                    <h3 v-if="typeP=='news'">
-                        1. <span class="text-rose-500"> สรุป </span> ปัญหาเกี่ยวกับ News ที่คุณต้องการความช่วยเหลือ
-                    </h3> 
-                    
-                    
-                </div>
-
-                
-                <div class="grid grid-cols-6 gap-y-2 gap-x-2 mt-4 text-[15px] font-medium">
-                    
-                    <div v-for="(data,index) in problems" :key="index"  class="w-[150px] mx-auto p-2 bg-gray-200 rounded-xl ">
-                        <img src="../../../assets/vue.svg" alt="NoteBook" class="w-[80px] mx-auto">
-                        <h3 class="w-fit mx-auto">
-                           {{data}}
-                        </h3>
-                    </div >
-                    <div v-show="isOther==true" class="w-[150px] mx-auto p-2 bg-gray-200 rounded-xl ">
-                        <img src="../../../assets/vue.svg" alt="NoteBook" class="w-[80px] mx-auto">
-                        <h3 class="w-fit mx-auto">
-                           Other
-                        </h3>
-                    </div >
-
-                </div>
-            </div>
-
-
-            <!-- fourth -->
-            <div v-if="typeP !='other'"  class="flex flex-nowrap w-fit mt-10 ">
-                <div v-show="isOther==true" class="mx-4">
-                    <label for="other_1" class="ml-3 text-[17px] font-semibold inline-b">
-                        กรณีเลือก<span class="text-rose-500 pl-2">อื่นๆโปรดระบุ</span>
-                    </label>
-                    <span class="text-[13px] ml-2">(กรณีไม่พบปัญหาข้างต้น)</span>
-                    <textarea v-model="others" name="other" id="other_1" cols="50" rows="5" disabled class="resize-none pt-[10px] block rounded-xl bg-gray-300 p-2 focus:outline-0" ></textarea>
-                </div>
-                
-                <div v-show="massage.length != 0"  class="mx-4">
-                    <label for="other_2" class="ml-3 text-[17px] font-semibold">
-                        ระบุรายละเอียดของปัญหาที่พบ (ถ้ามี)
-                    </label>
-                    <textarea v-model="massage" name="other" id="other_2" cols="50" rows="5" disabled class="resize-none block bg-gray-300 rounded-xl p-2 focus:outline-0"></textarea>
-                </div>
-                <div>
-
-                </div>
-            </div>
-
-            <!-- other -->
-            <div v-else-if="typeP=='other'" class="mt-10 mx-auto w-fit mx-auto">
-                <div class="mx-4">
-                    <label for="other_1" class="ml-3 text-[17px] font-semibold inline-b">
-                        ระบุ รายละเอียด หรือ ความต้องการของคุณ
-                    </label>
-                    <span class="text-[13px] ml-2">(กรณีไม่พบปัญหาข้างต้น)</span>
-                    <textarea v-model="others" name="other" id="other_1"  disabled class="resize-none pt-[10px] block w-[700px] h-[150px] rounded-xl bg-gray-300 p-2 focus:outline-0" ></textarea>
-                </div>
-                    
-                <div  class="mx-4 mt-4">
-                    <label for="other_2" class="ml-3 text-[17px] font-semibold">
-                        หมายเหตุเพิ่มเติม (ถ้ามี)
-                    </label>
-                    <textarea v-model="massage" name="other" id="other_2" disabled  class="resize-none block w-[700px] h-[150px] bg-gray-300 rounded-xl p-2 focus:outline-0"></textarea>
-                </div>
-            </div>
-
-            <!-- button -->
-            <div class="w-fit mx-auto mt-10">
-                <button @click="isSummary=false ,myRouter.go(-1)" class="w-[130px] mx-3 p-2 font-semibold bg-gray-400 text-white rounded-xl">
-                    <h4>
-                        ย้อนกลับ
                     </h4>
-                </button>
-                <button @click="submitt" class="w-[130px] mx-3 p-2 font-semibold bg-rose-400 text-white rounded-xl">
-                    <h4>
-                        ขอรับบริการ
+                    <h4 v-show="(countNumber==4 && (typeP=='hardware'||typeP=='software'||typeP=='internet'))
+                        ||(countNumber==2 && (typeP=='printer'||typeP=='website'||typeP=='meeting'||typeP=='application'||typeP=='media'||typeP=='news'))
+                        || (countNumber==1 && (typeP=='other'))" 
+                    >
+                        ส่งคำร้อง
                     </h4>
                 </button>
             </div>
 
         </div>
 
-        <!-- submit -->
-        <div v-if="isSubmitt==true" class="w-[1000px] mx-auto">
+        <!-- submitt report -->
+        <div v-else-if="isSubmitt==true" class="w-[1000px] mx-auto">
             <div class="w-fit mx-auto">
                 <img src="../../../assets/check.png" alt="check_icon" class="w-[130px] mt-[60px]">
             </div>
@@ -839,9 +687,15 @@ const getDataFromComponent =(value)=>{
                 <h3 class="text-[20px] text-center">
                     เจ้าหน้าที่จะติดต่อร็วๆนี้
                 </h3>
+                <button >
+                    กลับไปหน้าหลัก
+                </button>
             </div>
 
         </div>
+        
+
+        
 
     </div>
 </div>   
