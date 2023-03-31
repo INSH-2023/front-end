@@ -9,6 +9,7 @@ const solutionLink =`${import.meta.env.VITE_BACK_END_HOST}/solutions`
 const {params}=useRoute()
 
 const myRouter =useRouter()
+
 const goHowTo=(v)=>{
     // console.log('this is solution of',text)
     // console.log('this is id of solution',number)
@@ -17,6 +18,9 @@ const goHowTo=(v)=>{
 const goReport=(v)=>{
     myRouter.push({name:'report',params:{id:v,service:params.service}})
     console.log('this is report of :',v)
+}
+const goService=()=>{
+    myRouter.push({name:'services'})
 }
 
 // searching 
@@ -258,7 +262,11 @@ onBeforeMount(()=>{
 
     <!-- line -->
     <hr class="mt-[30px] w-[1100px] h-[1px] border-0 mx-auto bg-gray-700">
-
+    <div class="w-[200px] h-fit mx-auto mt-10 ">
+        <button @click="goService" class="w-full h-full mx-auto p-2 text-[20px] font-light text-gray-400 rounded-xl hover:bg-gray-400 hover:text-white" >
+            ย้อนกลับ
+        </button>
+    </div>
     <!-- searching -->
     <!-- <div v-if="params.service=='it'" class="relative w-[600px] h-[150px] mx-auto">
         <h3 class="mx-auto w-fit mt-4 text-[30px]">

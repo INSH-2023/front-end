@@ -104,7 +104,7 @@ const getUsers =async(id=undefined)=>{
         showList.value = userList.value
         
     }else{
-        let [s,data] = await toBackEnd.getDataBy('user',userLink,id)
+        let [s,data] = await toBackEnd.getDataBy('user',`${userLink}/emp-code`,id)
         if(s==200)status = true
         user.value=data
         console.log(user.value)

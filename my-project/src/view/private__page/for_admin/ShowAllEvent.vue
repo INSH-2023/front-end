@@ -26,7 +26,7 @@ const request=ref({})
 const adminList =ref([])
 
 // edit variable
-const assign_ch=ref("")
+const assign_ch=ref("Not_assign")
 const status_ch=ref("")
 const data_ch=computed(()=>{
     return{
@@ -140,6 +140,7 @@ const deleteItem =async (v)=>{
 const submitt =(v)=>{
     if(validate.vRequestEdit(data_ch.value)){
         // return something
+        
     }
     else{
         editInfo(v)
@@ -153,11 +154,12 @@ const showInfoByID=async(v,index)=>{
     request_id.value=v
     request.value={}
     console.log(v,index)
-    status_ch.value=""
-    assign_ch.value=""
- 
+    // status_ch.value=""
+    // assign_ch.value=""
+
     status = await getEvents(request_id.value)
-    
+    console.log(request.value.request_assign)
+    assign_ch.value = request.value.request_assign
     if(status && isEmptyOBJ.value !=true){
 
         changeST(request.value.request_status)
@@ -800,7 +802,7 @@ const searchByKeyW=()=>{
                             </h5>
                             <select  v-model="assign_ch" name="assign" id="assign" class="w-[200px] mt-2 p-1 bg-gray-400 text-gray-700 font-semibold  rounded">
                                 <option  value="Not_assign" selected disabled>เลือกผู้รับผิดชอบ</option>
-                                <option v-for="(admin,index) in adminList" :key="index" value="Testing_Tseing " class="font-semibold bg-gray-300">{{admin.user_first_name}}</option>
+                                <option v-for="(admin,index) in adminList" :key="index" :value="admin" class="font-semibold bg-gray-300">{{admin.user_first_name}}</option>
                                 <!--<option value="gnitset_testing" class="font-semibold bg-gray-300">gnitset testing</option>
                                 <option value="Testing_Tseing " class="font-semibold bg-gray-300">Testing Tseing</option> -->
 
@@ -821,7 +823,7 @@ const searchByKeyW=()=>{
 
                     <!-- แก้ไขข้อมูล -->
                     <a href="#veri">
-                        <button v-show="status_ch != undefined &&status_ch != 'request'&& assign_ch.length >0 "  class="w-[130px] mx-3 p-2 font-normal bg-gray-300  text-[#64B5F6] rounded-xl hover:bg-[#64B5F6] hover:text-gray-200">
+                        <button v-show="status_ch != undefined &&status_ch != 'request'&& assign_ch.length !=0 &&assign_ch!=assign_ch"  class="w-[130px] mx-3 p-2 font-normal bg-gray-300  text-[#64B5F6] rounded-xl hover:bg-[#64B5F6] hover:text-gray-200">
                             <h4>
                                 ทำการแก้ไข
                             </h4>

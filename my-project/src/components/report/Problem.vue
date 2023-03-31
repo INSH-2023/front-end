@@ -35,7 +35,7 @@ const otherSelection=()=>{
 
 // get problems
 const getProblems=async()=>{
-    let[status,data]=await toBackEnd.getData('component_problem',problemsLink,props.typeP)
+    let[status,data]=await toBackEnd.getData('component_problem',`${problemsLink}/type/${props.typeP}`)
     if(status==200){
         problemList.value=data
         console.log(data)        

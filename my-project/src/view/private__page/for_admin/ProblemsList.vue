@@ -35,23 +35,23 @@ const getP =async(v)=>{
         }
     }else
     if(v != undefined){
-
+        const [ss,data_problem]=await toBackEnd.getData('problem',`${problemsLink}/type/${v}`)
         console.log(v)
-        let res=await fetch(problemsLink,{
-            method:'GET',
-            headers:{
-                "subject_type":`${v}`
-            }
-        })
+        // let res=await fetch(problemsLink,{
+        //     method:'GET',
+        //     headers:{
+        //         "subject_type":`${v}`
+        //     }
+        // })
 
-        if(res.status==200){
+        if(ss==200){
             status=true
-            problemList.value=await res.json()
+            problemList.value=data_problem
             splitProblems(currentPage.value)
             console.log(problemList.value)
         }else{
             status=false
-            console.log(await res.json())
+            console.log(data)
         }
         // const [ss,data] = await toBackEnd.getDataBy('problem',problemsLink,v)
         // if(ss==200){
