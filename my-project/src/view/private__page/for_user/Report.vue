@@ -228,7 +228,7 @@ const problem_to_text=computed(()=>{
 
 const getUser= async(user_id)=>{
 
-    const [status,data]= await toBackEnd.getData('report_user',`${userLink}/emp-code/${user_id}`)
+    const [status,data]= await toBackEnd.getData('report_user',`${userLink}/${user_id}`)
     if(status==200){
         let [{user_first_name,user_last_name,user_group,user_email}]=data
         user.value.first_name=user_first_name

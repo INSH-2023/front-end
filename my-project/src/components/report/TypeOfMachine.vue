@@ -42,7 +42,7 @@ const item=ref({
 const itemList=ref([])
 // get item for use type = or
 const getItem=async(emp_code)=>{
-    let [status,data]= await toBackEnd.getData('component_item',`${itemLink}/emp-code/${emp_code}`)
+    let [status,data]= await toBackEnd.getData('component_item',`${itemLink}/${emp_code}`)
     if(status==200){
         itemList.value =data
         console.log('data item :',itemList.value)
