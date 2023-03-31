@@ -12,7 +12,7 @@ const goMainMenu =(v)=>myRouter.push({name:'booking',params:{service:v}})
     <div>
         <div>
             <!-- navigation bar -->
-            <BaseStatus />
+            <!-- <BaseStatus /> -->
 
             <!-- body -->
             <div>
@@ -21,7 +21,8 @@ const goMainMenu =(v)=>myRouter.push({name:'booking',params:{service:v}})
                 </div>
                 <div class="w-fit mx-auto mt-10">
                     <div  class="flex">
-                        <button @click="goMainMenu('pr')" class="mx-10">
+                        <!-- เดี๋ยวกลับมาแก้ -->
+                        <!-- <button @click="goMainMenu('pr')" class="mx-10">
                             <img src="../../assets/PR_service.png" alt="icon" class="w-[120px] mx-auto">
                             <h4 class="w-full text-center font-semibold text-[30px]">
                                 Service PR
@@ -29,7 +30,7 @@ const goMainMenu =(v)=>myRouter.push({name:'booking',params:{service:v}})
                             <h3>
                                 สื่อและรณรงค์ทางสังคม
                             </h3>
-                        </button>
+                        </button> -->
                         <button @click="goMainMenu('it')" class="mx-10">
                             <img src="../../assets/IT_service.png" alt="icon" class="w-[120px] mx-auto">
                             <h4 class="w-full text-center font-semibold text-[30px]">

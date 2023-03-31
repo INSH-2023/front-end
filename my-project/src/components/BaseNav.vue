@@ -69,13 +69,14 @@ const toAdmin =()=>{
 
 }
 
-
+const logOut =()=>{
+    localStorage.removeItem('user_info')
+    goHome()
+}
 
 onBeforeMount(()=>{
     // let user_info =JSON.parse(localStorage.getItem('user_info')) 
     getRole()
-    
-
 })
 </script>
 <template>
@@ -187,12 +188,27 @@ onBeforeMount(()=>{
                     <button @click="isSetting= !isSetting ,isLanguage= false" class="font-semibold text-[#8DA9C4] p-1 active:bg-[#90CAF9] active:text-[#0D47A1] rounded hover:text-white">
                         <img src="../assets/burger_menu.png" alt="menu" class="w-[35px]">
                     </button>
-                    <div v-show="isSetting==true" class="font-semibold text-[#8DA9C4] absolute mt-[10px] ml-[-120px] z-20 w-30 rounded bg-gray-700 divide-y divide-gray-800" id="dropdown" >
-                    <ul  class="p-2 m-auto">
-                        <li>
+
+                    <div v-show="isSetting==true" class="w-[150px] font-semibold text-[#8DA9C4] absolute  right-[25px] top-[60px] z-20 w-30 rounded bg-gray-700 divide-y divide-gray-800" id="dropdown" >
+                    <ul  class="flex flex-col p-2 m-auto">
+                        <!-- <li>
                             <button class="font-semibold text-[#8DA9C4] ml-">change theme</button> 
+                        </li> -->
+                        <li>
+                            <div class="flex" draggable="false">
+                                <img src="../assets/vue.svg" alt="logo_setting" draggable="false" class="w-[20px] h-[20px] ml-2">
+                                <h4 class="ml-3">
+                                    Option
+                                </h4>                                
+                            </div>
                         </li>
                         <li>
+                            <hr class="w-full my-2 ">
+                        </li>
+                        <li>
+                            <button @click="logOut" class="w-full font-semibold text-[#8DA9C4] px-2 py-1 hover:bg-rose-400 hover:text-white rounded-xl">Log out</button> 
+                        </li>
+                        <!-- <li>
                             <button @click="isLanguage= !isLanguage" class="font-semibold text-[#8DA9C4]">
                                  <span v-show="isLanguage==true">&#60;&nbsp;</span>change language 
                             </button> 
@@ -206,7 +222,7 @@ onBeforeMount(()=>{
                                     </li>
                                 </ul>
                             </div>
-                        </li>
+                        </li> -->
                     </ul>
                     </div>
                 </div>

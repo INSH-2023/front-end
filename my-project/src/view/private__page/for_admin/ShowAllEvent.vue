@@ -7,6 +7,7 @@ import validate from '../../../JS//validate'
 
 // const requestLink="http://localhost:3000/events"
 const requestLink=`${import.meta.env.VITE_BACK_END_HOST}/requests`
+const userLink =`${import.meta.env.VITE_BACK_END_HOST}/users`
 // const linkTesting=`${import.meta.env.VITE_BACK_END}/`
 
 const myRouter = useRouter()
@@ -14,6 +15,7 @@ const myRouter = useRouter()
 onBeforeMount(()=>{
     navigation()
     getEvents()
+    getAdmin()
 })
 
 // get variable
@@ -21,6 +23,7 @@ const requestList=ref([])
 const showList =ref([])
 const filterList=ref([])
 const request=ref({})
+const adminList =ref([])
 
 // edit variable
 const assign_ch=ref("")
@@ -80,6 +83,18 @@ const getEvents =async(id=undefined)=>{
     }
 
     return status
+}
+
+const getAdmin=async()=>{
+    let [status,data]=await toBackEnd.getData('request_admin',`${userLink}/role/admin_it`)
+    if(status==200){
+        console.log(data.user_first_name)
+        adminList.value=data
+    }else{
+        // status something
+        console.log(data)
+    }
+    
 }
 
 // edit by id
@@ -582,9 +597,9 @@ const searchByKeyW=()=>{
                         ข้อมูลเพิ่มเติม 
                     </h3>
                 </div>
-
+                <hr class="w-[80%] h-[10px] m-auto my-4">
                 <!-- first -->
-                <table  class="w-full   mt-10  text-[20px] font-semibold ">
+                <table  class="w-full     text-[20px] font-semibold ">
 
                         <!-- username -->
                         <tr >
@@ -632,9 +647,9 @@ const searchByKeyW=()=>{
                         </tr>
 
                         <!-- is OR or SF -->
-                        <tr v-show="request.request_service_type=='IT_Service'">
+                        <tr v-show="request.request_service_type=='IT_Service'&&request.request_subject!='other'">
                             <th class="table_header text-right w-[115px]">
-                                ประเภทของ
+                                type of use
                             </th>
                             <td class="indent-[5px] font-normal">
                                 {{request.request_use_type=='or'?'เป็นขององค์กร':'เป็นของส่วนตัว'}}
@@ -642,7 +657,7 @@ const searchByKeyW=()=>{
                         </tr>
 
                         <!-- brand -->
-                        <tr v-show="request.request_service_type=='IT_Service'">
+                        <tr v-show="request.request_service_type=='IT_Service'&&(request.request_subject=='hardware'||request.request_subject=='software'||request.request_subject=='internet')">
                             <th class="table_header text-right w-[115px]">
                                 ยี่ห้อ
                             </th>
@@ -652,7 +667,7 @@ const searchByKeyW=()=>{
                         </tr>
 
                         <!-- number -->
-                        <tr v-show="request.request_service_type=='IT_Service'">
+                        <tr v-show="request.request_service_type=='IT_Service'&&request.request_use_type=='or'&&request.request_subject=='hardware'">
                             <th class="table_header text-right w-[115px]">
                                 S/N
                             </th>
@@ -661,6 +676,8 @@ const searchByKeyW=()=>{
                             </td>
                         </tr>
                 </table>
+
+                <hr class="w-[80%] h-[10px] m-auto my-3">
                 
                 <!-- <div  class="mt-10  text-[20px] font-semibold ">
                     <div class="w-fit">
@@ -689,9 +706,9 @@ const searchByKeyW=()=>{
                     </div>
 
                     
-                    <div v-if="request.request_subject=='software'||request.request_subject=='hardware'||request.request_subject=='internet'" class=" mt-4 text-[15px] font-medium">
+                    <div v-if="request.request_subject=='software'||request.request_subject=='hardware'||request.request_subject=='internet'" class=" w-full grid grid-cols-4 gap-y-2 gap-x-2 mt-4 text-[15px] font-medium">
                         <!-- notebook -->
-                        <div class="w-[85px]  p-2 bg-gray-200 rounded-xl ">
+                        <div class="w-[85px] mx-auto p-2 bg-gray-200 rounded-xl">
                             <img src="../../../assets/vue.svg" alt="NoteBook" class="w-[40px] mx-auto">
                             <h3 class="w-fit mx-auto text-[4px]">
                             {{request.request_type_matchine}}
@@ -713,7 +730,7 @@ const searchByKeyW=()=>{
                     </div>
 
                     
-                    <div class="w-full grid grid-cols-6 gap-y-2 gap-x-2 mt-4 text-[15px] font-medium">
+                    <div class="w-full grid grid-cols-4 gap-y-2 gap-x-2 mt-4 text-[15px] font-medium">
                         
                         <div v-for="(data,index) of request.request_problems" :key="index"  class="w-[85px] mx-auto p-2 bg-gray-200 rounded-xl ">
                             <img src="../../../assets/vue.svg" alt="NoteBook" class="w-[40px] mx-auto">
@@ -731,8 +748,10 @@ const searchByKeyW=()=>{
                     </div>
                 </div>
 
+                <hr class="w-[80%] h-[10px] m-auto mt-10">
+
                 <!-- massage other -->
-                <div   class=" w-full mt-10 ">
+                <div   class=" w-full  ">
                     <div v-show="request.request_other!=''"  class="">
                         <label for="other_1" class="ml-2 text-[17px] font-semibold inline-b">
                             กรณีเลือก<span class="text-rose-500 pl-2">อื่นๆโปรดระบุ</span>
@@ -779,11 +798,11 @@ const searchByKeyW=()=>{
                             <h5 class="font-semibold">
                                 Assign
                             </h5>
-                            <select v-model="assign_ch" name="assign" id="assign" class="w-[200px] mt-2 p-1 bg-gray-400 text-gray-700 font-semibold  rounded">
-                                <option value="Not_assign" selected disabled>เลือกผู้รับผิดชอบ</option>
-                                <option value="Testing_Tseing " class="font-semibold bg-gray-300">Testing Tseing</option>
-                                <option value="gnitset_testing" class="font-semibold bg-gray-300">gnitset testing</option>
-                                <option value="Testing_Tseing " class="font-semibold bg-gray-300">Testing Tseing</option>
+                            <select  v-model="assign_ch" name="assign" id="assign" class="w-[200px] mt-2 p-1 bg-gray-400 text-gray-700 font-semibold  rounded">
+                                <option  value="Not_assign" selected disabled>เลือกผู้รับผิดชอบ</option>
+                                <option v-for="(admin,index) in adminList" :key="index" value="Testing_Tseing " class="font-semibold bg-gray-300">{{admin.user_first_name}}</option>
+                                <!--<option value="gnitset_testing" class="font-semibold bg-gray-300">gnitset testing</option>
+                                <option value="Testing_Tseing " class="font-semibold bg-gray-300">Testing Tseing</option> -->
 
                             </select>
                         </div>
@@ -810,7 +829,7 @@ const searchByKeyW=()=>{
                     </a>
                 </div>
 
-                <hr class="w-full h-[10px] mt-10">
+                <!-- <hr class="w-full h-[10px] mt-10"> -->
 
                 <!-- comment -->
                 <!-- <div   class=" w-full mt-4 ">

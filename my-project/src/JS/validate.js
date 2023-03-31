@@ -193,7 +193,7 @@ const validate={
     vSection_III(problems,is_other){
         let status=undefined
         if(problems.length==0&&is_other==false){
-            console.log('please input ur data section 2')
+            console.log('please input ur problem section 3')
             status=false
         }else{
             status=true
@@ -203,7 +203,7 @@ const validate={
     vSection_IIII(otherAndMsg,is_other){
         let status =undefined
         if(is_other==true && otherAndMsg.msg_other.length==0){
-            console.log('please input ur data section 2')
+            console.log('please input ur data section 4')
             status=false
         }else{
             status=true

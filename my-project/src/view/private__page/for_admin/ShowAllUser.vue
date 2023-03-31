@@ -7,7 +7,7 @@ import validate from'../../../JS/validate.js'
 
 
 onBeforeMount(()=>{
-    closeDetail()
+    changePath()
     getUsers()
 })
 
@@ -93,7 +93,7 @@ const is_active_open=ref(false)
 
 // get user
 const getUsers =async(id=undefined)=>{
-
+    console.log(id)
     let status=false
     if(id==undefined){
         let [s,data] = await toBackEnd.getData('user',userLink)
@@ -117,14 +117,17 @@ const getUsers =async(id=undefined)=>{
 // delete user
 const deleteUser =async(v)=>{
     
-    let status = await toBackEnd.delete('user',userLink,v)
+    let [status,data] = await toBackEnd.delete('user',userLink,v)
     
-    if(status==200?true:false){
+    if(status==200){
         await getUsers()
-        closeDetail()
+        console.log(data)
+        changePath()
         // status something
     }else{
         // status something
+        changePath('#showInfo')
+        console.log(data)
     }
 }
 
@@ -146,12 +149,10 @@ const showInfoByID=async(v,index)=>{
     // console.log(getUsers(v))
     // console.log('is user obj is empty ? : '+isEmptyOBJ.value)
     status = await getUsers(user_id.value)
-    console.log('helloworld')
-    if( status && isEmptyOBJ.value !=true){
 
-        window.location.href='#showInfo'
-        // detail[index].setAttribute("href","#showInfo")
-        // detail[index].click()
+    if( status && isEmptyOBJ.value !=true){
+        changePath('#showInfo')
+
     }else{
         console.log('error to show detail of user')
     }
@@ -200,14 +201,14 @@ const submitEdit =async(id)=>{
     // if(validate.vUserCreate(dataCh.value,lenghtOfInput) !=true){
         let [status,data] = await toBackEnd.editData('user',userLink,id,dataCh.value)
             console.log(status)
-            if(status==200?true:false){
+            if(status==200){
                 await getUsers()
-                closeDetail()
+                changePath()
                 assignDetail(false)
                 
                 // status something
             }else{
-                closeDetail()
+                changePath('#showInfo')
                 console.log(data)
                 // status something
             }        
@@ -240,8 +241,8 @@ const checkInput =()=>{
 
 
 // close detail every reload
-const closeDetail=()=>{
-    window.location.href = '#'
+const changePath=(path='#')=>{
+    window.location.href = path
 }
 
 
@@ -427,7 +428,7 @@ const searchByKeyW=()=>{
                                     {{data.user_group}}
                                 </div>
                             </td>
-                            <td class=" px-2 py-2 text-[20px] font-semibold ">
+                            <td class=" px-2 py-2 text-[20px] font-semibold capitalize">
                                 <div class="w-full truncate mx-auto" :style="data.user_status=='active'?'color:green':'color:red'">
                                     {{data.user_status}}                                    
                                 </div>
@@ -441,7 +442,7 @@ const searchByKeyW=()=>{
                             <td class=" px-2 py-2 font-semibold">
                                 <div class="flex w-fit mx-auto truncate ">
                                     <a    class="goInfo w-[28px] m-2 ">
-                                        <button @click="showInfoByID(data.userId,index)">
+                                        <button @click="showInfoByID(data.user_emp_code,index)">
                                             <img src="../../../assets/admin_page/edit.png" alt="edit_icon" >
                                         </button>
                                     </a>                                    

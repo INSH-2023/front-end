@@ -101,7 +101,7 @@ onBeforeMount(()=>{
 <div class="overflow-auto">
 <div class="pt-2 ">
     <!-- ส่วน navigation bar -->
-    <BaseStatus/>
+    <!-- <BaseStatus/> -->
 
     <!-- ส่วนล่าง -->
     <div class="w-fit mx-auto mt-4 text-[60px] text-gray-600 font-bold ">
@@ -260,7 +260,7 @@ onBeforeMount(()=>{
     <hr class="mt-[30px] w-[1100px] h-[1px] border-0 mx-auto bg-gray-700">
 
     <!-- searching -->
-    <div v-if="params.service=='it'" class="relative w-[600px] h-[150px] mx-auto">
+    <!-- <div v-if="params.service=='it'" class="relative w-[600px] h-[150px] mx-auto">
         <h3 class="mx-auto w-fit mt-4 text-[30px]">
             หรือค้นหาหัวข้อปัญหาที่คุณเจอ
         </h3>
@@ -279,10 +279,10 @@ onBeforeMount(()=>{
                 {{data.title}}
             </div>
         </div>
-    </div>
+    </div> -->
 
     <!-- list problems -->
-    <div v-if="params.service=='it'" class="grid grid-cols-2 grid-rows-2 gap-4 w-[1000px] mx-auto mt-3">
+    <!-- <div v-if="params.service=='it'" class="grid grid-cols-2 grid-rows-2 gap-4 w-[1000px] mx-auto mt-3">
         <div v-for="(dataa,index) in ranArticle" :key="index"  class="bg-gray-100 p-2 rounded-2xl hover:bg-gray-200">
             <img :src="dataa.img" alt="logo" class=" w-[45px] mx-3 mt-2">
             <h5 class="ml-[10px] mb-1.5 mt-2 text-[20px] font-semibold">
@@ -297,7 +297,7 @@ onBeforeMount(()=>{
         </div>
 
         
-    </div>
+    </div> -->
 
 
         <!-- list problems searching -->
