@@ -448,7 +448,10 @@ const getDataFromComponent =(value)=>{
                 <h3 class="text-[20px] text-center">
                     เจ้าหน้าที่จะติดต่อร็วๆนี้
                 </h3>
-                <button >
+                
+            </div>
+            <div class="w-fit h-fit mx-auto mt-6">
+                <button @click="goMain" class="w-fit h-fit p-2 mx-auto bg-gray-300 rounded-xl">
                     กลับไปหน้าหลัก
                 </button>
             </div>
