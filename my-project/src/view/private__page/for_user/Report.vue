@@ -235,10 +235,10 @@ const getUser= async(emp_code)=>{
         user.value.last_name=user_last_name
         user.value.group=user_group
         user.value.email=user_email
-        console.log(data)
+        console.log(data_user)
         
     }else{
-        console.log(data)
+        console.log(data_user)
     }
 }
 
@@ -413,15 +413,16 @@ const getDataFromComponent =(value)=>{
 
             <!-- button -->
             <div class="w-fit mx-auto mt-10">
-                <button @click="countNumber==0? myRouter.go(-1):computeStageReport(false)" class="w-[130px] mx-3 p-2 font-semibold bg-gray-400 text-white rounded-xl">
+                <button @click="countNumber==0? myRouter.go(-1):computeStageReport(false)" class="w-[130px] mx-3 p-2 font-semibold bg-[#EDEDE9] text-gray-500 rounded-xl hover:bg-gray-500 hover:text-[#EDEDE9]">
                     <h4>
                         ย้อนกลับ
                     </h4>
                 </button>
-                <button @click="validateReport(countNumber)" class="w-[130px] mx-3 p-2 font-semibold bg-rose-400 text-white rounded-xl">
+                <button @click="validateReport(countNumber)" class="w-[130px] mx-3 p-2 font-semibold bg-emerald-300  text-white rounded-xl hover:bg-[#b7e4c7] hover:text-gray-500">
                     <h4 v-show="(countNumber<4 && (typeP=='hardware'||typeP=='software'||typeP=='internet'))
                         ||(countNumber<2 && (typeP=='printer'||typeP=='website'||typeP=='meeting'||typeP=='application'||typeP=='media'||typeP=='news')) 
                         || (countNumber<1 && (typeP=='other'))"
+                        class=""
                     >
                         ถัดไป
                     </h4>

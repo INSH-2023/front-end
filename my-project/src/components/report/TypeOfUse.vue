@@ -31,13 +31,13 @@ const data=computed(()=>{
         
         <div class="w-fit h-[80px] mt-3 text-[20px] flex justify-between flex-col  font-medium">
             <div class="flex ml-14 " >
-                <input v-model="typeU" id="Organization" type="radio" name="hardware_of" value="or" class="w-[15px] "> 
+                <input v-model="typeU" id="Organization" type="radio" name="hardware_of" value="or" class="w-[25px] bg-gray-300"> 
                 <label for="Organization" class="ml-4">
                     ของสำนักงาน
                 </label>                       
             </div>
             <div class="flex ml-14 ">
-                <input v-model="typeU" id="Self" type="radio" name="hardware_of" value="sf" class="w-[15px]">
+                <input v-model="typeU" id="Self" type="radio" name="hardware_of" value="sf" class="w-[25px]">
                 <label for="Self" class="ml-4">
                     ของส่วนตัว (โปรดระบุ ยี้ห้อ / รุ่น)
                 </label>
