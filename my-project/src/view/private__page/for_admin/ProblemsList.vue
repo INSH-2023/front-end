@@ -13,7 +13,7 @@ const data_ch=computed(()=>{
         problem_type:subjectCr.value
     }
 })
-const subjectCr=ref('hardware')
+const subjectCr=ref('all')
 
 const isEdit =ref(false)
 // get  problem
@@ -21,7 +21,22 @@ const getP =async(v)=>{
 
     let status =undefined
 
-    if(v == undefined){
+    if(v != 'all'){
+        
+        const [ss,data_problem]=await toBackEnd.getData('problem',`${problemsLink}/type/${v}`)
+        console.log(v)
+
+        if(ss==200){
+            status=true
+            problemList.value=data_problem
+            splitProblems(currentPage.value)
+            console.log(problemList.value)
+        }else{
+            status=false
+            console.log(data)
+        }
+
+    }else{
         const [ss,data]=await toBackEnd.getData('problem',problemsLink)
         if(ss==200){
             status=true
@@ -33,37 +48,6 @@ const getP =async(v)=>{
             status=false
             console.log(data)
         }
-    }else
-    if(v != undefined){
-        const [ss,data_problem]=await toBackEnd.getData('problem',`${problemsLink}/type/${v}`)
-        console.log(v)
-        // let res=await fetch(problemsLink,{
-        //     method:'GET',
-        //     headers:{
-        //         "subject_type":`${v}`
-        //     }
-        // })
-
-        if(ss==200){
-            status=true
-            problemList.value=data_problem
-            splitProblems(currentPage.value)
-            console.log(problemList.value)
-        }else{
-            status=false
-            console.log(data)
-        }
-        // const [ss,data] = await toBackEnd.getDataBy('problem',problemsLink,v)
-        // if(ss==200){
-        //     status=true
-        //     problemList.value=data
-        //     splitProblems(currentPage.value)
-        //     console.log(data)
-        // }else{
-        //     // status something
-        //     status=false
-        //     console.log(data)
-        // }
     }
 
     return status
@@ -247,7 +231,8 @@ const subjectCh=(event)=>{
                         </h4>
                         <select @change="subjectCh" name="subject" id="subject" class="absolute bottom-0 w-[200px] bg-[#C6AC8F] text-[#0A0908] text-[20px] font-light rounded-lg p-[1px]  px-[10px]">
                             <!-- <option value="none" selected hidden>Type of subject</option> -->
-                            <option value="hardware" selected>Hardware</option>
+                            <option value="all" selected>All Problem</option>
+                            <option value="hardware" >Hardware</option>
                             <option value="software" >Software</option>
                             <option value="internet" >Internet</option>
                             <option value="printer" >Printer</option>
