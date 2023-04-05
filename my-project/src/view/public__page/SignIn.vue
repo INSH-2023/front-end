@@ -36,11 +36,19 @@ const isEmailTesting=ref(false)
 <template>
 <div>
     <div class=" pt-3 relative ">
-       <div class="mt-6 w-fit mx-auto text-[60px] font-semibold text-gray-600">
+       <div class="mt-6 w-fit mx-auto text-[27px] font-semibold text-gray-600
+            sm:text-gray-300 md:text-rose-300 lg:text-sky-300 sm:text-[40px]
+            
+       ">
          ลงชื่อเข้าใช้
        </div>
-       <div class="mt-6 w-[400px] h-[105px]  mx-auto relative">
-            <h4 class="ml-3 font-light text-[10px] text-gray-400">
+       <div class="mt-2 w-[20rem] h-[6.563rem]  mx-auto relative
+            sm:w-[25rem]
+            md:mt-3
+       ">
+            <h4 class="ml-3 font-light text-[10px] text-gray-400
+                md:text-[0.86rem]
+            ">
                 ใส่ Email ของคุณที่นี่ !!
             </h4>
             <!-- input zone -->
@@ -72,8 +80,8 @@ const isEmailTesting=ref(false)
 
 
        <!-- button submit -->
-       <div v-show="isEmailTesting==true" class="w-fit mx-auto mt-3">
-            <button @click="logIn"  class="bg-sky-500 px-[100px] py-[10px] rounded-2xl text-white">
+       <div v-show="isEmailTesting==true" class="w-fit h-fit mx-auto mt-3 md:mt-6">
+            <button @click="logIn"  class="bg-sky-500 w-[13rem] h-[2.4rem] rounded-2xl text-white md:w-[16rem]">
                 login
             </button>
        </div>

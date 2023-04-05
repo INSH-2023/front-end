@@ -98,7 +98,7 @@ onBeforeMount(()=>{
             
         </div>
 
-        <!-- user page -->
+        <!-- user page
         <div v-else-if="role=='user'" class=" flex justify-between p-2 relative">
             <div class=" ml-[20px] w-fit ">
                 <div class="flex">
@@ -109,7 +109,7 @@ onBeforeMount(()=>{
                 </div>
                 
             </div>
-            <!-- menu username -->
+            menu username
             <div class="flex mr-[20px]">
                 <img src="../assets/alert.png" alt="alert" class="mx-3 w-[25px] m-auto">
                 <h3 class="m-auto mb-2 mx-1 text-[14px] text-white font-medium">
@@ -120,7 +120,7 @@ onBeforeMount(()=>{
                 </button>
                 
 
-                    <!-- ตั้งค่า drop down -->
+                    ตั้งค่า drop down
                 <div class=" ">
                     <button @click="isSetting= !isSetting ,isLanguage= false" class="font-semibold text-[#8DA9C4] p-1 active:bg-[#90CAF9] active:text-[#0D47A1] rounded hover:text-white">
                         <img src="../assets/burger_menu.png" alt="menu" class="w-[35px]">
@@ -149,16 +149,24 @@ onBeforeMount(()=>{
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->
 
         <!-- admin page -->
-        <div v-else-if="role=='admin_it'||role=='admin_pr'" class="flex justify-between p-2 relative">
+        <div v-else class="w-full flex justify-between p-2 relative">
             <div class="flex ml-[20px] w-fit ">
                     <img src="../assets/Moral_Fainal.png" alt="" class="w-[40px] h-[40px] my-auto">
-                    <div class="text-[20px] font-bold text-white my-auto m-3 ">
+                    <div class="text-[20px] font-bold text-white my-auto m-3 
+                        sm:text-gray-300 md:text-rose-300 lg:text-sky-300
+                    ">
                         Zeed web
                     </div>
-                    <button @click="toAdmin" :style="[isAdmin===true?'background-color: rgb(244 63 94);color:white':'color: rgb(64 64 64);']" class="text-[15px] font-bold  rounded py-[5px] px-[10px] my-auto  ">
+                    <button 
+                        v-if="role=='admin_it'||role=='admin_pr'" 
+                        @click="toAdmin" 
+                        :style="[isAdmin===true?'background-color: rgb(244 63 94);color:white':'color: rgb(64 64 64);']" 
+                        class=" text-[15px] font-bold  rounded py-[5px] px-[10px] my-auto  
+                            
+                        ">
                         Admin
                     </button >
                     <!-- <label  class="switch my-auto z-60">
@@ -190,12 +198,16 @@ onBeforeMount(()=>{
                     Your browser does not support the audio element.
                 </audio> -->
                 <!-- <img src="../assets/alert.png" alt="alert" class="mx-3 w-[25px] m-auto"> -->
-                <h3 class="m-auto mb-2 mx-1 text-[14px] text-white font-medium">
+                <h3 class="hidden m-auto mb-2 mx-1 text-[14px] text-white font-medium
+                    sm:block
+                ">
                     สวัสดี!
                 </h3>
-                <button class=" truncate w-[180px] mb-1.5 mx-2 m-auto   text-[17px] text-white font-semibold">
+                <div class="hidden truncate w-[180px] mb-1.5 mx-2 m-auto   text-[17px] text-white font-semibold
+                    sm:block
+                ">
                     {{ userName }}
-                </button>
+                </div>
                 
 
                     <!-- ตั้งค่า drop down -->
@@ -204,13 +216,24 @@ onBeforeMount(()=>{
                         <img src="../assets/burger_menu.png" alt="menu" class="w-[35px]">
                     </button>
 
-                    <div v-show="isSetting==true" class="w-[150px] font-semibold text-[#8DA9C4] absolute  right-[25px] top-[60px] z-20 w-30 rounded bg-gray-700 divide-y divide-gray-800" id="dropdown" >
+                    <div v-show="isSetting==true" 
+                        id="dropdown"
+                        class="w-[100vw] h-fit font-semibold text-[#8DA9C4] absolute  right-0 top-[60px] z-20 w-30 rounded bg-gray-700 divide-y divide-gray-800
+                            sm:w-[11.5rem] 
+                        ">
                     <ul  class="flex flex-col p-2 m-auto">
                         <!-- <li>
                             <button class="font-semibold text-[#8DA9C4] ml-">change theme</button> 
                         </li> -->
-                        <li>
-                            <div class="flex" draggable="false">
+                        <li class="block sm:hidden">
+                            <div class="block truncate w-fit h-fit   m-auto   text-[0.9rem] text-white font-semibold
+                                
+                            ">
+                                {{ userName }}
+                            </div>
+                        </li>
+                        <li class="hidden sm:block">
+                            <div class="flex">
                                 <img src="../assets/vue.svg" alt="logo_setting" draggable="false" class="w-[20px] h-[20px] ml-2">
                                 <h4 class="ml-3">
                                     Option
