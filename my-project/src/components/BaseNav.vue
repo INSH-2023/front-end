@@ -46,10 +46,10 @@ const getRole=()=>{
 //     goAdmin()
 // }
 
-// const setRoleUser=()=>{
-//     localStorage.setItem('role','user')
-//     goUser()
-// }
+// // const setRoleUser=()=>{
+// //     localStorage.setItem('role','user')
+// //     goUser()
+// // }
 
 // switch for admin
 const isAdmin=ref(false)
@@ -57,7 +57,8 @@ const toAdmin =()=>{
     isAdmin.value= !isAdmin.value
     // console.log("before change:",isAdmin.value)
     // isAdmin.value==true?isAdmin.value=false:isAdmin.value=true
-    console.log("after change",isAdmin.value)
+
+    // console.log("after change",isAdmin.value)
     if(isAdmin.value==true){
         localStorage.setItem('isAdmin',isAdmin.value)
          goShowAllEvent()
@@ -81,30 +82,24 @@ onBeforeMount(()=>{
 </script>
 <template>
     <!-- new apdate -->
-<div class="bg-[#2196F3]">
+<div class="h-[65px] bg-[#2196F3]">
     <div >
         <!-- default home -->
-        <div v-if="role==null||role==undefined" class=" p-2">
-            <div class="flex ml-[20px] w-fit">
-                <img src="../assets/Moral_Fainal.png" alt="" class="w-[40px] h-[40px]">
-                <div class="text-[20px] font-bold text-white my-auto m-3 ">
-                    Zeed web
+        <div v-if="role==null||role==undefined" class=" p-2 relative">
+            <div class=" ml-[20px] w-fit ">
+                <div class="flex">
+                    <img src="../assets/Moral_Fainal.png" alt="" class="w-[40px] h-[40px] inline-block">
+                    <div class="text-[20px] font-bold text-white my-auto m-3 ">
+                        Zeed web
+                    </div>                    
                 </div>
-                <!-- <button @click="setRoleAdmin" class="text-[20px] font-bold text-gray-700 my-auto m-3 ">
-                    admin
-                </button >
-                <button @click="setRoleUser" class="text-[20px] font-bold text-gray-700 my-auto m-3 ">
-                    user
-                </button > -->
+                
             </div>
-
-            <div>
-
-            </div>
+            
         </div>
 
         <!-- user page -->
-        <div v-else-if="role=='user'" class="flex justify-between p-2 relative">
+        <div v-else-if="role=='user'" class=" flex justify-between p-2 relative">
             <div class=" ml-[20px] w-fit ">
                 <div class="flex">
                     <img src="../assets/Moral_Fainal.png" alt="" class="w-[40px] h-[40px] inline-block">
@@ -120,7 +115,7 @@ onBeforeMount(()=>{
                 <h3 class="m-auto mb-2 mx-1 text-[14px] text-white font-medium">
                     สวัสดี!
                 </h3>
-                <button class=" truncate w-[100px] mb-1.5 ml-2 m-auto mx-2 mr-10 text-[17px] text-white font-semibold">
+                <button class=" truncate w-[180px] mb-1.5  m-auto mx-2 text-[17px] text-white font-semibold">
                     {{ userName }}
                 </button>
                 
@@ -163,9 +158,29 @@ onBeforeMount(()=>{
                     <div class="text-[20px] font-bold text-white my-auto m-3 ">
                         Zeed web
                     </div>
-                    <button @click="toAdmin" :style="[isAdmin===true?'background-color: rgb(244 63 94);color:white':'color: rgb(64 64 64);']" class="text-[15px] font-bold  rounded py-[5px] px-[10px] my-auto m-3 ">
+                    <button @click="toAdmin" :style="[isAdmin===true?'background-color: rgb(244 63 94);color:white':'color: rgb(64 64 64);']" class="text-[15px] font-bold  rounded py-[5px] px-[10px] my-auto  ">
                         Admin
                     </button >
+                    <!-- <label  class="switch my-auto z-60">
+                        <input @click="toAdmin" type="checkbox">
+                        <span class="slider round  "></span>
+                        <h3 v-show="isAdmin==false" class="absolute w-fit h-fit top-0 bottom-0 right-[10px] z-50 inset-y-0 text-[12px] m-auto  font-light">
+                            user
+                        </h3>
+                        <h3 v-show="isAdmin==true" class="absolute w-fit h-fit top-0 bottom-0 left-[5px] z-50 inset-y-0 text-[12px] m-auto  font-light">
+                            admin
+                        </h3>
+                    </label> -->
+
+                    <!-- <div class="toggle-button-cover"> -->
+                        <!-- <div class="button-cover"> -->
+                            <!-- <div class="button r " id="button-1">
+                                <input @click="toAdmin" type="checkbox" class="checkbox " />
+                                <div class="knobs "></div>                               
+                                <div class="layer "></div>
+                            </div> -->
+                        <!-- </div> -->
+                    <!-- </div> -->
 
             </div>
             <!-- menu username -->
@@ -174,11 +189,11 @@ onBeforeMount(()=>{
                     <source src="../assets/bp.mp3" type="audio/mpeg">
                     Your browser does not support the audio element.
                 </audio> -->
-                <img src="../assets/alert.png" alt="alert" class="mx-3 w-[25px] m-auto">
+                <!-- <img src="../assets/alert.png" alt="alert" class="mx-3 w-[25px] m-auto"> -->
                 <h3 class="m-auto mb-2 mx-1 text-[14px] text-white font-medium">
                     สวัสดี!
                 </h3>
-                <button class=" truncate w-[100px] mb-1.5 ml-2 m-auto mx-2 mr-10 text-[17px] text-white font-semibold">
+                <button class=" truncate w-[180px] mb-1.5 mx-2 m-auto   text-[17px] text-white font-semibold">
                     {{ userName }}
                 </button>
                 
@@ -233,5 +248,192 @@ onBeforeMount(()=>{
 
 </template>
 <style scoped>
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 70px;
+  height: 28px;
+  background-color: transparent;
+ 
+}
+
+.switch input { 
+  opacity: 0;
+  width: 0;
+  height: 0;
+  
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 20px;
+  width: 20px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+
+}
+
+input:checked + .slider {
+  background-color: #b2f7cc;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #b2f7cc;
+  
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(40px);
+
+
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 34px;
+  z-index: 40;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
+/* try new button */
+
+
+
+.toggle-button-cover {
+  display: table-cell;
+  position: relative;
+  width: 200px;
+  height: 140px;
+  box-sizing: border-box;
+}
+
+.button-cover {
+  height: 100px;
+  margin: 20px;
+  background-color: #fff;
+  box-shadow: 0 10px 20px -8px #c5d6d6;
+  border-radius: 4px;
+}
+
+.button-cover:before {
+  counter-increment: button-counter;
+  content: counter(button-counter);
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  color: #d7e3e3;
+  font-size: 12px;
+  line-height: 1;
+  padding: 5px;
+}
+
+.button-cover,
+.knobs,
+.layer {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
+.button {
+  position: relative;
+  top: 50%;
+  width: 80px;
+  height: 25px;
+  margin: -14px auto 0 auto;
+  overflow: hidden;
+}
+
+.button.r,
+.button.r .layer {
+  border-radius: 100px;
+}
+
+.button.b2 {
+  border-radius: 2px;
+}
+
+.checkbox {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+  z-index: 3;
+}
+
+.knobs {
+  z-index: 2;
+}
+
+.layer {
+  width: 100%;
+  background-color: #ebf7fc;
+  transition: 0.3s ease all;
+  z-index: 1;
+}
+
+/* Button 1 */
+#button-1 .knobs:before {
+  content: "user";
+  position: absolute;
+  top: -2px;
+  left: -1px;
+  width: 40px;
+  height: 30px;
+  color: #fff;
+  font-size: 10px;
+  font-weight: bold;
+  text-align: center;
+  line-height: 1;
+  padding: 9px 4px;
+  background-color: #03a9f4;
+  border-radius: 50%;
+  transition: 0.3s cubic-bezier(0.18, 0.89, 0.35, 1.15) all;
+}
+
+#button-1 .checkbox:checked + .knobs:before {
+  content: "admin";
+
+  left: 40px;
+  background-color: #f44336;
+}
+
+#button-1 .checkbox:checked ~ .layer {
+    
+  background-color: #fcebeb;
+}
+
+#button-1 .knobs,
+#button-1 .knobs:before,
+#button-1 .layer {
+  transition: 0.3s ease all;
+}
 
 </style>
