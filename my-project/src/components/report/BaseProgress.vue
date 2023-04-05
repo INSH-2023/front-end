@@ -13,12 +13,37 @@ const props =defineProps({
 
 const full_stage=ref(0)
 const stage=ref(0)
+const imageLink=`${import.meta.env.VITE_BACK_END_HOST}/image`
+const computedIconForSrc=(stage,id)=>{
+    if(full_stage.value==5 && (id<6 && id>=0)){
+        return `${imageLink}/stage/${stage}/${id}`
+        // http://localhost:5000/api/image/stage_5/
+    }
+}
 
+
+// const computedIconForSrc=computed((stage=0)=>{
+//     // return '../../assets/vue.svg'
+//     let src=''
+//     if(full_stage.value==5){
+//         src=`../../assets/${srcIconV.value[stage]}`
+//         console.log(`../../assets/vue.svg`)
+//     }else
+//     if(full_stage.value==3){
+//         src=`../../assets/${srcIconIII.value[stage]}`
+//     }else 
+//     if(full_stage.value==2){
+//         src=`../../assets/${srcIconII.value[stage]}`
+//     }else{
+//         return console.log('error cannot return src for images !!!')
+//     }
+//     return src
+// })
 onBeforeMount(()=>{
     countAllStage()
 })
 onMounted(()=>{
-    document.getElementsByClassName('stage_color')[0].classList.replace("bg-gray-400","bg-rose-300")
+    document.getElementsByClassName('stage_color')[0].classList.replace("bg-[#EDEDE9]","bg-[#b7e4c7]")
     
 
 })
@@ -58,14 +83,14 @@ const setStage=()=>{
     // check input with stage
     if(number > stage.value && !(number>=full_stage.value)){
         // circle[number].classList.add("bg-rose-300")
-        circle[number].classList.replace("bg-gray-400","bg-rose-300")
+        circle[number].classList.replace("bg-[#EDEDE9]","bg-[#b7e4c7]")
 
         // circle[number-1].classList.remove("bg-rose-300")
         stage.value=number
     }else 
     if(number < stage.value && !(number<=-1)){
         // circle[number].classList.add("bg-rose-300")
-        circle[number+1].classList.replace("bg-rose-300","bg-gray-400")
+        circle[number+1].classList.replace("bg-[#b7e4c7]","bg-[#EDEDE9]")
         stage.value=number
     }
 }
@@ -75,7 +100,12 @@ const setStage=()=>{
     <!-- progress -->
     <ul  class=" flex justify-around">
         <li v-for="index  in full_stage" :key=index>
-            <div  class="stage_color w-[45px] h-[45px] p-1 bg-gray-400 rounded-full">
+            <div  class="relative z-0 stage_color w-[45px] h-[45px]  bg-[#EDEDE9] rounded-full">
+                <img v-if="full_stage==5" :src="computedIconForSrc(full_stage,index)" alt="icon" class="absolute z-10 inset-0 w-[22px] h-[22px] m-auto brightness-200">
+                <!-- <img v-else-if="full_stage==3" :src="srcIconIII[0]" alt="icon" class=" w-[20px] h-[20px] mx-auto">
+                <img v-else-if="full_stage==2" v-attr="src=`${srcIconII[0]}`" alt="icon" class=" w-[20px] h-[20px] mx-auto"> -->
+
+                <!-- <img  src="../../assets/vue.svg" alt="icon" class=" w-[20px] h-[20px] mx-auto"> -->
 
             </div>
         </li>
