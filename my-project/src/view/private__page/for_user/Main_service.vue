@@ -1,6 +1,6 @@
 <script setup>
 import {useRoute,useRouter} from'vue-router'
-import BaseStatus from '../../components/BaseStatus.vue'
+import BaseStatus from '../../../components/BaseStatus.vue'
 const myRouter =useRouter()
 const goMainMenu =(v)=>myRouter.push({name:'booking',params:{service:v}})
 
@@ -32,7 +32,7 @@ const goMainMenu =(v)=>myRouter.push({name:'booking',params:{service:v}})
                             </h3>
                         </button> -->
                         <button @click="goMainMenu('it')" class="mx-10">
-                            <img src="../../assets/IT_service.png" alt="icon" class="w-[120px] mx-auto">
+                            <img src="../../../assets/IT_service.png" alt="icon" class="w-[120px] mx-auto">
                             <h4 class="w-full text-center font-semibold text-[30px]">
                                 Service IT
                             </h4>
