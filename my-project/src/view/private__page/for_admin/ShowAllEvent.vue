@@ -303,6 +303,21 @@ const resetF=()=>{
     showList.value=requestList.value
 }
 
+const statusChange=ref(false)
+const checkEdit=computed(()=>{
+    let status=statusChange.value
+    if(status_ch.value.length==0||status_ch.value == 'request'||request.value.request_status == status_ch.value){
+        status=false
+    }else
+    if(assign_ch.value.length ==0 ||assign_ch.value=='Not_assign'){
+        status=false
+    }else{
+        status=true
+    }
+
+    return status
+})
+
 const searchByKeyW=()=>{
     console.log(f_status.value)
 
@@ -712,7 +727,7 @@ const searchByKeyW=()=>{
                         <!-- notebook -->
                         <div class="w-[85px] mx-auto p-2 bg-gray-200 rounded-xl">
                             <img src="../../../assets/vue.svg" alt="NoteBook" class="w-[40px] mx-auto">
-                            <h3 class="w-fit mx-auto text-[4px]">
+                            <h3 class="w-fit mx-auto text-[10px]">
                             {{request.request_type_matchine}}
                             </h3>
 
@@ -723,7 +738,7 @@ const searchByKeyW=()=>{
                 <!-- problem -->
                 <div   class="mt-4 " >
                     <div class="text-[20px] font-semibold">
-                        <h3 v-show="request.request_service_type=='IT_Service'">
+                        <h3 v-show="request.request_service_type=='IT_Service'" class="capitalize">
                             อาการของ {{request.request_subject}} ที่พบ
                         </h3>  
                         <h3 v-show="request.request_service_type=='PR_Service'">
@@ -736,7 +751,7 @@ const searchByKeyW=()=>{
                         
                         <div v-for="(data,index) of request.request_problems" :key="index"  class="w-[85px] mx-auto p-2 bg-gray-200 rounded-xl ">
                             <img src="../../../assets/vue.svg" alt="NoteBook" class="w-[40px] mx-auto">
-                            <h3 class="w-fit mx-auto text-[8px]">
+                            <h3 class="w-fit mx-auto text-[10px]">
                             {{data}}
                             </h3>
                         </div >
@@ -802,7 +817,7 @@ const searchByKeyW=()=>{
                             </h5>
                             <select  v-model="assign_ch" name="assign" id="assign" class="w-[200px] mt-2 p-1 bg-gray-400 text-gray-700 font-semibold  rounded">
                                 <option  value="Not_assign" selected disabled>เลือกผู้รับผิดชอบ</option>
-                                <option v-for="(admin,index) in adminList" :key="index" :value="admin" class="font-semibold bg-gray-300">{{admin.user_first_name}}</option>
+                                <option v-for="(admin,index) in adminList" :key="index" :value="admin.user_first_name" class="font-semibold bg-gray-300">{{admin.user_first_name}}</option>
                                 <!--<option value="gnitset_testing" class="font-semibold bg-gray-300">gnitset testing</option>
                                 <option value="Testing_Tseing " class="font-semibold bg-gray-300">Testing Tseing</option> -->
 
@@ -823,7 +838,7 @@ const searchByKeyW=()=>{
 
                     <!-- แก้ไขข้อมูล -->
                     <a href="#veri">
-                        <button v-show="status_ch != undefined &&status_ch != 'request'&& assign_ch.length !=0 &&assign_ch!=assign_ch"  class="w-[130px] mx-3 p-2 font-normal bg-gray-300  text-[#64B5F6] rounded-xl hover:bg-[#64B5F6] hover:text-gray-200">
+                        <button v-show="checkEdit"  class="w-[130px] mx-3 p-2 font-normal bg-gray-300  text-[#64B5F6] rounded-xl hover:bg-[#64B5F6] hover:text-gray-200">
                             <h4>
                                 ทำการแก้ไข
                             </h4>
