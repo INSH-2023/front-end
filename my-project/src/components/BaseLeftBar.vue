@@ -36,7 +36,7 @@ const goProblemsList =()=>myRouter.push({name:'problemsList'})
             </div>
 
             <!-- list navigation -->
-            <div class="m-auto mt-20 w-full mt-[50px] text-[20px]">
+            <div class="m-auto  w-full mt-[80px] text-[20px]">
                 <ul>
                     <li class="">
                         <button @click="goShowAllEvent" class="flex w-fit  font-semibold text-gray-800 ">
