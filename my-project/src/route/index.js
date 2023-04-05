@@ -7,7 +7,7 @@ import History from '../view/private__page/for_user/History.vue'
 // import Summary from '../view/private__page/for_user/Summary.vue'
 
 // main service
-import Services from '../view/private__page/Main_service.vue'
+import Services from '../view/private__page/for_user/Main_service.vue'
 
 // user/solution
 import Solutions from '../view/private__page/for_user/Solutions.vue'
@@ -29,6 +29,9 @@ import SignIn from '../view/public__page/SignIn.vue'
 import Home from '../view/public__page/Home.vue'
 import NotFound from '../view/NotFound.vue'
 import Main_public from '../view/public__page/Main_public.vue'
+
+// private
+import Main_for_navbar from '../view/private__page/Main_for_navbar.vue'
 
 const history=createWebHistory()
 const routes=[
@@ -124,80 +127,90 @@ const routes=[
 
         ]
     },
-    {
-        path:'/account/admin/service',
-        name:'mainPrivateAdmin',
-        component:Main_private_admin,
-        children:[
-            
-            {
-                path:'request',
-                name:'showAllEvents',
-                component:ShowAllEvent
-            },
-            {
-                path:'register',
-                name:'signUp',
-                component:SignUp
-            },
-            {
-                path:'all-users',
-                name:'showAllUser',
-                component:ShowAllUser
-            },
-            {
-                path:'write-solutions',
-                name:'writeS',
-                component:WriteSolutions
-            },
-            {
-                path:'all-solution',
-                name:'showAllSolution',
-                component:ShowAllSolution
-            },
-            {
-                path:'add-problems',
-                name:'problemsList',
-                component:ProblemsList
-            }
-        ]
 
-    },
     {
-        path:'/account/user/services',
-        name:'mainPrivateUser',
-        component:Main_private_user,
+        path:'/account/admin',
+        name:'mainForNavbar',
+        component:Main_for_navbar,
         children:[
             {
-                path:'',
-                name:'services',
-                component:Services
+                path:'/account/admin/service',
+                name:'mainPrivateAdmin',
+                component:Main_private_admin,
+                children:[
+                    
+                    {
+                        path:'request',
+                        name:'showAllEvents',
+                        component:ShowAllEvent
+                    },
+                    {
+                        path:'register',
+                        name:'signUp',
+                        component:SignUp
+                    },
+                    {
+                        path:'all-users',
+                        name:'showAllUser',
+                        component:ShowAllUser
+                    },
+                    {
+                        path:'write-solutions',
+                        name:'writeS',
+                        component:WriteSolutions
+                    },
+                    {
+                        path:'all-solution',
+                        name:'showAllSolution',
+                        component:ShowAllSolution
+                    },
+                    {
+                        path:'add-problems',
+                        name:'problemsList',
+                        component:ProblemsList
+                    }
+                ]
+        
             },
             {
-                path:':service',
-                name:'booking',
-                component: Booking_main
-            },
-            {
-                path:'history',
-                name:'history',
-                component: History
-            },
-            {
-                path:':service?/report-problem/:id?',
-                name:'report',
-                component: Report
-            },
-            // {
-            //     path:'/account/user/report-problem/:id?/summary'
-            // },
-            {
-                path:'solution/:id?',
-                name:'solution',
-                component: Solutions
+                path:'/account/user/services',
+                name:'mainPrivateUser',
+                component:Main_private_user,
+                children:[
+                    {
+                        path:'',
+                        name:'services',
+                        component:Services
+                    },
+                    {
+                        path:':service',
+                        name:'booking',
+                        component: Booking_main
+                    },
+                    {
+                        path:'history',
+                        name:'history',
+                        component: History
+                    },
+                    {
+                        path:':service?/report-problem/:id?',
+                        name:'report',
+                        component: Report
+                    },
+                    // {
+                    //     path:'/account/user/report-problem/:id?/summary'
+                    // },
+                    {
+                        path:'solution/:id?',
+                        name:'solution',
+                        component: Solutions
+                    }
+                ]
             }
+
         ]
-    },
+    }
+    ,
     {
         path:'/:NoPage(.*)',
         name:'notFound',
