@@ -79,65 +79,73 @@ const setData=(data,index)=>{
 }
 </script>
 <template>
-        <div class="w-full text-[25px] font-normal ">
+        <div class="w-full text-[20px] font-normal md:text-[25px] sm:w-fit">
             <h3 >
                 2. เลือก <span class="text-rose-500">ชนิด</span> อุปกรณ์ของคุณ
             </h3>                    
         </div>
 
                 
-        <div v-if="props.typeOfUseOR==false" class=" grid grid-cols-4 gap-y-2 gap-x-1 mt-4 text-[15px] font-medium">
+        <div v-if="props.typeOfUseOR==false" class="w-[300px] grid grid-cols-3 gap-y-2 gap-x-2 mt-4 mx-auto text-[15px] font-medium 
+            sm:w-[400px] sm:grid-cols-4 sm:gap-y-2 sm:gap-x-1
+            md:w-full 
+            lg:sm:gap-y-4
+        ">
             <!-- notebook -->
-            <button @click="setData('NoteBook')" name="machine_sf" :style="[item.type=='NoteBook'?'background-color:#1E88E5;color:#E3F2FD':'']" class="w-[150px] mx-auto p-2 bg-gray-200 rounded-xl hover:bg-gray-300">
-                <img src="../../assets/machine/laptop.png" draggable="false" alt="NoteBook" class="w-[80px] mx-auto">
-                <h3 class="w-fit mx-auto">
+            <button @click="setData('NoteBook')" name="machine_sf" :style="[item.type=='NoteBook'?'background-color:#1E88E5;color:#E3F2FD':'']" class="truncate w-full mx-auto p-2 bg-gray-200 rounded-xl hover:bg-gray-300 md:w-[150px] md:h-fit ">
+                <img src="../../assets/machine/laptop.png" draggable="false" alt="NoteBook" class="w-[30px] mx-auto md:w-[60px]">
+                <h3 class="truncate w-fit mx-auto mt-2 text-[0.813rem] md:text-[1.125rem]">
                     NoteBook
                 </h3>
             </button>
 
             <!-- PC -->
-            <button @click="setData('PC')" name="machine_sf" :style="[item.type=='PC'?'background-color:#1E88E5;color:#E3F2FD':'']" class="w-[150px] mx-auto p-2 bg-gray-200 rounded-xl hover:bg-gray-300">
-                <img src="../../assets/machine/pc.png" draggable="false" alt="NoteBook" class="w-[80px] mx-auto">
-                <h3 class="w-fit mx-auto ">
+            <button @click="setData('PC')" name="machine_sf" :style="[item.type=='PC'?'background-color:#1E88E5;color:#E3F2FD':'']" class="truncate w-full mx-auto p-2 bg-gray-200 rounded-xl hover:bg-gray-300 md:w-[150px] md:h-fit ">
+                <img src="../../assets/machine/pc.png" draggable="false" alt="NoteBook" class="w-[30px] mx-auto md:w-[60px]">
+                <h3 class="truncate w-fit mx-auto mt-2  text-[0.813rem] md:text-[1.125rem] ">
                     PC
                 </h3>
             </button>
                     
             <!-- Smart Phone -->
-            <button @click="setData('Smart_Phone')" name="machine_sf" :style="[item.type=='Smart_Phone'?'background-color:#1E88E5;color:#E3F2FD':'']" class="w-[150px] mx-auto p-2 bg-gray-200 rounded-xl hover:bg-gray-300">
-                <img src="../../assets/machine/phone.png" draggable="false" alt="NoteBook" class="w-[80px] mx-auto">
-                <h3 class="w-fit mx-auto text-[14px]">
+            <button @click="setData('Smart_Phone')" name="machine_sf" :style="[item.type=='Smart_Phone'?'background-color:#1E88E5;color:#E3F2FD':'']" class="truncate w-full mx-auto p-2 bg-gray-200 rounded-xl hover:bg-gray-300 md:w-[150px] md:h-fit ">
+                <img src="../../assets/machine/phone.png" draggable="false" alt="NoteBook" class="w-[30px] mx-auto md:w-[60px]">
+                <h3 class="truncate w-fit mx-auto mt-2  text-[0.813rem] md:text-[1.125rem]">
                     Smart Phone
                 </h3>
             </button>
 
             <!-- Tablet -->
-            <button @click="setData('Tablet')" name="machine_sf" :style="[item.type=='Tablet'?'background-color:#1E88E5;color:#E3F2FD':'']" class="w-[150px] mx-auto p-2 bg-gray-200 rounded-xl hover:bg-gray-300">
-                <img src="../../assets/machine/tablet.png" draggable="false" alt="NoteBook" class="w-[80px] mx-auto">
-                <h3 class="w-fit mx-auto">
+            <button @click="setData('Tablet')" name="machine_sf" :style="[item.type=='Tablet'?'background-color:#1E88E5;color:#E3F2FD':'']" class="truncate w-full mx-auto p-2 bg-gray-200 rounded-xl hover:bg-gray-300 md:w-[150px] md:h-fit ">
+                <img src="../../assets/machine/tablet.png" draggable="false" alt="NoteBook" class="w-[30px] mx-auto md:w-[60px]">
+                <h3 class="truncate w-fit mx-auto mt-2  text-[0.813rem] md:text-[1.125rem]">
                     Tablet
                 </h3>
             </button>
         </div>
 
-        <div v-else-if="props.typeOfUseOR==true && itemList.length != 0" class="grid grid-cols-4 gap-y-2 gap-x-2 mt-4 text-[15px] font-medium">
+        <div v-else-if="props.typeOfUseOR==true && itemList.length != 0" class="w-[300px] grid grid-cols-3 gap-y-2 gap-x-2 mt-4 mx-auto text-[15px] font-medium 
+            sm:w-[400px] sm:grid-cols-4 sm:gap-y-2 sm:gap-x-1
+            md:w-full 
+            lg:sm:gap-y-4
+        ">
             <!-- item --> <!--need style selection-->
             <button v-for="(v,index) in itemList" 
                 :key="index" 
                 @click="setData(v,index)"
                 name="machine_or"  
                 :style="[item.sn==v.item_number?'background-color:#1E88E5;color:#E3F2FD':'']"
-                class="w-[150px] mx-auto p-2 bg-gray-200 rounded-xl hover:bg-gray-300"
+                class="truncate w-full mx-auto p-2 bg-gray-200 rounded-xl hover:bg-gray-300 md:w-[150px] md:h-fit "
             >
                 <img src="../../assets/machine/laptop.png" 
                     draggable="false" 
                     alt="NoteBook" 
-                    class="w-[80px] mx-auto"
+                    class="w-[30px] mx-auto md:w-[60px]"
                 >
-                <h3 class="w-fit mx-auto">
+                <h3 class="truncate w-fit mx-auto text-[0.813rem] md:text-[1.125rem]">
                     {{v.item_name}}
                 </h3>
-                <h3>
+                <h3 class="text-[10px] md:text-[14px] font-semibold">
                     {{v.item_type}}
                 </h3>
             </button>

@@ -55,15 +55,17 @@ const isEmailTesting=ref(false)
             <div class=" w-full h-fit border-2 border-gray-400 rounded-[10px]">
                 <div class="flex px-2 py-1.5">
                     <input v-model="email" type="text" placeholder="E-mail" class="w-[90%] focus:outline-0 my-auto">
-                    <button v-show="isEmailTesting==false && email.length!=0" @click="isEmailTesting=true"  class=" ml-[2px] mx-auto rounded-full border-2 border-gray-500 text-gray-500 w-[25px] h-[25px] hover:bg-gray-700 hover:text-gray-200">
+                    <!-- <button v-show="isEmailTesting==false && email.length!=0" @click="isEmailTesting=true"  class=" ml-[2px] mx-auto rounded-full border-2 border-gray-500 text-gray-500 w-[25px] h-[25px] hover:bg-gray-700 hover:text-gray-200">
                        <h2  class="p-[1px] mx-auto text-[13px] " >
                          > 
                        </h2> 
-                    </button>
+                    </button> -->
                     
                 </div>
-                <hr v-show="isEmailTesting==true" class="w-[100%] h-[3px]   bg-gray-400 ">
-                <div v-show="isEmailTesting==true" class="flex px-2 py-1.5  ">
+                <!-- ค่อยมาทำต่อ -->
+                <!-- v-show="isEmailTesting==true" -->
+                <hr  class="w-[100%] h-[3px]   bg-gray-400 ">
+                <div  class="flex px-2 py-1.5  ">
                     <input v-model="pw" @keyup.enter="logIn" type="text" placeholder="Password" class="w-[90%]  focus:outline-0 my-auto">
                     <!-- <button class="w-[10%] ml-[2px] mx-auto">
                         <h2 class="p-[1px] mx-auto rounded-full border-2 border-gray-500 text-gray-500 w-[30px]" >
@@ -80,7 +82,8 @@ const isEmailTesting=ref(false)
 
 
        <!-- button submit -->
-       <div v-show="isEmailTesting==true" class="w-fit h-fit mx-auto mt-3 md:mt-6">
+       <!-- v-show="isEmailTesting==true" -->
+       <div class="w-fit h-fit mx-auto mt-3 md:mt-6">
             <button @click="logIn"  class="bg-sky-500 w-[13rem] h-[2.4rem] rounded-2xl text-white md:w-[16rem]">
                 login
             </button>

@@ -91,7 +91,7 @@ const addP =(v)=>{
 }
 </script>
 <template>
-    <div class="w-full text-[25px] font-normal">
+    <div class="w-full text-[17px] font-normal md:text-[25px] sm:w-fit">
         <h3 v-if="props.typeP=='hardware'">
             3. เลือก <span class="text-rose-500">ปัญหา</span> Hardware ที่ต้องการให้ช่วยเหลือ
         </h3>
@@ -121,20 +121,24 @@ const addP =(v)=>{
         </h3>                    
     </div>
 
-    <div class="grid grid-cols-4 gap-y-2 gap-x-2 mt-4 text-[15px] font-medium">
+    <div class="w-[300px] grid grid-cols-3 gap-y-2 gap-x-2 mt-4 mx-auto text-[15px] font-medium 
+            sm:w-[400px] sm:grid-cols-4 sm:gap-y-2 sm:gap-x-1
+            md:w-full 
+            lg:sm:gap-y-4
+    ">
     <!-- problems -->
-        <button  v-for="(value,index) in problemList" :key="index" @click="addP(value.problem_problem)"  :style="[value.selection==true?'background-color:#1E88E5;color:#E3F2FD':'']" class="w-[150px] mx-auto p-2 hover:bg-gray-300 bg-gray-200 rounded-xl">
-            <img src="../../assets/vue.svg" alt="NoteBook" draggable="false" class="w-[80px] mx-auto">
-            <h3 class="w-fit mx-auto">
+        <button  v-for="(value,index) in problemList" :key="index" @click="addP(value.problem_problem)"  :style="[value.selection==true?'background-color:#1E88E5;color:#E3F2FD':'']" class="truncate w-full mx-auto p-2 bg-gray-200 rounded-xl hover:bg-gray-300 md:w-[150px] md:h-fit ">
+            <img src="../../assets/vue.svg" alt="NoteBook" draggable="false" class="w-[30px] mx-auto md:w-[60px]">
+            <h3 class="truncate w-fit mx-auto mt-2 text-[0.625rem] md:text-[1.125rem]">
                 {{value.problem_problem}}
             </h3>
         </button>
 
 
         <!-- other -->
-        <button  @click="otherSelection" :style="[is_other==true?'background-color:#1E88E5;color:#E3F2FD':'']"  class="w-[150px] mx-auto p-2 bg-gray-200 rounded-xl hover:bg-gray-300">
-            <img src="../../assets/report_icon/other.png" draggable="false" alt="other" class="w-[80px] mx-auto">
-            <h3 class="w-fit mx-auto">
+        <button  @click="otherSelection" :style="[is_other==true?'background-color:#1E88E5;color:#E3F2FD':'']"  class="truncate w-full mx-auto p-2 bg-gray-200 rounded-xl hover:bg-gray-300 md:w-[150px] md:h-fit ">
+            <img src="../../assets/report_icon/other.png" draggable="false" alt="other" class="w-[30px] mx-auto md:w-[60px]">
+            <h3 class="truncate w-fit mx-auto mt-2 text-[0.625rem] md:text-[1.125rem]">
                 อื่นๆโปรดระบุ
             </h3>
         </button> 

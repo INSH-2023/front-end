@@ -60,7 +60,7 @@ const textToArray=(input)=>{
 }
 </script>
 <template>
-        <div  class="w-[700px] mx-auto">
+
             <div id="summaryInfo" class=" w-fit mx-auto text-[25px] font-semibold">
                 <h3>
                     สรุปข้อมูล
@@ -68,12 +68,12 @@ const textToArray=(input)=>{
             </div>
 
             <!-- first -->
-            <div v-if="subject=='hardware'||subject=='software'||subject=='internet'" class="w-full h-fit   text-[20px] font-semibold">
+            <div v-if="subject=='hardware'||subject=='software'||subject=='internet'" class="w-full h-fit   text-[15px] font-semibold md:text-[20px]">
                 
-                <table class=" w-fit h-fit   mt-6  text-[20px] font-semibold ">
+                <table class=" w-fit h-fit   mt-6   font-semibold ">
                     <tbody >
                         <tr>
-                            <td class="text-right">
+                            <td class="text-right text-[13px] md:text-[20px]" >
                                 1. <span class="text-rose-500">ประเภท</span> ของ Hardware : 
                             </td>
                             <td>
@@ -81,7 +81,7 @@ const textToArray=(input)=>{
                             </td>
                         </tr>
                         <tr >
-                            <td class="text-right">
+                            <td class="text-right text-[13px] md:text-[20px]">
                                 ยี่ห้อ : 
                             </td>
                             <td>
@@ -89,7 +89,7 @@ const textToArray=(input)=>{
                             </td>
                         </tr>
                         <tr>
-                            <td class="text-right">
+                            <td class="text-right text-[13px] md:text-[20px]">
                                 ประเภทของอุปกรณ์ :
                             </td>
                             <td>
@@ -97,7 +97,7 @@ const textToArray=(input)=>{
                             </td>
                         </tr>
                         <tr v-show="item.sn.length != 0">
-                            <td class="text-right">
+                            <td class="text-right text-[13px] md:text-[20px]">
                                 S/N :
                             </td>
                             <td>
@@ -112,7 +112,7 @@ const textToArray=(input)=>{
 
             <!-- second  -->
             <div v-if="subject=='hardware'||subject=='software'||subject=='internet'" class="mt-4">
-                <div class="text-[20px] font-semibold">
+                <div class=" font-semibold text-[13px] md:text-[20px]">
                     <h3 >
                         2. <span class="text-rose-500">ชนิด</span> อุปกรณ์ของคุณ
                     </h3>
@@ -120,11 +120,13 @@ const textToArray=(input)=>{
                 </div>
 
                 
-                <div class="grid grid-cols-4 gap-y-2 gap-x-2 mt-4 text-[15px] font-medium">
+                <div class="grid grid-cols-3 gap-y-2 gap-x-2 mt-4 text-[20px] font-medium
+                    md:grid-cols-4
+                ">
                     <!-- notebook -->
-                    <div class="w-[150px] mx-auto p-2 bg-gray-200 rounded-xl ">
-                        <img src="../../assets/vue.svg" alt="NoteBook" class="w-[80px] mx-auto">
-                        <h3 class="w-fit mx-auto">
+                    <div class="w-[80px] h-fit mx-auto p-2 bg-gray-200 rounded-xl md:w-full">
+                        <img src="../../assets/vue.svg" alt="NoteBook" class="w-[30px] h-[30px] mx-auto md:w-[80px] md:h-[80px]">
+                        <h3 class="w-fit mx-auto ">
                             {{item.type}}
                         </h3>
                     </div >
@@ -133,7 +135,7 @@ const textToArray=(input)=>{
 
             <!-- third -->
              <div v-if="subject!='other'"  class="mt-4">
-                <div class="text-[20px] font-semibold">
+                <div class="text-[13px]  font-semibold md:text-[20px]">
                     <h3 v-if="subject=='hardware'||subject=='software'||subject=='internet'">
                         3. <span class="text-rose-500"> สรุป </span> อาการของ Hardware ของคุณ
                     </h3>   
@@ -166,11 +168,13 @@ const textToArray=(input)=>{
                 </div>
 
                 
-                <div class="grid grid-cols-4 gap-y-2 gap-x-2 mt-4 text-[15px] font-medium">
+                <div class="grid grid-cols-3 gap-y-2 gap-x-2 mt-4 text-[15px] font-medium
+                    md:grid-cols-4 
+                ">
                     
-                    <div v-for="(data,index) in problems" :key="index"  class="w-[150px] mx-auto p-2 bg-gray-200 rounded-xl ">
-                        <img src="../../assets/vue.svg" alt="NoteBook" class="w-[80px] mx-auto">
-                        <h3 class="w-fit mx-auto">
+                    <div v-for="(data,index) in problems" :key="index"  class="w-[80px] h-fit mx-auto p-2 bg-gray-200 rounded-xl md:w-full">
+                        <img src="../../assets/vue.svg" alt="NoteBook" class="w-[30px] h-[30px] mx-auto md:w-[80px] md:h-[80px]">
+                        <h3 class="w-fit mx-auto text-[10px] md:text-[20px]">
                            {{data}}
                         </h3>
                     </div >
@@ -187,19 +191,20 @@ const textToArray=(input)=>{
 
             <!-- fourth -->
             <div  v-if="subject!='other'" class="w-full  flex flex-col  mt-6 ">
-                <div v-show="useAndOther.msg_other.length !=0" class=" mx-4">
-                    <label for="other_1" class="ml-3 text-[17px] font-semibold inline-b">
+                <div v-show="useAndOther.msg_other.length !=0" class="">
+                    <label for="other_1" class="ml-3 text-[13px] font-semibold inline-b md:text-[20px]">
                         กรณีเลือก<span class="text-rose-500 pl-2">อื่นๆโปรดระบุ</span>
                     </label>
+                    <br class="md:hidden">
                     <span class="text-[13px] ml-2">(กรณีไม่พบปัญหาข้างต้น)</span>
-                    <textarea v-model="useAndOther.msg_other" name="other" id="other_1"  disabled class="w-full h-[80px] resize-none pt-[10px] block rounded-lg bg-gray-300 font-light  p-2 focus:outline-0" ></textarea>
+                    <textarea v-model="useAndOther.msg_other" name="other" id="other_1"  disabled class="w-full h-fit resize-none pt-[10px] block rounded-lg bg-gray-300 font-light text-[14px] p-2 focus:outline-0 md:text-[20px]" ></textarea>
                 </div>
                 
-                <div v-show="useAndOther.msg.length !=0" class="mx-4 mt-3">
-                    <label for="other_2" class="ml-3 text-[17px] font-semibold">
+                <div v-show="useAndOther.msg.length !=0" class=" mt-3">
+                    <label for="other_2" class="ml-3 text-[13px] font-semibold md:text-[17px]">
                         ระบุรายละเอียดของปัญหาที่พบ (ถ้ามี)
                     </label>
-                    <textarea v-model="useAndOther.msg" name="other" id="other_2"  disabled class="w-full h-[80px] resize-none block bg-gray-300 font-light rounded-lg p-2 focus:outline-0"></textarea>
+                    <textarea v-model="useAndOther.msg" name="other" id="other_2"  disabled class="w-full h-fit  resize-none block bg-gray-300 font-light text-[14px] rounded-lg p-2 focus:outline-0 md:text-[20px]"></textarea>
                 </div>
                 <div>
 
@@ -207,20 +212,39 @@ const textToArray=(input)=>{
             </div>
 
             <!-- other -->
-            <div v-else-if="subject=='other'" class="mt-10 mx-auto w-fit mx-auto">
-                <div class="mx-4">
+            <div v-else-if="subject=='other'" class="w-full flex flex-col flex-nowrap mt-2 mx-auto
+                md:6
+            ">
+                <!-- suject is other -->
+                <div class="w-fit mt-3 mx-auto px-3 md:px-0 md:mt-0">
+
                     <label for="other_1" class="ml-3 text-[17px] font-semibold inline-b">
                         ระบุ รายละเอียด หรือ ความต้องการของคุณ
                     </label>
-                    <span class="text-[13px] ml-2">(กรณีไม่พบปัญหาข้างต้น)</span>
-                    <textarea v-model="useAndOther.msg_other" name="other" id="other_1"  disabled class="resize-none pt-[10px] block w-[700px] h-[150px] font-light  rounded-xl bg-gray-300 p-2 focus:outline-0" ></textarea>
+                    <br class="">
+                    <span class="text-[13px] ml-2">(กรณีไม่พบปัญหาข้างต้น)</span>                        
+
+                    <!-- <textarea v-model="useAndOther.msg_other" name="other" id="other_1"  class="block w-full h-[100px] resize-none pt-[10px]  rounded-xl bg-gray-300 p-2 mx-auto focus:outline-0
+                        md:w-[600px] md:h-fit
+                    " ></textarea> -->
+
+                    <div class="block w-full h-[100px] resize-none pt-[10px]  rounded-xl bg-gray-300 p-2 mx-auto focus:outline-0
+                        md:w-[600px] md:h-[100px]
+                    ">
+                        {{ useAndOther.msg_other }}
+                    </div>
                 </div>
-                    
-                <div  class="mx-4 mt-4">
-                    <label for="other_2" class="ml-3 text-[17px] font-semibold">
+
+                <div  class="w-fit  mt-3 mx-auto mt-0 px-3 md:px-0 md:mt-6 md:w-fit">
+                    <label for="other_2" class="ml-3 text-[17px] font-semibold inline-b">
                         หมายเหตุเพิ่มเติม (ถ้ามี)
                     </label>
-                    <textarea v-model="useAndOther.msg" name="other" id="other_2" disabled  class="resize-none block w-[700px] h-[150px] bg-gray-300 font-light  rounded-xl p-2 focus:outline-0"></textarea>
+                    
+                    <div class="block w-full h-[100px] resize-none pt-[10px]  rounded-xl bg-gray-300 p-2 mx-auto focus:outline-0
+                        md:w-[600px] md:h-[100px]
+                    ">
+                        {{ useAndOther.msg }}
+                    </div>
                 </div>
             </div>
 
@@ -237,7 +261,7 @@ const textToArray=(input)=>{
                     </h4>
                 </button>
             </div> -->
-        </div> 
+
 
 
         <!-- submit -->

@@ -350,30 +350,32 @@ const getDataFromComponent =(value)=>{
     <div class="pt-3">
        
         <!-- for write report -->
-        <div v-if="isSubmitt==false" class="w-[1000px] mx-auto">
+        <div v-if="isSubmitt==false" class="w-full mx-auto lg:w-[1000px]">
             
 
             <!-- header -->
-            <div class="w-fit h-fit mx-auto my-3 text-[36px]">
+            <div class="w-fit h-fit mx-auto my-3 text-[25px] sm:text-[36px]">
                 <h3 class="font-semibold">
-                    รายงานปัญหาเกี่ยวกับ <span class="font-light">{{ typeP }}</span>
+                    รายงานปัญหาเกี่ยวกับ <span class="font-light capitalize">{{ typeP }}</span>
                 </h3>
             </div>
 
-            <div class="w-[400px] h-fit mx-auto my-3">
+            <div class="w-[300px] h-fit mx-auto my-3 sm:w-[400px]">
                 <BaseProgress :stage="countNumber" :full_stage="full_stage"/>
             </div>
 
 
             <!-- first -->
             <div v-show="(countNumber==0 && (typeP=='hardware'||typeP=='software'||typeP=='internet'))" 
-                class="w-[400px] h-fit mt-10 mx-auto ">
+                class="w-fit h-fit mt-10 mx-auto mx-auto sm:w-[400px]">
                 <TypeOfUse @get-type-of-use="getDataFromComponent" />
             </div>
 
             <!-- second type of matchine -->
             <div v-show="(countNumber==1 && (typeP=='hardware'||typeP=='software'||typeP=='internet'))" 
-                class="w-[700px] h-fit mx-auto mt-10">
+                class="w-fit h-fit mx-auto mt-10
+                    lg:w-[700px]
+                ">
                 <TypeOfMachine  @get-type-of-m="getDataFromComponent" :type-of-use-o-r="typeOfUse.type=='or'?true:false" />
             </div>
 
@@ -381,7 +383,9 @@ const getDataFromComponent =(value)=>{
             <div v-show="((countNumber==2 && (typeP=='hardware'||typeP=='software'||typeP=='internet'))
                         || (countNumber==0 && (typeP=='printer'||typeP=='website'||typeP=='meeting'||typeP=='application'||typeP=='media'||typeP=='news')))
                         && typeP != 'other'" 
-                class="w-[700px] h-fit mx-auto mt-10 "
+                class="w-fit h-fit mx-auto mt-10 
+                    lg:w-[700px]
+                "
             >
                 
                 <Problem @get-problem-selected="getDataFromComponent" :typeP="typeP" />
@@ -404,7 +408,9 @@ const getDataFromComponent =(value)=>{
             <!-- for summary -->
             <div v-show="(countNumber==4 && (typeP=='hardware'||typeP=='software'||typeP=='internet'))
                     || (countNumber==2 && (typeP=='printer'||typeP=='website'||typeP=='meeting'||typeP=='application'||typeP=='media'||typeP=='news'))
-                    || (countNumber==1 && (typeP=='other'))" class="w-[1000px] mx-auto">
+                    || (countNumber==1 && (typeP=='other'))" 
+                    class="w-[280px] h-fit mx-auto mt-3 
+                    lg:w-full">
                 <SummaryReport :data="data_ch"  />
             </div>    
 
@@ -412,7 +418,7 @@ const getDataFromComponent =(value)=>{
             
 
             <!-- button -->
-            <div class="w-fit mx-auto mt-10">
+            <div class="w-fit mx-auto my-6">
                 <button @click="countNumber==0? myRouter.go(-1):computeStageReport(false)" class="w-[130px] mx-3 p-2 font-semibold bg-[#EDEDE9] text-gray-500 rounded-xl hover:bg-gray-500 hover:text-[#EDEDE9]">
                     <h4>
                         ย้อนกลับ

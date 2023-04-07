@@ -10,6 +10,10 @@ const {params}=useRoute()
 
 const myRouter =useRouter()
 
+const subjectObj_it =[
+    {type:'hardware',desc:'อุปกรณ์'}
+]
+
 const goHowTo=(v)=>{
     // console.log('this is solution of',text)
     // console.log('this is id of solution',number)
@@ -108,118 +112,251 @@ onBeforeMount(()=>{
     <!-- <BaseStatus/> -->
 
     <!-- ส่วนล่าง -->
-    <div class="w-fit mx-auto mt-4 text-[60px] text-gray-600 font-bold ">
+    <div class="w-fit mx-auto mt-4 text-[27px] text-gray-600 font-bold 
+        md:text-[50px]
+        lg:text-[60px]
+    ">
         <span v-if="params.service=='it'">เลือกบริการช่วยเหลือของ IT</span>
         <span v-else-if="params.service=='pr'">เลือกบริการช่วยเหลือของ PR</span> 
 
     </div>
 
     <!-- IT -->
-    <div v-if="params.service=='it'" class="flex w-fit mx-auto p-2">
+    <div v-if="params.service=='it'" class="flex flex-col w-full mx-auto p-2 lg:w-fit
+        lg:flex-row
+    ">
         <!-- hard ware -->
-        <button @click="goReport('hardware')" class="px-4 w-[130px] my-auto  ">
-            <img src="../../../assets/report_icon/hardware.png" alt="Hardware"  class="  w-[80px] h-[80px] w-fit mx-auto">
-            
-            <h3 class="mt-2 w-fit mx-auto font-semibold">
-                Hardware
-            </h3>
-            <h3 class="w-fit m-auto text-[14px]">  
-                (อุปกรณ์)
-            </h3>                
+        <button @click="goReport('hardware')" class="flex  px-4 w-[300px] my-auto mx-auto my-3 p-3 text-gray-700 bg-[#B9E9FC] rounded-xl drop-shadow-md
+            md:w-[500px] 
+            lg:w-[130px] lg:my-auto lg:block lg:bg-inherit 
+        ">
+
+            <img src="../../../assets/report_icon/hardware.png" 
+                alt="Hardware"  
+                class="  w-[60px] h-[60px] p-2 ml-3 mr-4 
+                    md:w-[80px] md:h-[80px]
+                    lg:h-[80px] lg:w-[80px] lg:p-0 lg:mx-auto
+                "
+            >
+ 
+            <div class="block w-full m-auto border-l-2 border-gray-700
+                lg:border-0 
+            ">
+                <h3 class="mt-auto w-fit mx-auto font-semibold text-[16px]  
+                    md:text-[35px]
+                    lg:mt-2 lg:text-[18px]
+                ">
+                    Hardware
+                </h3>
+                <h3 class="w-fit mx-auto text-[16px]">  
+                    (อุปกรณ์)
+                </h3>                  
+            </div>
         </button>
 
         <!-- solfware -->
-        <button  @click="goReport('software')" class="px-4 w-[130px] my-auto">
-            <img src="../../../assets/report_icon/software.png" alt="Software" class="w-[80px] h-[80px] w-fit mx-auto">
-            <h3 class="mt-2 w-fit mx-auto font-semibold">
-                Solfware
-            </h3>
-            <h3 class="w-fit m-auto text-[14px]">
-                (โปรเกรม)
-            </h3>
+
+
+        <button @click="goReport('software')" class="flex  px-4 w-[300px] my-auto mx-auto my-3 p-3 text-gray-700 bg-[#B9E9FC] rounded-xl drop-shadow-md
+            md:w-[500px] 
+            lg:w-[130px] lg:my-auto lg:block lg:bg-inherit 
+        ">
+
+            <img src="../../../assets/report_icon/software.png" 
+                alt="Hardware"  
+                class="  w-[60px] h-[60px] p-2 ml-3 mr-4 
+                    md:w-[80px] md:h-[80px]
+                    lg:h-[80px] lg:w-[80px] lg:p-0 lg:mx-auto
+                "
+            >
+ 
+            <div class="block w-full m-auto border-l-2 border-gray-700
+                lg:border-0 
+            ">
+                <h3 class="mt-auto w-fit mx-auto font-semibold text-[16px]  
+                    md:text-[35px]
+                    lg:mt-2 lg:text-[18px]
+                ">
+                    Solfware
+                </h3>
+                <h3 class="w-fit mx-auto text-[16px]">  
+                    (โปรเกรม)
+                </h3>                  
+            </div>
         </button>
 
         <!-- internet -->
-        <button @click="goReport('internet')" class=" px-4 w-[130px] my-auto">
-            <img src="../../../assets/report_icon/internet.png" alt="Internet" class="w-[80px] h-[80px] w-fit mx-auto">            
-            <h3 class="mt-2 w-fit mx-auto font-semibold">
-                Internet
-            </h3>
-            <h3 class="w-fit m-auto text-[14px]">
-                (อินเตอร์เน็ต)
-            </h3>
-            <!-- <h3 class="mt-2 w-fit mx-auto">
-                อินเตอร์เน็ต
-            </h3> -->
+        <button @click="goReport('internet')" class="flex  px-4 w-[300px] my-auto mx-auto my-3 p-3 text-gray-700 bg-[#B9E9FC] rounded-xl drop-shadow-md
+            md:w-[500px] 
+            lg:w-[130px] lg:my-auto lg:block lg:bg-inherit 
+        ">
+
+            <img src="../../../assets/report_icon/internet.png" 
+                alt="Hardware"  
+                class="  w-[60px] h-[60px] p-2 ml-3 mr-4 
+                    md:w-[80px] md:h-[80px]
+                    lg:h-[80px] lg:w-[80px] lg:p-0 lg:mx-auto
+                "
+            >
+ 
+            <div class="block w-full m-auto border-l-2 border-gray-700
+                lg:border-0 
+            ">
+                <h3 class="mt-auto w-fit mx-auto font-semibold text-[16px]  
+                    md:text-[35px]
+                    lg:mt-2 lg:text-[18px]
+                ">
+                    Internet
+                </h3>
+                <h3 class="w-fit mx-auto text-[16px]">  
+                    (อินเตอร์เน็ต)
+                </h3>                  
+            </div>
         </button>
 
         <!-- printer -->
-        <button @click="goReport('printer')" class=" px-4 w-[130px] my-auto"> 
-            <img src="../../../assets/report_icon/printer.png" alt="Printer" class="w-[80px] h-[80px] w-fit mx-auto">            
-            <h3 class="mt-2 w-fit mx-auto font-semibold">
-                Printer
-            </h3>
-            <h3 class="w-fit m-auto text-[13px]">
-                (เครื่องพิมพ์เอกสาร)
-            </h3>
-            <!-- <h3 class="mt-2 w-fit mx-auto">
-                Printer
-            </h3> -->
+        <button @click="goReport('printer')" class="flex  px-4 w-[300px] my-auto mx-auto my-3 p-3 text-gray-700 bg-[#B9E9FC] rounded-xl drop-shadow-md
+            md:w-[500px] 
+            lg:w-[130px] lg:my-auto lg:block lg:bg-inherit 
+        ">
+
+            <img src="../../../assets/report_icon/printer.png" 
+                alt="Hardware"  
+                class="  w-[60px] h-[60px] p-2 ml-3 mr-4 
+                    md:w-[80px] md:h-[80px]
+                    lg:h-[80px] lg:w-[80px] lg:p-0 lg:mx-auto
+                "
+            >
+ 
+            <div class="block w-full m-auto border-l-2 border-gray-700
+                lg:border-0 
+            ">
+                <h3 class="mt-auto w-fit mx-auto font-semibold text-[16px]  
+                    md:text-[35px]
+                    lg:mt-2 lg:text-[18px]
+                ">
+                    Printer
+                </h3>
+                <h3 class="w-fit mx-auto text-[16px] lg:text-[11px]">  
+                    (เครื่องพิมพ์เอกสาร)
+                </h3>                  
+            </div>
         </button>
 
         <!-- website -->
-        <button @click="goReport('website')" class="px-4 w-[130px] my-auto"> 
-            <img src="../../../assets/report_icon/website.png" alt="Website" class="w-[80px] h-[80px] w-fit mx-auto">            
-            <h3 class="mt-2 w-fit mx-auto font-semibold">
-                Website
-            </h3>
-            <h3 class="w-fit m-auto text-[14px]">
-                (เว็บไซต์)
-            </h3>
-            <!-- <h3 class="mt-2 w-fit mx-auto">
-                Website
-            </h3> -->
-        </button>
+        <button @click="goReport('website')" class="flex  px-4 w-[300px] my-auto mx-auto my-3 p-3 text-gray-700 bg-[#B9E9FC] rounded-xl drop-shadow-md
+            md:w-[500px] 
+            lg:w-[130px] lg:my-auto lg:block lg:bg-inherit 
+        ">
 
+            <img src="../../../assets/report_icon/website.png" 
+                alt="website"  
+                class="  w-[60px] h-[60px] p-2 ml-3 mr-4 
+                    md:w-[80px] md:h-[80px]
+                    lg:h-[80px] lg:w-[80px] lg:p-0 lg:mx-auto
+                "
+            >
+ 
+            <div class="block w-full m-auto border-l-2 border-gray-700
+                lg:border-0 
+            ">
+                <h3 class="mt-auto w-fit mx-auto font-semibold text-[16px]  
+                    md:text-[35px]
+                    lg:mt-2 lg:text-[18px]
+                ">
+                    Website
+                </h3>
+                <h3 class="w-fit mx-auto text-[16px]">  
+                    (เว็บไซต์)
+                </h3>                  
+            </div>
+        </button>
         
-        <button @click="goReport('meeting')" class="px-4 w-[130px] my-auto"> 
-            <img src="../../../assets/report_icon/meeting.png" alt="Meeting" class="w-[80px] h-[80px] w-fit mx-auto">            
-            <h3 class="mt-2 w-fit mx-auto font-semibold">
-                Meeting
-            </h3>
-            <h3 class="w-fit mx-auto">
-                (ห้องประชุม)
-            </h3>
-            <!-- <h3 class="mt-2 w-fit mx-auto">
-                Meating room
-            </h3> -->
+        <!-- meeting -->
+        <button @click="goReport('meeting')" class="flex  px-4 w-[300px] my-auto mx-auto my-3 p-3 text-gray-700 bg-[#B9E9FC] rounded-xl drop-shadow-md
+            md:w-[500px] 
+            lg:w-[130px] lg:my-auto lg:block lg:bg-inherit 
+        ">
+
+            <img src="../../../assets/report_icon/meeting.png" 
+                alt="meeting"  
+                class="  w-[60px] h-[60px] p-2 ml-3 mr-4 
+                    md:w-[80px] md:h-[80px]
+                    lg:h-[80px] lg:w-[80px] lg:p-0 lg:mx-auto
+                "
+            >
+ 
+            <div class="block w-full m-auto border-l-2 border-gray-700
+                lg:border-0 
+            ">
+                <h3 class="mt-auto w-fit mx-auto font-semibold text-[16px]  
+                    md:text-[35px]
+                    lg:mt-2 lg:text-[18px]
+                ">
+                    Meeting
+                </h3>
+                <h3 class="w-fit mx-auto text-[16px]">  
+                    (ห้องประชุม)
+                </h3>                  
+            </div>
         </button>
 
-        <button @click="goReport('application')" class="px-4 w-[130px] my-auto"> 
-            <img src="../../../assets/report_icon/application.png" alt="Meeting" class="w-[80px] h-[80px] w-fit mx-auto">            
-            <h3 class="mt-2 w-fit mx-auto font-semibold">
+        <!-- application -->
+        <button @click="goReport('application')" class="flex  px-4 w-[300px] my-auto mx-auto my-3 p-3 text-gray-700 bg-[#B9E9FC] rounded-xl drop-shadow-md
+            md:w-[500px] 
+            lg:w-[130px] lg:my-auto lg:block lg:bg-inherit 
+        ">
+
+            <img src="../../../assets/report_icon/application.png" 
+                alt="Hardware"  
+                class="  w-[60px] h-[60px] p-2 ml-3 mr-4 
+                    md:w-[80px] md:h-[80px]
+                    lg:h-[80px] lg:w-[80px] lg:p-0 lg:mx-auto
+                "
+            >
+ 
+            <div class="block w-full m-auto border-l-2 border-gray-700
+                lg:border-0 
+            ">
+                <h3 class="mt-auto w-fit mx-auto font-semibold text-[16px]  
+                    md:text-[35px]
+                    lg:mt-2 lg:text-[18px]
+                ">
                 application
-            </h3>
-            <h3 class="w-fit mx-auto">
-                (แอปพลิเคชัน)
-            </h3>
-            <!-- <h3 class="mt-2 w-fit mx-auto">
-                Meating room
-            </h3> -->
+                </h3>
+                <h3 class="w-fit mx-auto text-[16px]">  
+                    (แอปพลิเคชัน)
+                </h3>                  
+            </div>
         </button>
 
         <!-- other -->
-        <button @click="goReport('other')" class="px-4 w-[130px] my-auto"> 
-            <img src="../../../assets/report_icon/other.png" alt="Other" class="w-[80px] h-[80px] w-fit m-auto">            
-            <h3 class="mt-2 w-fit mx-auto font-semibold">
+        <button @click="goReport('other')" class="flex  px-4 w-[300px] my-auto mx-auto my-3 p-3 text-gray-700 bg-[#B9E9FC] rounded-xl drop-shadow-md
+            md:w-[500px] 
+            lg:w-[130px] lg:my-auto lg:block lg:bg-inherit 
+        ">
+
+            <img src="../../../assets/report_icon/other.png" 
+                alt="Hardware"  
+                class="  w-[60px] h-[60px] p-2 ml-3 mr-4 
+                    md:w-[80px] md:h-[80px]
+                    lg:h-[80px] lg:w-[80px] lg:p-0 lg:mx-auto
+                "
+            >
+ 
+            <div class="block w-full m-auto border-l-2 border-gray-700
+                lg:border-0 
+            ">
+                <h3 class="mt-auto w-fit mx-auto font-semibold text-[16px]  
+                    md:text-[35px]
+                    lg:mt-2 lg:text-[18px]
+                ">
                 Other
-            </h3>
-            <h3 class="w-fit mx-auto">
-                (อื่นๆ)
-            </h3>
-            <!-- <h3 class="mt-2 w-fit mx-auto">
-                Meating room
-            </h3> -->
+                </h3>
+                <h3 class="w-fit mx-auto text-[16px]">  
+                    (อื่นๆ)
+                </h3>                  
+            </div>
         </button>
     </div>
 
@@ -261,8 +398,10 @@ onBeforeMount(()=>{
     </div>
 
     <!-- line -->
-    <hr class="mt-[30px] w-[1100px] h-[1px] border-0 mx-auto bg-gray-700">
-    <div class="w-[200px] h-fit mx-auto mt-10 ">
+    <hr class="hidden mt-[30px] w-[1100px] h-[1px] border-0 mx-auto bg-gray-700
+        lg:block
+    ">
+    <div class="w-[200px] h-fit mx-auto my-5 lg:mt-10 lg:my-0">
         <button @click="goService" class="w-full h-full mx-auto p-2 text-[20px] font-light text-gray-400 rounded-xl hover:bg-gray-400 hover:text-white" >
             ย้อนกลับ
         </button>

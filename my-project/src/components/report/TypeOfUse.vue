@@ -22,14 +22,14 @@ const data=computed(()=>{
 </script>
 <template>
         <!-- first -->
-        <div class="text-[25px] font-normal">
+        <div class="text-[20px] font-normal sm:text-[25px]">
             <h3 >
                 1. เลือก <span class="text-rose-500">ประเภท</span> อุปกรณ์ ของคุณ
             </h3>                    
         </div>
 
         
-        <div class="w-fit h-[80px] mt-3 text-[20px] flex justify-between flex-col  font-medium">
+        <div class="w-fit h-[60px] mt-3 text-[15px] flex justify-between flex-col  font-medium sm:text-[20px] sm:h-[80px]">
             <div class="flex ml-14 " >
                 <input v-model="typeU" id="Organization" type="radio" name="hardware_of" value="or" class="w-[25px] bg-gray-300"> 
                 <label for="Organization" class="ml-4">
