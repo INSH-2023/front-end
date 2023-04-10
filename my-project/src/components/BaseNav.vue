@@ -25,7 +25,7 @@ const goShowAllEvent =()=>myRouter.push({name:'showAllEvents'})
 const goHistory =()=>myRouter.push({name:'history'})
 const goBooking =()=>myRouter.push({name:'booking'})
 const goService =()=>myRouter.push({name:'services'})
-
+const comingSoon =()=>myRouter.push({name:'notAvaliable'})
 
 // get role from local
  const role =ref(undefined)
@@ -59,14 +59,20 @@ const toAdmin =()=>{
     // isAdmin.value==true?isAdmin.value=false:isAdmin.value=true
 
     // console.log("after change",isAdmin.value)
-    if(isAdmin.value==true){
-        localStorage.setItem('isAdmin',isAdmin.value)
-         goShowAllEvent()
-    }else
-    if(isAdmin.value==false){
-        localStorage.setItem('isAdmin',isAdmin.value)
-        goService()
+    console.log('width : ',window.innerWidth)
+    if(window.innerWidth<1280){
+        comingSoon()
+    }else{
+        if(isAdmin.value==true){
+            localStorage.setItem('isAdmin',isAdmin.value)
+            goShowAllEvent()
+        }else
+        if(isAdmin.value==false){
+            localStorage.setItem('isAdmin',isAdmin.value)
+            goService()
+        }
     }
+    
 
 }
 
@@ -169,6 +175,7 @@ onBeforeMount(()=>{
                         ">
                         Admin
                     </button >
+
                     <!-- <label  class="switch my-auto z-60">
                         <input @click="toAdmin" type="checkbox">
                         <span class="slider round  "></span>
