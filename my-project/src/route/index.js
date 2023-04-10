@@ -29,7 +29,7 @@ import SignIn from '../view/public__page/SignIn.vue'
 import Home from '../view/public__page/Home.vue'
 import NotFound from '../view/NotFound.vue'
 import Main_public from '../view/public__page/Main_public.vue'
-
+import ComingSoon from '../view/ComingSoon.vue'
 // private
 import Main_for_navbar from '../view/private__page/Main_for_navbar.vue'
 
@@ -216,6 +216,11 @@ const routes=[
         name:'notFound',
         component: NotFound
     }, 
+    {
+        path:'/coming-soon',
+        name:'notAvaliable',
+        component:ComingSoon
+    }
 ]
 const router=createRouter({history,routes})
 export default router
