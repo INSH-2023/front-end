@@ -16,8 +16,8 @@ onMounted(()=>{
 })
 </script>
 <template>
-    <BaseNav :role="role" :user-name="userName" class="h-fit  w-full"/>
-    <router-view class="w-[100%] h-fit mx-auto"/>    
+    <BaseNav :role="role" :user-name="userName" class="w-full h-[5vh]  "/>
+    <router-view class="w-[100vw] h-[95vh] mx-auto"/>    
 </template>
 <style scoped>
 

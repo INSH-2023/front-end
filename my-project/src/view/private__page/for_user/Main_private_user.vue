@@ -5,7 +5,7 @@
 
     <!-- <BaseNav :role="role" :user-name="userName" class="h-fit  w-full"/> -->
 
-    <router-view class="w-[100vw] h-[90vh]"/>    
+    <router-view class="w-screen h-screen"/>    
 
 </template>
 <style scoped>

@@ -34,7 +34,7 @@ const goMainMenu =(v)=>myRouter.push({name:'booking',params:{service:v}})
                             </h3>
                         </button> -->
                         <button @click="goMainMenu('it')" class="mx-10">
-                            <img src="../../../assets/IT_service.png" alt="icon" class="w-[6.25rem] h-fit mx-auto sm:w-[120px]">
+                            <img src="../../../assets/IT_service.png" alt="icon" class="w-[6.25rem] h-[6.25rem] mx-auto sm:w-[7.5rem] sm:w-[7.5rem]">
                             <h4 class="w-full text-center font-semibold text-[15px]  sm:text-[30px]">
                                 Service IT
                             </h4>
