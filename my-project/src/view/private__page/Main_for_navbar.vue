@@ -16,10 +16,10 @@ onMounted(()=>{
 })
 </script>
 <template>
-   <div class="w-full h-[60px]">
+   <div class="w-full h-[60px]  z-50">
       <BaseNav :role="role" :user-name="userName"  />
    </div>
-   <div class="w-full h-fit">
+   <div class="w-full h-fit z-10">
       <router-view />    
    </div>
 </template>

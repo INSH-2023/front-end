@@ -3,11 +3,16 @@ import BaseNav from '../../components/BaseNav.vue';
 </script>
 <template>
 
-    <BaseNav  class="h-fit w-full" />   
-    <router-view class="w-[100vw] h-[90%] "/> 
+    
+    <!-- <router-view class="w-[100vw] h-[90%] "/>  -->
 
 
-
+    <div class="w-full h-[60px]  z-50">
+        <BaseNav   />   
+   </div>
+   <div class="w-full h-full z-10">
+      <router-view />    
+   </div>
 
     <!-- <ShowAllEvent/> -->
     <!-- this is main private -->

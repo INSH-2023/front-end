@@ -2,6 +2,7 @@
 import{ref,computed}from'vue'
 import { useRouter } from 'vue-router';
 import toBackEnd from '../../JS/fetchToBack'
+import BaseAlert from '../../components/BaseAlert.vue'
 const myRouter = useRouter()
 const goMain=()=>myRouter.push({name:'services'})
 
@@ -34,7 +35,7 @@ const setLocal=(data)=>{
 const isEmailTesting=ref(false)
 </script>
 <template>
-<div>
+
     <div class=" pt-3 relative ">
        <div class="mt-6 w-fit mx-auto text-[27px] font-semibold text-gray-600
             sm:text-gray-300 md:text-rose-300 lg:text-sky-300 sm:text-[40px]
@@ -110,8 +111,14 @@ const isEmailTesting=ref(false)
             </button>
        </div> -->
 
+            <BaseAlert/>
+   
+       
     </div>
-</div>
+
+          
+
+
 
 <!--     
     <div class="h-fit w-fit mx-auto font-mono">
