@@ -5,7 +5,7 @@ import Booking_main from '../view/private__page/for_user/Booking_main.vue'
 import Main_private_user from '../view/private__page/for_user/Main_private_user.vue'
 import History from '../view/private__page/for_user/History.vue'
 // import Summary from '../view/private__page/for_user/Summary.vue'
-
+import Finish from '../view/private__page/for_user/Finishing.vue'
 // main service
 import Services from '../view/private__page/for_user/Main_service.vue'
 
@@ -204,6 +204,11 @@ const routes=[
                         path:'solution/:id?',
                         name:'solution',
                         component: Solutions
+                    },
+                    {
+                        path:'finish',
+                        name:'finish',
+                        component: Finish
                     }
                 ]
             }

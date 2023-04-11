@@ -60,6 +60,8 @@ const textToArray=(input)=>{
 }
 </script>
 <template>
+    <div class="w-[280px] h-fit mx-auto mt-3 lg:w-full" >
+        
 
             <div id="summaryInfo" class=" w-fit mx-auto text-[25px] font-semibold">
                 <h3>
@@ -279,6 +281,7 @@ const textToArray=(input)=>{
             </div>
 
         </div> -->
+    </div>
 </template>
 <style scoped>
 </style>

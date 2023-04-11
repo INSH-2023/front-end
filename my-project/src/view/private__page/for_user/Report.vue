@@ -346,15 +346,15 @@ const getDataFromComponent =(value)=>{
 
 </script>
 <template>
-<div class="overflow-auto">
-    <div class="pt-3">
+<!-- <div class="overflow-auto">
+    <div class="pt-3"> -->
        
         <!-- for write report -->
-        <div v-if="isSubmitt==false" class="w-full mx-auto lg:w-[1000px]">
+        <div v-if="isSubmitt==false" class="w-full h-fit py-3 mx-auto lg:w-[800px] lg:h-fit">
             
 
             <!-- header -->
-            <div class="w-fit h-fit mx-auto my-3 text-[25px] sm:text-[36px]">
+            <div class="w-fit h-fit mx-auto  text-[25px] sm:text-[36px]">
                 <h3 class="font-semibold">
                     รายงานปัญหาเกี่ยวกับ <span class="font-light capitalize">{{ typeP }}</span>
                 </h3>
@@ -406,13 +406,14 @@ const getDataFromComponent =(value)=>{
                     
 
             <!-- for summary -->
-            <div v-show="(countNumber==4 && (typeP=='hardware'||typeP=='software'||typeP=='internet'))
+
+                <SummaryReport
+                v-show="(countNumber==4 && (typeP=='hardware'||typeP=='software'||typeP=='internet'))
                     || (countNumber==2 && (typeP=='printer'||typeP=='website'||typeP=='meeting'||typeP=='application'||typeP=='media'||typeP=='news'))
-                    || (countNumber==1 && (typeP=='other'))" 
-                    class="w-[280px] h-fit mx-auto mt-3 
-                    lg:w-full">
-                <SummaryReport :data="data_ch"  />
-            </div>    
+                    || (countNumber==1 && (typeP=='other'))"
+                :data="data_ch" 
+                />
+  
 
 
             
@@ -444,7 +445,7 @@ const getDataFromComponent =(value)=>{
         </div>
 
         <!-- submitt report -->
-        <div v-else-if="isSubmitt==true" class="w-[250px] mx-auto md:w-[500px] lg:w-[1000px]">
+        <div v-else-if="isSubmitt==true" class="w-[250px] h-fit mx-auto md:w-[500px] lg:w-[1000px] md:h-fit ">
             <div class="w-fit mx-auto">
                 <img src="../../../assets/check.png" alt="check_icon" class="w-[80px] h-[80px] mt-[20px] lg:w-[130px] lg:h-[130px] lg:mt-[60px]">
             </div>
@@ -468,8 +469,8 @@ const getDataFromComponent =(value)=>{
 
         
 
-    </div>
-</div>   
+    <!-- </div>
+</div>    -->
 </template>
 <style scoped>
 </style>

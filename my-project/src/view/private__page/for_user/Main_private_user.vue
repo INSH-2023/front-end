@@ -1,11 +1,9 @@
-<script setup>
 
-</script>
 <template>
 
     <!-- <BaseNav :role="role" :user-name="userName" class="h-fit  w-full"/> -->
 
-    <router-view class="w-screen h-screen"/>    
+    <router-view />    
 
 </template>
 <style scoped>

@@ -106,8 +106,8 @@ onBeforeMount(()=>{
 })
 </script>
 <template>
-<div class="overflow-auto">
-<div class="pt-2 ">
+<!-- <div class="overflow-auto">
+<div class="pt-2 "> -->
     <!-- ส่วน navigation bar -->
     <!-- <BaseStatus/> -->
 
@@ -464,8 +464,8 @@ onBeforeMount(()=>{
 
         
     </div> -->
-</div>
-</div>
+<!-- </div>
+</div> -->
 </template>
 <style scoped>
 </style>

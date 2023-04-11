@@ -66,7 +66,7 @@ const isEmailTesting=ref(false)
                 <!-- v-show="isEmailTesting==true" -->
                 <hr  class="w-[100%] h-[3px]   bg-gray-400 ">
                 <div  class="flex px-2 py-1.5  ">
-                    <input v-model="pw" @keyup.enter="logIn" type="text" placeholder="Password" class="w-[90%]  focus:outline-0 my-auto">
+                    <input v-model="pw" @keyup.enter="logIn" type="password" placeholder="Password" class="w-[90%]  focus:outline-0 my-auto">
                     <!-- <button class="w-[10%] ml-[2px] mx-auto">
                         <h2 class="p-[1px] mx-auto rounded-full border-2 border-gray-500 text-gray-500 w-[30px]" >
                          > 

@@ -88,77 +88,26 @@ onBeforeMount(()=>{
 </script>
 <template>
     <!-- new apdate -->
-<div class="h-[65px] bg-[#2196F3]">
-    <div >
+<!-- <div class="h-full w-full bg-[#2196F3]"> -->
+<!-- <div class="w-[100vw] h-[5vh]"> -->
+
+
         <!-- default home -->
-        <div v-if="role==null||role==undefined" class=" p-2 relative">
-            <div class=" ml-[20px] w-fit ">
-                <div class="flex">
-                    <img src="../assets/Moral_Fainal.png" alt="" class="w-[40px] h-[40px] inline-block">
-                    <div class="text-[20px] font-bold text-white my-auto m-3 ">
+        <div v-if="role==null||role==undefined" class="w-full h-full flex justify-between p-2 relative bg-[#2196F3] sticky top-0 z-50">
+            <div class="flex ml-[20px] w-fit ">
+                    <img src="../assets/Moral_Fainal.png" alt="" class="w-[40px] h-[40px] my-auto">
+                    <div class="text-[20px] font-bold text-white my-auto m-3 
+                        sm:text-gray-300 md:text-rose-300 lg:text-sky-300
+                    ">
                         Zeed web
-                    </div>                    
-                </div>
-                
+                    </div>
             </div>
             
         </div>
 
-        <!-- user page
-        <div v-else-if="role=='user'" class=" flex justify-between p-2 relative">
-            <div class=" ml-[20px] w-fit ">
-                <div class="flex">
-                    <img src="../assets/Moral_Fainal.png" alt="" class="w-[40px] h-[40px] inline-block">
-                    <div class="text-[20px] font-bold text-white my-auto m-3 ">
-                        Zeed web
-                    </div>                    
-                </div>
-                
-            </div>
-            menu username
-            <div class="flex mr-[20px]">
-                <img src="../assets/alert.png" alt="alert" class="mx-3 w-[25px] m-auto">
-                <h3 class="m-auto mb-2 mx-1 text-[14px] text-white font-medium">
-                    สวัสดี!
-                </h3>
-                <button class=" truncate w-[180px] mb-1.5  m-auto mx-2 text-[17px] text-white font-semibold">
-                    {{ userName }}
-                </button>
-                
-
-                    ตั้งค่า drop down
-                <div class=" ">
-                    <button @click="isSetting= !isSetting ,isLanguage= false" class="font-semibold text-[#8DA9C4] p-1 active:bg-[#90CAF9] active:text-[#0D47A1] rounded hover:text-white">
-                        <img src="../assets/burger_menu.png" alt="menu" class="w-[35px]">
-                    </button>
-                    <div v-show="isSetting==true" class="font-semibold text-[#8DA9C4] absolute mt-[10px] ml-[-120px] z-20 w-30 rounded bg-gray-700 divide-y divide-gray-800" id="dropdown" >
-                    <ul  class="p-2 m-auto">
-                        <li>
-                            <button class="font-semibold text-[#8DA9C4] ml-">change theme</button> 
-                        </li>
-                        <li>
-                            <button @click="isLanguage= !isLanguage" class="font-semibold text-[#8DA9C4]">
-                                 <span v-show="isLanguage==true">&#60;&nbsp;</span>change language 
-                            </button> 
-                            <div v-show="isLanguage==true" class="mt-[-15px] ml-[-75px] z-20 absolute  w-fit bg-gray-800 text-white divide-y divide-gray-800 rounded">
-                                <ul class="px-2 py-1">
-                                    <li class="px-2">
-                                        <button class="font-semibold text-[#8DA9C4]">thai</button>
-                                    </li>
-                                    <li class="px-2">
-                                        <button class="font-semibold text-[#8DA9C4]">eng</button>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
-                    </ul>
-                    </div>
-                </div>
-            </div>
-        </div> -->
 
         <!-- admin page -->
-        <div v-else class="w-full flex justify-between p-2 relative">
+        <div v-else class="flex h-full w-full justify-between p-2 relative bg-[#2196F3] sticky top-0 z-50">
             <div class="flex ml-[20px] w-fit ">
                     <img src="../assets/Moral_Fainal.png" alt="" class="w-[40px] h-[40px] my-auto">
                     <div class="text-[20px] font-bold text-white my-auto m-3 
@@ -273,9 +222,8 @@ onBeforeMount(()=>{
                 </div>
             </div>
         </div>
-    </div>
-</div>
-
+<!-- </div> -->
+<!-- </div> -->
 </template>
 <style scoped>
 .switch {

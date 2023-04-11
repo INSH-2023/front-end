@@ -8,14 +8,14 @@ const goMainMenu =(v)=>myRouter.push({name:'booking',params:{service:v}})
 
 </script>
 <template>
-<div class="overflow-auto">
+<!-- <div class="overflow-auto">
     <div>
-        <div>
+        <div> -->
             <!-- navigation bar -->
             <!-- <BaseStatus /> -->
 
             <!-- body -->
-            <div>
+            <!-- <div class=""> -->
                 <div class="w-fit mx-auto mt-2 text-[2.5rem] text-gray-600 font-bold sm:mt-4 sm:text-[3.75rem]">
                     เลือกบริการ
                 </div>
@@ -44,15 +44,12 @@ const goMainMenu =(v)=>myRouter.push({name:'booking',params:{service:v}})
                         </button>                        
                     </div>
 
-                    <div>
-
-                    </div>
                 </div>                 
-            </div>
+            <!-- </div> -->
            
-        </div>
+        <!-- </div>
     </div>    
-</div>
+</div> -->
 
 </template>
 <style scoped>
