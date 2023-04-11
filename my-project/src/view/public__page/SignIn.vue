@@ -6,6 +6,10 @@ import BaseAlert from '../../components/BaseAlert.vue'
 const myRouter = useRouter()
 const goMain=()=>myRouter.push({name:'services'})
 
+const alert_message=ref('')
+const alert_title=ref('')
+const alert_status=ref(undefined)
+
 const loginLink =`${import.meta.env.VITE_BACK_END_HOST}/authentication`
 const email=ref('')
 const pw=ref('')
@@ -22,7 +26,16 @@ const logIn=async()=>{
         console.log('login',data)
         localStorage.setItem('user_info',setLocal(data.data))
         goMain()
-    }else{
+    }else 
+    if(status==404){
+        alert_status.value=false
+        alert_title.value='User Not Found !!'
+        alert_message.value='ไม่เจอผู้ใช้ชื่อนี้ 😁'
+    }else
+    {
+        alert_status.value=true
+        alert_title.value='Error from server !!'
+        alert_message.value='เกิดข้อผิดพลาดทางด้าน Server'
         console.log(data)
     }
 }
@@ -111,7 +124,7 @@ const isEmailTesting=ref(false)
             </button>
        </div> -->
 
-            <BaseAlert/>
+            <BaseAlert :status="alert_status" :title="alert_title" :message="alert_message" />
    
        
     </div>
