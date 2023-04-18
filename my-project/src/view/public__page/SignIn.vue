@@ -3,12 +3,16 @@ import{ref,computed}from'vue'
 import { useRouter } from 'vue-router';
 import toBackEnd from '../../JS/fetchToBack'
 import BaseAlert from '../../components/BaseAlert.vue'
+import BaseLoading from '../../components/BaseLoading.vue'
+// src\components\BaseLoading.vue
 const myRouter = useRouter()
 const goMain=()=>myRouter.push({name:'services'})
 
 const alert_message=ref('')
 const alert_title=ref('')
 const alert_status=ref(undefined)
+
+const button_status=ref(false)
 
 const loginLink =`${import.meta.env.VITE_BACK_END_HOST}/authentication`
 const email=ref('')
@@ -20,25 +24,40 @@ const data_ch =computed(()=>{
     }
 })
 const logIn=async()=>{
-    // console.log(data_ch.value)
-    let [status,data]=await toBackEnd.postData('login',loginLink,data_ch.value)
-    if(status==200){
-        console.log('login',data)
-        localStorage.setItem('user_info',setLocal(data.data))
-        goMain()
-    }else 
-    if(status==404){
+    button_status.value=true
+    if(email.value.length==0||pw.value.length==0){
+        console.log('please in put ur email and password!!')
         alert_status.value=false
-        alert_title.value='User Not Found !!'
-        alert_message.value='ไม่เจอผู้ใช้ชื่อนี้ 😁'
-    }else
-    {
-        alert_status.value=true
-        alert_title.value='Error from server !!'
-        alert_message.value='เกิดข้อผิดพลาดทางด้าน Server'
-        console.log(data)
+        alert_title.value='Invalid data !!'
+        alert_message.value='please in put your email and password!!'
+        button_status.value=false
+    }else{
+        // console.log(data_ch.value)
+        let [status,data]=await toBackEnd.postData('login',loginLink,data_ch.value)
+        // console.log(status)
+        if(status==200){
+            console.log('login',data)
+            localStorage.setItem('user_info',setLocal(data.data))
+            button_status.value=false
+            goMain()
+        }else 
+        if(status==404){
+            alert_status.value=false
+            alert_title.value='Not Found !!'
+            alert_message.value='user does not exist '
+            button_status.value=false
+        }else
+        {
+            alert_status.value=true
+            alert_title.value='Error !!'
+            alert_message.value=data
+            console.log(data)
+            button_status.value=false
+        }
     }
 }
+
+
 
 const setLocal=(data)=>{
     return JSON.stringify(data)
@@ -49,16 +68,17 @@ const isEmailTesting=ref(false)
 </script>
 <template>
 
-    <div class=" pt-3 relative ">
+    <div class="w-full pt-3 relative ">
        <div class="mt-6 w-fit mx-auto text-[27px] font-semibold text-gray-600
             sm:text-gray-300 md:text-rose-300 lg:text-sky-300 sm:text-[40px]
-            
+          
        ">
          ลงชื่อเข้าใช้
        </div>
-       <div class="mt-2 w-[20rem] h-[6.563rem]  mx-auto relative
+       <div class="mt-2 w-[20rem] h-[6.563rem]  mx-auto relative 
             sm:w-[25rem]
             md:mt-3
+            
        ">
             <h4 class="ml-3 font-light text-[10px] text-gray-400
                 md:text-[0.86rem]
@@ -94,12 +114,20 @@ const isEmailTesting=ref(false)
             </div>
        </div>
 
+       <BaseAlert :status="alert_status" :title="alert_title" :message="alert_message" />
+
 
        <!-- button submit -->
        <!-- v-show="isEmailTesting==true" -->
-       <div class="w-fit h-fit mx-auto mt-3 md:mt-6">
-            <button @click="logIn"  class="bg-sky-500 w-[13rem] h-[2.4rem] rounded-2xl text-white md:w-[16rem]">
-                login
+       <div class="w-fit h-fit mx-auto mt-3  md:mt-6 ">
+            <button @click="logIn"  class="  bg-sky-500 w-[13rem] h-[3rem]  rounded-2xl text-white md:w-[16rem]">
+                <div class="flex w-fit h-fit mx-auto">
+                    <h4 class="w-fit h-fit p-2 mx-auto">
+                        login
+                    </h4>
+                    <BaseLoading v-show="false" type="circle" w="20" h="20" r="2"/>                               
+                </div>
+
             </button>
        </div>
 
@@ -123,8 +151,8 @@ const isEmailTesting=ref(false)
                 </h5>
             </button>
        </div> -->
+        
 
-            <BaseAlert :status="alert_status" :title="alert_title" :message="alert_message" />
    
        
     </div>
