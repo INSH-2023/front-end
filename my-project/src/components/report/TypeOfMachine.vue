@@ -15,12 +15,13 @@ const props = defineProps({
         required:false
     }
 })
-
+const statusAPI=ref(undefined)
 const emit=defineEmits(["getTypeOfM"])
 onUpdated(()=>{
     emit('getTypeOfM',{
         name:'type_of_machine',
         item:item.value,
+        statusAPI:statusAPI.value
 
     })
 })
@@ -45,10 +46,12 @@ const getItem=async(emp_code)=>{
     if(status==200){
         itemList.value =data
         console.log('data item :',itemList.value)
-        
+        statusAPI.value=true
     }else{
-
         // status something
+        console.log('error type of machine :',data)
+        statusAPI.value=false
+
     }
 }
 
@@ -152,8 +155,12 @@ const setData=(data,index)=>{
 
         </div>
 
-        <div v-else-if="props.typeOfUseOR==true && itemList.length == 0" class="grid grid-cols-6 gap-y-2 gap-x-2 mt-4 text-[15px] font-medium">
-            <div  name="problem"  class="w-[150px] mx-auto p-2 bg-gray-200 rounded-xl hover:bg-gray-300">
+        <div v-else-if="props.typeOfUseOR==true && itemList.length == 0" class="w-[300px] grid grid-cols-3 gap-y-2 gap-x-2 mt-4 mx-auto text-[15px] font-medium 
+            sm:w-[400px] sm:grid-cols-4 sm:gap-y-2 sm:gap-x-1
+            md:w-full 
+            lg:sm:gap-y-4
+        ">
+            <div  name="problem"  class="truncate w-full mx-auto p-2 bg-gray-200 rounded-xl hover:bg-gray-300 md:w-[150px] md:h-fit ">
                 <h3 class="w-fit mx-auto">
                     เหมือนว่าคุณจะไม่มีเครื่องที่ใช้ในองค์กรนะ 😱 
                 </h3>

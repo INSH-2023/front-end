@@ -120,7 +120,7 @@ onBeforeMount(()=>{
                         @click="toAdmin" 
                         :style="[isAdmin===true?'background-color: rgb(244 63 94);color:white':'color: rgb(64 64 64);']" 
                         class=" text-[15px] font-bold  rounded py-[5px] px-[10px] my-auto  
-                            
+                            hidden lg:block
                         ">
                         Admin
                     </button >
@@ -174,8 +174,8 @@ onBeforeMount(()=>{
 
                     <div v-show="isSetting==true" 
                         id="dropdown"
-                        class="w-[100vw] h-fit font-semibold text-[#8DA9C4] absolute  right-0 top-[60px] z-20 w-30 rounded bg-gray-700 divide-y divide-gray-800
-                            sm:w-[11.5rem] 
+                        class="w-[100vw] h-fit font-semibold text-[#8DA9C4] absolute  right-0 top-[60px]  z-20 w-30 rounded-b bg-gray-700 divide-y divide-gray-800
+                            sm:w-[11.5rem] sm:rounded-l
                         ">
                     <ul  class="flex flex-col p-2 m-auto">
                         <!-- <li>

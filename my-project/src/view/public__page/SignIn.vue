@@ -28,8 +28,8 @@ const logIn=async()=>{
     if(email.value.length==0||pw.value.length==0){
         console.log('please in put ur email and password!!')
         alert_status.value=false
-        alert_title.value='Invalid data !!'
-        alert_message.value='please in put your email and password!!'
+        alert_title.value='Missing data !!'
+        alert_message.value='กรุณาใส่ข้อมูล E-mail และ Password ของคุณ!!'
         button_status.value=false
     }else{
         // console.log(data_ch.value)
@@ -44,7 +44,7 @@ const logIn=async()=>{
         if(status==404){
             alert_status.value=false
             alert_title.value='Not Found !!'
-            alert_message.value='user does not exist '
+            alert_message.value='ไม่พบผู้ใช้นี้ '
             button_status.value=false
         }else
         {
@@ -125,7 +125,7 @@ const isEmailTesting=ref(false)
                     <h4 class="w-fit h-fit p-2 mx-auto">
                         login
                     </h4>
-                    <BaseLoading v-show="false" type="circle" w="20" h="20" r="2"/>                               
+                    <BaseLoading v-show="button_status" type="circle" w="20" h="20" r="2"/>                               
                 </div>
 
             </button>

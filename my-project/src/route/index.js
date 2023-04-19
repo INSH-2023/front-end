@@ -30,6 +30,7 @@ import Home from '../view/public__page/Home.vue'
 import NotFound from '../view/NotFound.vue'
 import Main_public from '../view/public__page/Main_public.vue'
 import ComingSoon from '../view/ComingSoon.vue'
+import ErrorServer from '../view/ErrorServer.vue'
 // private
 import Main_for_navbar from '../view/private__page/Main_for_navbar.vue'
 
@@ -225,6 +226,11 @@ const routes=[
         path:'/coming-soon',
         name:'notAvaliable',
         component:ComingSoon
+    },
+    {
+        path:'/error',
+        name:'errorServer',
+        component:ErrorServer
     }
 ]
 const router=createRouter({history,routes})

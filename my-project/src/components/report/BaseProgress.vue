@@ -14,9 +14,14 @@ const props =defineProps({
 const full_stage=ref(0)
 const stage=ref(0)
 const imageLink=`${import.meta.env.VITE_BACK_END_HOST}/image`
-const computedIconForSrc=(stage,id)=>{
-    if(full_stage.value==5 && (id<6 && id>=0)){
-        return `${imageLink}/stage/${stage}/${id}`
+const computedIconForSrc=(id)=>{
+    console.log(full_stage.value)
+    if(id>(full_stage.value+1) || id<0){
+       console.log('cannot get images BaseProgress!!')
+    }else
+    { console.log(`${imageLink}/stage/${full_stage.value}/${id}`)
+         return `${imageLink}/stage/${full_stage.value}/${id}`
+        
         // http://localhost:5000/api/image/stage_5/
     }
 }
@@ -53,7 +58,7 @@ onUpdated(()=>{
 
 const countAllStage =()=>{
     let number = props.full_stage
-    if(typeof number =='number'){
+    if(typeof(number) =='number'){
         console.log(typeof number)
         full_stage.value = number
 
@@ -101,7 +106,7 @@ const setStage=()=>{
     <ul  class=" flex justify-around">
         <li v-for="index  in full_stage" :key=index>
             <div  class="relative z-0 stage_color w-[45px] h-[45px]  bg-[#EDEDE9] rounded-full">
-                <img v-if="full_stage==5" :src="computedIconForSrc(full_stage,index)" alt="icon" class="absolute z-10 inset-0 w-[22px] h-[22px] m-auto brightness-200">
+                <img v-if="full_stage==5" :src="computedIconForSrc(index)" alt="icon" class="absolute z-10 inset-0 w-[22px] h-[22px] m-auto brightness-200">
                 <!-- <img v-else-if="full_stage==3" :src="srcIconIII[0]" alt="icon" class=" w-[20px] h-[20px] mx-auto">
                 <img v-else-if="full_stage==2" v-attr="src=`${srcIconII[0]}`" alt="icon" class=" w-[20px] h-[20px] mx-auto"> -->
 

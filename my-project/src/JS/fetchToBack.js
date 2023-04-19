@@ -191,6 +191,11 @@ let toBackEnd={
          console.log(`post ${name} successful`)
          return_data.push(status)
          return_data.push(await res.json())
+      }else
+      if(status==400){
+         status=res.status
+         return_data.push(status)
+         return_data.push(await res.json())
       }else 
       if(status==404){
          status=res.status
@@ -199,7 +204,7 @@ let toBackEnd={
          status=500
          console.log(`error cannot post ${name}`)
          return_data.push(status)
-         return_data.push('An internal error occurred, please try again later.')
+         return_data.push('เกิดข้อผิดพลาดฝั่ง Server กรูณาติดต่อฝ่าย IT !!')
       }
      
 

@@ -199,14 +199,14 @@ const textToArray=(input)=>{
                     </label>
                     <br class="lg:hidden">
                     <span class="text-[13px] ml-2">(กรณีไม่พบปัญหาข้างต้น)</span>
-                    <textarea v-model="useAndOther.msg_other" name="other" id="other_1"  disabled class="w-full h-fit resize-none pt-[10px] block rounded-lg bg-gray-300 font-light text-[14px] p-2 focus:outline-0 lg:text-[20px]" ></textarea>
+                    <textarea v-model="useAndOther.msg_other" name="other" id="other_1"  disabled class="w-full h-fit resize-none block  bg-gray-300 font-light text-[14px] rounded-lg px-2 py-4 focus:outline-0 lg:text-[20px]" ></textarea>
                 </div>
                 
                 <div v-show="useAndOther.msg.length !=0" class=" mt-3">
                     <label for="other_2" class="ml-3 text-[13px] font-semibold lg:text-[17px]">
                         ระบุรายละเอียดของปัญหาที่พบ (ถ้ามี)
                     </label>
-                    <textarea v-model="useAndOther.msg" name="other" id="other_2"  disabled class="w-full h-fit  resize-none block bg-gray-300 font-light text-[14px] rounded-lg p-2 focus:outline-0 lg:text-[20px]"></textarea>
+                    <textarea v-model="useAndOther.msg" name="other" id="other_2"  disabled class="w-full h-fit  resize-none block bg-gray-300 font-light text-[14px] rounded-lg px-2 py-4 focus:outline-0 lg:text-[20px]"></textarea>
                 </div>
                 <div>
 
@@ -218,32 +218,33 @@ const textToArray=(input)=>{
                 lg:6
             ">
                 <!-- suject is other -->
-                <div class="w-fit mt-3 mx-auto px-3 lg:px-0 lg:mt-0">
+                <div class="w-full mt-3 mx-auto px-3 lg:px-0 lg:mt-0 lg:w-fit">
 
-                    <label for="other_1" class="ml-3 text-[17px] font-semibold inline-b">
+                    <label for="other_1" class="ml-3 text-[13px] font-semibold inline-b lg:text-[17px]">
                         ระบุ รายละเอียด หรือ ความต้องการของคุณ
+                        <br class="hidden lg:block">
+                        <span class="text-[10px] ml-2 md:text-[13px]">(กรณีไม่พบปัญหาข้างต้น)</span> 
                     </label>
-                    <br class="">
-                    <span class="text-[13px] ml-2">(กรณีไม่พบปัญหาข้างต้น)</span>                        
+                                           
 
                     <!-- <textarea v-model="useAndOther.msg_other" name="other" id="other_1"  class="block w-full h-[100px] resize-none pt-[10px]  rounded-xl bg-gray-300 p-2 mx-auto focus:outline-0
                         lg:w-[600px] lg:h-fit
                     " ></textarea> -->
 
-                    <div class="block w-full h-[100px] resize-none pt-[10px]  rounded-xl bg-gray-300 p-2 mx-auto focus:outline-0
-                        lg:w-[600px] lg:h-[100px]
+                    <div class="block w-full h-fit resize-none px-2 py-4 rounded-xl bg-gray-300  mx-auto focus:outline-0
+                        lg:w-[600px] 
                     ">
                         {{ useAndOther.msg_other }}
                     </div>
                 </div>
 
-                <div  class="w-fit  mt-3 mx-auto mt-0 px-3 lg:px-0 lg:mt-6 lg:w-fit">
-                    <label for="other_2" class="ml-3 text-[17px] font-semibold inline-b">
+                <div  class="w-full  mt-3 mx-auto mt-4 px-3 lg:px-0 lg:mt-6 lg:w-fit">
+                    <label for="other_2" class="ml-3 text-[13px] font-semibold inline-b lg:text-[17px]">
                         หมายเหตุเพิ่มเติม (ถ้ามี)
                     </label>
                     
-                    <div class="block w-full h-[100px] resize-none pt-[10px]  rounded-xl bg-gray-300 p-2 mx-auto focus:outline-0
-                        lg:w-[600px] lg:h-[100px]
+                    <div class="block w-full h-fit resize-none px-2 py-4 rounded-xl bg-gray-300  mx-auto focus:outline-0
+                        lg:w-[600px] 
                     ">
                         {{ useAndOther.msg }}
                     </div>

@@ -126,7 +126,7 @@ onBeforeMount(()=>{
         lg:flex-row
     ">
         <!-- hard ware -->
-        <button @click="goReport('hardware')" class="flex  px-4 w-[300px] my-auto mx-auto my-3 p-3 text-gray-700 bg-[#f8f7ff]  rounded-xl drop-shadow-md
+        <button @click="goReport('hardware')" class="flex  px-4 w-[300px] my-auto mx-auto my-3 p-3 text-gray-700 bg-[#B9E9FC]  rounded-xl drop-shadow-md
             md:w-[500px] 
             lg:w-[130px] lg:my-auto lg:block lg:bg-inherit 
             lg:hover:bg-[#fffcf9] lg:hover:text-black

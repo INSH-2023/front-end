@@ -9,9 +9,12 @@ import Problem from '../../../components/report/Problem.vue';
 import OtherAndMessage from '../../../components/report/OtherAndMessage.vue';
 import validate from '../../../JS/validate';
 import SummaryReport from '../../../components/report/SummaryReport.vue';
+import BaseAlert from '../../../components/BaseAlert.vue';
+import BaseLoading from '../../../components/BaseLoading.vue';
 const myRouter = useRouter()
 const goBack=()=> myRouter.go(-1)
 const goMain=()=>myRouter.push({name:'services'})
+const errorServer=()=>myRouter.push({name:'errorServer'})
 // const requestLink ="http://localhost:3000/events"
 // const problemsLink = "http://localhost:3000/problems"
 const requestLink =`${import.meta.env.VITE_BACK_END_HOST}/requests`
@@ -24,6 +27,11 @@ const service=params.service
 
 const progress_status=undefined
 
+const alert_message=ref('')
+const alert_title=ref('')
+const alert_status=ref(undefined)
+
+const button_status=ref(false)
 // get date time
 const Timestamp=()=>{
     let dateTime =new Date()
@@ -110,9 +118,14 @@ const validateReport=(stage)=>{
         if(stage==0 ){
             // status something
             if(validate.vSection_I(typeOfUse.value)){
+                alert_status.value=undefined
                 computeStageReport(true)
             }else{
                 // alert error something
+                alert_status.value=false
+                alert_title.value='Missing data !!'
+                alert_message.value='กรุณากรอกข้อมูล ประเภท อุปกรณ์ของคุณ'
+                
             }
 
 
@@ -120,9 +133,13 @@ const validateReport=(stage)=>{
         if(stage==1){
             // status something
             if(validate.vSection_II(typeOfMachine.value,typeOfUse.value,user.value)){
+                alert_status.value=undefined
                 computeStageReport(true)   
             }else{
                 // alert error something
+                alert_status.value=false
+                alert_title.value='Missing data !!'
+                alert_message.value='กรุณากรอกข้อมูล ชนิด อุปกรณ์ของคุณ'
             }
             
 
@@ -130,19 +147,27 @@ const validateReport=(stage)=>{
         if(stage==2){
             // status something
             if(validate.vSection_III(problems.value,is_other.value)){
+                alert_status.value=undefined
                 computeStageReport(true)
             }else{
                 // alert error something
+                alert_status.value=false
+                alert_title.value='Missing data !!'
+                alert_message.value='กรุณากรอกข้อมูล ปัญหา ของคุณที่พบเจอ'
             }
             
         }else
         if(stage==3){
             // status something
             if(validate.vSection_IIII(otherAndMsg.value,is_other.value)){
+                alert_status.value=undefined
                 computeStageReport(true)
                 console.log(data_ch.value)
             }else{
-                
+                // alert error something
+                alert_status.value=false
+                alert_title.value='Missing data !!'
+                alert_message.value='กรุณากรอกข้อมูล ปัญหาเพิ่มเติม ของคุณ'
             }
         }else
         if(stage==4){
@@ -174,18 +199,26 @@ const validateReport=(stage)=>{
         ||typeP=='media'||typeP=='news'){
         if(stage==0){
             if(validate.vSection_III(problems.value,is_other.value)){
+                alert_status.value=undefined
                 computeStageReport(true)
             }else{
                 // alert error something
+                alert_status.value=false
+                alert_title.value='Missing data !!'
+                alert_message.value='กรุณากรอกข้อมูล ปัญหา ของคุณที่พบเจอ'
             }
         }else
         if(stage==1){
 
             if(validate.vSection_IIII(otherAndMsg.value,is_other.value)){
+                alert_status.value=undefined
                 computeStageReport(true)
                 console.log(data_ch.value)
             }else{
                 // alert error something
+                alert_status.value=false
+                alert_title.value='Missing data !!'
+                alert_message.value='กรุณากรอกข้อมูล ปัญหาเพิ่มเติม ของคุณ'
             }
         }else
         if(stage==2){
@@ -197,10 +230,14 @@ const validateReport=(stage)=>{
     if(typeP=='other'){
         if(stage==0){
             if(validate.vSection_IIII(otherAndMsg.value,is_other.value)){
+                alert_status.value=undefined
                 computeStageReport(true)
                 // console.log(data_ch.value)
             }else{
                 // alert error something
+                alert_status.value=false
+                alert_title.value='Missing data !!'
+                alert_message.value='กรุณากรอกข้อมูล ปัญหาเพิ่มเติม ของคุณ'
             }    
         }
         else 
@@ -236,8 +273,8 @@ const getUser= async(emp_code)=>{
         user.value.group=user_group
         user.value.email=user_email
         console.log(data_user)
-        
     }else{
+        errorServer()
         console.log(data_user)
     }
 }
@@ -255,17 +292,26 @@ const countNumber=ref(0)
 const full_stage=computed(()=>{
     let all_stage =0
     if(service=='it'){
-        if(typeP=='hardware'||typeP=='software'||typeP=='internet') all_stage=5 ;
-        else if(typeP=='printer'||typeP=='website'||typeP=='meeting'||typeP=='application') all_stage=3 ;
-        else if(typeP=='other') all_stage=2;
+        if(typeP=='hardware'||typeP=='software'||typeP=='internet'){
+            all_stage=5 
+        }else 
+        if(typeP=='printer'||typeP=='website'||typeP=='meeting'||typeP=='application'){ 
+            all_stage=3 
+        }else if(typeP=='other'){
+            all_stage=2
+        }
+        return all_stage
     }else
     if(service=='pr'){
-        if(typeP=='media'||typeP=='news'||typeP=='other') all_stage=3
+        if(typeP=='media'||typeP=='news'||typeP=='other') {
+            all_stage=3
+        }
+        return all_stage
     }
 
       
 
-    return all_stage
+    
 })
 
 // คำนวณ stage สำหรับกดปุ่มถัดไป
@@ -295,6 +341,7 @@ const computeStageReport=(status)=>{
 // send form
 const isSubmitt=ref(false)
 const submitt = async()=>{
+    button_status.value=true
     console.log(data_ch.value)
     let [status,data]=await toBackEnd.postData('report',requestLink,data_ch.value)
     if(status==200){
@@ -302,8 +349,20 @@ const submitt = async()=>{
         isSubmitt.value=true
         // setTimeout(goMain,5000)
         console.log(data)
+        button_status.value=false
+    }else
+    if(status==400){
+        // console.log(data)
+        button_status.value=false
+        alert_status.value=true
+        alert_title.value='Invalid data !!'
+        alert_message.value='ข้อมูลไม่ถูกต้องไม่สามารถทำรายการได้'
     }else{
         console.log(data)
+        button_status.value=false
+        alert_status.value=true
+        alert_title.value='Error from server !!'
+        alert_message.value='An internal error occurred, please try again later.'
     }
 }
 
@@ -354,8 +413,8 @@ const getDataFromComponent =(value)=>{
             
 
             <!-- header -->
-            <div class="w-fit h-fit mx-auto  text-[25px] sm:text-[36px]">
-                <h3 class="font-semibold">
+            <div class="w-fit h-fit mx-auto  text-[23px] sm:text-[36px]">
+                <h3 class="font-semibold px-4">
                     รายงานปัญหาเกี่ยวกับ <span class="font-light capitalize">{{ typeP }}</span>
                 </h3>
             </div>
@@ -366,13 +425,17 @@ const getDataFromComponent =(value)=>{
 
 
             <!-- first -->
-            <div v-show="(countNumber==0 && (typeP=='hardware'||typeP=='software'||typeP=='internet'))" 
-                class="w-fit h-fit mt-10 mx-auto mx-auto sm:w-[400px]">
+            <!-- <div v-show="(countNumber==0 && (typeP=='hardware'||typeP=='software'||typeP=='internet'))"  -->
+            <div v-show="(countNumber==0)" 
+                 v-if="typeP=='hardware'||typeP=='software'||typeP=='internet'"
+                class="w-fit h-fit mt-4 mx-auto mx-auto sm:w-[400px]">
                 <TypeOfUse @get-type-of-use="getDataFromComponent" />
             </div>
 
             <!-- second type of matchine -->
-            <div v-show="(countNumber==1 && (typeP=='hardware'||typeP=='software'||typeP=='internet'))" 
+            <!-- <div v-show="(countNumber==1 && (typeP=='hardware'||typeP=='software'||typeP=='internet'))"  -->
+            <div v-show="(countNumber==1)" 
+                v-if="typeP=='hardware'||typeP=='software'||typeP=='internet'"
                 class="w-fit h-fit mx-auto mt-10
                     lg:w-[700px]
                 ">
@@ -382,7 +445,8 @@ const getDataFromComponent =(value)=>{
             <!-- third problem -->
             <div v-show="((countNumber==2 && (typeP=='hardware'||typeP=='software'||typeP=='internet'))
                         || (countNumber==0 && (typeP=='printer'||typeP=='website'||typeP=='meeting'||typeP=='application'||typeP=='media'||typeP=='news')))
-                        && typeP != 'other'" 
+                        " 
+                 v-if="typeP != 'other'"
                 class="w-fit h-fit mx-auto mt-10 
                     lg:w-[700px]
                 "
@@ -398,6 +462,7 @@ const getDataFromComponent =(value)=>{
                     v-show="(countNumber==3 && (typeP=='hardware'||typeP=='software'||typeP=='internet'))
                             || (countNumber==1 && (typeP=='printer'||typeP=='website'||typeP=='meeting'||typeP=='application'||typeP=='media'||typeP=='news'))
                             || (countNumber==0 && (typeP=='other'))" 
+                    
                     @get-message="getDataFromComponent" 
                     :is-type-p_other="typeP == 'other'?true:false" 
                     :service_it="service=='it'?true:false" 
@@ -415,30 +480,37 @@ const getDataFromComponent =(value)=>{
                 />
   
 
+                <div class="my-2 lg:my-auto"> 
+                   <BaseAlert  :title="alert_title" :message="alert_message" :status="alert_status" type="login"/>
+                </div>
 
-            
 
             <!-- button -->
             <div class="w-fit mx-auto my-6">
-                <button @click="countNumber==0? myRouter.go(-1):computeStageReport(false)" class="w-[130px] mx-3 p-2 font-semibold bg-[#EDEDE9] text-gray-500 rounded-xl hover:bg-gray-500 hover:text-[#EDEDE9]">
+                <button @click="countNumber==0? myRouter.go(-1):computeStageReport(false),alert_status=undefined" class="w-[130px] mx-3 p-2 font-semibold bg-[#EDEDE9] text-gray-500 rounded-xl hover:bg-gray-500 hover:text-[#EDEDE9]">
                     <h4>
                         ย้อนกลับ
                     </h4>
                 </button>
                 <button @click="validateReport(countNumber)" class="w-[130px] mx-3 p-2 font-semibold bg-emerald-300  text-white rounded-xl hover:bg-[#b7e4c7] hover:text-gray-500">
-                    <h4 v-show="(countNumber<4 && (typeP=='hardware'||typeP=='software'||typeP=='internet'))
+                    <div v-show="(countNumber<4 && (typeP=='hardware'||typeP=='software'||typeP=='internet'))
                         ||(countNumber<2 && (typeP=='printer'||typeP=='website'||typeP=='meeting'||typeP=='application'||typeP=='media'||typeP=='news')) 
                         || (countNumber<1 && (typeP=='other'))"
                         class=""
                     >
                         ถัดไป
-                    </h4>
-                    <h4 v-show="(countNumber==4 && (typeP=='hardware'||typeP=='software'||typeP=='internet'))
+                    </div>
+                    
+                    <div v-show="(countNumber==4 && (typeP=='hardware'||typeP=='software'||typeP=='internet'))
                         ||(countNumber==2 && (typeP=='printer'||typeP=='website'||typeP=='meeting'||typeP=='application'||typeP=='media'||typeP=='news'))
                         || (countNumber==1 && (typeP=='other'))" 
+                        class="flex w-fit h-fit mx-auto"
                     >
-                        ส่งคำร้อง
-                    </h4>
+                       <h4 class="px-2">
+                            ส่งคำร้อง 
+                       </h4> 
+                       <BaseLoading v-show="button_status" type="circle" w="20" h="20" />                               
+                    </div>
                 </button>
             </div>
 

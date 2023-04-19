@@ -27,7 +27,7 @@ const props =defineProps({
     <div v-if="props.type =='login'" >
     <!-- waring -->
         <div v-if="props.status==false" >
-            <div class="relative hidden top-10 right-0 w-[300px] h-fit p-3 bg-[#fcbf49] border-l-2 border-gray-500 lg:block lg:absolute">
+            <div class="relative hidden top-20 right-0 w-[300px] h-fit p-3 bg-[#fcbf49] border-l-2 border-gray-500 lg:block lg:absolute">
                 <h4 class="font-semibold text-[16px]">
                     {{props.title}}
                 </h4>
@@ -53,7 +53,7 @@ const props =defineProps({
         </div>
         <!-- error -->
         <div v-else-if="props.status==true" >
-            <div class="relative hidden top-10 right-0 w-[300px] h-fit p-3 bg-[#ef233c] border-l-2 border-gray-500 lg:block lg:absolute">
+            <div class="relative hidden top-20 right-0 w-[300px] h-fit p-3 bg-[#ef233c] border-l-2 border-gray-500 lg:block lg:absolute">
                 <h4 class="font-semibold text-[16px]">
                     {{props.title}}
                 </h4>
