@@ -526,7 +526,7 @@ const getDataFromComponent =(value)=>{
                     เราได้รับข้อมูลของคุณเรียบร้อยแล้ว
                 </h3>
                 <h3 class="text-[14px] text-center md:text-[20px] lg:text-[25px]">
-                    เจ้าหน้าที่จะติดต่อร็วๆนี้
+                    เจ้าหน้าที่จะติดต่อไปเร็วๆนี้
                 </h3>
                 
             </div>

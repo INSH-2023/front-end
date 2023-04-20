@@ -16,7 +16,7 @@ const myRouter = useRouter()
   <!-- <Main_private/> -->
   <!-- <BaseNav  :isPublic="true"/> -->
 
-  <router-view ></router-view>
+  <router-view />
 </div>
 
 </template>

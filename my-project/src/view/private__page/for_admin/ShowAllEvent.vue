@@ -347,8 +347,6 @@ const searchByKeyW=()=>{
 }
 </script>
 <template>
-<div class="overflow-y-auto relative">
-    <div class="">
 
         <!-- wait -->
         <div v-if="get_status==undefined">
@@ -501,7 +499,7 @@ const searchByKeyW=()=>{
 
         
               <!-- table -->    
-        <div class="w-[1200px] mx-auto  h-[450px] mt-2"> 
+        <div class="w-[1200px] mx-auto  h-[450px] mt-2 "> 
             <hr class="mt-3 bg-gray-700  w-[1170px] h-[3px]">
             <div class="overflow-y-auto mx-auto h-[100%] w-[100%] ">
                 <table class="relative w-full table-fixed text-sm text-center text-gray-800 ">
@@ -602,8 +600,7 @@ const searchByKeyW=()=>{
                 </table>    
             </div>    
         </div>
-        </div> 
-    </div>
+
 
     <!-- show detail -->
     <div id="showInfo" class="overlay">
