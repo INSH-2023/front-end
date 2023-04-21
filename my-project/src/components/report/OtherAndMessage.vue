@@ -36,8 +36,8 @@ const other_msg=ref('')
             </label>
             <br class="md:hidden">
             <span class="text-[13px] ml-2">(กรณีไม่พบปัญหาข้างต้น)</span>
-            <textarea v-model="other_msg" name="other" id="other_1"  class="block w-full h-[100px] resize-none pt-[10px]  rounded-xl bg-gray-300 p-2  focus:outline-0
-                md:w-[600px] md:h-[150px]
+            <textarea v-model="other_msg" name="other" id="other_1" maxlength="150"   class="block w-full h-[100px] resize-none pt-[10px]  rounded-xl bg-gray-300 p-2  focus:outline-0
+                md:w-[600px] md:h-[100px]
             " ></textarea>
         </div>
 
@@ -46,8 +46,8 @@ const other_msg=ref('')
                 <span v-if="props.service_it==true">ระบุรายละเอียดของปัญหาที่พบ (ถ้ามี)</span>
                 <span v-if="props.service_it==false">ระบุรายละเอียดเพิ่มเติม (ถ้ามี)</span> 
             </label>
-            <textarea v-model="msg" name="other" id="other_2"  class="block w-full h-[100px] resize-none pt-[10px]  rounded-xl bg-gray-300 p-2 mx-auto focus:outline-0
-                md:w-[600px] md:h-[150px]
+            <textarea v-model="msg" name="other" id="other_2" maxlength="150"  class="block w-full h-[100px] resize-none pt-[10px]  rounded-xl bg-gray-300 p-2 mx-auto focus:outline-0
+                md:w-[600px] md:h-[100px]
             "></textarea>
         </div>
         
@@ -62,8 +62,8 @@ const other_msg=ref('')
                 ระบุ รายละเอียด หรือ ความต้องการของคุณ
             </label>
             <br class="">
-            <span class="text-[13px] ml-2">(กรณีไม่พบปัญหาข้างต้น)</span>
-            <textarea v-model="other_msg" name="other" id="other_1"  class="block w-full h-[100px] resize-none pt-[10px]  rounded-xl bg-gray-300 p-2  focus:outline-0
+            <span v-show="props.isTypeP_other!=true" class="text-[13px] ml-2">(กรณีไม่พบปัญหาข้างต้น)</span>
+            <textarea v-model="other_msg" name="other" id="other_1" maxlength="150"   class="block w-full h-[100px] resize-none pt-[10px]  rounded-xl bg-gray-300 p-2  focus:outline-0
                 md:w-[600px] md:h-[100px]
             " ></textarea>
         </div>
@@ -72,7 +72,7 @@ const other_msg=ref('')
             <label for="other_2" class="ml-3 text-[17px] font-semibold">
                 หมายเหตุเพิ่มเติม (ถ้ามี)
             </label>
-            <textarea v-model="msg" name="other" id="other_2"  class="block w-full h-[100px] resize-none pt-[10px]  rounded-xl bg-gray-300 p-2 mx-auto focus:outline-0
+            <textarea v-model="msg" name="other" id="other_2" maxlength="150"   class="block w-full h-[100px] resize-none pt-[10px]  rounded-xl bg-gray-300 p-2 mx-auto focus:outline-0
                 md:w-[600px] md:h-[100px]
             "></textarea>
         </div>
