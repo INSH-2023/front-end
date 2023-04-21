@@ -46,8 +46,8 @@ const data=computed(()=>{
             
         </div>  
         
-        <div v-if="typeU=='sf'" class="w-full h-[100px] m-auto mt-3">
-                <textarea v-model="brand_sf" id="Self" type="text" placeholder="ระบุยี้ห้อของคุณที่นี้." name="input_type"  class="resize-none w-full h-full   p-2  bg-gray-200 text-[20px] font-light  rounded-lg focus:outline-0"></textarea>
+        <div v-if="typeU=='sf'" class="w-[250px] h-[70px] m-auto mt-3 lg:w-full lg:h-[100px]">
+                <textarea v-model="brand_sf" id="Self" type="text" placeholder="ระบุยี้ห้อของคุณที่นี้." name="input_type" maxlength="50"  class="resize-none w-full h-full   p-2  bg-gray-200 text-[15px] font-light  rounded-lg focus:outline-0 lg:text-[18px]"></textarea>
         </div>
 </template>
 <style scoped>

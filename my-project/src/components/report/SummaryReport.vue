@@ -60,7 +60,7 @@ const textToArray=(input)=>{
 }
 </script>
 <template>
-    <div class="w-[280px] h-fit mx-auto mt-3 lg:w-full" >
+    <div class=" w-[280px] h-fit mx-auto mt-3 lg:w-full" >
         
 
             <div id="summaryInfo" class=" w-fit mx-auto text-[25px] font-semibold">
@@ -128,7 +128,7 @@ const textToArray=(input)=>{
                     <!-- notebook -->
                     <div class="w-[80px] h-fit mx-auto p-2 bg-gray-200 rounded-xl lg:w-[70%] lg:h-[100px]">
                         <img src="../../assets/vue.svg" alt="NoteBook" class="w-[30px] h-[30px] mx-auto lg:w-[50px] lg:h-[50px]">
-                        <h3 class="w-fit mx-auto text-[10px] lg:text-[20px]">
+                        <h3 class="w-fit mx-auto text-[10px] lg:text-[15px]">
                             {{item.type}}
                         </h3>
                     </div >
@@ -170,13 +170,13 @@ const textToArray=(input)=>{
                 </div>
 
                 
-                <div class="grid grid-cols-3 gap-y-2 gap-x-2 mt-4 text-[15px] font-medium
+                <div class="grid grid-cols-3 gap-y-2 gap-x-2 mt-4  font-medium
                     lg:grid-cols-4 
                 ">
                     
                     <div v-for="(data,index) in problems" :key="index"  class="w-[80px] h-fit mx-auto p-2 bg-gray-200 rounded-xl lg:w-[70%] lg:h-[100px]">
                         <img src="../../assets/vue.svg" alt="NoteBook" class="w-[30px] h-[30px] mx-auto lg:w-[50px] lg:h-[50px]">
-                        <h3 class="w-fit mx-auto text-[10px] lg:text-[20px]">
+                        <h3 class="w-fit mx-auto text-[10px] lg:text-[15px]">
                            {{data}}
                         </h3>
                     </div >
@@ -195,93 +195,51 @@ const textToArray=(input)=>{
             <div  v-if="subject!='other'" class="w-full  flex flex-col  mt-6 ">
                 <div v-show="useAndOther.msg_other.length !=0" class="">
                     <label for="other_1" class="ml-3 text-[13px] font-semibold inline-b lg:text-[20px]">
-                        กรณีเลือก<span class="text-rose-500 pl-2">อื่นๆโปรดระบุ</span>
+                        ความต้องการอื่นๆ ของคุณ
                     </label>
-                    <br class="lg:hidden">
-                    <span class="text-[13px] ml-2">(กรณีไม่พบปัญหาข้างต้น)</span>
-                    <textarea v-model="useAndOther.msg_other" name="other" id="other_1"  disabled class="w-full h-fit resize-none block  bg-gray-300 font-light text-[14px] rounded-lg px-2 py-4 focus:outline-0 lg:text-[20px]" ></textarea>
+                    <!-- <br class="lg:hidden"> -->
+                    <!-- <span class="text-[13px] ml-2">(กรณีไม่พบปัญหาข้างต้น)</span> -->
+                    <textarea v-model="useAndOther.msg_other" name="other" id="other_1"  disabled class="w-full h-fit resize-none block  bg-gray-300 font-light text-[14px] rounded-lg p-2  focus:outline-0 lg:text-[20px] lg:h-[100px]" ></textarea>
                 </div>
                 
                 <div v-show="useAndOther.msg.length !=0" class=" mt-3">
-                    <label for="other_2" class="ml-3 text-[13px] font-semibold lg:text-[17px]">
-                        ระบุรายละเอียดของปัญหาที่พบ (ถ้ามี)
+                    <label for="other_2" class="ml-3 text-[13px] font-semibold lg:text-[20px]">
+                        หมายเหตุเพิ่มเติม
                     </label>
-                    <textarea v-model="useAndOther.msg" name="other" id="other_2"  disabled class="w-full h-fit  resize-none block bg-gray-300 font-light text-[14px] rounded-lg px-2 py-4 focus:outline-0 lg:text-[20px]"></textarea>
-                </div>
-                <div>
-
+                    <textarea v-model="useAndOther.msg" name="other" id="other_2"  disabled class="w-full h-fit  resize-none block bg-gray-300 font-light text-[14px] rounded-lg p-2  focus:outline-0 lg:text-[20px] lg:h-[100px]"></textarea>
                 </div>
             </div>
 
             <!-- other -->
             <div v-else-if="subject=='other'" class="w-full flex flex-col flex-nowrap mt-2 mx-auto
-                lg:6
+               
             ">
                 <!-- suject is other -->
-                <div class="w-full mt-3 mx-auto px-3 lg:px-0 lg:mt-0 lg:w-fit">
+                <div class="w-full h-fit mt-3 mx-auto px-3 lg:px-0 lg:mt-0 lg:w-fit ">
 
                     <label for="other_1" class="ml-3 text-[13px] font-semibold inline-b lg:text-[17px]">
-                        ระบุ รายละเอียด หรือ ความต้องการของคุณ
-                        <br class="hidden lg:block">
-                        <span class="text-[10px] ml-2 md:text-[13px]">(กรณีไม่พบปัญหาข้างต้น)</span> 
+                        ความต้องการของคุณ
+                        <!-- <br class="hidden lg:block">
+                        <span class="text-[10px] ml-2 md:text-[13px]">(กรณีไม่พบปัญหาข้างต้น)</span>  -->
                     </label>
-                                           
-
-                    <!-- <textarea v-model="useAndOther.msg_other" name="other" id="other_1"  class="block w-full h-[100px] resize-none pt-[10px]  rounded-xl bg-gray-300 p-2 mx-auto focus:outline-0
-                        lg:w-[600px] lg:h-fit
-                    " ></textarea> -->
-
-                    <div class="block w-full h-fit resize-none px-2 py-4 rounded-xl bg-gray-300  mx-auto focus:outline-0
-                        lg:w-[600px] 
+                     
+                    <textarea v-model="useAndOther.msg_other" name="other" id="other_1"  disabled class="block w-full h-fit resize-none px-2  rounded-xl bg-gray-300  mx-auto focus:outline-0
+                        lg:w-[600px] lg:h-[100px]
                     ">
-                        {{ useAndOther.msg_other }}
-                    </div>
+                    </textarea>
                 </div>
 
-                <div  class="w-full  mt-3 mx-auto mt-4 px-3 lg:px-0 lg:mt-6 lg:w-fit">
+                <div v-show="useAndOther.msg.length !=0" class="w-full h-fit mt-3 mx-auto mt-4 px-3 lg:px-0 lg:mt-6 lg:w-fit">
                     <label for="other_2" class="ml-3 text-[13px] font-semibold inline-b lg:text-[17px]">
-                        หมายเหตุเพิ่มเติม (ถ้ามี)
+                        หมายเหตุเพิ่มเติม
                     </label>
-                    
-                    <div class="block w-full h-fit resize-none px-2 py-4 rounded-xl bg-gray-300  mx-auto focus:outline-0
-                        lg:w-[600px] 
+                    <textarea v-model="useAndOther.msg" name="other" id="other_2"  disabled class="block w-full h-fit resize-none p-2  rounded-xl bg-gray-300  mx-auto focus:outline-0
+                        lg:w-[600px] lg:h-[100px]
                     ">
-                        {{ useAndOther.msg }}
-                    </div>
+                    </textarea>
                 </div>
             </div>
 
-            <!-- button -->
-            <!-- <div class="w-fit mx-auto mt-10">
-                <button @click="isSummary=false ,myRouter.go(-1)" class="w-[130px] mx-3 p-2 font-semibold bg-gray-400 text-white rounded-xl">
-                    <h4>
-                        ย้อนกลับ
-                    </h4>
-                </button>
-                <button @click="submitt" class="w-[130px] mx-3 p-2 font-semibold bg-rose-400 text-white rounded-xl">
-                    <h4>
-                        ขอรับบริการ
-                    </h4>
-                </button>
-            </div> -->
-
-
-
-        <!-- submit -->
-        <!-- <div v-if="isSubmitt==true" class="w-[1000px] mx-auto">
-            <div class="w-fit mx-auto">
-                <img src="../../../assets/check.png" alt="check_icon" class="w-[130px] mt-[60px]">
-            </div>
-            <div class="w-fit mx-auto mt-4 font-semibold ">
-                <h3 class="text-[50px]">
-                    เราได้รับข้อมูลของคุณเรียบร้อยแล้ว
-                </h3>
-                <h3 class="text-[20px] text-center">
-                    เจ้าหน้าที่จะติดต่อร็วๆนี้
-                </h3>
-            </div>
-
-        </div> -->
     </div>
 </template>
 <style scoped>

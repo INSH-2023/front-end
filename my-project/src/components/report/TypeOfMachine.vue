@@ -145,10 +145,10 @@ const setData=(data,index)=>{
                     alt="NoteBook" 
                     class="w-[30px] mx-auto md:w-[60px]"
                 >
-                <h3 class="truncate w-fit mx-auto text-[0.813rem] md:text-[1.125rem]">
+                <h3 class="truncate w-fit mx-auto text-[0.625rem] md:text-[0.813rem] font-light">
                     {{v.item_name}}
                 </h3>
-                <h3 class="text-[10px] md:text-[14px] font-semibold">
+                <h3 class="text-[0.625rem] md:text-[0.813rem] font-semibold uppercase">
                     {{v.item_type}}
                 </h3>
             </button>
