@@ -99,7 +99,9 @@ onBeforeMount(()=>{
                     <div class="text-[20px] font-bold text-white my-auto m-3 
                         sm:text-gray-300 md:text-rose-300 lg:text-sky-300
                     ">
-                        Zeed web
+                        <h4 @click="goHome" class="text-center cursor-pointer">
+                            IT HELP DESK
+                        </h4> 
                     </div>
             </div>
             
@@ -109,20 +111,25 @@ onBeforeMount(()=>{
         <!-- admin page -->
         <div v-else class="flex h-full w-full justify-between p-2 relative bg-[#2196F3]  sticky top-0">
             <div class="flex ml-[20px] w-fit ">
-                    <img src="../assets/Moral_Fainal.png" alt="" class="w-[40px] h-[40px] my-auto">
+                    <img src="../assets/Moral_Fainal.png" alt="" class="w-[30px] h-[30px] my-auto">
                     <div class="text-[20px] font-bold text-white my-auto m-3 
                         sm:text-gray-300 md:text-rose-300 lg:text-sky-300
                     ">
-                        Zeed web
+                        <h4 @click="goService" class="text-center cursor-pointer">
+                            IT HELP DESK
+                        </h4> 
                     </div>
                     <button 
                         v-if="role=='admin_it'||role=='admin_pr'" 
                         @click="toAdmin" 
-                        :style="[isAdmin===true?'background-color: rgb(244 63 94);color:white':'color: rgb(64 64 64);']" 
-                        class=" text-[15px] font-bold  rounded py-[5px] px-[10px] my-auto  
-                            hidden lg:block
+                        :style="[isAdmin===true?'background-color:#e63946 ;color:white':'color:white;']" 
+                        class=" h-fit w-[95px] text-[15px] font-bold  rounded py-[5px] px-[10px] my-auto  
+                            hidden lg:flex 
                         ">
-                        Admin
+                        <h4 class="lg:grow">
+                          Admin  
+                        </h4>
+                        <img src="../assets/admin_mode.png" alt="admin_mode" class="w-[20px] h-[20px] lg:grow-0">
                     </button >
 
                     <!-- <label  class="switch my-auto z-60">
@@ -154,27 +161,29 @@ onBeforeMount(()=>{
                     Your browser does not support the audio element.
                 </audio> -->
                 <!-- <img src="../assets/alert.png" alt="alert" class="mx-3 w-[25px] m-auto"> -->
-                <h3 class="hidden m-auto mb-2 mx-1 text-[14px] text-white font-medium
+                <!-- <h3 class="hidden m-auto mb-2 mx-1 text-[14px] text-white font-medium
                     sm:block
                 ">
                     สวัสดี!
-                </h3>
-                <div class="hidden truncate w-[180px] mb-1.5 mx-2 m-auto   text-[17px] text-white font-semibold
+                </h3> -->
+                <div class="hidden  truncate w-[200px] mb-1.5 mx-2 m-auto   text-[17px] text-white font-semibold
                     sm:block
                 ">
-                    {{ userName }}
+                    <h4 class="text-center ">
+                        {{ userName }}
+                    </h4>
                 </div>
                 
 
                     <!-- ตั้งค่า drop down -->
                 <div class=" ">
-                    <button @click="isSetting= !isSetting ,isLanguage= false" class="font-semibold text-[#8DA9C4] p-1 active:bg-[#90CAF9] active:text-[#0D47A1] rounded hover:text-white">
-                        <img src="../assets/burger_menu.png" alt="menu" class="w-[35px]">
+                    <button @click="isSetting= !isSetting ,isLanguage= false" class="font-semibold text-[#8DA9C4] mx-3 active:bg-[#90CAF9] active:text-[#0D47A1] rounded hover:text-white">
+                        <img src="../assets/burger_menu.png" alt="menu" class="w-[25px] lg:w-[30px] ">
                     </button>
 
                     <div v-show="isSetting==true" 
                         id="dropdown"
-                        class="w-[100vw] h-fit font-semibold text-[#8DA9C4] absolute  right-0 top-[60px]  z-20 w-30 rounded-b bg-gray-700 divide-y divide-gray-800
+                        class="w-[100vw] h-fit font-semibold text-[#8DA9C4] absolute  right-0 top-[50px]  z-20 w-30 rounded-b bg-gray-700 divide-y divide-gray-800
                             sm:w-[11.5rem] sm:rounded-l
                         ">
                     <ul  class="flex flex-col p-2 m-auto">
@@ -185,12 +194,14 @@ onBeforeMount(()=>{
                             <div class="block truncate w-fit h-fit   m-auto   text-[0.9rem] text-white font-semibold
                                 
                             ">
+                            <h4>
                                 {{ userName }}
+                            </h4>
                             </div>
                         </li>
                         <li class="hidden sm:block">
                             <div class="flex">
-                                <img src="../assets/vue.svg" alt="logo_setting" draggable="false" class="w-[20px] h-[20px] ml-2">
+                                <img src="../assets/settings.png" alt="logo_setting" draggable="false" class="w-[20px] h-[20px] ml-2">
                                 <h4 class="ml-3">
                                     Option
                                 </h4>                                
