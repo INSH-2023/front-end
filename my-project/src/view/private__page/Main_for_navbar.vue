@@ -16,12 +16,14 @@ onMounted(()=>{
 })
 </script>
 <template>
-   <div class="w-full h-[60px] sticky top-0 z-50">
+<div class="flex flex-col">
+   <div class="w-full h-[7.682458386683739dvh] sticky top-0 z-50">
       <BaseNav :role="role" :user-name="userName"  />
    </div>
-   <div class="w-full h-fit z-10">
+   <div class="w-full h-[92.31754161331626dvh] overflow-y-auto z-10">
       <router-view />    
    </div>
+</div>
 </template>
 <style scoped>
 

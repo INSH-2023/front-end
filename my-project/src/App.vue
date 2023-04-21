@@ -5,7 +5,7 @@ const myRouter = useRouter()
 </script>
 
 <template>
-<div class="w-screen ">
+<div class="w-[100ddvw] h-[100ddvh] ">
 
   <!-- <nav class="h-[20%]">
     <BaseNav/>
