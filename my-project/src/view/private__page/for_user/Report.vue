@@ -146,7 +146,12 @@ const validateReport=(stage)=>{
         }else
         if(stage==2){
             // status something
-            if(validate.vSection_III(problems.value,is_other.value)){
+            if(problem_to_text.value.length>150){
+                alert_status.value=false
+                alert_title.value='Warning !!'
+                alert_message.value='ปัญหาที่คุณเลือก มีมากเกินไป!!'
+
+            }else if(validate.vSection_III(problems.value,is_other.value)){
                 alert_status.value=undefined
                 computeStageReport(true)
             }else{
@@ -409,7 +414,7 @@ const getDataFromComponent =(value)=>{
     <div class="pt-3"> -->
        
         <!-- for write report -->
-        <div v-if="isSubmitt==false" class="w-full h-fit py-3 mx-auto lg:w-[800px] lg:h-fit">
+        <div v-if="isSubmitt==false" class=" w-full h-fit py-3 mx-auto lg:w-[800px] lg:h-fit">
             
 
             <!-- header -->
@@ -471,7 +476,7 @@ const getDataFromComponent =(value)=>{
                     
 
             <!-- for summary -->
-
+                
                 <SummaryReport
                 v-show="(countNumber==4 && (typeP=='hardware'||typeP=='software'||typeP=='internet'))
                     || (countNumber==2 && (typeP=='printer'||typeP=='website'||typeP=='meeting'||typeP=='application'||typeP=='media'||typeP=='news'))
