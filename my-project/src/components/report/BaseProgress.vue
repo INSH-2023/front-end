@@ -1,13 +1,14 @@
 <script setup>
 import {ref,computed,onBeforeMount,onUpdated,onMounted} from 'vue'
+
 const props =defineProps({
     stage:{
         type:Number,
-        default:"0"
+        default:0
     },
     full_stage:{
         type:Number,
-        default:"0"
+        default:0
     }
 })
 
@@ -15,7 +16,7 @@ const full_stage=ref(0)
 const stage=ref(0)
 const imageLink=`${import.meta.env.VITE_BACK_END_HOST}/image`
 const computedIconForSrc=(id)=>{
-    console.log(full_stage.value)
+    console.log('sdfjlasdjflasdjf      ',full_stage.value)
     if(id>(full_stage.value+1) || id<0){
        console.log('cannot get images BaseProgress!!')
     }else
@@ -106,7 +107,7 @@ const setStage=()=>{
     <ul  class=" flex justify-around">
         <li v-for="index  in full_stage" :key=index>
             <div  class="relative z-0 stage_color w-[45px] h-[45px]  bg-[#EDEDE9] rounded-full">
-                <img v-if="full_stage==5" :src="computedIconForSrc(index)" alt="icon" class="absolute z-10 inset-0 w-[22px] h-[22px] m-auto brightness-200">
+                <img  :src="computedIconForSrc(index)" alt="icon" class="absolute z-10 inset-0 w-[22px] h-[22px] m-auto brightness-200">
                 <!-- <img v-else-if="full_stage==3" :src="srcIconIII[0]" alt="icon" class=" w-[20px] h-[20px] mx-auto">
                 <img v-else-if="full_stage==2" v-attr="src=`${srcIconII[0]}`" alt="icon" class=" w-[20px] h-[20px] mx-auto"> -->
 
