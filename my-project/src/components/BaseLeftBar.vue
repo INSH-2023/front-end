@@ -17,7 +17,7 @@ const goProblemsList =()=>myRouter.push({name:'problemsList'})
 </script>
 <template>
 
-        <div class="block bg-gray-300 border-r-2  border-gray-400 w-full h-full">
+        <div class="flex flex-col h-full   border-r-2  border-gray-400 ">
             <!-- เดี๋ยวกลับมาทำต่อ -->
             <!-- <div class="flex m-auto w-full h-[40px] bg-white rounded-xl border-2 border-gray-400">
                 <label for="searching" class="mx-2 my-auto">
@@ -26,7 +26,7 @@ const goProblemsList =()=>myRouter.push({name:'problemsList'})
                 <input id="searching" type="text" class="w-[210px]  focus:outline-0 bg-transparent">
             </div> -->
 
-            <div class=" w-full h-fit  bg-white rounded-xl ">
+            <div class=" w-full h-fit  bg-white p-3 ">
                 <img src="../assets/Moralcenter2.png" alt="moralcenter" class="w-[80px] h-[80px] mx-auto">
                 <!-- <label for="searching" class="mx-2 my-auto">
                     <img src="../assets/loupe.png" alt="" class="w-[20px] h-[20px] ">
@@ -35,7 +35,7 @@ const goProblemsList =()=>myRouter.push({name:'problemsList'})
             </div>
 
             <!-- list navigation -->
-            <div class="m-auto  w-[250px] h-full  text-[20px]">
+            <div class="m-auto  w-[250px] h-full  text-[20px] mt-6 py-3">
                 <ul>
                     <li class="">
                         <button @click="goShowAllEvent" class="flex w-fit  font-semibold text-gray-800 ">

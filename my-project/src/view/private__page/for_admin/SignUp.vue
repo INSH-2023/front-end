@@ -27,11 +27,12 @@ const organization ='@moralcenter.or.th'
 // const passWL=14
 
 const lenghtOfInput={
-    fNameL:100,
-    lNameL:100,
-    emailL:100,
+    fNameL:50,
+    lNameL:50,
+    emailL:32,
     passWL:14,
-    empCodeL:100
+    empCodeL:10,
+    positionL:50
 }
 // style
 const empCodeS=ref(undefined)
@@ -188,7 +189,7 @@ const goRotate =()=>{
                                 {{empCode.length}}/{{lenghtOfInput.empCodeL}}
                             </span>
                         </h4>
-                        <input v-model="empCode" placeholder="Employee code" id="empCode" type="text" :maxlength="lenghtOfInput.fNameL" :style="[empCodeS==false?'border-color: rgb(225 29 72);border-width: 2px;':'']" class="absolute bottom-0 w-full h-[40px]  bg-gray-300 text-gray-500   px-2 rounded-lg focus:outline-0" >
+                        <input v-model="empCode" placeholder="Employee code" id="empCode" type="text" :maxlength="lenghtOfInput.empCodeL" :style="[empCodeS==false?'border-color: rgb(225 29 72);border-width: 2px;':'']" class="absolute bottom-0 w-full h-[40px]  bg-gray-300 text-gray-500   px-2 rounded-lg focus:outline-0" >
                     </div>
 
                     <!-- first name -->
@@ -265,7 +266,7 @@ const goRotate =()=>{
                                 <h4 v-show="position.length>0" class="text-sm font-semibold text-gray-500 mx-2">
                                     Position
                                 </h4>
-                                <input v-model="position" type="text" placeholder="Position" :style="[positionS==false?'border-color: rgb(225 29 72);border-width: 2px;':'']" class="absolute bottom-0  w-full h-[40px]  px-2 bg-gray-300 text-gray-500 rounded-lg focus:outline-0"> 
+                                <input v-model="position" type="text" placeholder="Position" :maxlength="lenghtOfInput.positionL" :style="[positionS==false?'border-color: rgb(225 29 72);border-width: 2px;':'']" class="absolute bottom-0  w-full h-[40px]  px-2 bg-gray-300 text-gray-500 rounded-lg focus:outline-0"> 
                                 <!-- <select v-model="position"  id="position"  >
                                     <option value="" selected disabled hidden >Position</option>
                                     <option value="เจ้าหน้าที่เทคโนโลยีสารสนเทศ" >เจ้าหน้าที่เทคโนโลยีสารสนเทศ</option>

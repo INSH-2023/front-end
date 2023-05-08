@@ -12,6 +12,7 @@ let toBackEnd={
          res = await fetch(`${link}/${id}`,{
             method:'DELETE'
          })         
+         status=res.status
       } catch (error) {
          console.log(error) 
       }
@@ -144,10 +145,11 @@ let toBackEnd={
             headers:{ "content-type": "application/json"},
             body:JSON.stringify(data)
          })         
+         status=res.status
       } catch (error) {
          console.log(name,error)
       }
-
+      console.log(res.status)
 
       if(status==200){
          console.log(`update ${name} successful`)
