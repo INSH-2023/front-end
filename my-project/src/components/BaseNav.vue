@@ -109,7 +109,7 @@ onBeforeMount(()=>{
 
 
         <!-- admin page -->
-        <div v-else class="flex  h-full w-full justify-between p-2 relative bg-[#2196F3]  sticky top-0">
+        <div v-else class="flex  h-full w-full px-[20px] justify-between p-2 relative bg-[#2196F3]  sticky top-0">
             <div class="flex ml-[20px] w-fit ">
                     <img src="../assets/Moral_Fainal.png" alt="" class="w-[30px] h-[30px] my-auto">
                     <div class="text-[20px] font-bold text-white my-auto m-3 
@@ -155,7 +155,7 @@ onBeforeMount(()=>{
 
             </div>
             <!-- menu username -->
-            <div class="flex flex-row mr-[20px]">
+            <div class="flex flex-row w-fit h-full">
                 <!-- <audio   autoplay >
                     <source src="../assets/bp.mp3" type="audio/mpeg">
                     Your browser does not support the audio element.
@@ -166,25 +166,23 @@ onBeforeMount(()=>{
                 ">
                     สวัสดี!
                 </h3> -->
-                <div class="hidden  truncate w-[200px] mb-1.5 mx-2 m-auto   text-[17px] text-white font-semibold
-                    sm:block
-                    lg:w-fit lg:h-fit
+                <div class="hidden  truncate w-full h-fit px-3 max-w-sm m-auto text-[17px]  text-white font-semibold text-justify
+                    sm:block 
+                    
                 ">
-                    <h4 class="text-center m-auto">
-                        {{ userName }}
-                    </h4>
+                    {{ userName }}
                 </div>
                 
 
                     <!-- ตั้งค่า drop down -->
-                <div class="w-[20px] h-[20px] lg:h-[40px] lg:w-[40px] ">
-                    <button @click="isSetting= !isSetting ,isLanguage= false" class="w-full h-full font-semibold text-[#8DA9C4]  active:bg-[#90CAF9] active:text-[#0D47A1] rounded hover:text-white">
-                        <img src="../assets/burger_menu.png" alt="menu" class="w-[25px] h-[25px] lg:w-[30px] lg:h-[30px] mx-auto ">
+                <div class=" ">
+                    <button @click="isSetting= !isSetting ,isLanguage= false" class="w-full h-full font-semibold text-[#8DA9C4]  rounded ">
+                        <img src="../assets/burger_menu.png" alt="menu" class="w-[25px] h-[25px] lg:w-[30px] lg:h-[30px] mx-auto active:bg-[#90CAF9] active:text-[#0D47A1]  ">
                     </button>
 
                     <div v-show="isSetting==true" 
                         id="dropdown"
-                        class="w-[100vw] h-fit font-semibold text-[#8DA9C4] absolute  right-0 top-[50px]  z-20 w-30 rounded-b bg-gray-700 divide-y divide-gray-800
+                        class="w-[100vw] h-fit font-semibold text-[#8DA9C4] absolute  right-0 top-[100%]  z-20 w-30 rounded-b bg-gray-700 divide-y divide-gray-800
                             sm:w-[11.5rem] sm:rounded-l
                         ">
                     <ul  class="flex flex-col p-2 m-auto">

@@ -55,7 +55,7 @@ const getItem=async(emp_code)=>{
     }
 }
 
-const setData=(data,index)=>{
+const setData=(data=undefined,index=undefined)=>{
     if(data!=undefined && props.typeOfUseOR==false && typeof(data)=='string'){
         item.value.type = data
         console.log('set only type machine : ',data)

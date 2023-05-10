@@ -369,39 +369,96 @@ onBeforeMount(()=>{
     </div>
 
     <!-- PR -->
-    <div v-if="params.service=='pr'" class="flex w-fit mx-auto p-2">
-        <!-- hard ware -->
-        <button @click="goReport('media')" class="px-4 w-[130px] my-auto  ">
-            <img src="../../../assets/vue.svg" alt="Hardware"  class="  w-[80px] h-[80px] w-fit mx-auto">
-            
-            <h3 class="mt-2 w-fit mx-auto font-semibold">
-                Media
-            </h3>
-            <h3 class="w-fit m-auto text-[14px]">  
-                (สื่อต่างๆ)
-            </h3>                
-        </button>
+    <div v-if="params.service=='pr'" class="flex flex-col w-full mx-auto p-2 lg:w-fit
+        lg:flex-row
+    ">
+      
         
-        <button @click="goReport('news')" class="px-4 w-[130px] my-auto  ">
-            <img src="../../../assets/vue.svg" alt="Hardware"  class="  w-[80px] h-[80px] w-fit mx-auto">
-            
-            <h3 class="mt-2 w-fit mx-auto font-semibold">
-                NEWS
-            </h3>
-            <h3 class="w-fit m-auto text-[14px]">  
-                (ข่าว)
-            </h3>                
+        <button @click="goReport('media')" class="flex  px-4 w-[300px] my-auto mx-auto my-3 p-3 text-gray-700 bg-[#B9E9FC] rounded-xl drop-shadow-md
+            md:w-[500px] 
+            lg:w-[130px] lg:my-auto lg:block lg:bg-inherit 
+            lg:hover:bg-[#fffcf9] lg:hover:text-black
+        ">
+
+            <img src="../../../assets/report_icon/media.png" 
+                alt="Hardware"  
+                class="  w-[60px] h-[60px] p-2 ml-3 mr-4 
+                    md:w-[80px] md:h-[80px]
+                    lg:h-[80px] lg:w-[80px] lg:p-0 lg:mx-auto
+                "
+            >
+ 
+            <div class="block w-full m-auto border-l-2 border-gray-700
+                lg:border-0 
+            ">
+                <h3 class="mt-auto w-fit mx-auto font-semibold text-[16px]  
+                    md:text-[35px]
+                    lg:mt-2 lg:text-[18px]
+                ">
+                Media
+                </h3>
+                <h3 class="w-fit mx-auto text-[16px]">  
+                    (สื่อต่างๆ)
+                </h3>                  
+            </div>
         </button>
 
-        <button @click="goReport('other')" class="px-4 w-[130px] my-auto  ">
-            <img src="../../../assets/vue.svg" alt="Hardware"  class="  w-[80px] h-[80px] w-fit mx-auto">
-            
-            <h3 class="mt-2 w-fit mx-auto font-semibold">
+        <button @click="goReport('news')" class="flex  px-4 w-[300px] my-auto mx-auto my-3 p-3 text-gray-700 bg-[#B9E9FC] rounded-xl drop-shadow-md
+            md:w-[500px] 
+            lg:w-[130px] lg:my-auto lg:block lg:bg-inherit 
+            lg:hover:bg-[#fffcf9] lg:hover:text-black
+        ">
+
+            <img src="../../../assets/report_icon/news.png" 
+                alt="Hardware"  
+                class="  w-[60px] h-[60px] p-2 ml-3 mr-4 
+                    md:w-[80px] md:h-[80px]
+                    lg:h-[80px] lg:w-[80px] lg:p-0 lg:mx-auto
+                "
+            >
+ 
+            <div class="block w-full m-auto border-l-2 border-gray-700
+                lg:border-0 
+            ">
+                <h3 class="mt-auto w-fit mx-auto font-semibold text-[16px]  
+                    md:text-[35px]
+                    lg:mt-2 lg:text-[18px]
+                ">
+                NEWS
+                </h3>
+                <h3 class="w-fit mx-auto text-[16px]">  
+                    (ข่าว)
+                </h3>                  
+            </div>
+        </button>
+
+        <button @click="goReport('other')" class="flex  px-4 w-[300px] my-auto mx-auto my-3 p-3 text-gray-700 bg-[#B9E9FC] rounded-xl drop-shadow-md
+            md:w-[500px] 
+            lg:w-[130px] lg:my-auto lg:block lg:bg-inherit 
+            lg:hover:bg-[#fffcf9] lg:hover:text-black
+        ">
+
+            <img src="../../../assets/report_icon/other.png" 
+                alt="Hardware"  
+                class="  w-[60px] h-[60px] p-2 ml-3 mr-4 
+                    md:w-[80px] md:h-[80px]
+                    lg:h-[80px] lg:w-[80px] lg:p-0 lg:mx-auto
+                "
+            >
+ 
+            <div class="block w-full m-auto border-l-2 border-gray-700
+                lg:border-0 
+            ">
+                <h3 class="mt-auto w-fit mx-auto font-semibold text-[16px]  
+                    md:text-[35px]
+                    lg:mt-2 lg:text-[18px]
+                ">
                 Other
-            </h3>
-            <h3 class="w-fit m-auto text-[14px]">  
-                (อื่นๆ)
-            </h3>                
+                </h3>
+                <h3 class="w-fit mx-auto text-[16px]">  
+                    (อื่นๆ)
+                </h3>                  
+            </div>
         </button>
     </div>
 
