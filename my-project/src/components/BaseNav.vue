@@ -93,7 +93,7 @@ onBeforeMount(()=>{
 
 
         <!-- default home -->
-        <div v-if="role==null||role==undefined" class="w-full h-full flex justify-between p-2 relative bg-[#2196F3] sticky top-0">
+        <div v-if="role==null||role==undefined" class="w-full h-full flex justify-between p-2 relative bg-[#0920aa] sticky top-0">
             <div class="flex ml-[20px] w-fit ">
                     <img src="../assets/Moral_Fainal.png" alt="" class="w-[40px] h-[40px] my-auto">
                     <div class="text-[20px] font-bold text-white my-auto m-3 
@@ -109,7 +109,7 @@ onBeforeMount(()=>{
 
 
         <!-- admin page -->
-        <div v-else class="flex  h-full w-full px-[20px] justify-between p-2 relative bg-[#2196F3]  sticky top-0">
+        <div v-else class="flex  h-full w-full px-[20px] justify-between p-2 relative bg-[#0920aa]  sticky top-0">
             <div class="flex ml-[20px] w-fit ">
                     <img src="../assets/Moral_Fainal.png" alt="" class="w-[30px] h-[30px] my-auto">
                     <div class="text-[20px] font-bold text-white my-auto m-3 
