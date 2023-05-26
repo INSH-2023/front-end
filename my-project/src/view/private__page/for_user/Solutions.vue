@@ -12,9 +12,6 @@ const id = params.id
 // const infoLink = "http://localhost:3000/solutions"
 const infoLink = `${import.meta.env.VITE_BACK_END_HOST}/solutions`
 
-
-
-
 const data =ref(undefined)
 // get infomation
 // ถ้า get เป็น id จะดีมาก

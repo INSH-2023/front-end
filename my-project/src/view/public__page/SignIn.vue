@@ -4,6 +4,7 @@ import { useRouter } from 'vue-router';
 import toBackEnd from '../../JS/fetchToBack'
 import BaseAlert from '../../components/BaseAlert.vue'
 import BaseLoading from '../../components/BaseLoading.vue'
+import Cookies from 'js-cookie'
 // src\components\BaseLoading.vue
 const myRouter = useRouter()
 const goMain=()=>myRouter.push({name:'services'})
@@ -36,8 +37,8 @@ const logIn=async()=>{
         let [status,data]=await toBackEnd.postData('login',loginLink,data_ch.value)
         // console.log(status)
         if(status==200){
-            console.log('login',data)
-            localStorage.setItem('user_info',setLocal(data.data))
+            console.log('login successfully')
+            Cookies.set("data",JSON.stringify(data),{expires: 1, secure: true})
             button_status.value=false
             goMain()
         }else 
@@ -55,12 +56,6 @@ const logIn=async()=>{
             button_status.value=false
         }
     }
-}
-
-
-
-const setLocal=(data)=>{
-    return JSON.stringify(data)
 }
 
 // testing button

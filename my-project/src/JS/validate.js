@@ -1,3 +1,4 @@
+import Cookies from 'js-cookie'
 import {useRouter} from 'vue-router'
 const validate={
     vUserCreate(data,lenghtOfText){
@@ -215,8 +216,7 @@ const validate={
         return problemArr
     },
     getUserDataFromLocal(property=undefined){
-        let data = JSON.parse(localStorage.getItem('user_info'))
-        console.log('data : ',data)
+        let data = JSON.parse(Cookies.get("data"))
         if(data == null ||data == undefined){
             console.log("login first !!")
             return data
@@ -227,10 +227,7 @@ const validate={
                 return data    
             }
         }
-        
     }
-    
-
 }
 
 export default validate

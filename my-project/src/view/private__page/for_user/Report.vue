@@ -128,7 +128,6 @@ const validateReport=(stage)=>{
                 
             }
 
-
         }else
         if(stage==1){
             // status something

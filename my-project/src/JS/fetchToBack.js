@@ -18,7 +18,6 @@ let toBackEnd={
       }
       
       if(status==200){
-         
          console.log(`delete ${name} sucessful by ${id} `)
          return_data.push(status)
          return_data.push(await res.json())
@@ -28,9 +27,6 @@ let toBackEnd={
          return_data.push(status)
          return_data.push('An internal error occurred, please try again later.')
       }
-      
-   
-
       return return_data
    },
 
@@ -125,8 +121,6 @@ let toBackEnd={
          return_data.push('An internal error occurred, please try again later.')
       }
       
-      
-
       return return_data
    },
 
@@ -163,7 +157,6 @@ let toBackEnd={
          return_data.push('An internal error occurred, please try again later.')
       }
       
-
       return return_data
    },
 
@@ -187,7 +180,6 @@ let toBackEnd={
          console.log(name,error)
       }
       
-
       if(status==200){
          status=res.status
          console.log(`post ${name} successful`)
@@ -208,8 +200,7 @@ let toBackEnd={
          return_data.push(status)
          return_data.push('เกิดข้อผิดพลาดฝั่ง Server กรูณาติดต่อฝ่าย IT !!')
       }
-     
-
+   
       return return_data
    }
 }
