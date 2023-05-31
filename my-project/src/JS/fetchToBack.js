@@ -11,7 +11,7 @@ let toBackEnd={
       try {
          res = await fetch(`${link}/${id}`,{
             method:'DELETE',
-            authentication: "Bearer " + token
+            Authorization: "Bearer " + token
          })         
          status=res.status
       } catch (error) {
@@ -31,7 +31,7 @@ let toBackEnd={
       return return_data
    },
 
-   async getData(name,link){
+   async getData(name,link,token){
       // variable
       let return_data =[]
       let status = undefined
@@ -43,7 +43,7 @@ let toBackEnd={
          try {
             res =await fetch(link,{
             method:'GET',
-
+            Authorization: "Bearer " + token
             })   
             status=res.status         
          } catch (error) {
@@ -96,7 +96,7 @@ let toBackEnd={
       try {
          res = await fetch(`${link}/${id}`,{
             method:'GET',
-            authentication: "Bearer " + token
+            Authorization: "Bearer " + token
          })
          status=res.status
       } catch (error) {
@@ -140,7 +140,7 @@ let toBackEnd={
             method:'PUT',
             headers:{ "content-type": "application/json"},
             body:JSON.stringify(data),
-            authentication: "Bearer " + token
+            Authorization: "Bearer " + token
          })         
          status=res.status
       } catch (error) {
@@ -177,7 +177,7 @@ let toBackEnd={
             method:'POST',
             headers:{ "content-type": "application/json"},
             body:JSON.stringify(data),
-            authentication: "Bearer " + token
+            Authorization: "Bearer " + token
          })       
          status=res.status  
       } catch (error) {
