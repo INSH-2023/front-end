@@ -5,7 +5,7 @@ import BaseLoading from '../../../components/BaseLoading.vue';
 import toBackEnd from '../../../JS/fetchToBack';
 import validate from '../../../JS//validate'
 import jsCookie from 'js-cookie';
-
+import getRefreshToken from './../../../JS/refresh';
 // const requestLink="http://localhost:3000/events"
 const requestLink=`${import.meta.env.VITE_BACK_END_HOST}/requests`
 const userLink =`${import.meta.env.VITE_BACK_END_HOST}/users`
@@ -17,6 +17,7 @@ onBeforeMount(()=>{
     navigation()
     getEvents()
     getAdmin()
+    getRefreshToken(JSON.parse(jsCookie.get("data")).refreshToken)
 })
 
 // get variable

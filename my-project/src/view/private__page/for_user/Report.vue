@@ -11,6 +11,8 @@ import validate from '../../../JS/validate';
 import SummaryReport from '../../../components/report/SummaryReport.vue';
 import BaseAlert from '../../../components/BaseAlert.vue';
 import BaseLoading from '../../../components/BaseLoading.vue';
+import jsCookie from 'js-cookie';
+import getRefreshToken from './../../../JS/refresh';
 const myRouter = useRouter()
 const goBack=()=> myRouter.go(-1)
 const goMain=()=>myRouter.push({name:'services'})
@@ -267,8 +269,6 @@ const problem_to_text=computed(()=>{
     return problemT
 })
 
-
-
 const getUser= async(emp_code)=>{
     token.value = JSON.parse(jsCookie.get("data")).token
     const [status,data_user]= await toBackEnd.getData('report_user',`${userLink}/emp-code/${emp_code}`,token.value)
@@ -288,7 +288,8 @@ const getUser= async(emp_code)=>{
 
 
 onBeforeMount(()=>{
-    getUser(validate.getUserDataFromLocal('user_emp_code'))
+    getUser(validate.getUserDataFromLocal('user_emp_code')),
+    getRefreshToken(JSON.parse(jsCookie.get("data")).refreshToken)
 })
 
 // compute stage report

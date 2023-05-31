@@ -2,7 +2,7 @@
 import BaseStatus from '../../../components/BaseStatus.vue'
 import { useRoute,useRouter } from 'vue-router';
 import { onBeforeMount,ref } from 'vue';
-
+import getRefreshToken from './../../../JS/refresh';
 const {params} = useRoute()
 const myRouter=useRouter()
 const goMain =()=> myRouter.go(-1)
@@ -29,8 +29,8 @@ const getInfo =async()=>{
 }
 
 onBeforeMount(()=>{
-    
-    getInfo()
+    getInfo(),
+    getRefreshToken(JSON.parse(jsCookie.get("data")).refreshToken)
 })
 </script>
 <template>

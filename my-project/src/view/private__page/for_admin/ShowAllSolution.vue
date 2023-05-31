@@ -1,5 +1,6 @@
 <script setup>
 import{ref, onBeforeMount}from'vue'
+import getRefreshToken from './../../../JS/refresh';
 const isFilter=ref(false)
 const solutionList =ref([])
 // const solutionLink ='http://localhost:3000/solutions'
@@ -35,6 +36,7 @@ const deleteItem =async (v)=>{
 
 onBeforeMount(()=>{
     getSolu()
+    getRefreshToken(JSON.parse(jsCookie.get("data")).refreshToken)
 })
 </script>
 <template>

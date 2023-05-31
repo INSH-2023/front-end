@@ -17,7 +17,6 @@ const path="../assets/vue.svg"
             <img v-else-if="title=='request'" src="../assets/admin_page/request.png" alt="users_icon" class="w-[50px] h-[50px] mr-4 my-auto">
             <img v-else-if="title=='addSolution'" src="../assets/admin_page/new-document.png" alt="users_icon" class="w-[50px] h-[50px] mr-4 my-auto">
             <!-- <img v-else-if="title=='adduser'" src="../assets/admin_page/addUser.png" alt="users_icon" class="w-[50px] h-[50px] mr-4 my-auto"> -->
-
             
             {{title}}
         </div>

@@ -5,10 +5,11 @@ import {useLink, useRouter} from 'vue-router'
 import toBackEnd from'../../../JS/fetchToBack.js'
 import validate from'../../../JS/validate.js'
 import jsCookie from 'js-cookie';
-
+import getRefreshToken from './../../../JS/refresh';
 onBeforeMount(()=>{
     changePath()
     getUsers()
+    getRefreshToken(JSON.parse(jsCookie.get("data")).refreshToken)
 })
 
 //variable 

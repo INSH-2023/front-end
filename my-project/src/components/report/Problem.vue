@@ -1,6 +1,8 @@
 <script setup>
 import{ref,computed,onBeforeMount,onUpdated} from 'vue'
 import toBackEnd from '../../JS/fetchToBack'
+import getRefreshToken from '../../JS/refresh';
+import jsCookie from 'js-cookie';
 
 const problemsLink = `${import.meta.env.VITE_BACK_END_HOST}/problems`
 const emit =defineEmits(["getProblemSelected"])
@@ -11,8 +13,11 @@ const props = defineProps({
     }
 })
 
+const token = ref('')
+
 onBeforeMount(()=>{
-    getProblems()
+    getProblems(),
+    getRefreshToken(JSON.parse(jsCookie.get("data")).refreshToken)
 })
 
 onUpdated(()=>{
@@ -35,7 +40,8 @@ const otherSelection=()=>{
 
 // get problems
 const getProblems=async()=>{
-    let[status,data]=await toBackEnd.getData('component_problem',`${problemsLink}/type/${props.typeP}`)
+    token.value = JSON.parse(jsCookie.get("data")).token
+    let[status,data]=await toBackEnd.getData('component_problem',`${problemsLink}/type/${props.typeP}`,token.value = JSON.parse(jsCookie.get("data")).token)
     if(status==200){
         problemList.value=data
         console.log(data)        

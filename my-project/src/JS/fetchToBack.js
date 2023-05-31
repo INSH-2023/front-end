@@ -68,7 +68,7 @@ let toBackEnd={
          return_data.push(status)
          return_data.push(data)
          console.log(`get data ${name} successfull`)
-         console.log(data)
+         // console.log(data)
          // console.log(return_data)
       }
       // else if(res.status==404){

@@ -2,7 +2,10 @@
 import {ref,computed,onUpdated,onBeforeMount} from 'vue'
 import toBackEnd from '../../JS/fetchToBack';
 import validate from '../../JS/validate';
+import getRefreshToken from '../../JS/refresh';
 const itemLink =`${import.meta.env.VITE_BACK_END_HOST}/items`
+
+const token = ref('')
 
 const indexNumber=ref(undefined)
 const props = defineProps({
@@ -22,11 +25,11 @@ onUpdated(()=>{
         name:'type_of_machine',
         item:item.value,
         statusAPI:statusAPI.value
-
     })
 })
 onBeforeMount(()=>{
     getItem(validate.getUserDataFromLocal('user_emp_code'))
+    getRefreshToken(JSON.parse(jsCookie.get("data")).refreshToken)
 })
 
 // item variable
@@ -42,7 +45,8 @@ const item=ref({
 const itemList=ref([])
 // get item for use type = or
 const getItem=async(emp_code)=>{
-    let [status,data]= await toBackEnd.getData('component_item',`${itemLink}/emp-code/${emp_code}`)
+    token.value = JSON.parse(jsCookie.get("data")).token
+    let [status,data]= await toBackEnd.getData('component_item',`${itemLink}/emp-code/${emp_code}`,token.value)
     if(status==200){
         itemList.value =data
         console.log('data item :',itemList.value)

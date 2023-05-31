@@ -2,6 +2,8 @@
 import {onBeforeMount, ref,computed}from'vue'
 import {useRouter,useRoute} from 'vue-router'
 import BaseStatus from '../../../components/BaseStatus.vue'
+import getRefreshToken from './../../../JS/refresh';
+import jsCookie from 'js-cookie';
 // const solutionLink='http://localhost:3000/solutions'
 const solutionLink =`${import.meta.env.VITE_BACK_END_HOST}/solutions`
 
@@ -102,7 +104,8 @@ const randomAricle =async(n,max,data)=>{
 }
 
 onBeforeMount(()=>{
-    getArticle()
+    getArticle(),
+    getRefreshToken(JSON.parse(jsCookie.get("data")).refreshToken)
 })
 </script>
 <template>

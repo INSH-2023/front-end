@@ -2,6 +2,7 @@
 import {ref,computed,onBeforeMount} from 'vue'
 import toBackEnd from '../../../JS/fetchToBack';
 import jsCookie from 'js-cookie';
+import getRefreshToken from './../../../JS/refresh';
 // const problemsLink='http://localhost:3000/problems'
 const problemsLink=`${import.meta.env.VITE_BACK_END_HOST}/problems`
 
@@ -163,6 +164,7 @@ const editProblem =()=>{
 
 onBeforeMount(()=>{
     getP(subjectCr.value)
+    getRefreshToken(JSON.parse(jsCookie.get("data")).refreshToken)
 })
 
 
