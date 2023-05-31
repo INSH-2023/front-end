@@ -35,7 +35,7 @@ const logIn=async()=>{
     }else{
         // console.log(data_ch.value)
         let [status,data]=await toBackEnd.postData('login',loginLink,data_ch.value)
-        // console.log(status)
+        console.log(status)
         if(status==200){
             console.log('login successfully')
             Cookies.set("data",JSON.stringify(data),{expires: 1, secure: true})
@@ -46,6 +46,12 @@ const logIn=async()=>{
             alert_status.value=false
             alert_title.value='Invalid !!'
             alert_message.value='กรุณาใส่ข้อมูล E-mail และ Password ของคุณให้ถูกต้อง!!'
+            button_status.value=false
+        }else
+        if(status==403){
+            alert_status.value=false
+            alert_title.value='Inactive !!'
+            alert_message.value='สถานะของ user ไม่พร้อมใช้งาน'
             button_status.value=false
         }else
         {

@@ -1,6 +1,6 @@
 let toBackEnd={
 
-   async delete(name,link,id){
+   async delete(name,link,id,token){
       // variable
       let return_data =[]
       let status =undefined
@@ -10,7 +10,8 @@ let toBackEnd={
       // fetch
       try {
          res = await fetch(`${link}/${id}`,{
-            method:'DELETE'
+            method:'DELETE',
+            authentication: "Bearer " + token
          })         
          status=res.status
       } catch (error) {
@@ -94,7 +95,8 @@ let toBackEnd={
       // fetch    
       try {
          res = await fetch(`${link}/${id}`,{
-            method:'GET'
+            method:'GET',
+            authentication: "Bearer " + token
          })
          status=res.status
       } catch (error) {
@@ -137,7 +139,8 @@ let toBackEnd={
          res = await fetch(`${link}/${id}`,{
             method:'PUT',
             headers:{ "content-type": "application/json"},
-            body:JSON.stringify(data)
+            body:JSON.stringify(data),
+            authentication: "Bearer " + token
          })         
          status=res.status
       } catch (error) {
@@ -173,7 +176,8 @@ let toBackEnd={
          res = await fetch(link,{
             method:'POST',
             headers:{ "content-type": "application/json"},
-            body:JSON.stringify(data)
+            body:JSON.stringify(data),
+            authentication: "Bearer " + token
          })       
          status=res.status  
       } catch (error) {
@@ -191,6 +195,14 @@ let toBackEnd={
          return_data.push(status)
          return_data.push(await res.json())
       }else 
+      if(status==401){
+         status=res.status
+         return_data.push(status)
+      }else
+      if(status==403){
+         status=res.status
+         return_data.push(status)
+      }else
       if(status==404){
          status=res.status
          return_data.push(status)
