@@ -42,10 +42,10 @@ const logIn=async()=>{
             button_status.value=false
             goMain()
         }else 
-        if(status==404){
+        if(status==401){
             alert_status.value=false
-            alert_title.value='Not Found !!'
-            alert_message.value='ไม่พบผู้ใช้นี้ '
+            alert_title.value='Invalid !!'
+            alert_message.value='กรุณาใส่ข้อมูล E-mail และ Password ของคุณให้ถูกต้อง!!'
             button_status.value=false
         }else
         {
