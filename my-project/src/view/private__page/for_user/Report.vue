@@ -110,6 +110,8 @@ const user=ref({
 // problem list
 const problemList =ref([])
 
+const token = ref('')
+
 const validateReport=(stage)=>{
 
 // console.log(service)
@@ -268,8 +270,8 @@ const problem_to_text=computed(()=>{
 
 
 const getUser= async(emp_code)=>{
-
-    const [status,data_user]= await toBackEnd.getData('report_user',`${userLink}/emp-code/${emp_code}`)
+    token.value = JSON.parse(jsCookie.get("data")).token
+    const [status,data_user]= await toBackEnd.getData('report_user',`${userLink}/emp-code/${emp_code}`,token.value)
     if(status==200){
         let [{user_first_name,user_last_name,user_group,user_email}]=data_user
         user.value.first_name=user_first_name
@@ -287,7 +289,6 @@ const getUser= async(emp_code)=>{
 
 onBeforeMount(()=>{
     getUser(validate.getUserDataFromLocal('user_emp_code'))
-
 })
 
 // compute stage report
@@ -312,10 +313,6 @@ const full_stage=computed(()=>{
         }
         return all_stage
     }
-
-      
-
-    
 })
 
 // คำนวณ stage สำหรับกดปุ่มถัดไป
@@ -338,16 +335,13 @@ const computeStageReport=(status)=>{
     }
 }
 
-
-
-
-
 // send form
 const isSubmitt=ref(false)
 const submitt = async()=>{
     button_status.value=true
     console.log(data_ch.value)
-    let [status,data]=await toBackEnd.postData('report',requestLink,data_ch.value)
+    token.value = JSON.parse(jsCookie.get("data")).token
+    let [status,data]=await toBackEnd.postData('report',requestLink,data_ch.value,token.value)
     if(status==200){
         // isSummary.value=undefined
         isSubmitt.value=true

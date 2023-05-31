@@ -4,8 +4,6 @@ import BaseStatus from '../../../components/BaseStatus.vue'
 const myRouter =useRouter()
 const goMainMenu =(v)=>myRouter.push({name:'booking',params:{service:v}})
 
-
-
 </script>
 <template>
 <!-- <div class="overflow-auto">

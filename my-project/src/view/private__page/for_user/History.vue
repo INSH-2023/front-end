@@ -1,23 +1,28 @@
 <script setup>
 import { onBeforeMount,ref } from 'vue';
-
+import getData from './../../../JS/fetchToBack'
+import jsCookie from 'js-cookie';
 
 // const datalink ='http://localhost:3000/events'
 const datalink =`${import.meta.env.VITE_BACK_END_HOST}/requests`
 
 const data = ref([])
+const token = ref('')
 
-const getData = async()=>{
-const res =await fetch(datalink,{
-    method:'GET'
-})
-    if(res.status==200){
-        console.log('get data already?')
-        data.value=await res.json()
-    }
+const getDataList = async()=>{
+// const res =await fetch(datalink,{
+//     method:'GET'
+// })
+//     if(res.status==200){
+//         console.log('get data already?')
+//         data.value=await res.json()
+//     }
+    token.value = JSON.parse(jsCookie.get("data")).token
+    data.value = await getData("history_requests",datalink,token.value)
 }
+
 onBeforeMount(()=>{
-    getData()
+    getDataList()
 })
 </script>
 <template>

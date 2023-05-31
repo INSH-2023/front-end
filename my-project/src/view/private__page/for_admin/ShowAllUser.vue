@@ -4,7 +4,7 @@ import{ref,computed, onBeforeMount}from'vue'
 import {useLink, useRouter} from 'vue-router'
 import toBackEnd from'../../../JS/fetchToBack.js'
 import validate from'../../../JS/validate.js'
-
+import jsCookie from 'js-cookie';
 
 onBeforeMount(()=>{
     changePath()
@@ -90,21 +90,23 @@ const is_filter_open=ref(false)
 const is_edit_open=ref(false)
 const is_active_open=ref(false)
 
+const token = ref('')
 
 // get user
 const getUsers =async(id=undefined)=>{
     console.log(id)
     let status=false
     if(id==undefined){
-        let [s,data] = await toBackEnd.getData('user',userLink)
+        token.value = JSON.parse(jsCookie.get("data")).token
+        let [s,data] = await toBackEnd.getData('user',userLink,token.value)
         if(s==200)status = true
-        
         userList.value=data
 
         showList.value = userList.value
         
     }else{
-        let [s,data] = await toBackEnd.getDataBy('user',`${userLink}/emp-code`,id)
+        token.value = JSON.parse(jsCookie.get("data")).token
+        let [s,data] = await toBackEnd.getDataBy('user',`${userLink}/emp-code`,id,token.value)
         if(s==200)status = true
         user.value=data
         console.log(user.value)
@@ -116,8 +118,8 @@ const getUsers =async(id=undefined)=>{
 
 // delete user
 const deleteUser =async(v)=>{
-    
-    let [status,data] = await toBackEnd.delete('user',userLink,v)
+    token.value = JSON.parse(jsCookie.get("data")).token
+    let [status,data] = await toBackEnd.delete('user',userLink,v,token.value)
     
     if(status==200){
         await getUsers()
@@ -199,7 +201,8 @@ const assignDetail =(b)=>{
 const submitEdit =async(id)=>{
 
     // if(validate.vUserCreate(dataCh.value,lenghtOfInput) !=true){
-        let [status,data] = await toBackEnd.editData('user',userLink,id,dataCh.value)
+        token.value = JSON.parse(jsCookie.get("data")).token
+        let [status,data] = await toBackEnd.editData('user',userLink,id,dataCh.value,token.value)
             console.log(status)
             if(status==200){
                 await getUsers()

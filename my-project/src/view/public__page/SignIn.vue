@@ -35,7 +35,6 @@ const logIn=async()=>{
     }else{
         // console.log(data_ch.value)
         let [status,data]=await toBackEnd.postData('login',loginLink,data_ch.value)
-        console.log(status)
         if(status==200){
             console.log('login successfully')
             Cookies.set("data",JSON.stringify(data),{expires: 1, secure: true})

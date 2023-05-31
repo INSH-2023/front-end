@@ -54,7 +54,7 @@ const goSignIn=()=>myRouter.push({name:'signIn'})
       sm:relative  sm:w-[16rem] sm:top-auto 
       md:w-[25rem] md:m-auto
    ">
-      <img src="../../assets/IT_HELP_DESK.png" alt="photo" class="mx-auto">
+      <img src="./../../assets/IT_HELP_DESK.png" alt="photo" class="mx-auto">
    </div>
 </div>
 <!-- <div style='text-align:center;width:100dvw;height: fit-content;background-color: gray;padding: 16px;'>

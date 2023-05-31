@@ -4,6 +4,7 @@ import { useRouter } from 'vue-router';
 import BaseLoading from '../../../components/BaseLoading.vue';
 import toBackEnd from '../../../JS/fetchToBack';
 import validate from '../../../JS//validate'
+import jsCookie from 'js-cookie';
 
 // const requestLink="http://localhost:3000/events"
 const requestLink=`${import.meta.env.VITE_BACK_END_HOST}/requests`
@@ -45,6 +46,7 @@ const edit_status = ref(undefined)
 
 const is_filter_open=ref(false)
 
+const token = ref('')
 
 // get data
 const getEvents =async(id=undefined)=>{
@@ -52,7 +54,8 @@ const getEvents =async(id=undefined)=>{
     let status = false
 
     if(id==undefined){
-        let [s,data] =await toBackEnd.getData('request',requestLink)
+        token.value = JSON.parse(jsCookie.get("data")).token
+        let [s,data] =await toBackEnd.getData('request',requestLink,token.value)
         if(s==200){
 
             status=true
@@ -67,7 +70,8 @@ const getEvents =async(id=undefined)=>{
         }
 
     }else{
-        let [s,data]= await toBackEnd.getDataBy('request',requestLink,id)
+        token.value = JSON.parse(jsCookie.get("data")).token
+        let [s,data]= await toBackEnd.getDataBy('request',requestLink,id,token.value)
         if(s==200){
             
             status=true
@@ -86,7 +90,8 @@ const getEvents =async(id=undefined)=>{
 }
 
 const getAdmin=async()=>{
-    let [status,data]=await toBackEnd.getData('request_admin',`${userLink}/role/admin_it`)
+    token.value = JSON.parse(jsCookie.get("data")).token
+    let [status,data]=await toBackEnd.getData('request_admin',`${userLink}/role/admin_it`,token.value)
     if(status==200){
         console.log(data.user_first_name)
         adminList.value=data
@@ -94,13 +99,13 @@ const getAdmin=async()=>{
         // status something
         console.log(data)
     }
-    
 }
 
 // edit by id
 const editInfo = async(v)=>{
     edit_status.value=undefined
-    let [ss,data] =await toBackEnd.editData('request',requestLink,v,data_ch.value)
+    token.value = JSON.parse(jsCookie.get("data")).token
+    let [ss,data] =await toBackEnd.editData('request',requestLink,v,data_ch.value,token.value)
     if(ss==200){
         edit_status.value=true
         console.log(data)
@@ -120,7 +125,8 @@ const editInfo = async(v)=>{
 // delete
 const deleteItem =async (v)=>{
     delete_status.value=undefined
-    let [status,data] = await toBackEnd.delete('request',requestLink,v)
+    token.value = JSON.parse(jsCookie.get("data")).token
+    let [status,data] = await toBackEnd.delete('request',requestLink,v,token.value)
     if(status==200){
         delete_status.value=true
         await getEvents()

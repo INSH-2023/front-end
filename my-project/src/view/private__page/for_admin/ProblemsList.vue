@@ -1,11 +1,13 @@
 <script setup>
 import {ref,computed,onBeforeMount} from 'vue'
 import toBackEnd from '../../../JS/fetchToBack';
+import jsCookie from 'js-cookie';
 // const problemsLink='http://localhost:3000/problems'
 const problemsLink=`${import.meta.env.VITE_BACK_END_HOST}/problems`
 
 const problemList=ref([])
 const name=ref('')
+const token=ref('')
 
 const data_ch=computed(()=>{
     return{
@@ -22,8 +24,8 @@ const getP =async(v)=>{
     let status =undefined
 
     if(v != 'all'){
-        
-        const [ss,data_problem]=await toBackEnd.getData('problem',`${problemsLink}/type/${v}`)
+        token.value = JSON.parse(jsCookie.get("data")).token
+        const [ss,data_problem]=await toBackEnd.getData('problem',`${problemsLink}/type/${v}`,token.value)
         console.log(v)
 
         if(ss==200){
@@ -37,7 +39,8 @@ const getP =async(v)=>{
         }
 
     }else{
-        const [ss,data]=await toBackEnd.getData('problem',problemsLink)
+        token.value = JSON.parse(jsCookie.get("data")).token
+        const [ss,data]=await toBackEnd.getData('problem',problemsLink,token.value)
         if(ss==200){
             status=true
             problemList.value=data
@@ -125,8 +128,8 @@ const hoverFn =(b,n)=>{
 
 // add new problem
 const addProblem =async()=>{
-
-    let [status,data]=await toBackEnd.postData('problem',problemsLink,data_ch.value)
+    token.value = JSON.parse(jsCookie.get("data")).token
+    let [status,data]=await toBackEnd.postData('problem',problemsLink,data_ch.value,token.value)
     
     if(status==200){
         console.log('add problem success 😏')
@@ -140,7 +143,8 @@ const addProblem =async()=>{
 // delete problems
 const removeProblem = async (id)=>{
     console.log(id)
-    let [status,data]= await toBackEnd.delete("problem",problemsLink,id)
+    token.value = JSON.parse(jsCookie.get("data")).token
+    let [status,data]= await toBackEnd.delete("problem",problemsLink,id,token.value)
     if(status==200){
         console.log(data)
         getP(subjectCr.value)

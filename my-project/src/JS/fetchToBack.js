@@ -11,7 +11,9 @@ let toBackEnd={
       try {
          res = await fetch(`${link}/${id}`,{
             method:'DELETE',
-            Authorization: "Bearer " + token
+            headers: {
+               Authorization: "Bearer " + token
+            }
          })         
          status=res.status
       } catch (error) {
@@ -43,7 +45,9 @@ let toBackEnd={
          try {
             res =await fetch(link,{
             method:'GET',
-            Authorization: "Bearer " + token
+            headers: {
+               Authorization: "Bearer " + token
+            }
             })   
             status=res.status         
          } catch (error) {
@@ -85,7 +89,7 @@ let toBackEnd={
          
    },
 
-   async getDataBy(name,link,id){
+   async getDataBy(name,link,id,token){
       // variable
       let return_data =[]
       let status = undefined
@@ -96,7 +100,9 @@ let toBackEnd={
       try {
          res = await fetch(`${link}/${id}`,{
             method:'GET',
-            Authorization: "Bearer " + token
+            headers: {
+               Authorization: "Bearer " + token
+            }
          })
          status=res.status
       } catch (error) {
@@ -105,12 +111,10 @@ let toBackEnd={
 
       if(status==200){
          let [data] = await res.json()
-
          if(name=='request'){
             if(data.request_problems.match(","))data.request_problems = data.request_problems.split(",")
             else data.request_problems=[data.request_problems]               
          }
-
          status =res.status
          return_data.push(status)
          return_data.push(data)
@@ -122,11 +126,10 @@ let toBackEnd={
          return_data.push(status)
          return_data.push('An internal error occurred, please try again later.')
       }
-      
       return return_data
    },
 
-   async editData(name,link,id,data){
+   async editData(name,link,id,data,token){
       // variable
       let return_data =[]
       let status =undefined
@@ -138,9 +141,8 @@ let toBackEnd={
       try {
          res = await fetch(`${link}/${id}`,{
             method:'PUT',
-            headers:{ "content-type": "application/json"},
+            headers:{ "content-type": "application/json", Authorization: "Bearer " + token},
             body:JSON.stringify(data),
-            Authorization: "Bearer " + token
          })         
          status=res.status
       } catch (error) {
@@ -163,7 +165,7 @@ let toBackEnd={
       return return_data
    },
 
-   async postData(name,link,data){
+   async postData(name,link,data,token){
       // variable
       let return_data =[]
       let status =undefined
@@ -175,9 +177,8 @@ let toBackEnd={
       try {
          res = await fetch(link,{
             method:'POST',
-            headers:{ "content-type": "application/json"},
-            body:JSON.stringify(data),
-            Authorization: "Bearer " + token
+            headers:{ "content-type": "application/json", Authorization: "Bearer " + token},
+            body:JSON.stringify(data)
          })       
          status=res.status  
       } catch (error) {

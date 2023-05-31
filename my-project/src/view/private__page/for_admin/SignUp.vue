@@ -79,7 +79,7 @@ const submittform =async()=>{
     if(validate.vUserCreate(dataCh.value,lenghtOfInput)){
         console.log('cannot create new user')
     }else{
-        let [status,data]=await toBackEnd.postData('signUp',userLink,dataCh.value)
+        let [status,data]=await toBackEnd.postData('signUp',userLink,dataCh.value,token.value)
         if(status==200){
             console.log(data)
             // clear()
