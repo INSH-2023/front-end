@@ -11,7 +11,7 @@ import validate from '../../../JS/validate';
 import SummaryReport from '../../../components/report/SummaryReport.vue';
 import BaseAlert from '../../../components/BaseAlert.vue';
 import BaseLoading from '../../../components/BaseLoading.vue';
-import jsCookie from 'js-cookie';
+import jsCookie from '../../../JS/cookies';
 import getRefreshToken from './../../../JS/refresh';
 const myRouter = useRouter()
 const goBack=()=> myRouter.go(-1)

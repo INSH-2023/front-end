@@ -1,4 +1,4 @@
-import Cookies from 'js-cookie'
+import Cookies from './cookies'
 import {useRouter} from 'vue-router'
 const validate={
     vUserCreate(data,lenghtOfText){

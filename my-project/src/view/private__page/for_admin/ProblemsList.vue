@@ -1,7 +1,7 @@
 <script setup>
 import {ref,computed,onBeforeMount} from 'vue'
 import toBackEnd from '../../../JS/fetchToBack';
-import jsCookie from 'js-cookie';
+import jsCookie from './../../../JS/cookies';
 import getRefreshToken from './../../../JS/refresh';
 // const problemsLink='http://localhost:3000/problems'
 const problemsLink=`${import.meta.env.VITE_BACK_END_HOST}/problems`

@@ -4,7 +4,7 @@ import { useRouter } from 'vue-router';
 import toBackEnd from '../../JS/fetchToBack'
 import BaseAlert from '../../components/BaseAlert.vue'
 import BaseLoading from '../../components/BaseLoading.vue'
-import Cookies from 'js-cookie'
+import Cookies from '../../JS/cookies'
 // src\components\BaseLoading.vue
 const myRouter = useRouter()
 const goMain=()=>myRouter.push({name:'services'})
@@ -37,7 +37,7 @@ const logIn=async()=>{
         let [status,data]=await toBackEnd.postData('login',loginLink,data_ch.value)
         if(status==200){
             console.log('login successfully')
-            Cookies.set("data",JSON.stringify(data),{expires: 1, secure: true})
+            Cookies.set("data",JSON.stringify(data))
             button_status.value=false
             goMain()
         }else 

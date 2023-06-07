@@ -1,7 +1,7 @@
 <script setup>
 import { onBeforeMount,ref } from 'vue';
 import getData from './../../../JS/fetchToBack'
-import jsCookie from 'js-cookie';
+import jsCookie from './../../../JS/cookies';
 import getRefreshToken from './../../../JS/refresh';
 // const datalink ='http://localhost:3000/events'
 const datalink =`${import.meta.env.VITE_BACK_END_HOST}/requests`

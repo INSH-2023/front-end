@@ -4,7 +4,7 @@ import{ref,computed, onBeforeMount}from'vue'
 import {useLink, useRouter} from 'vue-router'
 import toBackEnd from'../../../JS/fetchToBack.js'
 import validate from'../../../JS/validate.js'
-import jsCookie from 'js-cookie';
+import jsCookie from '../../../JS/cookies';
 import getRefreshToken from './../../../JS/refresh';
 onBeforeMount(()=>{
     changePath()

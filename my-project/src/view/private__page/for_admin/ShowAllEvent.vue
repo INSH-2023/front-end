@@ -4,7 +4,7 @@ import { useRouter } from 'vue-router';
 import BaseLoading from '../../../components/BaseLoading.vue';
 import toBackEnd from '../../../JS/fetchToBack';
 import validate from '../../../JS//validate'
-import jsCookie from 'js-cookie';
+import jsCookie from '../../../JS/cookies';
 import getRefreshToken from './../../../JS/refresh';
 // const requestLink="http://localhost:3000/events"
 const requestLink=`${import.meta.env.VITE_BACK_END_HOST}/requests`

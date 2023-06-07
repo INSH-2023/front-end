@@ -1,4 +1,4 @@
-import jsCookies from 'js-cookie'
+import jsCookies from './cookies'
 import toBackEnd from './fetchToBack'
 
 const getRefreshToken = async refreshToken => {
