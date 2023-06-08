@@ -17,13 +17,13 @@ let Cookies = {
         const d = new Date();
         d.setTime(d.getTime() + (24 * 60 * 60 * 1000));
         let expires = "expires="+d.toUTCString();
-        document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/ ;secure";
+        document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
     },
     remove(cname) {
         const d = new Date();
         d.setTime(0);
         let expires = "expires="+d.toUTCString();
-        document.cookie = cname + "=expired" + ";" + expires + ";path=/ ;secure";
+        document.cookie = cname + "=expired" + ";" + expires + ";path=/";
     }
 }
 
