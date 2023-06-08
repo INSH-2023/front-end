@@ -368,6 +368,7 @@ const submitt = async()=>{
 // get data from component
 const getDataFromComponent =(value)=>{
     let data =value
+    console.log(data)
     console.log(`${data.name} => ${data}`)
     
     if(data.name=='use_type'){

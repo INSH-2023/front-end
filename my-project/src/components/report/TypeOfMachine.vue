@@ -3,7 +3,8 @@ import {ref,computed,onUpdated,onBeforeMount} from 'vue'
 import toBackEnd from '../../JS/fetchToBack';
 import validate from '../../JS/validate';
 import getRefreshToken from '../../JS/refresh';
-const itemLink =`${import.meta.env.VITE_BACK_END_HOST}/items`
+import jsCookie from '../../JS/cookies';
+const itemLink =`${import.meta.env.VITE_BACK_END_HOST}/items`;
 
 const token = ref('')
 
@@ -28,8 +29,8 @@ onUpdated(()=>{
     })
 })
 onBeforeMount(()=>{
-    getItem(validate.getUserDataFromLocal('user_emp_code'))
     getRefreshToken(JSON.parse(jsCookie.get("data")).refreshToken)
+    getItem(JSON.parse(jsCookie.get("data")).user_emp_code)
 })
 
 // item variable

@@ -50,8 +50,6 @@ onBeforeMount(()=>{
 })
 onMounted(()=>{
     document.getElementsByClassName('stage_color')[0].classList.replace("bg-[#EDEDE9]","bg-[#b7e4c7]")
-    
-
 })
 onUpdated(()=>{
     setStage()
