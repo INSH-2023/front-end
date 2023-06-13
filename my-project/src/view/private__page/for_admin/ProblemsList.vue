@@ -266,7 +266,7 @@ const subjectCh = (event) => {
                             </div> -->
 
                     <!-- add new problem ใช้ไปก่อน-->
-                    <div class="flex bg-gray-500 my-auto px-2 py-1.5 rounded-3xl" v-if="role == 'admin_it'">
+                    <div class="flex bg-gray-500 my-auto px-2 py-1.5 rounded-3xl">
                         <!-- <h4 class="text-white my-auto">
                                     name : 
                                 </h4> -->
@@ -281,7 +281,7 @@ const subjectCh = (event) => {
                 </div>
 
                 <!-- การ์ด problems -->
-                <div class=" grid grid-cols-4 gap-4 mt-[15px] ml-10 text-center" v-if="role == 'admin_it'">
+                <div class=" grid grid-cols-4 gap-4 mt-[15px] ml-10 text-center">
                     <div :id="`card_${index}`" @mouseover="hoverFn(true, index)" @mouseleave="hoverFn(false, index)"
                         v-for="(p, index) in problemSplit" :key="index"
                         class="card block w-full h-[175px] mx-auto bg-[#EAE0D5] rounded-lg">
@@ -304,7 +304,7 @@ const subjectCh = (event) => {
                                     </div> -->
 
                             <!-- delete card -->
-                            <div class="w-full h-fit mt-3" v-if="role == 'admin_it'">
+                            <div class="w-full h-fit mt-3">
                                 <button @click="removeProblem(p.problemId)"
                                     class=" bg-[#C1121F] text-[#FDF0D5] text-[20px] px-4 py-2 font-light hover:bg-rose-300 hover:text-gray-600 rounded-lg">
                                     Delete
@@ -313,19 +313,7 @@ const subjectCh = (event) => {
                         </div>
                         <!-- <button @click="">splitProblems</button> -->
                     </div>
-                </div>
-                <div class=" grid grid-cols-4 gap-4 mt-[15px] ml-10 text-center" v-else>
-                    <div :id="`card_${index}`" v-for="(p, index) in problemSplit" :key="index"
-                        class="card block w-full h-[175px] mx-auto bg-[#EAE0D5] rounded-lg">
-                        <div :id="`info_${index}`" class="info ">
-                            <img src="../../../assets/vue.svg" alt="logo" class="w-[80px] mx-auto mt-6 ">
-                            <!-- ชื่อ -->
-                            <h4 class="text-[20px] mt-6 font-light">
-                                {{ p.problem_problem }}
-                            </h4>
-                        </div>
-                    </div>
-                </div>    
+                </div>   
 
                 <!-- page -->
                 <div class="absolute inset-x-0 bottom-0 flex w-fit mx-auto">

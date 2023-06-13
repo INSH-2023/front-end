@@ -551,7 +551,7 @@ const searchByKeyW=()=>{
                 
 
                     <!-- button -->
-                    <div class="w-full flex mt-6 mb-1.5" v-if="role=='admin_it'">
+                    <div class="w-full flex mt-6 mb-1.5" v-if="role=='super_admin'">
                         <a href="#dele" class="w-[200px] h-[50px] px-5 mx-auto mr-3 text-[15px] font-light text-rose-400 bg-gray-300 rounded-2xl hover:bg-rose-400 hover:text-gray-200">
                             <button class="w-full h-full ">
                                 ลบข้อมูล

@@ -55,7 +55,7 @@ let role = ref(JSON.parse(Cookies.get("data")).user_role)
                         </button>
                         <hr class="full border-[1px] mt-2 border-gray-400">
                     </li>
-                    <li class="mt-3" v-if="role=='admin_it'">
+                    <li class="mt-3" v-if="role=='super_admin'">
                         <button @click="goRegister" class="flex w-fit  font-semibold text-gray-800 ">
                             <img src="../assets/admin_page/addUser.png" alt="" class="w-[28px] h-[28] my-auto">
                             <span class="ml-3">Add User</span> 

@@ -6,6 +6,7 @@ import toBackEnd from '../../../JS/fetchToBack';
 import validate from '../../../JS//validate'
 import jsCookie from '../../../JS/cookies';
 import getRefreshToken from './../../../JS/refresh';
+import Cookies from '../../../JS/cookies';
 // const requestLink="http://localhost:3000/events"
 const requestLink=`${import.meta.env.VITE_BACK_END_HOST}/requests`
 const userLink =`${import.meta.env.VITE_BACK_END_HOST}/users`
@@ -48,6 +49,7 @@ const edit_status = ref(undefined)
 const is_filter_open=ref(false)
 
 const token = ref('')
+const role = ref(JSON.parse(Cookies.get("data")).user_role)
 
 // get data
 const getEvents =async(id=undefined)=>{
@@ -92,9 +94,9 @@ const getEvents =async(id=undefined)=>{
 
 const getAdmin=async()=>{
     token.value = JSON.parse(jsCookie.get("data")).token
-    let [status,data]=await toBackEnd.getData('request_admin',`${userLink}/role/admin_it`,token.value)
+    let [status,data]=await toBackEnd.getData('request_admin',`${userLink}`,token.value)
     if(status==200){
-        console.log(data.user_first_name)
+        data = ["super_admin","user"].includes(role) ? data.filter(e=>e.user_role==role.value) : data
         adminList.value=data
     }else{
         // status something

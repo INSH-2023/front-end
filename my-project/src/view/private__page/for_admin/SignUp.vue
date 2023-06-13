@@ -89,6 +89,7 @@ const submittform =async()=>{
         console.log('cannot create new user')
     }else{
         token.value = JSON.parse(Cookies.get("data")).token
+        console.log(token.value)
         let [status,data]=await toBackEnd.postData('signUp',userLink,dataCh.value,token.value)
         if(status==200){
             console.log(data)
@@ -247,9 +248,8 @@ const goRotate =()=>{
                                     <option value="user" >User</option>
                                     <option value="admin_it" >Admin IT</option>
                                     <option value="admin_pr" >Admin PR</option>
-
-
-                                </select>                                
+                                    <option value="super_admin" >Super Admin</option>
+                                </select>
                             </div>
 
                             <!-- Position -->
