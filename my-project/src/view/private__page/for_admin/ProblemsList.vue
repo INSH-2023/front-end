@@ -1,55 +1,57 @@
 <script setup>
-import {ref,computed,onBeforeMount} from 'vue'
+import { ref, computed, onBeforeMount } from 'vue'
 import toBackEnd from '../../../JS/fetchToBack';
 import jsCookie from './../../../JS/cookies';
 import getRefreshToken from './../../../JS/refresh';
+import Cookies from './../../../JS/cookies';
 // const problemsLink='http://localhost:3000/problems'
-const problemsLink=`${import.meta.env.VITE_BACK_END_HOST}/problems`
+const problemsLink = `${import.meta.env.VITE_BACK_END_HOST}/problems`
 
-const problemList=ref([])
-const name=ref('')
-const token=ref('')
+const problemList = ref([])
+const name = ref('')
+const token = ref('')
+const role = ref(JSON.parse(Cookies.get("data")).user_role)
 
-const data_ch=computed(()=>{
-    return{
-        problem_problem:name.value,
-        problem_type:subjectCr.value
+const data_ch = computed(() => {
+    return {
+        problem_problem: name.value,
+        problem_type: subjectCr.value
     }
 })
-const subjectCr=ref('all')
+const subjectCr = ref('all')
 
-const isEdit =ref(false)
+const isEdit = ref(false)
 // get  problem
-const getP =async(v)=>{
+const getP = async (v) => {
 
-    let status =undefined
+    let status = undefined
 
-    if(v != 'all'){
+    if (v != 'all') {
         token.value = JSON.parse(jsCookie.get("data")).token
-        const [ss,data_problem]=await toBackEnd.getData('problem',`${problemsLink}/type/${v}`,token.value)
+        const [ss, data_problem] = await toBackEnd.getData('problem', `${problemsLink}/type/${v}`, token.value)
         console.log(v)
 
-        if(ss==200){
-            status=true
-            problemList.value=data_problem
+        if (ss == 200) {
+            status = true
+            problemList.value = data_problem
             splitProblems(currentPage.value)
             console.log(problemList.value)
-        }else{
-            status=false
+        } else {
+            status = false
             console.log(data)
         }
 
-    }else{
+    } else {
         token.value = JSON.parse(jsCookie.get("data")).token
-        const [ss,data]=await toBackEnd.getData('problem',problemsLink,token.value)
-        if(ss==200){
-            status=true
-            problemList.value=data
+        const [ss, data] = await toBackEnd.getData('problem', problemsLink, token.value)
+        if (ss == 200) {
+            status = true
+            problemList.value = data
             splitProblems(currentPage.value)
             console.log(data)
-        }else{
+        } else {
             //status something
-            status=false
+            status = false
             console.log(data)
         }
     }
@@ -61,35 +63,35 @@ const getP =async(v)=>{
 // split data
 const maxOfPage = ref(8)
 const maxOfL = ref(0)
-const minOfL  = ref(0)
-const sumP =ref(0)
-const problemSplit=ref([])
+const minOfL = ref(0)
+const sumP = ref(0)
+const problemSplit = ref([])
 // const pageN=ref(1)
 // for count N of page
-const pageN =()=>{
-    let length = problemList.value.length/maxOfPage.value
+const pageN = () => {
+    let length = problemList.value.length / maxOfPage.value
     let number = Math.ceil(length)
     // sumP.value=number
     return number
 }
 
 // for click and first value
-const currentPage=ref(1)
-const splitProblems=(N)=>{
+const currentPage = ref(1)
+const splitProblems = (N) => {
     currentPage.value = N
-    let max =(N*maxOfPage.value)-1
-    let min =(max-maxOfPage.value)+1
-    let arr =[]
-    for(let i=min;i<=max;i++){
-        if(problemList.value[i]){
+    let max = (N * maxOfPage.value) - 1
+    let min = (max - maxOfPage.value) + 1
+    let arr = []
+    for (let i = min; i <= max; i++) {
+        if (problemList.value[i]) {
             arr.push(problemList.value[i])
         }
-        
+
     }
-    problemSplit.value=arr
+    problemSplit.value = arr
     console.log(problemSplit.value)
-    console.log('A max : ',max)
-    console.log('A min : ',min)
+    console.log('A max : ', max)
+    console.log('A min : ', min)
 
 
     // if(data.length>8){
@@ -100,130 +102,130 @@ const splitProblems=(N)=>{
 }
 
 // display fn 
-const display=ref(undefined)
-const hoverFn =(b,n)=>{
-    display.value=b
-    let eInfo =document.getElementById(`info_${n}`)
-    let eEdit =document.getElementById(`edit_${n}`)
+const display = ref(undefined)
+const hoverFn = (b, n) => {
+    display.value = b
+    let eInfo = document.getElementById(`info_${n}`)
+    let eEdit = document.getElementById(`edit_${n}`)
     let card = document.getElementById(`card_${n}`)
 
     // var element = document.getElementById("myDIV");
-//   element.classList.remove("mystyle");
-    if(display.value==true){
+    //   element.classList.remove("mystyle");
+    if (display.value == true) {
         // eInfo.style.visibility="hidden"
         // eEdit.style.visibility="visible"
-        eInfo.style.display="none"
-        eEdit.style.display="block"
-        card.style.background="#C6AC8F"
+        eInfo.style.display = "none"
+        eEdit.style.display = "block"
+        card.style.background = "#C6AC8F"
 
         // console.log('hover',n)
-    }else{
+    } else {
         // eInfo.style.visibility="visible"
         // eEdit.style.visibility="hidden"
-        eEdit.style.display="none"
-        eInfo.style.display="block"
-        card.style.background="#EAE0D5"
+        eEdit.style.display = "none"
+        eInfo.style.display = "block"
+        card.style.background = "#EAE0D5"
     }
-   
+
 }
 
 // add new problem
-const addProblem =async()=>{
+const addProblem = async () => {
     token.value = JSON.parse(jsCookie.get("data")).token
-    let [status,data]=await toBackEnd.postData('problem',problemsLink,data_ch.value,token.value)
-    
-    if(status==200){
+    let [status, data] = await toBackEnd.postData('problem', problemsLink, data_ch.value, token.value)
+
+    if (status == 200) {
         console.log('add problem success 😏')
         console.log(data)
         getP(subjectCr.value)
-    }else{
+    } else {
         console.log(data)
     }
 }
 
 // delete problems
-const removeProblem = async (id)=>{
+const removeProblem = async (id) => {
     console.log(id)
     token.value = JSON.parse(jsCookie.get("data")).token
-    let [status,data]= await toBackEnd.delete("problem",problemsLink,id,token.value)
-    if(status==200){
+    let [status, data] = await toBackEnd.delete("problem", problemsLink, id, token.value)
+    if (status == 200) {
         console.log(data)
         getP(subjectCr.value)
-        if(problemList.value.length<=maxOfPage.value){
+        if (problemList.value.length <= maxOfPage.value) {
             splitProblems(1)
         }
-    }else{
+    } else {
         console.log(data)
     }
 }
 
 // edit
-const editProblem =()=>{
+const editProblem = () => {
     console.log('this is edit')
 }
 
-onBeforeMount(()=>{
+onBeforeMount(() => {
     getP(subjectCr.value)
     getRefreshToken(JSON.parse(jsCookie.get("data")).refreshToken)
 })
 
 
 // auto change subject 
-const subjectCh=(event)=>{
-    let type =event.target.value.trim()
-    if(type != subjectCr.value){
-        subjectCr.value=type
-        console.log('change from subject',subjectCr.value)
-        getP(type)    
-    }else 
-    if(type == subjectCr.value){
-        console.log('subject not change :' ,subjectCr.value)
-    }
+const subjectCh = (event) => {
+    let type = event.target.value.trim()
+    if (type != subjectCr.value) {
+        subjectCr.value = type
+        console.log('change from subject', subjectCr.value)
+        getP(type)
+    } else
+        if (type == subjectCr.value) {
+            console.log('subject not change :', subjectCr.value)
+        }
 
 
 }
 
 </script>
 <template>
-<div class="overflow-y-auto relative show_up">
-    <div class="">
-        <div class=" bg-white w-full mx-auto  h-fit ">
+    <div class="overflow-y-auto relative show_up">
+        <div class="">
+            <div class=" bg-white w-full mx-auto  h-fit ">
                 <div class="w-full text-center font-semibold text-[40px] pt-6">
                     <div class="flex w-fit mx-auto tracking-wide">
                         <img src="../../../assets/vue.svg" alt="users_icon" class="w-[40px] h-[40px] my-auto mr-4">
                         <h4 class="text-[#5E503F]">
-                            Problems List   
-                        </h4> 
+                            Problems List
+                        </h4>
                     </div>
                 </div>
                 <!-- button
-                <div class="   right-[80px] top-[115px]  absolute">
-                    <button @click="isFilter= !isFilter" class="flex w-fit">
-                        <span class="font-semibold my-auto">
-                            ตัวกรอง
-                        </span> 
-                        <img src="../../../assets/admin_page/filter.png" alt="icon" class="w-[20px] ml-[5px] my-auto">                                
-                    </button>
-                </div> -->
+                        <div class="   right-[80px] top-[115px]  absolute">
+                            <button @click="isFilter= !isFilter" class="flex w-fit">
+                                <span class="font-semibold my-auto">
+                                    ตัวกรอง
+                                </span> 
+                                <img src="../../../assets/admin_page/filter.png" alt="icon" class="w-[20px] ml-[5px] my-auto">                                
+                            </button>
+                        </div> -->
 
                 <!-- filter
-                <div v-show="isFilter==true" class="w-fit mx-auto absolute">
-                    <div class="flex ">
-                        <div class="p-3">
-                            testing filter
-                        </div>
-                        <div class="p-3">
-                            testing filter
-                        </div>
-                        <div class="p-3">
-                            testing filter
-                        </div>
-                        <div class="p-3">
-                            testing filter
-                        </div>
-                    </div>
-                </div> -->
-                
+                        <div v-show="isFilter==true" class="w-fit mx-auto absolute">
+                            <div class="flex ">
+                                <div class="p-3">
+                                    testing filter
+                                </div>
+                                <div class="p-3">
+                                    testing filter
+                                </div>
+                                <div class="p-3">
+                                    testing filter
+                                </div>
+                                <div class="p-3">
+                                    testing filter
+                                </div>
+                            </div>
+                        </div> -->
+
             </div>
 
             <div class="relative w-[1100px] mx-auto  h-[500px] ">
@@ -232,45 +234,46 @@ const subjectCh=(event)=>{
                 <div class=" flex w-full h-[53px] mt-[20px] ml-[20px]   ">
                     <!-- select type -->
                     <div class="relative w-[250px]">
-                        <h4 v-show="subjectCr !='none'" class="text ml-2 text-sm font-semiboldd text-[#C6AC8F]">
+                        <h4 v-show="subjectCr != 'none'" class="text ml-2 text-sm font-semiboldd text-[#C6AC8F]">
                             Type of subject
                         </h4>
-                        <select @change="subjectCh" name="subject" id="subject" class="absolute bottom-0 w-[200px] bg-[#C6AC8F] text-[#0A0908] text-[20px] font-light rounded-lg p-[1px]  px-[10px]">
+                        <select @change="subjectCh" name="subject" id="subject"
+                            class="absolute bottom-0 w-[200px] bg-[#C6AC8F] text-[#0A0908] text-[20px] font-light rounded-lg p-[1px]  px-[10px]">
                             <!-- <option value="none" selected hidden>Type of subject</option> -->
                             <option value="all" selected>All Problem</option>
-                            <option value="hardware" >Hardware</option>
-                            <option value="software" >Software</option>
-                            <option value="internet" >Internet</option>
-                            <option value="printer" >Printer</option>
-                            <option value="website" >Website</option>
-                            <option value="meeting" >Meeting</option>
-                            <option value="application" >Application</option>
-                        </select>                        
+                            <option value="hardware">Hardware</option>
+                            <option value="software">Software</option>
+                            <option value="internet">Internet</option>
+                            <option value="printer">Printer</option>
+                            <option value="website">Website</option>
+                            <option value="meeting">Meeting</option>
+                            <option value="application">Application</option>
+                        </select>
                     </div>
 
                     <!-- add new problem -->
                     <!-- <div class="relative overflow-visible flex w-[300px] h-[50px] my-auto    ">
-                        <div class="relative w-[20px] z-10">
-                            <button class=" inset-0 top-[-20px] w-[50px] h-[50px] my-auto bg-gray-300 p-2 text-[40px] font-light rounded-[50%]">
-                                <hr class="w-full h-[4px] bg-gray-800 ">
-                                <hr class="w-[4px] h-full bg-gray-800 ">
-                            </button>                            
-                        </div>
+                                <div class="relative w-[20px] z-10">
+                                    <button class=" inset-0 top-[-20px] w-[50px] h-[50px] my-auto bg-gray-300 p-2 text-[40px] font-light rounded-[50%]">
+                                        <hr class="w-full h-[4px] bg-gray-800 ">
+                                        <hr class="w-[4px] h-full bg-gray-800 ">
+                                    </button>                            
+                                </div>
 
-                        <div class="relative w-[150px] h-[40px] bg-sky-800 z-0">
-                            <input type="text" class="absolute bottom-0 w-[] my-auto ml-10 bg-rose-300 ">
-                        </div>
-                    </div> -->
+                                <div class="relative w-[150px] h-[40px] bg-sky-800 z-0">
+                                    <input type="text" class="absolute bottom-0 w-[] my-auto ml-10 bg-rose-300 ">
+                                </div>
+                            </div> -->
 
                     <!-- add new problem ใช้ไปก่อน-->
-                    <div class="flex bg-gray-500 my-auto px-2 py-1.5 rounded-3xl">
+                    <div class="flex bg-gray-500 my-auto px-2 py-1.5 rounded-3xl" v-if="role == 'admin_it'">
                         <!-- <h4 class="text-white my-auto">
-                            name : 
-                        </h4> -->
+                                    name : 
+                                </h4> -->
                         <input v-model="name" type="text" class=" bg-gray-300 pl-2 p-1 rounded-l-xl focus:outline-0" />
                         <!-- <button class="bg-gray-300 text-sm p-1 font-semibold">
-                            UPLOAD ICON
-                        </button> -->
+                                    UPLOAD ICON
+                                </button> -->
                         <button @click="addProblem" class="bg-gray-500 px-2 rounded-r-3xl text-white ">
                             Create Problem
                         </button>
@@ -278,73 +281,89 @@ const subjectCh=(event)=>{
                 </div>
 
                 <!-- การ์ด problems -->
-                <div class=" grid grid-cols-4 gap-4 mt-[15px] ml-10 text-center">
-                    <div :id="`card_${index}`" @mouseover="hoverFn(true,index)" @mouseleave="hoverFn(false,index)"   v-for="(p,index) in problemSplit" :key="index" class="card block w-full h-[175px] mx-auto bg-[#EAE0D5] rounded-lg">
+                <div class=" grid grid-cols-4 gap-4 mt-[15px] ml-10 text-center" v-if="role == 'admin_it'">
+                    <div :id="`card_${index}`" @mouseover="hoverFn(true, index)" @mouseleave="hoverFn(false, index)"
+                        v-for="(p, index) in problemSplit" :key="index"
+                        class="card block w-full h-[175px] mx-auto bg-[#EAE0D5] rounded-lg">
                         <div :id="`info_${index}`" class="info ">
                             <img src="../../../assets/vue.svg" alt="logo" class="w-[80px] mx-auto mt-6 ">
                             <!-- ชื่อ -->
                             <h4 class="text-[20px] mt-6 font-light">
                                 {{ p.problem_problem }}
-                            </h4>                           
+                            </h4>
                         </div>
-                        <div :id="`edit_${index}`" style="display: none;" class="edit  mt-[20px] ">
+                        <div :id="`edit_${index}`" style="display: none;" class="edit  mt-[20px]">
                             <h4 class="w-full font-semibold text-[#FFFFFF] cursor-default">
-                                {{ p.problem_problem}}                              
+                                {{ p.problem_problem }}
                             </h4>
                             <!-- edit button -->
-                            <div class="w-full h-fit mt-3">
-                                <button @click="editProblem" class="bg-[#0A0908] text-[#EAE0D5] text-[20px] px-4 py-2 font-light hover:bg-[#EAE0D5] hover:text-[#0A0908] rounded-lg">
-                                    แก้ไขข้อมูล
-                                </button>
-                            </div>
+                            <!-- <div class="w-full h-fit mt-3">
+                                        <button @click="editProblem" class="bg-[#0A0908] text-[#EAE0D5] text-[20px] px-4 py-2 font-light hover:bg-[#EAE0D5] hover:text-[#0A0908] rounded-lg">
+                                            แก้ไขข้อมูล
+                                        </button>
+                                    </div> -->
 
                             <!-- delete card -->
-                            <div class="w-full h-fit mt-2">
-                                <button @click="removeProblem(p.problemId)" class=" bg-[#C1121F] text-[#FDF0D5] text-[14px] px-3 py-1 font-light hover:bg-rose-300 hover:text-gray-600 rounded-lg">
-                                    ลบข้อมูล
-                                </button>                                
+                            <div class="w-full h-fit mt-3" v-if="role == 'admin_it'">
+                                <button @click="removeProblem(p.problemId)"
+                                    class=" bg-[#C1121F] text-[#FDF0D5] text-[20px] px-4 py-2 font-light hover:bg-rose-300 hover:text-gray-600 rounded-lg">
+                                    Delete
+                                </button>
                             </div>
-
-
                         </div>
- 
                         <!-- <button @click="">splitProblems</button> -->
                     </div>
-                    
                 </div>
+                <div class=" grid grid-cols-4 gap-4 mt-[15px] ml-10 text-center" v-else>
+                    <div :id="`card_${index}`" v-for="(p, index) in problemSplit" :key="index"
+                        class="card block w-full h-[175px] mx-auto bg-[#EAE0D5] rounded-lg">
+                        <div :id="`info_${index}`" class="info ">
+                            <img src="../../../assets/vue.svg" alt="logo" class="w-[80px] mx-auto mt-6 ">
+                            <!-- ชื่อ -->
+                            <h4 class="text-[20px] mt-6 font-light">
+                                {{ p.problem_problem }}
+                            </h4>
+                        </div>
+                    </div>
+                </div>    
 
                 <!-- page -->
                 <div class="absolute inset-x-0 bottom-0 flex w-fit mx-auto">
-                    <button @click="splitProblems(N)" v-for="N in pageN()" class=" w-full px-4 py-1 mx-2 text-[15px] bg-[#5E503F] text-[#C6AC8F] font-bold rounded-full focus:bg-[#C6AC8F] focus:text-[#5E503F] ">
-                        {{N}}
+                    <button @click="splitProblems(N)" v-for="N in pageN()"
+                        class=" w-full px-4 py-1 mx-2 text-[15px] bg-[#5E503F] text-[#C6AC8F] font-bold rounded-full focus:bg-[#C6AC8F] focus:text-[#5E503F] ">
+                        {{ N }}
                     </button>
                 </div>
 
                 <!-- add button old version -->
                 <!-- <div class="absolute right-[4px] bottom-[10px]">
-                    <input v-model="name" type="text" class="bg-gray-400">
-                    <button @click="addProblem()" class="relative w-[40px] h-[40px] mt-6  m-auto bg-transparent   border-gray-400 border-[4px] hover:bg-gray-500 hover:border-gray-200 hover:text-sky-200 rounded-full">
-                        <h4 class="absolute w-full h-full  top-[-20px]  text-[45px] text-sky-400 font-light">
-                        +
-                        </h4> 
-                    </button>                    
-                </div> -->
+                            <input v-model="name" type="text" class="bg-gray-400">
+                            <button @click="addProblem()" class="relative w-[40px] h-[40px] mt-6  m-auto bg-transparent   border-gray-400 border-[4px] hover:bg-gray-500 hover:border-gray-200 hover:text-sky-200 rounded-full">
+                                <h4 class="absolute w-full h-full  top-[-20px]  text-[45px] text-sky-400 font-light">
+                                +
+                                </h4> 
+                            </button>                    
+                        </div> -->
 
 
             </div>
+        </div>
     </div>
-</div>
 </template>
 <style scoped>
-.text{
-    animation: tada 2s 
+.text {
+    animation: tada 2s
 }
 
 
 
-@keyframes tada{
-    0%{opacity: 0%;}
-    100%{opacity: 100%;}
-}
+@keyframes tada {
+    0% {
+        opacity: 0%;
+    }
 
+    100% {
+        opacity: 100%;
+    }
+}
 </style>

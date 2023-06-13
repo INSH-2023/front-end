@@ -1,11 +1,18 @@
 <script setup>
-import {ref,computed} from 'vue'
+import {ref,computed, onBeforeMount} from 'vue'
 import validate from '../../../JS/validate';
 import toBackEnd from '../../../JS/fetchToBack'
 import BaseHeader from '../../../components/BaseHeader.vue';
+import Cookies from '../../../JS/cookies';
+import getRefreshToken from './../../../JS/refresh';
 // const userLink ='http://localhost:3000/users'
 const userLink =`${import.meta.env.VITE_BACK_END_HOST}/users`
 // const userLink ='http://localhost:5000/api/users'
+
+
+onBeforeMount(()=>{
+    getRefreshToken(JSON.parse(Cookies.get("data")).refreshToken)
+})
 
 const empCode=ref('')
 const fName=ref('')
@@ -25,6 +32,8 @@ const organization ='@moralcenter.or.th'
 // const lNameL=30
 // const emailL=30
 // const passWL=14
+
+let token = ref("")
 
 const lenghtOfInput={
     fNameL:50,
@@ -57,7 +66,7 @@ let dataCh =computed(()=>{
         user_position: position.value,
         user_password: passW.value,
         user_group: group.value,
-        user_status: 'inactive',
+        user_status: 'active',
         user_cPassW: cPassW.value
     }
 
@@ -79,6 +88,7 @@ const submittform =async()=>{
     if(validate.vUserCreate(dataCh.value,lenghtOfInput)){
         console.log('cannot create new user')
     }else{
+        token.value = JSON.parse(Cookies.get("data")).token
         let [status,data]=await toBackEnd.postData('signUp',userLink,dataCh.value,token.value)
         if(status==200){
             console.log(data)
@@ -220,25 +230,6 @@ const goRotate =()=>{
                         <input v-model="lName" placeholder="Last Name" id="lName" type="text" :maxlength="lenghtOfInput.lNameL" :style="[lNameS==false?'border-color: rgb(225 29 72);border-width: 2px;':'']" class="absolute bottom-0 w-full h-[40px] bg-gray-300 text-gray-500    px-2 rounded-lg focus:outline-0" >
                     </div>
 
-                    <!-- email -->
-                    <div class="relative h-[60px] mt-1.5 ">
-                        <!-- <label for="email" class="w-[120px] font-semibold m-2">
-                            Email
-                        </label> -->
-                        <h4 v-show="email.length>0" class="text-sm font-semibold text-gray-500 mx-2">
-                            Email
-                            <span class="" :style="[email.length==lenghtOfInput.emailL?'color: rgb(225 29 72);':'']">
-                                {{email.length}}/{{lenghtOfInput.emailL}}
-                            </span>
-                        </h4> 
-                        <div :style="[emailS==false?'border-color: rgb(225 29 72);border-width: 2px;':'']" class="absolute bottom-0 flex w-full h-[40px]  p-1 bg-gray-300 rounded-lg">
-                            <input v-model="email" placeholder="Email" id="email" type="email" :maxlength="lenghtOfInput.emailL"   class="w-full h-full mx-1   bg-transparent text-gray-500 focus:outline-0" >
-                            <h4 class="w-fit my-auto mx-2 font-semibold text-[15px] text-gray-500">
-                                @moralcenter.or.th
-                            </h4>
-                        </div>
-                    </div>
-
                     <!-- group -->
                     <div class="h-[60px] mt-2 text-sm">
                         <!-- <label for="group" class="w-[120px]  font-semibold m-2">
@@ -316,6 +307,25 @@ const goRotate =()=>{
                         </div>
 
                         <!-- <input id="group" type="text" class="w-[300px] bg-gray-300 m-2 rounded-lg" > -->
+                    </div>
+
+                    <!-- email -->
+                    <div class="relative h-[60px] mt-1.5 ">
+                        <!-- <label for="email" class="w-[120px] font-semibold m-2">
+                            Email
+                        </label> -->
+                        <h4 v-show="email.length>0" class="text-sm font-semibold text-gray-500 mx-2">
+                            Email
+                            <span class="" :style="[email.length==lenghtOfInput.emailL?'color: rgb(225 29 72);':'']">
+                                {{email.length}}/{{lenghtOfInput.emailL}}
+                            </span>
+                        </h4> 
+                        <div :style="[emailS==false?'border-color: rgb(225 29 72);border-width: 2px;':'']" class="absolute bottom-0 flex w-full h-[40px]  p-1 bg-gray-300 rounded-lg">
+                            <input v-model="email" placeholder="Email" id="email" type="email" :maxlength="lenghtOfInput.emailL"   class="w-full h-full mx-1   bg-transparent text-gray-500 focus:outline-0" >
+                            <h4 class="w-fit my-auto mx-2 font-semibold text-[15px] text-gray-500">
+                                @moralcenter.or.th
+                            </h4>
+                        </div>
                     </div>
 
                     <!-- password -->

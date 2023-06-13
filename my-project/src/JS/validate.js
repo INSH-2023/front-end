@@ -65,11 +65,11 @@ const validate={
             console.log('Please input ur role')
             vStatus =true
         }
-        if(password.length==0){
+        if([null,undefined].includes(password) || password.length==0){
             console.log('Please input ur password')
             vStatus =true
         }
-        if(cPassword.length==0){
+        if([null,undefined].includes(cPassword) || cPassword.length==0){
             console.log('Please input ur confirm password')
             vStatus =true
         }

@@ -6,6 +6,7 @@ import toBackEnd from'../../../JS/fetchToBack.js'
 import validate from'../../../JS/validate.js'
 import jsCookie from '../../../JS/cookies';
 import getRefreshToken from './../../../JS/refresh';
+import Cookies from '../../../JS/cookies';
 onBeforeMount(()=>{
     changePath()
     getUsers()
@@ -92,6 +93,7 @@ const is_edit_open=ref(false)
 const is_active_open=ref(false)
 
 const token = ref('')
+const role = ref(JSON.parse(Cookies.get("data")).user_role)
 
 // get user
 const getUsers =async(id=undefined)=>{
@@ -549,7 +551,7 @@ const searchByKeyW=()=>{
                 
 
                     <!-- button -->
-                    <div class="w-full flex mt-6 mb-1.5">
+                    <div class="w-full flex mt-6 mb-1.5" v-if="role=='admin_it'">
                         <a href="#dele" class="w-[200px] h-[50px] px-5 mx-auto mr-3 text-[15px] font-light text-rose-400 bg-gray-300 rounded-2xl hover:bg-rose-400 hover:text-gray-200">
                             <button class="w-full h-full ">
                                 ลบข้อมูล

@@ -1,5 +1,7 @@
 <script setup>
 import {useRouter} from 'vue-router'
+import { ref } from 'vue'
+import Cookies from '../JS/cookies';
 const myRouter=useRouter()
 const goSignIn=()=>myRouter.push({name:'signIn'})
 const goRegister=()=>myRouter.push({name:'signUp'})
@@ -13,6 +15,8 @@ const goBooking =()=>myRouter.push({name:'booking'})
 const goWriteS =()=>myRouter.push({name:'writeS'})
 const goShowAllSolution =()=>myRouter.push({name:'showAllSolution'})
 const goProblemsList =()=>myRouter.push({name:'problemsList'})
+
+let role = ref(JSON.parse(Cookies.get("data")).user_role)
 
 </script>
 <template>
@@ -51,7 +55,7 @@ const goProblemsList =()=>myRouter.push({name:'problemsList'})
                         </button>
                         <hr class="full border-[1px] mt-2 border-gray-400">
                     </li>
-                    <li class="mt-3">
+                    <li class="mt-3" v-if="role=='admin_it'">
                         <button @click="goRegister" class="flex w-fit  font-semibold text-gray-800 ">
                             <img src="../assets/admin_page/addUser.png" alt="" class="w-[28px] h-[28] my-auto">
                             <span class="ml-3">Add User</span> 
