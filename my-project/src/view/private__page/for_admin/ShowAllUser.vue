@@ -310,7 +310,7 @@ const searchByKeyW = () => {
 }
 </script>
 <template>
-    <div class="overflow-y-auto relative show_up">
+    <div >
         <div class="">
             <div class="">
 

@@ -4,6 +4,7 @@ import toBackEnd from '../../../JS/fetchToBack';
 import jsCookie from './../../../JS/cookies';
 import getRefreshToken from './../../../JS/refresh';
 import Cookies from './../../../JS/cookies';
+import BaseShowProblem from '../../../components/problem-list/BaseShowProblem.vue';
 // const problemsLink='http://localhost:3000/problems'
 const problemsLink = `${import.meta.env.VITE_BACK_END_HOST}/problems`
 
@@ -185,11 +186,16 @@ const subjectCh = (event) => {
 
 }
 
+
+const getDataFromComponent =(value)=>{
+    console.log(value)
+    if(value.status==true)removeProblem(value.id)
+}
 </script>
 <template>
-    <div class="overflow-y-auto relative show_up">
+    <!-- <div class="overflow-y-auto relative show_up"> -->
         <div class="">
-            <div class=" bg-white w-full mx-auto  h-fit ">
+            <div class=" bg-gray-400 w-full mx-auto  h-fit ">
                 <div class="w-full text-center font-semibold text-[40px] pt-6">
                     <div class="flex w-fit mx-auto tracking-wide">
                         <img src="../../../assets/vue.svg" alt="users_icon" class="w-[40px] h-[40px] my-auto mr-4">
@@ -227,116 +233,91 @@ const subjectCh = (event) => {
                         </div> -->
 
             </div>
-
-            <div class="relative w-[1100px] mx-auto  h-[500px] ">
-                <!-- <hr class="mt-3 bg-gray-700  w-full h-[3px]"/> -->
-                <!-- select type -->
-                <div class=" flex w-full h-[53px] mt-[20px] ml-[20px]   ">
-                    <!-- select type -->
-                    <div class="relative w-[250px]">
-                        <h4 v-show="subjectCr != 'none'" class="text ml-2 text-sm font-semiboldd text-[#C6AC8F]">
-                            Type of subject
-                        </h4>
-                        <select @change="subjectCh" name="subject" id="subject"
-                            class="absolute bottom-0 w-[200px] bg-[#C6AC8F] text-[#0A0908] text-[20px] font-light rounded-lg p-[1px]  px-[10px]">
-                            <!-- <option value="none" selected hidden>Type of subject</option> -->
-                            <option value="all" selected>All Problem</option>
-                            <option value="hardware">Hardware</option>
-                            <option value="software">Software</option>
-                            <option value="internet">Internet</option>
-                            <option value="printer">Printer</option>
-                            <option value="website">Website</option>
-                            <option value="meeting">Meeting</option>
-                            <option value="application">Application</option>
-                        </select>
-                    </div>
-
-                    <!-- add new problem -->
-                    <!-- <div class="relative overflow-visible flex w-[300px] h-[50px] my-auto    ">
-                                <div class="relative w-[20px] z-10">
-                                    <button class=" inset-0 top-[-20px] w-[50px] h-[50px] my-auto bg-gray-300 p-2 text-[40px] font-light rounded-[50%]">
-                                        <hr class="w-full h-[4px] bg-gray-800 ">
-                                        <hr class="w-[4px] h-full bg-gray-800 ">
-                                    </button>                            
-                                </div>
-
-                                <div class="relative w-[150px] h-[40px] bg-sky-800 z-0">
-                                    <input type="text" class="absolute bottom-0 w-[] my-auto ml-10 bg-rose-300 ">
-                                </div>
-                            </div> -->
-
-                    <!-- add new problem ใช้ไปก่อน-->
-                    <div class="flex bg-gray-500 my-auto px-2 py-1.5 rounded-3xl">
-                        <!-- <h4 class="text-white my-auto">
-                                    name : 
-                                </h4> -->
-                        <input v-model="name" type="text" class=" bg-gray-300 pl-2 p-1 rounded-l-xl focus:outline-0" />
-                        <!-- <button class="bg-gray-300 text-sm p-1 font-semibold">
-                                    UPLOAD ICON
-                                </button> -->
-                        <button @click="addProblem" class="bg-gray-500 px-2 rounded-r-3xl text-white ">
-                            Create Problem
-                        </button>
-                    </div>
-                </div>
-
-                <!-- การ์ด problems -->
-                <div class=" grid grid-cols-4 gap-4 mt-[15px] ml-10 text-center">
-                    <div :id="`card_${index}`" @mouseover="hoverFn(true, index)" @mouseleave="hoverFn(false, index)"
-                        v-for="(p, index) in problemSplit" :key="index"
-                        class="card block w-full h-[175px] mx-auto bg-[#EAE0D5] rounded-lg">
-                        <div :id="`info_${index}`" class="info ">
-                            <img src="../../../assets/vue.svg" alt="logo" class="w-[80px] mx-auto mt-6 ">
-                            <!-- ชื่อ -->
-                            <h4 class="text-[20px] mt-6 font-light">
-                                {{ p.problem_problem }}
-                            </h4>
-                        </div>
-                        <div :id="`edit_${index}`" style="display: none;" class="edit  mt-[20px]">
-                            <h4 class="w-full font-semibold text-[#FFFFFF] cursor-default">
-                                {{ p.problem_problem }}
-                            </h4>
-                            <!-- edit button -->
-                            <!-- <div class="w-full h-fit mt-3">
-                                        <button @click="editProblem" class="bg-[#0A0908] text-[#EAE0D5] text-[20px] px-4 py-2 font-light hover:bg-[#EAE0D5] hover:text-[#0A0908] rounded-lg">
-                                            แก้ไขข้อมูล
-                                        </button>
-                                    </div> -->
-
-                            <!-- delete card -->
-                            <div class="w-full h-fit mt-3">
-                                <button @click="removeProblem(p.problemId)"
-                                    class=" bg-[#C1121F] text-[#FDF0D5] text-[20px] px-4 py-2 font-light hover:bg-rose-300 hover:text-gray-600 rounded-lg">
-                                    Delete
-                                </button>
-                            </div>
-                        </div>
-                        <!-- <button @click="">splitProblems</button> -->
-                    </div>
-                </div>   
-
-                <!-- page -->
-                <div class="absolute inset-x-0 bottom-0 flex w-fit mx-auto">
-                    <button @click="splitProblems(N)" v-for="N in pageN()"
-                        class=" w-full px-4 py-1 mx-2 text-[15px] bg-[#5E503F] text-[#C6AC8F] font-bold rounded-full focus:bg-[#C6AC8F] focus:text-[#5E503F] ">
-                        {{ N }}
+            <div class="relative w-full mx-auto  h-full ">
+                <h5 class="m-3 text-[30px] font-semibold">
+                    Service IT
+                </h5>
+                <div class="flex justify-around">
+                    <button class="ml-4 p-3">
+                        ย้อนกลับ
                     </button>
+                    <!-- menu -->
+                    <div class="flex w-fit h-fit m-auto">
+                        <button class="p-3 mx-6 bg-gray-300">
+                            เพิ่มหัวข้อปัญหา
+                        </button>
+                        <button class="p-3 mx-6 bg-gray-300">
+                            หัวข้อปัญหาทั้งหมด
+                        </button>    
+                    </div>
                 </div>
+                
 
-                <!-- add button old version -->
-                <!-- <div class="absolute right-[4px] bottom-[10px]">
-                            <input v-model="name" type="text" class="bg-gray-400">
-                            <button @click="addProblem()" class="relative w-[40px] h-[40px] mt-6  m-auto bg-transparent   border-gray-400 border-[4px] hover:bg-gray-500 hover:border-gray-200 hover:text-sky-200 rounded-full">
-                                <h4 class="absolute w-full h-full  top-[-20px]  text-[45px] text-sky-400 font-light">
-                                +
-                                </h4> 
-                            </button>                    
+                <!-- show all problem -->
+                <div class="w-fit h-fit m-auto">
+                    <!-- <hr class="mt-3 bg-gray-700  w-full h-[3px]"/> -->
+                    <!-- select type -->
+                    <div class=" flex w-fit h-[53px] mt-[20px] ml-[20px]   ">
+                        <!-- select type -->
+                        <div class="relative w-[250px] h-full">
+                            <h4 v-show="subjectCr != 'none'" class="text ml-2 text-sm font-semiboldd text-[#C6AC8F]">
+                                Type of subject
+                            </h4>
+                            <select @change="subjectCh" name="subject" id="subject"
+                                class="absolute bottom-0 w-[200px] bg-[#C6AC8F] text-[#0A0908] text-[20px] font-light rounded-lg p-[1px]  px-[10px]">
+                                <!-- <option value="none" selected hidden>Type of subject</option> -->
+                                <option value="all" selected>All Problem</option>
+                                <option value="hardware">Hardware</option>
+                                <option value="software">Software</option>
+                                <option value="internet">Internet</option>
+                                <option value="printer">Printer</option>
+                                <option value="website">Website</option>
+                                <option value="meeting">Meeting</option>
+                                <option value="application">Application</option>
+                            </select>
+                        </div>
+
+                        <!-- add new problem -->
+                        <!-- <div class="relative overflow-visible flex w-[300px] h-[50px] my-auto    ">
+                                    <div class="relative w-[20px] z-10">
+                                        <button class=" inset-0 top-[-20px] w-[50px] h-[50px] my-auto bg-gray-300 p-2 text-[40px] font-light rounded-[50%]">
+                                            <hr class="w-full h-[4px] bg-gray-800 ">
+                                            <hr class="w-[4px] h-full bg-gray-800 ">
+                                        </button>                            
+                                    </div>
+
+                                    <div class="relative w-[150px] h-[40px] bg-sky-800 z-0">
+                                        <input type="text" class="absolute bottom-0 w-[] my-auto ml-10 bg-rose-300 ">
+                                    </div>
+                                </div> -->
+
+                        <!-- add new problem ใช้ไปก่อน-->
+                        <!-- <div class="flex bg-gray-500 my-auto px-2 py-1.5 rounded-3xl">
+                    
+                            <input v-model="name" type="text" class=" bg-gray-300 pl-2 p-1 rounded-l-xl focus:outline-0" />
+                
+                            <button @click="addProblem" class="bg-gray-500 px-2 rounded-r-3xl text-white ">
+                                Create Problem
+                            </button>
                         </div> -->
+                    </div>
 
-
+                    <div>
+                        <BaseShowProblem @get-data-status="getDataFromComponent" :problems="problemSplit"/>
+                        <!-- page -->
+                        <div class=" inset-x-0 bottom-0 flex w-fit mx-auto mt-4">
+                            <button @click="splitProblems(N)" v-for="N in pageN()"
+                                class=" w-full px-4 py-1 mx-2 text-[15px] bg-[#5E503F] text-[#C6AC8F] font-bold rounded-full focus:bg-[#C6AC8F] focus:text-[#5E503F] ">
+                                {{ N }}
+                            </button>
+                        </div>
+                    </div>
+                    
+                </div>
             </div>
+            
         </div>
-    </div>
+    <!-- </div> -->
 </template>
 <style scoped>
 .text {
