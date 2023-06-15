@@ -103,7 +103,7 @@ const getUsers = async (id = undefined) => {
         token.value = JSON.parse(jsCookie.get("data")).token
         let [s, data] = await toBackEnd.getData('user', userLink, token.value)
         if (s == 200) status = true
-        userList.value = data
+        userList.value = data.reverse().sort((a,b)=>(a.user_status < b.user_status) ? -1 : (a.user_status > b.user_status) ? 1 : 0)
 
         showList.value = userList.value
 

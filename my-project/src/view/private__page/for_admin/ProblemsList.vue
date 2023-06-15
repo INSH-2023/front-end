@@ -33,7 +33,7 @@ const getP = async (v) => {
 
         if (ss == 200) {
             status = true
-            problemList.value = data_problem
+            problemList.value = data_problem.reverse()
             splitProblems(currentPage.value)
             console.log(problemList.value)
         } else {
@@ -46,7 +46,7 @@ const getP = async (v) => {
         const [ss, data] = await toBackEnd.getData('problem', problemsLink, token.value)
         if (ss == 200) {
             status = true
-            problemList.value = data
+            problemList.value = data.reverse()
             splitProblems(currentPage.value)
             console.log(data)
         } else {

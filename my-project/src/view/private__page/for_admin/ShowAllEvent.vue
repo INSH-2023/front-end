@@ -60,10 +60,9 @@ const getEvents =async(id=undefined)=>{
         token.value = JSON.parse(jsCookie.get("data")).token
         let [s,data] =await toBackEnd.getData('request',requestLink,token.value)
         if(s==200){
-
             status=true
-            requestList.value = data
-            showList.value = data
+            requestList.value = data.sort((a,b)=>(a.request_req_date > b.request_req_date) ? -1 : (a.request_req_date < b.request_req_date) ? 1 : 0);
+            showList.value = requestList.value
             get_status.value=true
             // status something
         }
@@ -76,7 +75,6 @@ const getEvents =async(id=undefined)=>{
         token.value = JSON.parse(jsCookie.get("data")).token
         let [s,data]= await toBackEnd.getDataBy('request',requestLink,id,token.value)
         if(s==200){
-            
             status=true
             request.value= data
             console.log(data)
@@ -97,7 +95,7 @@ const getAdmin=async()=>{
     let [status,data]=await toBackEnd.getData('request_admin',`${userLink}`,token.value)
     if(status==200){
         data = ["super_admin","user"].includes(role) ? data.filter(e=>e.user_role==role.value) : data
-        adminList.value=data
+        adminList.value=data.reverse()
     }else{
         // status something
         console.log(data)
