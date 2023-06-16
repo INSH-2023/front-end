@@ -94,7 +94,7 @@ const getAdmin=async()=>{
     token.value = JSON.parse(jsCookie.get("data")).token
     let [status,data]=await toBackEnd.getData('request_admin',`${userLink}`,token.value)
     if(status==200){
-        data = ["super_admin","user"].includes(role) ? data.filter(e=>e.user_role==role.value) : data
+        data = ["super_admin","user"].includes(role) ? data : data.filter(e=>e.user_role==role.value)
         adminList.value=data.reverse()
     }else{
         // status something
@@ -834,7 +834,7 @@ const searchByKeyW=()=>{
                 <!-- button -->
                 <div  class="w-fit flex mx-auto mt-10">
                     <!-- ลบข้อมูล -->
-                        <button @click="navigation('#dele')"  class="w-[130px] mx-3 p-2 font-normal bg-gray-300  text-rose-400 rounded-xl hover:text-gray-200 hover:bg-rose-400">
+                        <button v-show="role=='super_admin'" @click="navigation('#dele')"  class="w-[130px] mx-3 p-2 font-normal bg-gray-300  text-rose-400 rounded-xl hover:text-gray-200 hover:bg-rose-400">
                             <h4>
                                 ลบคำร้องนี้
                             </h4>
