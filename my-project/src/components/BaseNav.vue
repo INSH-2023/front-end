@@ -1,6 +1,7 @@
 <script setup>
 import {useRouter} from 'vue-router'
 import {ref,onBeforeMount} from 'vue'
+import Cookies from '../JS/cookies';
 const props = defineProps({
     role:{
         type:String,
@@ -31,7 +32,7 @@ const comingSoon =()=>myRouter.push({name:'notAvaliable'})
  const role =ref(undefined)
 const getRole=()=>{
 
-     isAdmin.value = localStorage.getItem('isAdmin')==='false'||localStorage.getItem('isAdmin')==null?false:true
+     isAdmin.value = Cookies.get('isAdmin')==='false'||Cookies.get('isAdmin')==null?false:true
      userName.value = props.userName
      role.value=props.role
 
@@ -64,11 +65,11 @@ const toAdmin =()=>{
         comingSoon()
     }else{
         if(isAdmin.value==true){
-            localStorage.setItem('isAdmin',isAdmin.value)
+            Cookies.set('isAdmin',isAdmin.value)
             goShowAllEvent()
         }else
         if(isAdmin.value==false){
-            localStorage.setItem('isAdmin',isAdmin.value)
+            Cookies.set('isAdmin',isAdmin.value)
             goService()
         }
     }
@@ -77,7 +78,7 @@ const toAdmin =()=>{
 }
 
 const logOut =()=>{
-    localStorage.removeItem('user_info')
+    Cookies.remove('data')
     goHome()
 }
 
