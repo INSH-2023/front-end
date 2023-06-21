@@ -13,6 +13,14 @@ const name = ref('')
 const token = ref('')
 const role = ref(JSON.parse(Cookies.get("data")).user_role)
 
+// length of problem name
+const problemL=20
+// mode use for show template
+const problemMode=ref("show")
+
+const typeProblemsIT=["hardware","software","internet","printer","website","meeting","application"]
+const typeProblemsPR=["media","news"]
+
 const data_ch = computed(() => {
     return {
         problem_problem: name.value,
@@ -195,8 +203,8 @@ const getDataFromComponent =(value)=>{
 <template>
     <!-- <div class="overflow-y-auto relative show_up"> -->
         <div class="">
-            <div class=" bg-gray-400 w-full mx-auto  h-fit ">
-                <div class="w-full text-center font-semibold text-[40px] pt-6">
+            <div class=" bg-white w-full mx-auto  h-fit ">
+                <div class="w-full text-center font-semibold text-[40px] mt-2">
                     <div class="flex w-fit mx-auto tracking-wide">
                         <img src="../../../assets/vue.svg" alt="users_icon" class="w-[40px] h-[40px] my-auto mr-4">
                         <h4 class="text-[#5E503F]">
@@ -237,24 +245,52 @@ const getDataFromComponent =(value)=>{
                 <h5 class="m-3 text-[30px] font-semibold">
                     Service IT
                 </h5>
-                <div class="flex justify-around">
+                <div class="flex justify-around mb-4">
                     <button class="ml-4 p-3">
-                        ย้อนกลับ
+                        &lt; ย้อนกลับ
                     </button>
                     <!-- menu -->
                     <div class="flex w-fit h-fit m-auto">
-                        <button class="p-3 mx-6 bg-gray-300">
+                        <button @click="problemMode='add'" class="p-3 mx-6 bg-gray-300 rounded-xl">
                             เพิ่มหัวข้อปัญหา
                         </button>
-                        <button class="p-3 mx-6 bg-gray-300">
+                        <button @click="problemMode='show'" class="p-3 mx-6 bg-gray-300 rounded-xl">
                             หัวข้อปัญหาทั้งหมด
                         </button>    
                     </div>
                 </div>
                 
+                <hr class="w-[600px] h-fit mx-auto mb-4 border-1 border-gray-400">
+
+                <!-- form for input problem -->
+                <div v-if="problemMode=='add'" class="flex flex-col w-fit h-fit m-auto">
+                    <h5 class="mb-3 font-medium text-[20px] text-center font-medium">
+                        Service IT
+                    </h5>
+                    <div class="flex font-light">
+                        <h5 class=" shrink w-[150px] m-auto text-right">
+                            หัวข้อปัญหา
+                        </h5>
+                        <input type="text" :maxlength="problemL" class="grow ml-3 p-2 border-2 border-gray-300 rounded-xl">
+                    </div>
+                    <div class="flex mt-2 font-light">
+                        <h5 class="shrink w-[150px]  m-auto text-right">
+                            หมวดหมู่ของปัญหา
+                        </h5>
+                            <select   name="type_problem" id="type_problem" class="grow ml-3 p-2 border-2 border-gray-300 rounded-xl">
+                            <option v-if="true" v-for="(type,index) in typeProblemsIT" :key="index" :value="type">{{type}}</option>
+                            <option v-if="false" v-for="(type,index) in typeProblemsPR" :key="index" :value="type">{{type}}</option>
+
+                        </select>
+                    </div>
+                    <button class="mt-4 p-2 bg-gray-300">
+                        สร้างหัวข้อปัญหา
+                    </button>
+                </div>
+
 
                 <!-- show all problem -->
-                <div class="w-fit h-fit m-auto">
+                <div v-else-if="problemMode=='show'" class="w-fit h-fit m-auto">
                     <!-- <hr class="mt-3 bg-gray-700  w-full h-[3px]"/> -->
                     <!-- select type -->
                     <div class=" flex w-fit h-[53px] mt-[20px] ml-[20px]   ">
@@ -264,7 +300,7 @@ const getDataFromComponent =(value)=>{
                                 Type of subject
                             </h4>
                             <select @change="subjectCh" name="subject" id="subject"
-                                class="absolute bottom-0 w-[200px] bg-[#C6AC8F] text-[#0A0908] text-[20px] font-light rounded-lg p-[1px]  px-[10px]">
+                                class="absolute bottom-0 w-[200px] bg-[#C6AC8F] text-[#0A0908] text-[0.875rem] font-light rounded-lg p-[1px]  px-[10px]">
                                 <!-- <option value="none" selected hidden>Type of subject</option> -->
                                 <option value="all" selected>All Problem</option>
                                 <option value="hardware">Hardware</option>

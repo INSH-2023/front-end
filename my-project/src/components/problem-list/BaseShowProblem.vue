@@ -127,16 +127,16 @@ const removeProblem = async (id) => {
     <div class=" grid grid-cols-4 gap-4 w-[900px] h-fit mt-[15px]  text-center">
         <div :id="`card_${index}`" @mouseover="hoverFn(true, index)" @mouseleave="hoverFn(false, index)"
             v-for="(p, index) in props.problems" :key="index"
-            class="card block w-full h-[175px] mx-auto bg-[#EAE0D5] rounded-lg">
+            class="card block w-full h-[8.438rem] mx-auto bg-[#EAE0D5] rounded-lg">
             <div :id="`info_${index}`" class="info ">
-                <img src="../../assets/vue.svg" alt="logo" class="w-[80px] mx-auto mt-6 ">
+                <img src="../../assets/vue.svg" alt="logo" class="w-[60px] mx-auto mt-4 ">
                 <!-- ชื่อ -->
-                <h4 class="text-[20px] mt-6 font-light">
+                <h4 class="text-[0.875rem] mt-4 font-light">
                     {{ p.problem_problem }}
                 </h4>
             </div>
-            <div :id="`edit_${index}`" style="display: none;" class="edit  mt-[40px]">
-                <h4 class="w-full font-semibold text-[18px] text-[#FFFFFF] cursor-default">
+            <div :id="`edit_${index}`" style="display: none;" class="edit  mt-[20px]">
+                <h4 class="w-full font-semibold text-[0.938rem] text-[#FFFFFF] cursor-default">
                     {{ p.problem_problem }}
                 </h4>
                 <!-- edit button -->
