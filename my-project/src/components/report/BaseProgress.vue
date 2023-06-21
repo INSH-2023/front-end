@@ -14,7 +14,7 @@ const props =defineProps({
 
 const full_stage=ref(0)
 const stage=ref(0)
-const imageLink=`${import.meta.env.VITE_BACK_END_HOST}/image`
+const imageLink=`${import.meta.env.VITE_BACK_END_HOST}/images`
 const computedIconForSrc=(id)=>{
     // console.log('sdfjlasdjflasdjf      ',full_stage.value)
     if(id>(full_stage.value+1) || id<0){
