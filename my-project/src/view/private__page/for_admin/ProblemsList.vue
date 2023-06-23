@@ -194,7 +194,6 @@ const subjectCh = (event) => {
 
 }
 
-
 const getDataFromComponent =(value)=>{
     console.log(value)
     if(value.status==true)removeProblem(value.id)

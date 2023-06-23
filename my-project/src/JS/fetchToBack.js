@@ -25,7 +25,6 @@ let toBackEnd={
          return_data.push(status)
          return_data.push(await res.json())
       }else{
-         status=500
          console.log(`cannot delete ${name} by ${id}`)
          return_data.push(status)
          return_data.push('An internal error occurred, please try again later.')
@@ -79,7 +78,6 @@ let toBackEnd={
       // }
       else{
          console.log(`cannot get data ${name}`)
-         status = 500
          return_data.push(status)
          return_data.push('An internal error occurred, please try again later.')
       }
@@ -122,24 +120,23 @@ let toBackEnd={
          console.log(return_data)
       }else{
          console.log(`cannot get data ${name} by ${id}`)
-         status =500
          return_data.push(status)
          return_data.push('An internal error occurred, please try again later.')
       }
       return return_data
    },
 
-   async editData(name,link,id,data,token){
+   async editData(name,link,data,token){
       // variable
       let return_data =[]
       let status =undefined
       let res=undefined
       // let name =eName.value.split(' ')
       // show log
-      console.log(`edit ${name} : ${id} => ${link}`)
+      console.log(`edit ${name} : ${link}`)
       // fetch
       try {
-         res = await fetch(`${link}/${id}`,{
+         res = await fetch(`${link}`,{
             method:'PUT',
             headers:{ "content-type": "application/json", Authorization: "Bearer " + token},
             body:JSON.stringify(data),
@@ -157,7 +154,6 @@ let toBackEnd={
          return_data.push(await res.json())
       }else{
          console.log(`error cannot update ${name}`)
-         status=500
          return_data.push(status)
          return_data.push('An internal error occurred, please try again later.')
       }

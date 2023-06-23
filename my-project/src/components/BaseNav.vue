@@ -122,10 +122,9 @@ onBeforeMount(()=>{
                     </div>
                     <button 
                         v-if="role=='admin_it'||role=='admin_pr'||role=='super_admin'" 
-                        @click="toAdmin" 
-                        :style="[isAdmin===true?'background-color:#e63946 ;color:white':'color:white;']" 
+                        @click="toAdmin"
                         class=" h-fit w-[95px] text-[15px] font-bold  rounded py-[5px] px-[10px] my-auto  
-                            hidden lg:flex 
+                            hidden lg:flex text-white bg-[#e63946] lg:hover:bg-red-600 focus:ring-3 focus:ring-gray-400
                         ">
                         <h4 class="lg:grow">
                           Admin  

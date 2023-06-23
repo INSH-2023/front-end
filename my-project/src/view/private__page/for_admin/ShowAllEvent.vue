@@ -106,7 +106,7 @@ const getAdmin=async()=>{
 const editInfo = async(v)=>{
     edit_status.value=undefined
     token.value = JSON.parse(jsCookie.get("data")).token
-    let [ss,data] =await toBackEnd.editData('request',requestLink,v,data_ch.value,token.value)
+    let [ss,data] =await toBackEnd.editData('request',`${requestLink}/${v}`,data_ch.value,token.value)
     if(ss==200){
         edit_status.value=true
         console.log(data)

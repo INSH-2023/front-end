@@ -68,7 +68,6 @@ const countAllStage =()=>{
     }
 }
 
-
 const setStage=()=>{
    
     let number =props.stage

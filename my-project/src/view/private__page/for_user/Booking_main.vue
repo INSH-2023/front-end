@@ -132,7 +132,7 @@ onBeforeMount(()=>{
         <button @click="goReport('hardware')" class="flex  px-4 w-[300px] my-auto mx-auto my-3 p-3 text-gray-700 bg-[#B9E9FC]  rounded-xl drop-shadow-md
             md:w-[500px] 
             lg:w-[130px] lg:my-auto lg:block lg:bg-inherit 
-            lg:hover:bg-[#fffcf9] lg:hover:text-black
+            lg:hover:bg-gray-200 lg:hover:text-black focus:ring-3 focus:ring-gray-400
         ">
 
             <img src="../../../assets/report_icon/hardware.png" 
@@ -164,7 +164,7 @@ onBeforeMount(()=>{
         <button @click="goReport('software')" class="flex  px-4 w-[300px] my-auto mx-auto my-3 p-3 text-gray-700 bg-[#B9E9FC] rounded-xl drop-shadow-md
             md:w-[500px] 
             lg:w-[130px] lg:my-auto lg:block lg:bg-inherit 
-            lg:hover:bg-[#fffcf9] lg:hover:text-black
+            lg:hover:bg-gray-200 lg:hover:text-black focus:ring-3 focus:ring-gray-400
         ">
 
             <img src="../../../assets/report_icon/software.png" 
@@ -194,7 +194,7 @@ onBeforeMount(()=>{
         <button @click="goReport('internet')" class="flex  px-4 w-[300px] my-auto mx-auto my-3 p-3 text-gray-700 bg-[#B9E9FC] rounded-xl drop-shadow-md
             md:w-[500px] 
             lg:w-[130px] lg:my-auto lg:block lg:bg-inherit 
-            lg:hover:bg-[#fffcf9] lg:hover:text-black
+            lg:hover:bg-gray-200 lg:hover:text-black focus:ring-3 focus:ring-gray-400
         ">
 
             <img src="../../../assets/report_icon/internet.png" 
@@ -224,7 +224,7 @@ onBeforeMount(()=>{
         <button @click="goReport('printer')" class="flex  px-4 w-[300px] my-auto mx-auto my-3 p-3 text-gray-700 bg-[#B9E9FC] rounded-xl drop-shadow-md
             md:w-[500px] 
             lg:w-[130px] lg:my-auto lg:block lg:bg-inherit 
-            lg:hover:bg-[#fffcf9] lg:hover:text-black
+            lg:hover:bg-gray-200 lg:hover:text-black focus:ring-3 focus:ring-gray-400
         ">
 
             <img src="../../../assets/report_icon/printer.png" 
@@ -254,7 +254,7 @@ onBeforeMount(()=>{
         <button @click="goReport('website')" class="flex  px-4 w-[300px] my-auto mx-auto my-3 p-3 text-gray-700 bg-[#B9E9FC] rounded-xl drop-shadow-md
             md:w-[500px] 
             lg:w-[130px] lg:my-auto lg:block lg:bg-inherit 
-            lg:hover:bg-[#fffcf9] lg:hover:text-black
+            lg:hover:bg-gray-200 lg:hover:text-black focus:ring-3 focus:ring-gray-400
         ">
 
             <img src="../../../assets/report_icon/website.png" 
@@ -284,7 +284,7 @@ onBeforeMount(()=>{
         <button @click="goReport('meeting')" class="flex  px-4 w-[300px] my-auto mx-auto my-3 p-3 text-gray-700 bg-[#B9E9FC] rounded-xl drop-shadow-md
             md:w-[500px] 
             lg:w-[130px] lg:my-auto lg:block lg:bg-inherit 
-            lg:hover:bg-[#fffcf9] lg:hover:text-black
+            lg:hover:bg-gray-200 lg:hover:text-black focus:ring-3 focus:ring-gray-400
         ">
 
             <img src="../../../assets/report_icon/meeting.png" 
@@ -314,7 +314,7 @@ onBeforeMount(()=>{
         <button @click="goReport('application')" class="flex  px-4 w-[300px] my-auto mx-auto my-3 p-3 text-gray-700 bg-[#B9E9FC] rounded-xl drop-shadow-md
             md:w-[500px] 
             lg:w-[130px] lg:my-auto lg:block lg:bg-inherit 
-            lg:hover:bg-[#fffcf9] lg:hover:text-black
+            lg:hover:bg-gray-200 lg:hover:text-black focus:ring-3 focus:ring-gray-400
         ">
 
             <img src="../../../assets/report_icon/application.png" 
@@ -344,7 +344,7 @@ onBeforeMount(()=>{
         <button @click="goReport('other')" class="flex  px-4 w-[300px] my-auto mx-auto my-3 p-3 text-gray-700 bg-[#B9E9FC] rounded-xl drop-shadow-md
             md:w-[500px] 
             lg:w-[130px] lg:my-auto lg:block lg:bg-inherit 
-            lg:hover:bg-[#fffcf9] lg:hover:text-black
+            lg:hover:bg-gray-200 lg:hover:text-black focus:ring-3 focus:ring-gray-400
         ">
 
             <img src="../../../assets/report_icon/other.png" 
@@ -380,7 +380,7 @@ onBeforeMount(()=>{
         <button @click="goReport('media')" class="flex  px-4 w-[300px] my-auto mx-auto my-3 p-3 text-gray-700 bg-[#B9E9FC] rounded-xl drop-shadow-md
             md:w-[500px] 
             lg:w-[130px] lg:my-auto lg:block lg:bg-inherit 
-            lg:hover:bg-[#fffcf9] lg:hover:text-black
+            lg:hover:bg-gray-200 lg:hover:text-black focus:ring-3 focus:ring-gray-400
         ">
 
             <img src="../../../assets/report_icon/media.png" 
@@ -409,7 +409,7 @@ onBeforeMount(()=>{
         <button @click="goReport('news')" class="flex  px-4 w-[300px] my-auto mx-auto my-3 p-3 text-gray-700 bg-[#B9E9FC] rounded-xl drop-shadow-md
             md:w-[500px] 
             lg:w-[130px] lg:my-auto lg:block lg:bg-inherit 
-            lg:hover:bg-[#fffcf9] lg:hover:text-black
+            lg:hover:bg-gray-200 lg:hover:text-black focus:ring-3 focus:ring-gray-400
         ">
 
             <img src="../../../assets/report_icon/news.png" 
@@ -438,7 +438,7 @@ onBeforeMount(()=>{
         <button @click="goReport('other')" class="flex  px-4 w-[300px] my-auto mx-auto my-3 p-3 text-gray-700 bg-[#B9E9FC] rounded-xl drop-shadow-md
             md:w-[500px] 
             lg:w-[130px] lg:my-auto lg:block lg:bg-inherit 
-            lg:hover:bg-[#fffcf9] lg:hover:text-black
+            lg:hover:bg-gray-200 lg:hover:text-black focus:ring-3 focus:ring-gray-400
         ">
 
             <img src="../../../assets/report_icon/other.png" 

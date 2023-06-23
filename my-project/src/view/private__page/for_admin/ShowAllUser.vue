@@ -205,7 +205,7 @@ const submitEdit = async (id) => {
 
     // if(validate.vUserCreate(dataCh.value,lenghtOfInput) !=true){
     token.value = JSON.parse(jsCookie.get("data")).token
-    let [status, data] = await toBackEnd.editData('user', userLink, id, dataCh.value, token.value)
+    let [status, data] = await toBackEnd.editData('user', `${userLink}/${id}`, dataCh.value, token.value)
     console.log(status)
     if (status == 200) {
         await getUsers()
