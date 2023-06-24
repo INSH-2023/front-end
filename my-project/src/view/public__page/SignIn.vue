@@ -75,9 +75,9 @@ const logIn=async()=>{
     <div class="w-full pt-3 relative ">
        <div class="mt-6 w-fit mx-auto text-[27px] font-semibold text-gray-600
             sm:text-gray-300 md:text-rose-300 lg:text-sky-300 sm:text-[40px]
-          
        ">
-         ลงชื่อเข้าใช้
+       
+        ลงชื่อเข้าใช้
        </div>
        <div class="mt-2 w-[20rem] h-[6.563rem]  mx-auto relative 
             sm:w-[25rem]

@@ -53,9 +53,8 @@ const getRole=()=>{
 // // }
 
 // switch for admin
-const isAdmin=ref(false)
+const isAdmin=ref(true)
 const toAdmin =()=>{
-    isAdmin.value= !isAdmin.value
     // console.log("before change:",isAdmin.value)
     // isAdmin.value==true?isAdmin.value=false:isAdmin.value=true
 
@@ -66,10 +65,12 @@ const toAdmin =()=>{
     }else{
         if(isAdmin.value==true){
             Cookies.set('isAdmin',isAdmin.value)
+            isAdmin.value= !isAdmin.value
             goShowAllEvent()
         }else
         if(isAdmin.value==false){
             Cookies.set('isAdmin',isAdmin.value)
+            isAdmin.value= !isAdmin.value
             goService()
         }
     }

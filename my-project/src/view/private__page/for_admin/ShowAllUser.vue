@@ -118,6 +118,7 @@ const getUsers = async (id = undefined) => {
     return status
 }
 
+const goVerify = () => myRouter.push({name: "verify"})
 
 // delete user
 const deleteUser = async (v) => {
@@ -714,7 +715,7 @@ const searchByKeyW = () => {
                         </div>
 
                         <!-- password -->
-                        <div class="relative w-[500px] flex h-[50px] mt-1">
+                        <!-- <div class="relative w-[500px] flex h-[50px] mt-1">
                             <div class="relative w-[249px]">
                                 <h4 h4 class="ml-2 text-sm font-light text-gray-500">
                                     Password
@@ -729,9 +730,15 @@ const searchByKeyW = () => {
                                 <input v-model="eCPw" type="text"
                                     class="absolute bottom-0 w-full h-[30px] p-2 bg-sky-300 font-light text-[20px] text-gray-600 rounded-lg focus:outline-0">
                             </div>
-                        </div>
+                        </div> -->
 
                         <!-- button -->
+                        <div class="mt-6 mb-1.5">
+                            <button @click="goVerify"
+                                class="w-[250px] h-fit bg-gray-600 p-2 text-[#90CAF9] rounded-lg hover:bg-[#90CAF9] hover:text-gray-600">
+                                ขอรหัสผ่านใหม่
+                            </button>
+                        </div>                        
                         <div class="mt-6 mb-1.5">
                             <button @click="checkInput"
                                 class="w-[250px] h-fit bg-gray-600 p-2 text-[#90CAF9] rounded-lg hover:bg-[#90CAF9] hover:text-gray-600">
