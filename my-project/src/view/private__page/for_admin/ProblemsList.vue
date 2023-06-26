@@ -9,9 +9,11 @@ import BaseShowProblem from '../../../components/problem-list/BaseShowProblem.vu
 const problemsLink = `${import.meta.env.VITE_BACK_END_HOST}/problems`
 
 const problemList = ref([])
-const name = ref('')
+const problemName = ref('')
 const token = ref('')
 const role = ref(JSON.parse(Cookies.get("data")).user_role)
+
+
 
 // length of problem name
 const problemL=20
@@ -23,13 +25,12 @@ const typeProblemsPR=["media","news"]
 
 const data_ch = computed(() => {
     return {
-        problem_problem: name.value,
-        problem_type: subjectCr.value
+        problem_problem: problemName.value,
+        problem_type: subjectCrInput.value
     }
 })
 const subjectCr = ref('all')
-
-const isEdit = ref(false)
+const subjectCrInput=ref('')
 // get  problem
 const getP = async (v) => {
 
@@ -47,7 +48,7 @@ const getP = async (v) => {
             console.log(problemList.value)
         } else {
             status = false
-            console.log(data)
+            console.log(data_problem)
         }
 
     } else {
@@ -140,16 +141,23 @@ const hoverFn = (b, n) => {
 
 // add new problem
 const addProblem = async () => {
-    token.value = JSON.parse(jsCookie.get("data")).token
-    let [status, data] = await toBackEnd.postData('problem', problemsLink, data_ch.value, token.value)
+    let {problem_problem,problem_type} = data_ch.value
+    
+    if(problem_problem.length!=0&&problem_type.length!=0){
+        token.value = JSON.parse(jsCookie.get("data")).token
+        let [status, data] = await toBackEnd.postData('problem', problemsLink, data_ch.value, token.value)
 
-    if (status == 200) {
-        console.log('add problem success 😏')
-        console.log(data)
-        getP(subjectCr.value)
-    } else {
-        console.log(data)
+        if (status == 200) {
+            console.log('add problem success 😏')
+            console.log(data)
+            getP(subjectCr.value)
+        } else {
+            console.log(data)
+        } 
+    }else{
+        console.log('pls input data before submit!!')
     }
+    
 }
 
 // delete problems
@@ -199,6 +207,24 @@ const getDataFromComponent =(value)=>{
     console.log(value)
     if(value.status==true)removeProblem(value.id)
 }
+
+
+// Enter edit mode
+const serviceName=ref('')
+const isEdit=ref(false)
+const editMode =(service=undefined)=>{
+    if(service==undefined){
+        isEdit.value=false
+        serviceName.value=''
+        getP('all')
+        console.log('edit mode false')
+    }else{
+        isEdit.value=true
+        serviceName.value=service
+        
+        console.log('edit mode true')
+    }
+}
 </script>
 <template>
     <!-- <div class="overflow-y-auto relative show_up"> -->
@@ -239,14 +265,43 @@ const getDataFromComponent =(value)=>{
                                 </div>
                             </div>
                         </div> -->
-
+                        
             </div>
-            <div class="relative w-full mx-auto  h-full ">
+
+            <!-- for select type service -->
+            <div v-if="isEdit==false" class="relative flex flex-col w-full mx-auto  h-full  mt-[7%]">
+                <button @click="editMode('IT')" class="flex flex-row w-[550px] h-[150px] p-2 bg-[#8FC9F7] m-auto rounded-xl hover:bg-[#3CA9FF]">
+                    <img src="../../../assets/IT_service.png" alt="it_service_image" class="w-[110px] h-[110px] m-auto">
+                    <div class=" w-[250px] h-fit p-3 m-auto ">
+                        <h4 class="text-[35px] font-semibold text-[#353535]">
+                            IT Service
+                        </h4>
+                        <h5 class="text-[15px]">
+                            ศูนย์ข้อมูลและเทคโนโลยีสารสนเทศ
+                        </h5>
+                    </div>
+                </button >
+                <button @click="editMode('PR')"  class="flex flex-row w-[550px] h-[150px] p-2 bg-[#8FC9F7] m-auto mt-[3%] rounded-xl hover:bg-[#3CA9FF]">
+                    <img src="../../../assets/PR_service.png" alt="it_service_image" class="w-[110px] h-[110px] m-auto">
+                    <div class=" w-[250px] h-fit p-3 m-auto ">
+                        <h4 class="text-[35px] font-semibold text-[#353535]">
+                            PR Service
+                        </h4>
+                        <h5 class="text-[15px]">
+                            สื่อสารและรณรงค์ทางสังคม
+                        </h5>
+                    </div>
+                </button >
+            </div>
+
+            <!-- infomation of service -->
+            <div v-else-if="isEdit==true" class="relative w-full mx-auto  h-full ">
                 <h5 class="m-3 text-[30px] font-semibold">
-                    Service IT
+                    {{ serviceName }} Service
+                    <!-- {{ serviceName }} -->
                 </h5>
                 <div class="flex justify-around mb-4">
-                    <button class="ml-4 p-3">
+                    <button @click="editMode()" class="ml-4 p-3">
                         &lt; ย้อนกลับ
                     </button>
                     <!-- menu -->
@@ -265,25 +320,26 @@ const getDataFromComponent =(value)=>{
                 <!-- form for input problem -->
                 <div v-if="problemMode=='add'" class="flex flex-col w-fit h-fit m-auto">
                     <h5 class="mb-3 font-medium text-[20px] text-center font-medium">
-                        Service IT
+                        {{ serviceName }} Service
                     </h5>
                     <div class="flex font-light">
                         <h5 class=" shrink w-[150px] m-auto text-right">
                             หัวข้อปัญหา
                         </h5>
-                        <input type="text" :maxlength="problemL" class="grow ml-3 p-2 border-2 border-gray-300 rounded-xl">
+                        <input v-model="problemName" type="text" :maxlength="problemL" class="grow ml-3 p-2 border-2 border-gray-300 rounded-xl">
                     </div>
                     <div class="flex mt-2 font-light">
                         <h5 class="shrink w-[150px]  m-auto text-right">
                             หมวดหมู่ของปัญหา
                         </h5>
-                            <select   name="type_problem" id="type_problem" class="grow ml-3 p-2 border-2 border-gray-300 rounded-xl">
-                            <option v-if="true" v-for="(type,index) in typeProblemsIT" :key="index" :value="type">{{type}}</option>
-                            <option v-if="false" v-for="(type,index) in typeProblemsPR" :key="index" :value="type">{{type}}</option>
+                            <select v-model="subjectCrInput"  name="type_problem" id="type_problem" class="grow ml-3 p-2 border-2 border-gray-300 rounded-xl">
+                                <option value="" selected disabled>เลือกหมวดหมู่</option>
+                            <option v-if="serviceName=='IT'" v-for="(type,index) in typeProblemsIT" :key="index" :value="type">{{type}}</option>
+                            <option v-if="serviceName=='PR'" v-for="(type,index) in typeProblemsPR" :key="index" :value="type">{{type}}</option>
 
                         </select>
                     </div>
-                    <button class="mt-4 p-2 bg-gray-300">
+                    <button @click="addProblem" class="mt-4 p-2 bg-gray-300">
                         สร้างหัวข้อปัญหา
                     </button>
                 </div>
@@ -303,13 +359,9 @@ const getDataFromComponent =(value)=>{
                                 class="absolute bottom-0 w-[200px] bg-[#C6AC8F] text-[#0A0908] text-[0.875rem] font-light rounded-lg p-[1px]  px-[10px]">
                                 <!-- <option value="none" selected hidden>Type of subject</option> -->
                                 <option value="all" selected>All Problem</option>
-                                <option value="hardware">Hardware</option>
-                                <option value="software">Software</option>
-                                <option value="internet">Internet</option>
-                                <option value="printer">Printer</option>
-                                <option value="website">Website</option>
-                                <option value="meeting">Meeting</option>
-                                <option value="application">Application</option>
+                                <option v-if="serviceName=='IT'" v-for="(type,index) in typeProblemsIT" :key="index" :value="type">{{type}}</option>
+                                <option v-if="serviceName=='PR'" v-for="(type,index) in typeProblemsPR" :key="index" :value="type">{{type}}</option>
+
                             </select>
                         </div>
 
