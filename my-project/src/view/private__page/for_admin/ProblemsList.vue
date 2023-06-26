@@ -14,12 +14,12 @@ const token = ref('')
 const role = ref(JSON.parse(Cookies.get("data")).user_role)
 
 // length of problem name
-const problemL=20
+const problemL = 20
 // mode use for show template
-const problemMode=ref("show")
+const problemMode = ref("show")
 
-const typeProblemsIT=["hardware","software","internet","printer","website","meeting","application"]
-const typeProblemsPR=["media","news"]
+const typeProblemsIT = ["hardware", "software", "internet", "printer", "website", "meeting", "application"]
+const typeProblemsPR = ["media", "news"]
 
 const data_ch = computed(() => {
     return {
@@ -38,7 +38,8 @@ const getP = async (v) => {
     if (v != 'all') {
         token.value = JSON.parse(jsCookie.get("data")).token
         const [ss, data_problem] = await toBackEnd.getData('problem', `${problemsLink}/type/${v}`, token.value)
-        console.log(v)
+        console.log(ss)
+        console.log(data_problem)
 
         if (ss == 200) {
             status = true
@@ -64,9 +65,7 @@ const getP = async (v) => {
             console.log(data)
         }
     }
-
     return status
-
 }
 
 // split data
@@ -190,28 +189,26 @@ const subjectCh = (event) => {
         if (type == subjectCr.value) {
             console.log('subject not change :', subjectCr.value)
         }
-
-
 }
 
-const getDataFromComponent =(value)=>{
+const getDataFromComponent = (value) => {
     console.log(value)
-    if(value.status==true)removeProblem(value.id)
+    if (value.status == true) removeProblem(value.id)
 }
 </script>
 <template>
     <!-- <div class="overflow-y-auto relative show_up"> -->
-        <div class="">
-            <div class=" bg-white w-full mx-auto  h-fit ">
-                <div class="w-full text-center font-semibold text-[40px] mt-2">
-                    <div class="flex w-fit mx-auto tracking-wide">
-                        <img src="../../../assets/vue.svg" alt="users_icon" class="w-[40px] h-[40px] my-auto mr-4">
-                        <h4 class="text-[#5E503F]">
-                            Problems List
-                        </h4>
-                    </div>
+    <div class="">
+        <div class=" bg-white w-full mx-auto  h-fit ">
+            <div class="w-full text-center font-semibold text-[40px] mt-2">
+                <div class="flex w-fit mx-auto tracking-wide">
+                    <img src="../../../assets/vue.svg" alt="users_icon" class="w-[40px] h-[40px] my-auto mr-4">
+                    <h4 class="text-[#5E503F]">
+                        Problems List
+                    </h4>
                 </div>
-                <!-- button
+            </div>
+            <!-- button
                         <div class="   right-[80px] top-[115px]  absolute">
                             <button @click="isFilter= !isFilter" class="flex w-fit">
                                 <span class="font-semibold my-auto">
@@ -221,7 +218,7 @@ const getDataFromComponent =(value)=>{
                             </button>
                         </div> -->
 
-                <!-- filter
+            <!-- filter
                         <div v-show="isFilter==true" class="w-fit mx-auto absolute">
                             <div class="flex ">
                                 <div class="p-3">
@@ -239,81 +236,86 @@ const getDataFromComponent =(value)=>{
                             </div>
                         </div> -->
 
+        </div>
+        <div class="relative w-full mx-auto  h-full ">
+            <h5 class="m-3 text-[30px] font-semibold">
+                Service IT
+            </h5>
+            <div class="flex justify-around mb-4">
+                <button class="ml-4 p-3">
+                    &lt; ย้อนกลับ
+                </button>
+                <!-- menu -->
+                <div class="flex w-fit h-fit m-auto">
+                    <button @click="problemMode = 'add'" class="p-3 mx-6 bg-gray-300 rounded-xl">
+                        เพิ่มหัวข้อปัญหา
+                    </button>
+                    <button @click="problemMode = 'show'" class="p-3 mx-6 bg-gray-300 rounded-xl">
+                        หัวข้อปัญหาทั้งหมด
+                    </button>
+                </div>
             </div>
-            <div class="relative w-full mx-auto  h-full ">
-                <h5 class="m-3 text-[30px] font-semibold">
+
+            <hr class="w-[600px] h-fit mx-auto mb-4 border-1 border-gray-400">
+
+            <!-- form for input problem -->
+            <div v-if="problemMode == 'add'" class="flex flex-col w-fit h-fit m-auto">
+                <h5 class="mb-3 font-medium text-[20px] text-center font-medium">
                     Service IT
                 </h5>
-                <div class="flex justify-around mb-4">
-                    <button class="ml-4 p-3">
-                        &lt; ย้อนกลับ
-                    </button>
-                    <!-- menu -->
-                    <div class="flex w-fit h-fit m-auto">
-                        <button @click="problemMode='add'" class="p-3 mx-6 bg-gray-300 rounded-xl">
-                            เพิ่มหัวข้อปัญหา
-                        </button>
-                        <button @click="problemMode='show'" class="p-3 mx-6 bg-gray-300 rounded-xl">
-                            หัวข้อปัญหาทั้งหมด
-                        </button>    
-                    </div>
-                </div>
-                
-                <hr class="w-[600px] h-fit mx-auto mb-4 border-1 border-gray-400">
-
-                <!-- form for input problem -->
-                <div v-if="problemMode=='add'" class="flex flex-col w-fit h-fit m-auto">
-                    <h5 class="mb-3 font-medium text-[20px] text-center font-medium">
-                        Service IT
+                <div class="flex font-light">
+                    <h5 class=" shrink w-[150px] m-auto text-right">
+                        หัวข้อปัญหา
                     </h5>
-                    <div class="flex font-light">
-                        <h5 class=" shrink w-[150px] m-auto text-right">
-                            หัวข้อปัญหา
-                        </h5>
-                        <input type="text" :maxlength="problemL" class="grow ml-3 p-2 border-2 border-gray-300 rounded-xl">
-                    </div>
-                    <div class="flex mt-2 font-light">
-                        <h5 class="shrink w-[150px]  m-auto text-right">
-                            หมวดหมู่ของปัญหา
-                        </h5>
-                            <select   name="type_problem" id="type_problem" class="grow ml-3 p-2 border-2 border-gray-300 rounded-xl">
-                            <option v-if="true" v-for="(type,index) in typeProblemsIT" :key="index" :value="type">{{type}}</option>
-                            <option v-if="false" v-for="(type,index) in typeProblemsPR" :key="index" :value="type">{{type}}</option>
+                    <input type="text" :maxlength="problemL" class="grow ml-3 p-2 border-2 border-gray-300 rounded-xl">
+                </div>
+                <div class="flex mt-2 font-light">
+                    <h5 class="shrink w-[150px]  m-auto text-right">
+                        หมวดหมู่ของปัญหา
+                    </h5>
+                    <select name="type_problem" id="type_problem" class="grow ml-3 p-2 border-2 border-gray-300 rounded-xl">
+                        <option v-if="true" v-for="(type, index) in typeProblemsIT" :key="index" :value="type">{{ type }}
+                        </option>
+                        <option v-if="false" v-for="(type, index) in typeProblemsPR" :key="index" :value="type">{{ type }}
+                        </option>
 
+                    </select>
+                </div>
+                <button class="mt-4 p-2 bg-gray-300">
+                    สร้างหัวข้อปัญหา
+                </button>
+            </div>
+
+
+            <!-- show all problem -->
+            <div v-else-if="problemMode == 'show'" class="w-fit h-fit m-auto">
+                <!-- <hr class="mt-3 bg-gray-700  w-full h-[3px]"/> -->
+                <!-- select type -->
+                <div class=" flex w-fit h-[53px] mt-[20px] ml-[20px]   ">
+                    <!-- select type -->
+                    <div class="relative w-[250px] h-full">
+                        <h4 v-show="subjectCr != 'none'" class="text ml-2 text-sm font-semiboldd text-[#C6AC8F]">
+                            Type of subject
+                        </h4>
+                        <select @change="subjectCh" name="subject" id="subject"
+                            class="absolute bottom-0 w-[200px] bg-[#C6AC8F] text-[#0A0908] text-[0.875rem] font-light rounded-lg p-[1px]  px-[10px]">
+                            <!-- <option value="none" selected hidden>Type of subject</option> -->
+                            <option v-if="['admin_it','super_admin'].includes(role)" value="all" selected>All Problem</option>
+                            <option v-if="['admin_it','super_admin'].includes(role)" value="hardware">Hardware</option>
+                            <option v-if="['admin_it','super_admin'].includes(role)" value="software">Software</option>
+                            <option v-if="['admin_it','super_admin'].includes(role)" value="internet">Internet</option>
+                            <option v-if="['admin_it','super_admin'].includes(role)" value="printer">Printer</option>
+                            <option v-if="['admin_it','super_admin'].includes(role)" value="website">Website</option>
+                            <option v-if="['admin_it','super_admin'].includes(role)" value="meeting">Meeting</option>
+                            <option v-if="['admin_it','super_admin'].includes(role)" value="application">Application</option>
+                            <option v-if="['admin_pr','super_admin'].includes(role)" value="media">Media</option>
+                            <option v-if="['admin_pr','super_admin'].includes(role)" value="news">News</option>
+                            <option value="other">Other</option>
                         </select>
                     </div>
-                    <button class="mt-4 p-2 bg-gray-300">
-                        สร้างหัวข้อปัญหา
-                    </button>
-                </div>
 
-
-                <!-- show all problem -->
-                <div v-else-if="problemMode=='show'" class="w-fit h-fit m-auto">
-                    <!-- <hr class="mt-3 bg-gray-700  w-full h-[3px]"/> -->
-                    <!-- select type -->
-                    <div class=" flex w-fit h-[53px] mt-[20px] ml-[20px]   ">
-                        <!-- select type -->
-                        <div class="relative w-[250px] h-full">
-                            <h4 v-show="subjectCr != 'none'" class="text ml-2 text-sm font-semiboldd text-[#C6AC8F]">
-                                Type of subject
-                            </h4>
-                            <select @change="subjectCh" name="subject" id="subject"
-                                class="absolute bottom-0 w-[200px] bg-[#C6AC8F] text-[#0A0908] text-[0.875rem] font-light rounded-lg p-[1px]  px-[10px]">
-                                <!-- <option value="none" selected hidden>Type of subject</option> -->
-                                <option value="all" selected>All Problem</option>
-                                <option value="hardware">Hardware</option>
-                                <option value="software">Software</option>
-                                <option value="internet">Internet</option>
-                                <option value="printer">Printer</option>
-                                <option value="website">Website</option>
-                                <option value="meeting">Meeting</option>
-                                <option value="application">Application</option>
-                            </select>
-                        </div>
-
-                        <!-- add new problem -->
-                        <!-- <div class="relative overflow-visible flex w-[300px] h-[50px] my-auto    ">
+                    <!-- add new problem -->
+                    <!-- <div class="relative overflow-visible flex w-[300px] h-[50px] my-auto    ">
                                     <div class="relative w-[20px] z-10">
                                         <button class=" inset-0 top-[-20px] w-[50px] h-[50px] my-auto bg-gray-300 p-2 text-[40px] font-light rounded-[50%]">
                                             <hr class="w-full h-[4px] bg-gray-800 ">
@@ -326,8 +328,8 @@ const getDataFromComponent =(value)=>{
                                     </div>
                                 </div> -->
 
-                        <!-- add new problem ใช้ไปก่อน-->
-                        <!-- <div class="flex bg-gray-500 my-auto px-2 py-1.5 rounded-3xl">
+                    <!-- add new problem ใช้ไปก่อน-->
+                    <!-- <div class="flex bg-gray-500 my-auto px-2 py-1.5 rounded-3xl">
                     
                             <input v-model="name" type="text" class=" bg-gray-300 pl-2 p-1 rounded-l-xl focus:outline-0" />
                 
@@ -335,23 +337,23 @@ const getDataFromComponent =(value)=>{
                                 Create Problem
                             </button>
                         </div> -->
-                    </div>
-
-                    <div>
-                        <BaseShowProblem @get-data-status="getDataFromComponent" :problems="problemSplit"/>
-                        <!-- page -->
-                        <div class=" inset-x-0 bottom-0 flex w-fit mx-auto mt-4">
-                            <button @click="splitProblems(N)" v-for="N in pageN()"
-                                class=" w-full px-4 py-1 mx-2 text-[15px] bg-[#5E503F] text-[#C6AC8F] font-bold rounded-full focus:bg-[#C6AC8F] focus:text-[#5E503F] ">
-                                {{ N }}
-                            </button>
-                        </div>
-                    </div>
-                    
                 </div>
+
+                <div>
+                    <BaseShowProblem @get-data-status="getDataFromComponent" :problems="problemSplit" />
+                    <!-- page -->
+                    <div class=" inset-x-0 bottom-0 flex w-fit mx-auto mt-4">
+                        <button @click="splitProblems(N)" v-for="N in pageN()"
+                            class=" w-full px-4 py-1 mx-2 text-[15px] bg-[#5E503F] text-[#C6AC8F] font-bold rounded-full focus:bg-[#C6AC8F] focus:text-[#5E503F] ">
+                            {{ N }}
+                        </button>
+                    </div>
+                </div>
+
             </div>
-            
         </div>
+
+    </div>
     <!-- </div> -->
 </template>
 <style scoped>

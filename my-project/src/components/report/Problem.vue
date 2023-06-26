@@ -75,8 +75,7 @@ const addP =(v)=>{
         for(let value2 of problemList.value){
             if(value2.problem_problem==v){
                 value2.selection= !value2.selection
-            }
-            
+            }  
         }
         check=false
         console.log(problems.value)
