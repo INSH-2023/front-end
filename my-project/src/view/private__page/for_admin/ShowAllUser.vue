@@ -660,7 +660,7 @@ const searchByKeyW = () => {
                                 <option value="user">User</option>
                                 <option value="admin_it">Admin_IT</option>
                                 <option value="admin_pr">Admin_PR</option>
-                                <option value="super_admin">Admin_PR</option>
+                                <option value="super_admin">Super_Admin</option>
                             </select>
                         </div>
 
