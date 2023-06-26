@@ -5,6 +5,20 @@ import jsCookie from './../../../JS/cookies';
 import getRefreshToken from './../../../JS/refresh';
 import Cookies from './../../../JS/cookies';
 import BaseShowProblem from '../../../components/problem-list/BaseShowProblem.vue';
+
+import Application from './../../../assets/problem/application.png'
+import Internet from './../../../assets/problem/internet.png'
+import Media from './../../../assets/problem/media.png'
+import Meeting from './../../../assets/problem/meeting.png'
+import News from './../../../assets/problem/news.png'
+import Other from './../../../assets/problem/news.png'
+import Printer from './../../../assets/problem/printer.png'
+import Problem from './../../../assets/problem/problem.png'
+import Software from './../../../assets/problem/software.png'
+import Website from './../../../assets/problem/website.png'
+
+const problemIcon = [Application,Internet,Media,Meeting,News,Other,Printer,Problem,Software,Website]
+
 // const problemsLink='http://localhost:3000/problems'
 const problemsLink = `${import.meta.env.VITE_BACK_END_HOST}/problems`
 
@@ -34,6 +48,7 @@ const isEdit = ref(false)
 const getP = async (v) => {
 
     let status = undefined
+    let currentIcon = []
 
     if (v != 'all') {
         token.value = JSON.parse(jsCookie.get("data")).token
@@ -44,6 +59,11 @@ const getP = async (v) => {
         if (ss == 200) {
             status = true
             problemList.value = data_problem.reverse()
+
+            // problemList.value
+            
+            // forEach(i=> console.log(i.problem_type))
+
             splitProblems(currentPage.value)
             console.log(problemList.value)
         } else {
