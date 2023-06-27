@@ -119,7 +119,7 @@ const validateReport=(stage)=>{
 // console.log(service)
 // console.log(stage)
     if(typeP=='hardware'||typeP=='software'||typeP=='internet'){
-        if(stage==0 ){
+        if(stage==0){
             // status something
             if(validate.vSection_I(typeOfUse.value)){
                 alert_status.value=undefined
@@ -128,8 +128,7 @@ const validateReport=(stage)=>{
                 // alert error something
                 alert_status.value=false
                 alert_title.value='Missing data !!'
-                alert_message.value='กรุณากรอกข้อมูล ประเภท อุปกรณ์ของคุณ'
-                
+                alert_message.value='กรุณากรอกข้อมูล ประเภท อุปกรณ์ของคุณ' 
             }
 
         }else

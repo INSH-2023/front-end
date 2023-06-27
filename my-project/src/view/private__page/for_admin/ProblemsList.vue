@@ -6,24 +6,12 @@ import getRefreshToken from './../../../JS/refresh';
 import Cookies from './../../../JS/cookies';
 import BaseShowProblem from '../../../components/problem-list/BaseShowProblem.vue';
 
-import Application from './../../../assets/problem/application.png'
-import Internet from './../../../assets/problem/internet.png'
-import Media from './../../../assets/problem/media.png'
-import Meeting from './../../../assets/problem/meeting.png'
-import News from './../../../assets/problem/news.png'
-import Other from './../../../assets/problem/news.png'
-import Printer from './../../../assets/problem/printer.png'
-import Problem from './../../../assets/problem/problem.png'
-import Software from './../../../assets/problem/software.png'
-import Website from './../../../assets/problem/website.png'
-
-const problemIcon = [Application,Internet,Media,Meeting,News,Other,Printer,Problem,Software,Website]
-
 // const problemsLink='http://localhost:3000/problems'
 const problemsLink = `${import.meta.env.VITE_BACK_END_HOST}/problems`
 
 const problemList = ref([])
 const name = ref('')
+const subjectCr = ref('all')
 const token = ref('')
 const role = ref(JSON.parse(Cookies.get("data")).user_role)
 
@@ -41,14 +29,12 @@ const data_ch = computed(() => {
         problem_type: subjectCr.value
     }
 })
-const subjectCr = ref('all')
 
 const isEdit = ref(false)
 // get  problem
 const getP = async (v) => {
 
     let status = undefined
-    let currentIcon = []
 
     if (v != 'all') {
         token.value = JSON.parse(jsCookie.get("data")).token
@@ -60,17 +46,12 @@ const getP = async (v) => {
             status = true
             problemList.value = data_problem.reverse()
 
-            // problemList.value
-            
-            // forEach(i=> console.log(i.problem_type))
-
             splitProblems(currentPage.value)
             console.log(problemList.value)
         } else {
             status = false
             console.log(data)
         }
-
     } else {
         token.value = JSON.parse(jsCookie.get("data")).token
         const [ss, data] = await toBackEnd.getData('problem', problemsLink, token.value)
@@ -85,6 +66,7 @@ const getP = async (v) => {
             console.log(data)
         }
     }
+    
     return status
 }
 
@@ -114,7 +96,6 @@ const splitProblems = (N) => {
         if (problemList.value[i]) {
             arr.push(problemList.value[i])
         }
-
     }
     problemSplit.value = arr
     console.log(problemSplit.value)
@@ -144,7 +125,7 @@ const hoverFn = (b, n) => {
         // eEdit.style.visibility="visible"
         eInfo.style.display = "none"
         eEdit.style.display = "block"
-        card.style.background = "#C6AC8F"
+        card.style.background = "#C2E1FD"
 
         // console.log('hover',n)
     } else {
@@ -165,6 +146,7 @@ const addProblem = async () => {
     if (status == 200) {
         console.log('add problem success 😏')
         console.log(data)
+        subjectCr.value = 'all'
         getP(subjectCr.value)
     } else {
         console.log(data)
@@ -197,7 +179,6 @@ onBeforeMount(() => {
     getRefreshToken(JSON.parse(jsCookie.get("data")).refreshToken)
 })
 
-
 // auto change subject 
 const subjectCh = (event) => {
     let type = event.target.value.trim()
@@ -222,8 +203,8 @@ const getDataFromComponent = (value) => {
         <div class=" bg-white w-full mx-auto  h-fit ">
             <div class="w-full text-center font-semibold text-[40px] mt-2">
                 <div class="flex w-fit mx-auto tracking-wide">
-                    <img src="../../../assets/vue.svg" alt="users_icon" class="w-[40px] h-[40px] my-auto mr-4">
-                    <h4 class="text-[#5E503F]">
+                    <img src="./../../../assets/admin_page/problem.png" alt="users_icon" class="w-[40px] h-[40px] my-auto mr-4">
+                    <h4>
                         Problems List
                     </h4>
                 </div>
@@ -262,15 +243,15 @@ const getDataFromComponent = (value) => {
                 Service IT
             </h5>
             <div class="flex justify-around mb-4">
-                <button class="ml-4 p-3">
+                <!-- <button class="ml-4 p-3">
                     &lt; ย้อนกลับ
-                </button>
+                </button> -->
                 <!-- menu -->
                 <div class="flex w-fit h-fit m-auto">
-                    <button @click="problemMode = 'add'" class="p-3 mx-6 bg-gray-300 rounded-xl">
+                    <button @click="problemMode = 'add'" class="p-3 mx-6 bg-gray-300 rounded-xl focus:bg-[#C2E1FD]">
                         เพิ่มหัวข้อปัญหา
                     </button>
-                    <button @click="problemMode = 'show'" class="p-3 mx-6 bg-gray-300 rounded-xl">
+                    <button @click="problemMode = 'show'" class="p-3 mx-6 bg-gray-300 rounded-xl focus:bg-[#C2E1FD]">
                         หัวข้อปัญหาทั้งหมด
                     </button>
                 </div>
@@ -287,21 +268,24 @@ const getDataFromComponent = (value) => {
                     <h5 class=" shrink w-[150px] m-auto text-right">
                         หัวข้อปัญหา
                     </h5>
-                    <input type="text" :maxlength="problemL" class="grow ml-3 p-2 border-2 border-gray-300 rounded-xl">
+                    <input type="text" :maxlength="problemL" class="grow ml-3 p-2 border-2 border-gray-300 rounded-xl" v-model="name">
                 </div>
                 <div class="flex mt-2 font-light">
                     <h5 class="shrink w-[150px]  m-auto text-right">
                         หมวดหมู่ของปัญหา
                     </h5>
-                    <select name="type_problem" id="type_problem" class="grow ml-3 p-2 border-2 border-gray-300 rounded-xl">
-                        <option v-if="true" v-for="(type, index) in typeProblemsIT" :key="index" :value="type">{{ type }}
+                    <select name="type_problem" id="type_problem" class="grow ml-3 p-2 border-2 border-gray-300 rounded-xl" v-model="subjectCr">
+                        <option disabled value="all">โปรดเลือกหมวดหมู่ของปัญหา
                         </option>
-                        <option v-if="false" v-for="(type, index) in typeProblemsPR" :key="index" :value="type">{{ type }}
+                        <option v-if="role=='admin_it'" v-for="(type, index) in typeProblemsIT" :key="index" :value="type">{{ type }}
                         </option>
-
+                        <option v-if="role=='admin_pr'" v-for="(type, index) in typeProblemsPR" :key="index" :value="type">{{ type }}
+                        </option>
+                        <option v-if="role=='super_admin'" v-for="(type, index) in typeProblemsIT.concat(...typeProblemsPR)" :key="index" :value="type">{{ type }}
+                        </option>
                     </select>
                 </div>
-                <button class="mt-4 p-2 bg-gray-300">
+                <button @click="addProblem" class="mt-4 p-2 bg-gray-300 hover:bg-gray-500 focus:bg-gray-300 rounded-xl">
                     สร้างหัวข้อปัญหา
                 </button>
             </div>
@@ -314,11 +298,11 @@ const getDataFromComponent = (value) => {
                 <div class=" flex w-fit h-[53px] mt-[20px] ml-[20px]   ">
                     <!-- select type -->
                     <div class="relative w-[250px] h-full">
-                        <h4 v-show="subjectCr != 'none'" class="text ml-2 text-sm font-semiboldd text-[#C6AC8F]">
+                        <h4 v-show="subjectCr != 'none'" class="text ml-2 text-sm font-semiboldd text-[#6FA1CE]">
                             Type of subject
                         </h4>
                         <select @change="subjectCh" name="subject" id="subject"
-                            class="absolute bottom-0 w-[200px] bg-[#C6AC8F] text-[#0A0908] text-[0.875rem] font-light rounded-lg p-[1px]  px-[10px]">
+                            class="absolute bottom-0 w-[200px] bg-[#6FA1CE] text-[#0A0908] text-[0.875rem] font-light rounded-lg p-[1px]  px-[10px]">
                             <!-- <option value="none" selected hidden>Type of subject</option> -->
                             <option v-if="['admin_it','super_admin'].includes(role)" value="all" selected>All Problem</option>
                             <option v-if="['admin_it','super_admin'].includes(role)" value="hardware">Hardware</option>
@@ -360,11 +344,11 @@ const getDataFromComponent = (value) => {
                 </div>
 
                 <div>
-                    <BaseShowProblem @get-data-status="getDataFromComponent" :problems="problemSplit" />
+                    <BaseShowProblem @get-data-status="getDataFromComponent" :problems="problemSplit"/>
                     <!-- page -->
                     <div class=" inset-x-0 bottom-0 flex w-fit mx-auto mt-4">
                         <button @click="splitProblems(N)" v-for="N in pageN()"
-                            class=" w-full px-4 py-1 mx-2 text-[15px] bg-[#5E503F] text-[#C6AC8F] font-bold rounded-full focus:bg-[#C6AC8F] focus:text-[#5E503F] ">
+                            class=" w-full px-4 py-1 mx-2 text-[15px] bg-[#6FA1CE] text-[#C2E1FD] font-bold rounded-full focus:bg-[#C2E1FD] focus:text-[#6FA1CE] ">
                             {{ N }}
                         </button>
                     </div>

@@ -80,7 +80,7 @@ let role = ref(JSON.parse(Cookies.get("data")).user_role)
                     </li> -->
                 <li class="lg:hover:bg-gray-200 focus:ring-3 focus:ring-gray-400" @click="goProblemsList">
                     <button class="flex w-fit font-semibold text-gray-800">
-                        <img src="../assets/admin_page/dashboard.png" alt="" class="w-[28px] h-[28] m-3">
+                        <img src="../assets/admin_page/problem.png" alt="" class="w-[28px] h-[28] m-3">
                         <span class="m-3">Problems List</span>
                     </button>
                     <!-- <hr class="full border-[1px] mt-2 border-gray-400"> -->

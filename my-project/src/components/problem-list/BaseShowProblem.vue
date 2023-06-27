@@ -1,5 +1,18 @@
 <script setup>
 import {ref,onUpdated,onMounted} from 'vue'
+
+import Application from './../../assets/problem/application.png'
+import Internet from './../../assets/problem/internet.png'
+import Media from './../../assets/problem/media.png'
+import Meeting from './../../assets/problem/meeting.png'
+import News from './../../assets/problem/news.png'
+import Printer from './../../assets/problem/printer.png'
+import Hardware from './../../assets/problem/hardware.png'
+import Software from './../../assets/problem/software.png'
+import Website from './../../assets/problem/website.png'
+
+const problemIcon = [Application, Internet, Media, Meeting, News, Printer, Hardware, Software, Website]
+
 const emit = defineEmits(["getDataStatus"])
 const props =defineProps({
     problems:{
@@ -19,32 +32,32 @@ onMounted(()=>{
 })
 
 // const problemsLink='http://localhost:3000/problems'
-const problemsLink = `${import.meta.env.VITE_BACK_END_HOST}/problems`
+// const problemsLink = `${import.meta.env.VITE_BACK_END_HOST}/problems`
 
 const problemList = ref([])
-const name = ref('')
-const token = ref('')
+// const name = ref('')
+// const token = ref('')
 
 
-const subjectCr = ref('all')
+// const subjectCr = ref('all')
 
-const isEdit = ref(false)
+// const isEdit = ref(false)
 
 
 // split data
 const maxOfPage = ref(8)
-const maxOfL = ref(0)
-const minOfL = ref(0)
-const sumP = ref(0)
+// const maxOfL = ref(0)
+// const minOfL = ref(0)
+// const sumP = ref(0)
 const problemSplit = ref([])
 // const pageN=ref(1)
 // for count N of page
-const pageN = () => {
-    let length = problemList.value.length / maxOfPage.value
-    let number = Math.ceil(length)
-    // sumP.value=number
-    return number
-}
+// const pageN = () => {
+//     let length = problemList.value.length / maxOfPage.value
+//     let number = Math.ceil(length)
+//     // sumP.value=number
+//     return number
+// }
 
 // for click and first value
 const currentPage = ref(1)
@@ -87,7 +100,7 @@ const hoverFn = (b, n) => {
         // eEdit.style.visibility="visible"
         eInfo.style.display = "none"
         eEdit.style.display = "block"
-        card.style.background = "#C6AC8F"
+        card.style.background = "#6FA1CE"
 
         // console.log('hover',n)
     } else {
@@ -95,7 +108,7 @@ const hoverFn = (b, n) => {
         // eEdit.style.visibility="hidden"
         eEdit.style.display = "none"
         eInfo.style.display = "block"
-        card.style.background = "#EAE0D5"
+        card.style.background = "#C2E1FD"
     }
 
 }
@@ -120,6 +133,16 @@ const removeProblem = async (id) => {
 
 }
 
+const getImg = (problem_type) => {
+    let path = `/src/assets/problem/${problem_type}.png`
+    let currentIcon = []
+    problemIcon.forEach( i => {
+        if (path == i) {
+            currentIcon.push(path)
+        }
+    })
+    return currentIcon
+}
 
 </script>
 <template>
@@ -127,9 +150,9 @@ const removeProblem = async (id) => {
     <div class=" grid grid-cols-4 gap-4 w-[900px] h-fit mt-[15px]  text-center">
         <div :id="`card_${index}`" @mouseover="hoverFn(true, index)" @mouseleave="hoverFn(false, index)"
             v-for="(p, index) in props.problems" :key="index"
-            class="card block w-full h-[8.438rem] mx-auto bg-[#EAE0D5] rounded-lg">
+            class="card block w-full h-[8.438rem] mx-auto bg-[#C2E1FD] rounded-lg">
             <div :id="`info_${index}`" class="info ">
-                <img src="../../assets/vue.svg" alt="logo" class="w-[60px] mx-auto mt-4 ">
+                <img :src="getImg(p.problem_type)" alt="logo" class="w-[60px] mx-auto mt-4 ">
                 <!-- ชื่อ -->
                 <h4 class="text-[0.875rem] mt-4 font-light">
                     {{ p.problem_problem }}
