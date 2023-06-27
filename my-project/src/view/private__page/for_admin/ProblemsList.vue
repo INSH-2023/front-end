@@ -275,7 +275,7 @@ const getDataFromComponent = (value) => {
                         หมวดหมู่ของปัญหา
                     </h5>
                     <select name="type_problem" id="type_problem" class="grow ml-3 p-2 border-2 border-gray-300 rounded-xl" v-model="subjectCr">
-                        <option disabled value="all">โปรดเลือกหมวดหมู่ของปัญหา
+                        <option selected disabled hidden value="all">โปรดเลือกหมวดหมู่ของปัญหา
                         </option>
                         <option v-if="role=='admin_it'" v-for="(type, index) in typeProblemsIT" :key="index" :value="type">{{ type }}
                         </option>

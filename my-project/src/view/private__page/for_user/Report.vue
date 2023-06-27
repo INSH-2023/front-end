@@ -45,7 +45,7 @@ const Timestamp=()=>{
 
 const data_ch=computed(()=>{
     
-    if(typeP=='printer'||typeP=='website'||typeP=='meeting'||typeP=='application'){
+    if(typeP=='printer'||typeP=='website'||typeP=='meeting'||typeP=='application'||typeP=='media'||typeP=='news'){
         typeOfUse.value.type='or'
     }else
     if(typeP=='other'){

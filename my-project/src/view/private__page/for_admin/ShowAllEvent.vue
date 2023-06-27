@@ -64,6 +64,7 @@ const getEvents =async(id=undefined)=>{
             requestList.value = data.sort((a,b)=>(a.request_req_date > b.request_req_date) ? -1 : (a.request_req_date < b.request_req_date) ? 1 : 0);
             showList.value = requestList.value
             get_status.value=true
+            console.log(showList.value)
             // status something
         }
         else {
@@ -87,15 +88,17 @@ const getEvents =async(id=undefined)=>{
         }
     }
 
+
+
     return status
 }
 
-const getAdmin=async()=>{
+const getAdmin=async(email)=>{
     token.value = JSON.parse(jsCookie.get("data")).token
     let [status,data]=await toBackEnd.getData('request_admin',`${userLink}`,token.value)
     if(status==200){
-        data = ["super_admin","user"].includes(role) ? data : data.filter(e=>e.user_role==role.value)
-        adminList.value=data.reverse()
+        data = ["super_admin","user"].includes(role.value) ? data : data.filter(e=>e.user_role==role.value)
+        adminList.value=data.reverse().filter(u=>u.user_email != email)
     }else{
         // status something
         console.log(data)
@@ -165,6 +168,7 @@ const showInfoByID=async(v,index)=>{
     // assign_ch.value=""
 
     status = await getEvents(request_id.value)
+    await getAdmin(request.value.request_email)
     console.log(request.value.request_assign)
     assign_ch.value = request.value.request_assign
     if(status && isEmptyOBJ.value !=true){
@@ -820,7 +824,7 @@ const searchByKeyW=()=>{
                                 Assign
                             </h5>
                             <select  v-model="assign_ch" name="assign" id="assign" class="w-[200px] mt-2 p-1 bg-gray-400 text-gray-700 font-semibold  rounded">
-                                <option  value="Not_assign" selected disabled>เลือกผู้รับผิดชอบ</option>
+                                <option  value="Not_assign" selected disabled hidden>เลือกผู้รับผิดชอบ</option>
                                 <option v-for="(admin,index) in adminList" :key="index" :value="admin.user_first_name" class="font-semibold bg-gray-300">{{admin.user_first_name}}</option>
                                 <!--<option value="gnitset_testing" class="font-semibold bg-gray-300">gnitset testing</option>
                                 <option value="Testing_Tseing " class="font-semibold bg-gray-300">Testing Tseing</option> -->

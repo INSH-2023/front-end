@@ -70,7 +70,6 @@ const splitProblems = (N) => {
         if (problemList.value[i]) {
             arr.push(problemList.value[i])
         }
-
     }
     problemSplit.value = arr
     console.log(problemSplit.value)
