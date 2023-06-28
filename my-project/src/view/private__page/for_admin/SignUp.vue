@@ -298,9 +298,6 @@ const goRotate =()=>{
                                     <option value="ศูนย์ข้อมูลและเทคโนโลยีสารสนเทศ" >ศูนย์ข้อมูลและเทคโนโลยีสารสนเทศ</option>
                                     <option value="สมัชชาคุณธรรมและความร่วมมือนานาชาติ" >สมัชชาคุณธรรมและความร่วมมือนานาชาติ</option>
                                     <option value="ส่งเสริมคุณธรรมเครือข่ายทางสังคม" >ส่งเสริมคุณธรรมเครือข่ายทางสังคม</option>
-
-
-
                                 </select>
                             </div>                            
                             
@@ -366,7 +363,7 @@ const goRotate =()=>{
 
                     <!-- button -->
                     <div class="w-fit mx-auto  mt-10">
-                        <button id="submitB" @click="submittform()" :style="['background-color:#77BEFF']" class=" relative w-[200px] h-[40px] p-1 text-[20px]   rounded-2xl">
+                        <button id="submitB" @click="submittform()" class=" relative w-[200px] h-[40px] p-1 text-[20px] rounded-2xl bg-[#77BEFF] hover:bg-[#6098CC] focus:bg-[#C4E3FF]">
                             <h4 @click="submittS=true" class=" static font-light text-white">
                                 Create User
                             </h4>

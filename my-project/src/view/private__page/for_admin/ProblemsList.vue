@@ -31,6 +31,9 @@ const data_ch = computed(() => {
 })
 
 const isEdit = ref(false)
+
+let isAdd = ref(false)
+
 // get  problem
 const getP = async (v) => {
 
@@ -58,6 +61,12 @@ const getP = async (v) => {
         if (ss == 200) {
             status = true
             problemList.value = data.reverse()
+            if (role.value == 'admin_it') {
+                problemList.value = problemList.value.filter(p => typeProblemsIT.includes(p.problem_type))
+            } else if (role.value == 'admin_pr') {
+                problemList.value = problemList.value.filter(p => typeProblemsPR.includes(p.problem_type))
+            }
+
             splitProblems(currentPage.value)
             console.log(data)
         } else {
@@ -66,7 +75,7 @@ const getP = async (v) => {
             console.log(data)
         }
     }
-    
+
     return status
 }
 
@@ -196,6 +205,15 @@ const getDataFromComponent = (value) => {
     console.log(value)
     if (value.status == true) removeProblem(value.id)
 }
+
+const changeMode = (mode) => {
+    if (mode == "add") {
+        isAdd.value = true
+    } else {
+        isAdd.value = false
+    }
+}
+
 </script>
 <template>
     <!-- <div class="overflow-y-auto relative show_up"> -->
@@ -203,7 +221,8 @@ const getDataFromComponent = (value) => {
         <div class=" bg-white w-full mx-auto  h-fit ">
             <div class="w-full text-center font-semibold text-[40px] mt-2">
                 <div class="flex w-fit mx-auto tracking-wide">
-                    <img src="./../../../assets/admin_page/problem.png" alt="users_icon" class="w-[40px] h-[40px] my-auto mr-4">
+                    <img src="./../../../assets/admin_page/problem.png" alt="users_icon"
+                        class="w-[40px] h-[40px] my-auto mr-4">
                     <h4>
                         Problems List
                     </h4>
@@ -248,10 +267,12 @@ const getDataFromComponent = (value) => {
                 </button> -->
                 <!-- menu -->
                 <div class="flex w-fit h-fit m-auto">
-                    <button @click="problemMode = 'add'" class="p-3 mx-6 bg-gray-300 rounded-xl focus:bg-[#C2E1FD]">
+                    <button @click="changeMode('add')" :style="[isAdd ? 'background-color: #C2E1FD' : '']"
+                        class="p-3 mx-6 bg-gray-300 rounded-xl hover:bg-[#77BEFD]">
                         เพิ่มหัวข้อปัญหา
                     </button>
-                    <button @click="problemMode = 'show'" class="p-3 mx-6 bg-gray-300 rounded-xl focus:bg-[#C2E1FD]">
+                    <button @click="changeMode('show')" :style="[!isAdd ? 'background-color: #C2E1FD' : '']"
+                        class="p-3 mx-6 bg-gray-300 rounded-xl hover:bg-[#77BEFD]">
                         หัวข้อปัญหาทั้งหมด
                     </button>
                 </div>
@@ -268,20 +289,25 @@ const getDataFromComponent = (value) => {
                     <h5 class=" shrink w-[150px] m-auto text-right">
                         หัวข้อปัญหา
                     </h5>
-                    <input type="text" :maxlength="problemL" class="grow ml-3 p-2 border-2 border-gray-300 rounded-xl" v-model="name">
+                    <input type="text" :maxlength="problemL" class="grow ml-3 p-2 border-2 border-gray-300 rounded-xl"
+                        v-model="name">
                 </div>
                 <div class="flex mt-2 font-light">
                     <h5 class="shrink w-[150px]  m-auto text-right">
                         หมวดหมู่ของปัญหา
                     </h5>
-                    <select name="type_problem" id="type_problem" class="grow ml-3 p-2 border-2 border-gray-300 rounded-xl" v-model="subjectCr">
+                    <select name="type_problem" id="type_problem" class="grow ml-3 p-2 border-2 border-gray-300 rounded-xl"
+                        v-model="subjectCr">
                         <option selected disabled hidden value="all">โปรดเลือกหมวดหมู่ของปัญหา
                         </option>
-                        <option v-if="role=='admin_it'" v-for="(type, index) in typeProblemsIT" :key="index" :value="type">{{ type }}
+                        <option v-if="role == 'admin_it'" v-for="(type, index) in typeProblemsIT" :key="index" :value="type">
+                            {{ type }}
                         </option>
-                        <option v-if="role=='admin_pr'" v-for="(type, index) in typeProblemsPR" :key="index" :value="type">{{ type }}
+                        <option v-if="role == 'admin_pr'" v-for="(type, index) in typeProblemsPR" :key="index" :value="type">
+                            {{ type }}
                         </option>
-                        <option v-if="role=='super_admin'" v-for="(type, index) in typeProblemsIT.concat(...typeProblemsPR)" :key="index" :value="type">{{ type }}
+                        <option v-if="role == 'super_admin'" v-for="(type, index) in typeProblemsIT.concat(...typeProblemsPR)"
+                            :key="index" :value="type">{{ type }}
                         </option>
                     </select>
                 </div>
@@ -304,17 +330,17 @@ const getDataFromComponent = (value) => {
                         <select @change="subjectCh" name="subject" id="subject"
                             class="absolute bottom-0 w-[200px] bg-[#6FA1CE] text-[#0A0908] text-[0.875rem] font-light rounded-lg p-[1px]  px-[10px]">
                             <!-- <option value="none" selected hidden>Type of subject</option> -->
-                            <option v-if="['admin_it','super_admin'].includes(role)" value="all" selected>All Problem</option>
-                            <option v-if="['admin_it','super_admin'].includes(role)" value="hardware">Hardware</option>
-                            <option v-if="['admin_it','super_admin'].includes(role)" value="software">Software</option>
-                            <option v-if="['admin_it','super_admin'].includes(role)" value="internet">Internet</option>
-                            <option v-if="['admin_it','super_admin'].includes(role)" value="printer">Printer</option>
-                            <option v-if="['admin_it','super_admin'].includes(role)" value="website">Website</option>
-                            <option v-if="['admin_it','super_admin'].includes(role)" value="meeting">Meeting</option>
-                            <option v-if="['admin_it','super_admin'].includes(role)" value="application">Application</option>
-                            <option v-if="['admin_pr','super_admin'].includes(role)" value="media">Media</option>
-                            <option v-if="['admin_pr','super_admin'].includes(role)" value="news">News</option>
-                            <option value="other">Other</option>
+                            <option value="all" selected>All Problem</option>
+                            <option v-if="['admin_it', 'super_admin'].includes(role)" value="hardware">Hardware</option>
+                            <option v-if="['admin_it', 'super_admin'].includes(role)" value="software">Software</option>
+                            <option v-if="['admin_it', 'super_admin'].includes(role)" value="internet">Internet</option>
+                            <option v-if="['admin_it', 'super_admin'].includes(role)" value="printer">Printer</option>
+                            <option v-if="['admin_it', 'super_admin'].includes(role)" value="website">Website</option>
+                            <option v-if="['admin_it', 'super_admin'].includes(role)" value="meeting">Meeting</option>
+                            <option v-if="['admin_it', 'super_admin'].includes(role)" value="application">Application
+                            </option>
+                            <option v-if="['admin_pr', 'super_admin'].includes(role)" value="media">Media</option>
+                            <option v-if="['admin_pr', 'super_admin'].includes(role)" value="news">News</option>
                         </select>
                     </div>
 
@@ -344,7 +370,7 @@ const getDataFromComponent = (value) => {
                 </div>
 
                 <div>
-                    <BaseShowProblem @get-data-status="getDataFromComponent" :problems="problemSplit"/>
+                    <BaseShowProblem @get-data-status="getDataFromComponent" :problems="problemSplit" />
                     <!-- page -->
                     <div class=" inset-x-0 bottom-0 flex w-fit mx-auto mt-4">
                         <button @click="splitProblems(N)" v-for="N in pageN()"
@@ -375,5 +401,4 @@ const getDataFromComponent = (value) => {
     100% {
         opacity: 100%;
     }
-}
-</style>
+}</style>

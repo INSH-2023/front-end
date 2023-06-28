@@ -94,15 +94,18 @@ const getEvents =async(id=undefined)=>{
 }
 
 const getAdmin=async(email)=>{
+    let status = false
     token.value = JSON.parse(jsCookie.get("data")).token
-    let [status,data]=await toBackEnd.getData('request_admin',`${userLink}`,token.value)
-    if(status==200){
-        data = ["super_admin","user"].includes(role.value) ? data : data.filter(e=>e.user_role==role.value)
+    let [s,data]=await toBackEnd.getData('request_admin',`${userLink}`,token.value)
+    if(s==200){
+        status = true
+        data = ["super_admin"].includes(role.value) ? data : data.filter(e=>e.user_role==role.value)
         adminList.value=data.reverse().filter(u=>u.user_email != email)
     }else{
         // status something
         console.log(data)
     }
+    return status
 }
 
 // edit by id
@@ -168,7 +171,7 @@ const showInfoByID=async(v,index)=>{
     // assign_ch.value=""
 
     status = await getEvents(request_id.value)
-    await getAdmin(request.value.request_email)
+    status = await getAdmin(request.value.request_email)
     console.log(request.value.request_assign)
     assign_ch.value = request.value.request_assign
     if(status && isEmptyOBJ.value !=true){
@@ -182,7 +185,6 @@ const showInfoByID=async(v,index)=>{
         // status something
     }
 }
-
 
 // old version
 const commentCh =ref('')
@@ -236,10 +238,6 @@ const changeColorBy=(v)=>{
 
     return style
 }
-
-
-
-
 
 const changeST =(v)=>{
     status_ch.value=''
@@ -624,7 +622,7 @@ const searchByKeyW=()=>{
                 </div>
                 <hr class="w-[80%] h-[10px] m-auto my-4">
                 <!-- first -->
-                <table  class="w-full     text-[20px] font-semibold ">
+                <table  class="w-full text-[20px] font-semibold ">
 
                         <!-- username -->
                         <tr >
@@ -823,8 +821,8 @@ const searchByKeyW=()=>{
                             <h5 class="font-semibold">
                                 Assign
                             </h5>
-                            <select  v-model="assign_ch" name="assign" id="assign" class="w-[200px] mt-2 p-1 bg-gray-400 text-gray-700 font-semibold  rounded">
-                                <option  value="Not_assign" selected disabled hidden>เลือกผู้รับผิดชอบ</option>
+                            <select v-model="assign_ch" name="assign" id="assign" class="w-[200px] mt-2 p-1 bg-gray-400 text-gray-700 font-semibold  rounded">
+                                <option selected disabled value="Not_assign">เลือกผู้รับผิดชอบ</option>
                                 <option v-for="(admin,index) in adminList" :key="index" :value="admin.user_first_name" class="font-semibold bg-gray-300">{{admin.user_first_name}}</option>
                                 <!--<option value="gnitset_testing" class="font-semibold bg-gray-300">gnitset testing</option>
                                 <option value="Testing_Tseing " class="font-semibold bg-gray-300">Testing Tseing</option> -->
