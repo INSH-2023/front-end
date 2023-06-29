@@ -199,6 +199,17 @@ onBeforeMount(()=>{
                             </h4>
                             </div>
                         </li>
+                        <li class="hidden sm:block" v-if="role == 'user'" @click="goHistory">
+                            <div class="flex">
+                                <img src="../assets/requests.png" alt="logo_setting" draggable="false" class="w-[20px] h-[20px] ml-2">
+                                <h4 class="ml-3">
+                                    Show Request
+                                </h4>                                
+                            </div>
+                        </li>
+                        <li>
+                            <hr class="w-full my-2 ">
+                        </li>
                         <li class="hidden sm:block">
                             <div class="flex">
                                 <img src="../assets/settings.png" alt="logo_setting" draggable="false" class="w-[20px] h-[20px] ml-2">

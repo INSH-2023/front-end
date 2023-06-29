@@ -366,13 +366,13 @@ const searchByKeyW=()=>{
     console.log(f_status.value)
 
     // email
-    if(f_email.value.length != 0){
-        filterList.value = requestList.value.filter(e=>e.request_email.toLowerCase().includes(f_email.value.toLowerCase()))
-        console.log('this  email filter : '+f_email.value)
-    }
+    // if(f_email.value.length != 0){
+    //     filterList.value = requestList.value.filter(e=>e.request_email.toLowerCase().includes(f_email.value.toLowerCase()))
+    //     console.log('this  email filter : '+f_email.value)
+    // }
 
     // service
-    else if(f_type.value.length !=0){
+    if(f_type.value.length !=0){
         filterList.value = requestList.value.filter(e=>e.request_service_type.toLowerCase()==f_type.value.toLowerCase())
     }
 
@@ -457,7 +457,6 @@ const searchByKeyW=()=>{
                         Request
                     </div>
                 </div>
-                
 
                 <!-- filter -->
                 <div  class="relative w-[1200px] h-[70px]  mx-auto ">
@@ -470,9 +469,9 @@ const searchByKeyW=()=>{
                             </div> -->
 
                             <!-- email -->
-                            <div class="px-2">
+                            <!-- <div class="px-2">
                                 <input v-model="f_email" placeholder="E-mail" type="text" class="px-3 py-[4px] bg-[#E3F2FD] text-gray-600 rounded-xl focus:outline-0">
-                            </div>
+                            </div> -->
 
                             <!-- type -->
                             <div class="px-2">
@@ -807,7 +806,7 @@ const searchByKeyW=()=>{
                 <hr class="w-[80%] h-[10px] m-auto mt-10">
 
                 <!-- massage other -->
-                <div   class=" w-full  ">
+                <div class=" w-full  ">
                     <div v-show="request.request_other!=''"  class="">
                         <label for="other_1" class="ml-2 text-[17px] font-semibold inline-b">
                             กรณีเลือก<span class="text-rose-500 pl-2">อื่นๆโปรดระบุ</span>
@@ -859,7 +858,6 @@ const searchByKeyW=()=>{
                                 <option v-for="(admin,index) in adminList" :key="index" :value="admin.user_first_name" class="font-semibold bg-gray-300">{{admin.user_first_name}}</option>
                                 <!--<option value="gnitset_testing" class="font-semibold bg-gray-300">gnitset testing</option>
                                 <option value="Testing_Tseing " class="font-semibold bg-gray-300">Testing Tseing</option> -->
-
                             </select>
                         </div>
 

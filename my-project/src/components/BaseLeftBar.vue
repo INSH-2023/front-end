@@ -40,7 +40,7 @@ let role = ref(JSON.parse(Cookies.get("data")).user_role)
         <!-- list navigation -->
         <div class="m-auto  w-[250px] h-full  text-[20px] mt-6 py-3">
             <ul>
-                <li class="lg:hover:bg-gray-200 focus:ring-3 focus:ring-gray-400" @click="goShowAllEvent">
+                <li class="lg:hover:bg-gray-200 focus:ring-3 focus:ring-gray-400" @click="">
                     <button class="flex w-fit  font-semibold text-gray-800">
                         <img src="../assets/admin_page/request.png" alt="" class="w-[28px] h-[28] m-3">
                         <span class="m-3">All Request</span>
