@@ -103,7 +103,7 @@ const getUsers = async (id = undefined) => {
         token.value = JSON.parse(jsCookie.get("data")).token
         let [s, data] = await toBackEnd.getData('user', userLink, token.value)
         if (s == 200) status = true
-        userList.value = data.reverse().sort((a,b)=>(a.user_status < b.user_status) ? -1 : (a.user_status > b.user_status) ? 1 : 0)
+        userList.value = data.reverse().sort((a, b) => (a.user_status < b.user_status) ? -1 : (a.user_status > b.user_status) ? 1 : 0)
 
         showList.value = userList.value
 
@@ -118,7 +118,7 @@ const getUsers = async (id = undefined) => {
     return status
 }
 
-const goVerify = () => myRouter.push({name: "verify"})
+const goVerify = () => myRouter.push({ name: "verify" })
 
 // delete user
 const deleteUser = async (v) => {
@@ -311,7 +311,7 @@ const searchByKeyW = () => {
 }
 </script>
 <template>
-    <div >
+    <div>
         <div class="">
             <div class="">
 
@@ -322,10 +322,7 @@ const searchByKeyW = () => {
                                 class="w-[40px] h-[40px] my-auto mr-4">
                             All User
                         </div>
-
-                </div>
-
-
+                    </div>
                     <!-- filter -->
                     <div class="relative w-[1200px] h-[70px] pl-4 mx-auto ">
                         <div v-show="is_filter_open == true" class="absolute w-fit h-fit bottom-0">
@@ -379,7 +376,6 @@ const searchByKeyW = () => {
                             </div>
                         </div>
 
-
                         <!-- button -->
                         <div class="   right-[70px] bottom-0  absolute">
                             <button @click="is_filter_open = !is_filter_open" class="flex w-fit">
@@ -393,9 +389,6 @@ const searchByKeyW = () => {
 
                     </div>
                 </div>
-
-
-
 
                 <!-- table -->
                 <div class="w-[1200px] mx-auto  h-[450px] mt-2">
@@ -419,8 +412,6 @@ const searchByKeyW = () => {
                                     <th scope="col" class=" w-[150px] py-2 px-2">
                                         Detail
                                     </th>
-
-
                                 </tr>
                             </thead>
                             <tbody>
@@ -738,7 +729,7 @@ const searchByKeyW = () => {
                                 class="w-[250px] h-fit bg-gray-600 p-2 text-[#90CAF9] rounded-lg hover:bg-[#90CAF9] hover:text-gray-600">
                                 ขอรหัสผ่านใหม่
                             </button>
-                        </div>                        
+                        </div>
                         <div class="mt-6 mb-1.5">
                             <button @click="checkInput"
                                 class="w-[250px] h-fit bg-gray-600 p-2 text-[#90CAF9] rounded-lg hover:bg-[#90CAF9] hover:text-gray-600">
@@ -915,4 +906,5 @@ const searchByKeyW = () => {
 
 .table_header::after {
     content: ':';
-}</style>
+}
+</style>

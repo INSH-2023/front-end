@@ -51,6 +51,10 @@ const is_filter_open=ref(false)
 const token = ref('')
 const role = ref(JSON.parse(Cookies.get("data")).user_role)
 
+let count = ref(0)
+let countOld = ref(0)
+let diffentNotify = ref(0)
+
 // get data
 const getEvents =async(id=undefined)=>{
 
@@ -60,11 +64,25 @@ const getEvents =async(id=undefined)=>{
         token.value = JSON.parse(jsCookie.get("data")).token
         let [s,data] =await toBackEnd.getData('request',requestLink,token.value)
         if(s==200){
+            count.value = Cookies.get("request")
+            countOld.value = Cookies.get("requestOld")
             status=true
             requestList.value = data.sort((a,b)=>(a.request_req_date > b.request_req_date) ? -1 : (a.request_req_date < b.request_req_date) ? 1 : 0);
             showList.value = requestList.value
             get_status.value=true
+            count.value = requestList.value.length
+
+            if(countOld != count) {
+                diffentNotify.value = count.value - countOld.value
+                if(diffentNotify.value != 0 && diffentNotify.value != requestList.value.length) {
+                    notify(requestList.value[0])
+                }
+                countOld.value = count.value
+            }
+            
             console.log(showList.value)
+            Cookies.set("request",count.value)
+            Cookies.set("requestOld",countOld.value)
             // status something
         }
         else {
@@ -88,9 +106,26 @@ const getEvents =async(id=undefined)=>{
         }
     }
 
-
-
     return status
+}
+
+// notification
+function notify(data) {
+    console.log(data)
+    let message = `ชื่อ: ${data.request_first_name.length == 0 || data.request_last_name.length == 0 ? '-' : data.request_first_name + ' ' + data.request_last_name} \nอีเมล: ${data.request_email.length == 0 ? '-' : data.request_email}) \nปัญหาที่พบ: ${data.request_problems.length == 0 ? '-' : data.request_problems}`
+    if (!("Notification" in window)) {
+        // Check if the browser supports notifications
+        alert("This browser does not support desktop notification");
+    } else if (Notification.permission !== "denied") {
+        // We need to ask the user for permission
+        Notification.requestPermission().then((permission) => {
+            if (permission === "granted") {
+                new Notification("🔧 คำร้องขอบริการถูกแจ้งแล้ว 🔧", {
+                    body: message
+                })
+            }
+        });
+    }
 }
 
 const getAdmin=async(email)=>{
@@ -354,6 +389,7 @@ const searchByKeyW=()=>{
     showList.value = filterList.value
     console.log(filterList.value)
 }
+
 </script>
 <template>
 
@@ -541,12 +577,9 @@ const searchByKeyW=()=>{
                         </tr>                        
                     </thead>
                     
-
-
                     <!-- have data -->
                     <tbody class="z-0"> <!-- @click="clickedInfo" -->
-                        <tr  v-for="(data,index) in showList" :key="index" class="relative text-[15px]  bg-white border-b-2 border-gray-300 cursor-default hover:border-gray-400 z-1">
-                            
+                        <tr v-for="(data,index) in showList" :style="[index<diffentNotify?'background-color:#A6F4F9':'']" :key="index" class="relative text-[15px]  bg-white border-b-2 border-gray-300 cursor-default hover:border-gray-400 z-1">
                             <td class=" font-medium py-3 px-2 text-center">
                                 <div class="  font-normal truncate ">
                                     <span class="">

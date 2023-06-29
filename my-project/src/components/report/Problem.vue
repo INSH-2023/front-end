@@ -2,7 +2,7 @@
 import{ref,computed,onBeforeMount,onUpdated} from 'vue'
 import toBackEnd from '../../JS/fetchToBack'
 import getRefreshToken from '../../JS/refresh';
-import jsCookie from 'js-cookie';
+import jsCookie from '../../JS/cookies';
 
 import Application from './../../assets/problem/application.png'
 import Internet from './../../assets/problem/internet.png'

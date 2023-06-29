@@ -2,10 +2,6 @@
 import { useRouter } from 'vue-router'
 import { ref } from 'vue'
 import Cookies from '../JS/cookies';
-import {useNotify} from '../stores/showCountNotify'
-import {storeToRefs} from 'pinia'
-const myNotify = useNotify()
-const {count,requestList} = storeToRefs(myNotify)
 const myRouter = useRouter()
 const goSignIn = () => myRouter.push({ name: 'signIn' })
 const goRegister = () => myRouter.push({ name: 'signUp' })
@@ -47,7 +43,7 @@ let role = ref(JSON.parse(Cookies.get("data")).user_role)
                 <li class="lg:hover:bg-gray-200 focus:ring-3 focus:ring-gray-400" @click="goShowAllEvent">
                     <button class="flex w-fit  font-semibold text-gray-800">
                         <img src="../assets/admin_page/request.png" alt="" class="w-[28px] h-[28] m-3">
-                        <span class="m-3">All Request ({{ count }})</span>
+                        <span class="m-3">All Request</span>
                     </button>
                     <hr class="full border-[1px] border-gray-400">
                 </li>

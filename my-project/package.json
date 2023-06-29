@@ -10,7 +10,6 @@
     "db": "json-server --watch database.json"
   },
   "dependencies": {
-    "js-cookie": "^3.0.5",
     "json-server": "^0.17.1",
     "pinia": "^2.1.4",
     "vue": "^3.2.45",

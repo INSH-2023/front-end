@@ -13,8 +13,6 @@ import BaseAlert from '../../../components/BaseAlert.vue';
 import BaseLoading from '../../../components/BaseLoading.vue';
 import jsCookie from '../../../JS/cookies';
 import getRefreshToken from './../../../JS/refresh';
-import {useNotify} from '../../../stores/showCountNotify'
-const myNotify = useNotify()
 
 const myRouter = useRouter()
 const goBack = () => myRouter.go(-1)
@@ -258,9 +256,6 @@ const validateReport = (stage) => {
             }
 }
 
-
-
-
 // third
 // const problems =ref([])
 const problem_to_text = computed(() => {
@@ -285,8 +280,6 @@ const getUser = async (emp_code) => {
         console.log(data_user)
     }
 }
-
-
 
 onBeforeMount(() => {
     getUser(validate.getUserDataFromLocal('user_emp_code')),
@@ -340,7 +333,7 @@ const computeStageReport = (status) => {
 // notification
 function notify(data) {
     console.log(data)
-    let message = `\n🔧 คำร้องขอบริการของ 🔧\nชื่อ: ${data.request_first_name.length == 0 || data.request_last_name.length == 0 ? '-' : data.request_first_name + ' ' + data.request_last_name} \nอีเมล: ${data.request_email.length == 0 ? '-' : data.request_email}) \nปัญหาที่พบ: ${data.request_problems.length == 0 ? '-' : data.request_problems}`
+    let message = `ชื่อ: ${data.request_first_name.length == 0 || data.request_last_name.length == 0 ? '-' : data.request_first_name + ' ' + data.request_last_name} \nอีเมล: ${data.request_email.length == 0 ? '-' : data.request_email}) \nปัญหาที่พบ: ${data.request_message.length == 0 ? '-' : data.request_message}`
     if (!("Notification" in window)) {
         // Check if the browser supports notifications
         alert("This browser does not support desktop notification");
@@ -348,7 +341,7 @@ function notify(data) {
         // We need to ask the user for permission
         Notification.requestPermission().then((permission) => {
             if (permission === "granted") {
-                new Notification("Request to Service successfully", {
+                new Notification("🔧 คำร้องขอบริการของ 🔧", {
                     body: message
                 })
                 // …
@@ -360,42 +353,42 @@ function notify(data) {
 // send form
 const isSubmitt = ref(false)
 const submitt = async () => {
-            // share on admin page
-            myNotify.addList(data_ch.value)
-    // button_status.value = true
-    // console.log(data_ch.value)
-    // token.value = JSON.parse(jsCookie.get("data")).token
-    // let [status, data] = await toBackEnd.postData('report', requestLink, data_ch.value, token.value)
-    // if (status == 200) {
+        // // share on admin page
+        // myNotify.addList(data_ch.value)
+    button_status.value = true
+    console.log(data_ch.value)
+    token.value = JSON.parse(jsCookie.get("data")).token
+    let [status, data] = await toBackEnd.postData('report', requestLink, data_ch.value, token.value)
+    if (status == 200) {
 
-    //     // isSummary.value=undefined
-    //     isSubmitt.value = true
-    //     // setTimeout(goMain,5000)
-    //     console.log(data)
-    //     button_status.value = false
+        // isSummary.value=undefined
+        isSubmitt.value = true
+        // setTimeout(goMain,5000)
+        console.log(data)
+        button_status.value = false
 
-    //     // send notify to user
-    //     notify(data_ch.value)
+        // send notify to user
+        notify(data_ch.value)
 
-    //     // play audio for notification
-    //     const audio = new Audio();
-    //     audio.src = 'https://drive.google.com/uc?id=1HFqk6XDY_5aF-OKtOXITlHEtM0Ek67CJ&export=download'
-    //     audio.play();
+        // play audio for notification
+        const audio = new Audio();
+        audio.src = 'https://drive.google.com/uc?id=1HFqk6XDY_5aF-OKtOXITlHEtM0Ek67CJ&export=download'
+        audio.play();
 
-    // } else
-    //     if (status == 400) {
-    //         // console.log(data)
-    //         button_status.value = false
-    //         alert_status.value = true
-    //         alert_title.value = 'Invalid data !!'
-    //         alert_message.value = 'ข้อมูลไม่ถูกต้องไม่สามารถทำรายการได้'
-    //     } else {
-    //         console.log(data)
-    //         button_status.value = false
-    //         alert_status.value = true
-    //         alert_title.value = 'Error from server !!'
-    //         alert_message.value = 'An internal error occurred, please try again later.'
-    //     }
+    } else
+        if (status == 400) {
+            // console.log(data)
+            button_status.value = false
+            alert_status.value = true
+            alert_title.value = 'Invalid data !!'
+            alert_message.value = 'ข้อมูลไม่ถูกต้องไม่สามารถทำรายการได้'
+        } else {
+            console.log(data)
+            button_status.value = false
+            alert_status.value = true
+            alert_title.value = 'Error from server !!'
+            alert_message.value = 'An internal error occurred, please try again later.'
+        }
 }
 
 // get data from component
