@@ -28,7 +28,6 @@ onUpdated(()=>{
 onMounted(()=>{
     console.log("helloooooo")
     console.log(props.problems)
-
 })
 
 // const problemsLink='http://localhost:3000/problems'

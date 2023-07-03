@@ -51,8 +51,6 @@ const is_filter_open=ref(false)
 const token = ref('')
 const role = ref(JSON.parse(Cookies.get("data")).user_role)
 
-let count = ref(0)
-let countOld = ref(0)
 let diffentNotify = ref(0)
 
 // get data
@@ -64,25 +62,19 @@ const getEvents =async(id=undefined)=>{
         token.value = JSON.parse(jsCookie.get("data")).token
         let [s,data] =await toBackEnd.getData('request',requestLink,token.value)
         if(s==200){
-            count.value = Cookies.get("request")
-            countOld.value = Cookies.get("requestOld")
             status=true
-            requestList.value = data.sort((a,b)=>(a.request_req_date > b.request_req_date) ? -1 : (a.request_req_date < b.request_req_date) ? 1 : 0);
+            requestList.value = data.data.sort((a,b)=>(a.request_req_date > b.request_req_date) ? -1 : (a.request_req_date < b.request_req_date) ? 1 : 0);
             showList.value = requestList.value
             get_status.value=true
-            count.value = requestList.value.length
 
-            if(countOld != count) {
-                diffentNotify.value = count.value - countOld.value
-                if(diffentNotify.value != 0 && diffentNotify.value != requestList.value.length) {
+            if(data.request_count != requestList.value.length) {
+                diffentNotify.value = requestList.value.length - data.request_count
+                if(diffentNotify.value != 0) {
                     notify(requestList.value[0])
                 }
-                countOld.value = count.value
             }
             
             console.log(showList.value)
-            Cookies.set("request",count.value)
-            Cookies.set("requestOld",countOld.value)
             // status something
         }
         else {

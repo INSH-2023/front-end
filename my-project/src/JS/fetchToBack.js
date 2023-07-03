@@ -181,7 +181,7 @@ let toBackEnd={
          console.log(name,error)
       }
       
-      if(status==200){
+      if(status==201){
          status=res.status
          console.log(`post ${name} successful`)
          return_data.push(status)
@@ -203,6 +203,40 @@ let toBackEnd={
       if(status==404){
          status=res.status
          return_data.push(status)
+      }else{
+         status=500
+         console.log(`error cannot post ${name}`)
+         return_data.push(status)
+         return_data.push('เกิดข้อผิดพลาดฝั่ง Server กรูณาติดต่อฝ่าย IT !!')
+      }
+   
+      return return_data
+   },
+   async postFile(name,link,data,token,boundary){
+      // variable
+      let return_data =[]
+      let status =undefined
+      let res= undefined
+      console.log(data)
+      // show log
+      console.log(`post data ${name} => ${link}`)
+      // fetch
+      try {
+         res = await fetch(link,{
+            method:'POST',
+            headers:{Authorization: "Bearer " + token},
+            body: data
+         })       
+         status=res.status  
+      } catch (error) {
+         console.log(name,error)
+      }
+      
+      if(status==201){
+         status=res.status
+         console.log(`post ${name} successful`)
+         return_data.push(status)
+         return_data.push(await res.json())
       }else{
          status=500
          console.log(`error cannot post ${name}`)

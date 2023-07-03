@@ -8,12 +8,15 @@ import BaseShowProblem from '../../../components/problem-list/BaseShowProblem.vu
 
 // const problemsLink='http://localhost:3000/problems'
 const problemsLink = `${import.meta.env.VITE_BACK_END_HOST}/problems`
+const iconLink = `${import.meta.env.VITE_BACK_END_HOST}/images/files/problems`
 
 const problemList = ref([])
 const name = ref('')
 const subjectCr = ref('all')
 const token = ref('')
 const role = ref(JSON.parse(Cookies.get("data")).user_role)
+const file = ref("")
+const base64Img = ref("")
 
 // length of problem name
 const problemL = 20
@@ -31,8 +34,6 @@ const data_ch = computed(() => {
 })
 
 const isEdit = ref(false)
-
-let isAdd = ref(false)
 
 // get  problem
 const getP = async (v) => {
@@ -152,13 +153,17 @@ const addProblem = async () => {
     token.value = JSON.parse(jsCookie.get("data")).token
     let [status, data] = await toBackEnd.postData('problem', problemsLink, data_ch.value, token.value)
 
-    if (status == 200) {
+    const formData = new FormData()
+    formData.append("file", file.value)
+    let [status1, data1] = await toBackEnd.postFile('problem', `${iconLink}/${data.problemId}`, formData, token.value)
+
+    if (status1 == 200) {
         console.log('add problem success 😏')
-        console.log(data)
+        console.log(data1)
         subjectCr.value = 'all'
         getP(subjectCr.value)
     } else {
-        console.log(data)
+        console.log(data1)
     }
 }
 
@@ -208,12 +213,29 @@ const getDataFromComponent = (value) => {
 
 const changeMode = (mode) => {
     if (mode == "add") {
-        isAdd.value = true
+        problemMode.value = "add"
     } else {
-        isAdd.value = false
+        problemMode.value = "show"
     }
 }
 
+function onFileChanged($event) {
+    const target = $event.target;
+    if (target && target.files) {
+        file.value = target.files[0];
+        encodeImage(file.value)
+    }
+}
+
+function encodeImage(input) {
+    if (input) {
+        const reader = new FileReader()
+        reader.onload = (e) => {
+            base64Img.value = e.target.result
+        }
+        reader.readAsDataURL(input)
+    }
+}
 </script>
 <template>
     <!-- <div class="overflow-y-auto relative show_up"> -->
@@ -267,11 +289,11 @@ const changeMode = (mode) => {
                 </button> -->
                 <!-- menu -->
                 <div class="flex w-fit h-fit m-auto">
-                    <button @click="changeMode('add')" :style="[isAdd ? 'background-color: #C2E1FD' : '']"
+                    <button @click="changeMode('add')" :style="[problemMode == 'add' ? 'background-color: #C2E1FD' : '']"
                         class="p-3 mx-6 bg-gray-300 rounded-xl hover:bg-[#77BEFD]">
                         เพิ่มหัวข้อปัญหา
                     </button>
-                    <button @click="changeMode('show')" :style="[!isAdd ? 'background-color: #C2E1FD' : '']"
+                    <button @click="changeMode('show')" :style="[problemMode == 'show' ? 'background-color: #C2E1FD' : '']"
                         class="p-3 mx-6 bg-gray-300 rounded-xl hover:bg-[#77BEFD]">
                         หัวข้อปัญหาทั้งหมด
                     </button>
@@ -300,16 +322,29 @@ const changeMode = (mode) => {
                         v-model="subjectCr">
                         <option selected disabled hidden value="all">โปรดเลือกหมวดหมู่ของปัญหา
                         </option>
-                        <option v-if="role == 'admin_it'" v-for="(type, index) in typeProblemsIT" :key="index" :value="type">
+                        <option v-if="role == 'admin_it'" v-for="(type, index) in typeProblemsIT" :key="index"
+                            :value="type">
                             {{ type }}
                         </option>
-                        <option v-if="role == 'admin_pr'" v-for="(type, index) in typeProblemsPR" :key="index" :value="type">
+                        <option v-if="role == 'admin_pr'" v-for="(type, index) in typeProblemsPR" :key="index"
+                            :value="type">
                             {{ type }}
                         </option>
-                        <option v-if="role == 'super_admin'" v-for="(type, index) in typeProblemsIT.concat(...typeProblemsPR)"
-                            :key="index" :value="type">{{ type }}
+                        <option v-if="role == 'super_admin'"
+                            v-for="(type, index) in typeProblemsIT.concat(...typeProblemsPR)" :key="index" :value="type">{{
+                                type }}
                         </option>
                     </select>
+                </div>
+                <div class="flex mt-2 font-light">
+                    <h5 class=" shrink w-[150px] m-auto text-right">
+                        รูปภาพของปัญหา
+                    </h5>
+                    <div class="grow ml-3 p-2 border-2 border-gray-300 rounded-xl">
+                        <input type="file" @change="onFileChanged($event)" accept="image/png, image/jpeg, image/jpg" capture/>
+                        <img :src="base64Img" width="400">
+                    </div>
+
                 </div>
                 <button @click="addProblem" class="mt-4 p-2 bg-gray-300 hover:bg-gray-500 focus:bg-gray-300 rounded-xl">
                     สร้างหัวข้อปัญหา
@@ -401,4 +436,5 @@ const changeMode = (mode) => {
     100% {
         opacity: 100%;
     }
-}</style>
+}
+</style>
