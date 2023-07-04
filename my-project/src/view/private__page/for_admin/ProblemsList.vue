@@ -13,6 +13,7 @@ const iconLink = `${import.meta.env.VITE_BACK_END_HOST}/images/files/problems`
 const problemList = ref([])
 const name = ref('')
 const subjectCr = ref('all')
+const isUpload = ref(false)
 const token = ref('')
 const role = ref(JSON.parse(Cookies.get("data")).user_role)
 const file = ref("")
@@ -29,7 +30,8 @@ const typeProblemsPR = ["media", "news"]
 const data_ch = computed(() => {
     return {
         problem_problem: name.value,
-        problem_type: subjectCr.value
+        problem_type: subjectCr.value,
+        problem_upload: isUpload.value
     }
 })
 
@@ -37,7 +39,6 @@ const isEdit = ref(false)
 
 // get  problem
 const getP = async (v) => {
-
     let status = undefined
 
     if (v != 'all') {
@@ -150,20 +151,26 @@ const hoverFn = (b, n) => {
 
 // add new problem
 const addProblem = async () => {
+    data_ch.value.problem_upload = file.value.length != 0 ? true : false
+
     token.value = JSON.parse(jsCookie.get("data")).token
     let [status, data] = await toBackEnd.postData('problem', problemsLink, data_ch.value, token.value)
 
-    const formData = new FormData()
-    formData.append("file", file.value)
-    let [status1, data1] = await toBackEnd.postFile('problem', `${iconLink}/${data.problemId}`, formData, token.value)
+    if (file.value.length != 0) {
+        const formData = new FormData()
+        formData.append("file", file.value)
+        let [status1, data1] = await toBackEnd.postFile('problem', `${iconLink}/${data.problemId}`, formData)
+    }
 
-    if (status1 == 200) {
+    if (status == 200) {
         console.log('add problem success 😏')
-        console.log(data1)
+        console.log(data)
         subjectCr.value = 'all'
-        getP(subjectCr.value)
+        base64Img.value = ''
+        file.value = ''
+        // getP(subjectCr.value)
     } else {
-        console.log(data1)
+        console.log(data)
     }
 }
 
@@ -216,6 +223,7 @@ const changeMode = (mode) => {
         problemMode.value = "add"
     } else {
         problemMode.value = "show"
+        getP(subjectCr.value)
     }
 }
 
@@ -331,18 +339,19 @@ function encodeImage(input) {
                             {{ type }}
                         </option>
                         <option v-if="role == 'super_admin'"
-                            v-for="(type, index) in typeProblemsIT.concat(...typeProblemsPR)" :key="index" :value="type">{{
-                                type }}
+                            v-for="(type, index) in typeProblemsIT.concat(...typeProblemsPR)" :key="index" :value="type">
+                            {{ type }}
                         </option>
                     </select>
                 </div>
                 <div class="flex mt-2 font-light">
                     <h5 class=" shrink w-[150px] m-auto text-right">
-                        รูปภาพของปัญหา
+                        รูปภาพของปัญหา (Optional)
                     </h5>
                     <div class="grow ml-3 p-2 border-2 border-gray-300 rounded-xl">
-                        <input type="file" @change="onFileChanged($event)" accept="image/png, image/jpeg, image/jpg" capture/>
-                        <img :src="base64Img" width="400">
+                        <input type="file" @change="onFileChanged($event)" accept="image/png, image/jpeg, image/jpg"
+                            capture />
+                        <img :src="base64Img" width="400" height="400" v-if="base64Img.length != 0">
                     </div>
 
                 </div>

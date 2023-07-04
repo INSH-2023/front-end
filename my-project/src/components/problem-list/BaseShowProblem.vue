@@ -1,5 +1,5 @@
 <script setup>
-import {ref,onUpdated,onMounted} from 'vue'
+import { ref, onUpdated, onMounted } from 'vue'
 
 import Application from './../../assets/problem/application.png'
 import Internet from './../../assets/problem/internet.png'
@@ -10,22 +10,23 @@ import Printer from './../../assets/problem/printer.png'
 import Hardware from './../../assets/problem/hardware.png'
 import Software from './../../assets/problem/software.png'
 import Website from './../../assets/problem/website.png'
+import jsCookie from './../../JS/cookies';
 
 const problemIcon = [Application, Internet, Media, Meeting, News, Printer, Hardware, Software, Website]
 
 const emit = defineEmits(["getDataStatus"])
-const props =defineProps({
-    problems:{
-        type:Array,
-        required:true
+const props = defineProps({
+    problems: {
+        type: Array,
+        required: true
     }
 })
-const getStatus=ref(false)
-onUpdated(()=>{
-    emit('getDataStatus',{status:getStatus})
+const getStatus = ref(false)
+onUpdated(() => {
+    emit('getDataStatus', { status: getStatus })
     console.log(props.problems)
 })
-onMounted(()=>{
+onMounted(() => {
     console.log("helloooooo")
     console.log(props.problems)
 })
@@ -60,6 +61,9 @@ const problemSplit = ref([])
 
 // for click and first value
 const currentPage = ref(1)
+
+const token = ref()
+
 const splitProblems = (N) => {
     currentPage.value = N
     let max = (N * maxOfPage.value) - 1
@@ -114,14 +118,14 @@ const hoverFn = (b, n) => {
 // delete problems
 const removeProblem = async (id) => {
     console.log(id)
-    getStatus.value=true
-    emit('getDataStatus',{status:getStatus.value,id:id})
+    getStatus.value = true
+    emit('getDataStatus', { status: getStatus.value, id: id })
 
     // token.value = JSON.parse(jsCookie.get("data")).token
     // let [status, data] = await toBackEnd.delete("problem", problemsLink, id, token.value)
     // if (status == 200) {
     //     console.log(data)
-        
+
     //     if (problemList.value.length <= maxOfPage.value) {
     //         splitProblems(1)
     //     }
@@ -131,15 +135,22 @@ const removeProblem = async (id) => {
 
 }
 
-const getImg = (problem_type) => {
+const getImg = (problemId) => {
+    let currentList = []
+    token.value = JSON.parse(jsCookie.get("data")).token
+    let data = `${import.meta.env.VITE_BACK_END_HOST}/images/files/problems/${problemId}`
+    currentList.push(data)
+    return currentList
+}
+const getIcon = (problem_type) => {
+    let currentList = []
     let path = `/src/assets/problem/${problem_type}.png`
-    let currentIcon = []
-    problemIcon.forEach( i => {
+    problemIcon.forEach(i => {
         if (path == i) {
-            currentIcon.push(path)
+            currentList.push(path)
         }
     })
-    return currentIcon
+    return currentList
 }
 
 </script>
@@ -150,7 +161,8 @@ const getImg = (problem_type) => {
             v-for="(p, index) in props.problems" :key="index"
             class="card block w-full h-[8.438rem] mx-auto bg-[#C2E1FD] rounded-lg">
             <div :id="`info_${index}`" class="info ">
-                <img :src="getImg(p.problem_type)" alt="logo" class="w-[60px] mx-auto mt-4 ">
+                <img :src="getImg(p.problemId)" alt="logo" class="w-[60px] h-[60px] mx-auto mt-4 " v-if="p.problem_upload">
+                <img :src="getIcon(p.problem_type)" alt="logo" class="w-[60px] h-[60px] mx-auto mt-4 " v-else>
                 <!-- ชื่อ -->
                 <h4 class="text-[0.875rem] mt-4 font-light">
                     {{ p.problem_problem }}
@@ -177,7 +189,6 @@ const getImg = (problem_type) => {
             </div>
             <!-- <button @click="">splitProblems</button> -->
         </div>
-    </div>   
+    </div>
 </template>
-<style scoped>
-</style>
+<style scoped></style>

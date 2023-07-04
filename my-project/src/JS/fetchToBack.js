@@ -181,7 +181,7 @@ let toBackEnd={
          console.log(name,error)
       }
       
-      if(status==201){
+      if(status==200 || status==201){
          status=res.status
          console.log(`post ${name} successful`)
          return_data.push(status)
@@ -212,19 +212,18 @@ let toBackEnd={
    
       return return_data
    },
-   async postFile(name,link,data,token,boundary){
+   async postFile(name,link,data){
       // variable
       let return_data =[]
       let status =undefined
       let res= undefined
       console.log(data)
       // show log
-      console.log(`post data ${name} => ${link}`)
+      console.log(`post file ${name} => ${link}`)
       // fetch
       try {
          res = await fetch(link,{
             method:'POST',
-            headers:{Authorization: "Bearer " + token},
             body: data
          })       
          status=res.status  

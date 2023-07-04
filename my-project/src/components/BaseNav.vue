@@ -207,7 +207,7 @@ onBeforeMount(()=>{
                                 </h4>                                
                             </div>
                         </li>
-                        <li>
+                        <li v-if="role == 'user'">
                             <hr class="w-full my-2 ">
                         </li>
                         <li class="hidden sm:block">
