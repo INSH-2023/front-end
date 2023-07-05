@@ -145,9 +145,6 @@ const getIcon = (problem_type) => {
     let currentList = []
     let path = `${import.meta.env.VITE_BACK_END_HOST}/images/files/problems/${problem_type}`
     problemIcon.forEach(i => {
-        console.log("")
-        console.log(path)
-        console.log(i)
         if (path == i) {
             currentList.push(path)
         }
