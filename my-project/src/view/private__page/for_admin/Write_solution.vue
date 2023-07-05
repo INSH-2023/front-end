@@ -295,8 +295,6 @@ const submitt=async()=>{
                             <img  v-show="false"  src="../../../assets/vue.svg" alt="spin_loading" class="absolute top-[10px] right-[25px] w-[20px] animate-spin">
                         </button>
                     </div>
-
-
                 </div>
             </div>
 
