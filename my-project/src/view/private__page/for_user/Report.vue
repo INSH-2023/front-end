@@ -359,7 +359,7 @@ const submitt = async () => {
     console.log(data_ch.value)
     token.value = JSON.parse(jsCookie.get("data")).token
     let [status, data] = await toBackEnd.postData('report', requestLink, data_ch.value, token.value)
-    if (status == 200) {
+    if (status == 201) {
 
         // isSummary.value=undefined
         isSubmitt.value = true

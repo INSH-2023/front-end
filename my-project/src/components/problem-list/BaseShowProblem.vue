@@ -1,18 +1,18 @@
 <script setup>
 import { ref, onUpdated, onMounted } from 'vue'
 
-import Application from './../../assets/problem/application.png'
-import Internet from './../../assets/problem/internet.png'
-import Media from './../../assets/problem/media.png'
-import Meeting from './../../assets/problem/meeting.png'
-import News from './../../assets/problem/news.png'
-import Printer from './../../assets/problem/printer.png'
-import Hardware from './../../assets/problem/hardware.png'
-import Software from './../../assets/problem/software.png'
-import Website from './../../assets/problem/website.png'
-import jsCookie from './../../JS/cookies';
+const path = `${import.meta.env.VITE_BACK_END_HOST}/images/files/problems`
+const APPLICATION = `${path}/application`
+const INTERNET =`${path}/internet`
+const MEDIA = `${path}/media`
+const MEETING =  `${path}/meeting`
+const NEWS =  `${path}/news`
+const PRINTER =  `${path}/printer`
+const HARDWARE =  `${path}/hardware`
+const SOFTWARE =  `${path}/software`
+const WEBSITE = `${path}/website`
 
-const problemIcon = [Application, Internet, Media, Meeting, News, Printer, Hardware, Software, Website]
+const problemIcon = [APPLICATION, INTERNET, MEDIA, MEETING, NEWS, PRINTER, HARDWARE, SOFTWARE, WEBSITE]
 
 const emit = defineEmits(["getDataStatus"])
 const props = defineProps({
@@ -137,15 +137,17 @@ const removeProblem = async (id) => {
 
 const getImg = (problemId) => {
     let currentList = []
-    token.value = JSON.parse(jsCookie.get("data")).token
     let data = `${import.meta.env.VITE_BACK_END_HOST}/images/files/problems/${problemId}`
     currentList.push(data)
     return currentList
 }
 const getIcon = (problem_type) => {
     let currentList = []
-    let path = `/src/assets/problem/${problem_type}.png`
+    let path = `${import.meta.env.VITE_BACK_END_HOST}/images/files/problems/${problem_type}`
     problemIcon.forEach(i => {
+        console.log("")
+        console.log(path)
+        console.log(i)
         if (path == i) {
             currentList.push(path)
         }
