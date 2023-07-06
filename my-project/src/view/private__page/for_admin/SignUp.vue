@@ -69,10 +69,7 @@ let dataCh =computed(()=>{
         user_status: 'active',
         user_cPassW: cPassW.value
     }
-
 })
-
-
 
 // modify email
 // const emailM=(event)=>{

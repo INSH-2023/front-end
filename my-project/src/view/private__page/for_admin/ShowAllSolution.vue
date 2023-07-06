@@ -1,34 +1,32 @@
 <script setup>
 import{ref, onBeforeMount}from'vue'
 import getRefreshToken from './../../../JS/refresh';
+import jsCookie from '../../../JS/cookies'
+import toBackEnd from '../../../JS/fetchToBack';
 const isFilter=ref(false)
 const solutionList =ref([])
 // const solutionLink ='http://localhost:3000/solutions'
 const solutionLink =`${import.meta.env.VITE_BACK_END_HOST}/solutions`
-
+const token = ref('')
 
 // get solution 
 const getSolu =async()=>{
-    let res = await fetch(solutionLink,{
-        method:'GET'
-    })
-    if(res.status==200){
-        solutionList.value=await res.json()
+    token.value = JSON.parse(jsCookie.get("data")).token
+    let [status,data] = await toBackEnd.getData('solution',solutionLink,token.value)
+    if(status==200){
+        solutionList.value=data
         console.log('get Solution success')
     }else{
         console.log('error something cannot get solution')
     }
-
 }
 
 // delete
 const deleteItem =async (v)=>{
-    let res = await fetch(`${solutionLink}/${v}`,{
-        method:'DELETE'
-    })
-    if(res.status==200){
+    let [status] = await toBackEnd.delete('solution',solutionLink,v,token.value)
+    if(status==200){
         console.log('delete success')
-        getEvents()
+        getSolu()
     }else{
         console.log('can not delete data error something')
     }
@@ -47,7 +45,7 @@ onBeforeMount(()=>{
             <div class=" bg-white w-full mx-auto  h-fit ">
                 <div class="w-full text-center font-semibold text-[40px] pt-6">
                     <div class="flex w-fit mx-auto">
-                        <img src="../../../assets/vue.svg" alt="users_icon" class="w-[40px] mr-4">
+                        <img src="../../../assets/admin_page/document.png" alt="users_icon" class="w-[60px] mr-4">
                         All Solution
                     </div>
 
@@ -58,7 +56,7 @@ onBeforeMount(()=>{
                         <span class="font-semibold my-auto">
                             ตัวกรอง
                         </span> 
-                        <img src="../../../assets/vue.svg" alt="icon" class="w-[20px] ml-[5px] my-auto">                                
+                        <img src="../../../assets/admin_page/filter.png" alt="icon" class="w-[20px] ml-[5px] my-auto">                                
                     </button>
                 </div>
 
@@ -128,7 +126,7 @@ onBeforeMount(()=>{
                         <tr v-for="(data,index) in solutionList" :key="index" class="text-[15px]  bg-white border-b-2 border-gray-300 hover:border-gray-400 hover:bg-gray-400">
                             <td class="w-[140px]   font-medium px-6 py-4 text-left">
                                 <div class="w-[130px] font-semibold truncate mx-auto text-center">
-                                    {{data.title}} 
+                                    {{data.solution_title}} 
                                 </div>
                             </td>
                             <td class="w-[90px] px-6 py-4 font-semibold ">
@@ -136,23 +134,21 @@ onBeforeMount(()=>{
                             </td>
                             <td class="w-[130px] px-3 py-4 font-semibold ">
                                 <div class="w-[250px] truncate mx-auto">
-                                    <span v-for="(tag,indexx) in data.tag" :key="indexx">
-                                        {{tag}},
+                                    <span v-for="(tag,index) in data.solution_tag" :key="index">
+                                        {{tag}}
                                     </span>
-                                    
                                 </div>
                             </td>
                             <td class="w-[130px] px-3 py-4 font-semibold ">
                                 <div class="w-[300px] truncate mx-auto">
-                                    {{data.text}}
+                                    <span v-html="data.solution_text"></span>
                                 </div>
                             </td>
                             <td class="w-[130px] px-6 py-4 font-semibold">
                                 <div class="flex w-fit mx-auto truncate ">
                                     <img src="../../../assets/admin_page/edit.png" alt="delete_icon" class="w-[28px] m-2">
-                                    <img @click="deleteItem" src="../../../assets/admin_page/bin.png" alt="delete_icon" class="w-[28px] m-2 cursor-pointer">
+                                    <img @click="deleteItem(data.solutionId)" src="../../../assets/admin_page/bin.png" alt="delete_icon" class="w-[28px] m-2 cursor-pointer">
                                 </div>
-
                             </td>
                         </tr>      
                     </tbody>

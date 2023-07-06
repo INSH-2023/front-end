@@ -187,7 +187,6 @@ const submitt =(v)=>{
     }
 }
 
-
 // showInfo
 const showInfoByID=async(v,index)=>{
     let status=false
@@ -296,8 +295,6 @@ const changeST =(v)=>{
     // rStatus.value=v
 }
 
-
-
 // add comment
 const addComment =()=>{
     let date =new Date()
@@ -397,7 +394,6 @@ const searchByKeyW=()=>{
                         </button>   -->
                     </div>
                 </div>
-              
             </div>
         </div>
         <!-- no data -->

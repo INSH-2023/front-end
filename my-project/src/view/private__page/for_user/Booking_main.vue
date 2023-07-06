@@ -61,14 +61,14 @@ const findingKeyW = async (keyWord) => {
                 arr.push(solu)
                 console.log('this from searching text: ', solu.solution_text.includes(keyWord))
             }
-            // else
-            //     if (matchStep(solu.solution_steps, keyWord)) {
-            //         arr.push(solu)
-            //         console.log('this from searching step: ', matchStep(solu.solution_steps, keyWord))
-            //     }
+        // else
+        //     if (matchStep(solu.solution_steps, keyWord)) {
+        //         arr.push(solu)
+        //         console.log('this from searching step: ', matchStep(solu.solution_steps, keyWord))
+        //     }
     }
     if (arr.length != 0) {
-        await randomArticle(4, arr.length, arr)        
+        await randomArticle(4, arr.length, arr)
     }
 }
 
@@ -105,7 +105,7 @@ const randomArticle = async (n, max, data) => {
 
 onBeforeMount(() => {
     getArticle(params.service),
-    getRefreshToken(JSON.parse(jsCookie.get("data")).refreshToken)
+        getRefreshToken(JSON.parse(jsCookie.get("data")).refreshToken)
 })
 </script>
 <template>
@@ -436,12 +436,6 @@ onBeforeMount(() => {
     <hr class="hidden mt-[30px] w-[1100px] h-[1px] border-0 mx-auto bg-gray-700
         lg:block
     ">
-    <div class="w-[200px] h-fit mx-auto my-5 lg:mt-10 lg:my-0">
-        <button @click="goService"
-            class="w-full h-full mx-auto p-2 text-[20px] font-light text-gray-400 rounded-xl hover:bg-gray-400 hover:text-white">
-            ย้อนกลับ
-        </button>
-    </div>
 
     <!-- searching -->
     <div v-if="params.service == 'it'" class="relative w-[600px] h-[150px] mx-auto">
@@ -493,10 +487,21 @@ onBeforeMount(() => {
             <p class="resize-none w-full h-[100px] px-2 text-[15px] text-ellipsis whitespace-normal break-words">
                 {{ data.solution_text }}
             </p>
-            <button @click="goHowTo(data.id)" class="w-fit text-left p-2 text-sky-500 hover:text-sky-700 block">
+            <button @click="goHowTo(data.solutionId)" class="w-fit text-left p-2 text-sky-500 hover:text-sky-700 block">
                 ดูรายละเอียดเพิ่มเติม &#62;&nbsp;
             </button>
         </div>
+    </div>
+
+    <!-- line -->
+    <hr class="hidden mt-[30px] w-[1100px] h-[1px] border-0 mx-auto bg-gray-700
+        lg:block
+    ">
+    <div class="w-[200px] h-fit mx-auto my-5 lg:mt-10 lg:my-0">
+        <button @click="goService"
+            class="w-full h-full mx-auto p-2 text-[20px] font-light text-gray-400 rounded-xl hover:bg-gray-400 hover:text-white">
+            ย้อนกลับ
+        </button>
     </div>
     <!-- </div>
 </div> -->

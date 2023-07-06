@@ -109,6 +109,7 @@ let toBackEnd={
 
       if(status==200){
          let [data] = await res.json()
+         console.log(data)
          if(name=='request'){
             if(data.request_problems.match(","))data.request_problems = data.request_problems.split(",")
             else data.request_problems=[data.request_problems]               

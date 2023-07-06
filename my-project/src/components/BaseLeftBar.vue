@@ -3,15 +3,15 @@ import { useRouter } from 'vue-router'
 import { ref } from 'vue'
 import Cookies from '../JS/cookies';
 const myRouter = useRouter()
-const goSignIn = () => myRouter.push({ name: 'signIn' })
+// const goSignIn = () => myRouter.push({ name: 'signIn' })
 const goRegister = () => myRouter.push({ name: 'signUp' })
-const goHome = () => myRouter.push({ name: 'home' })
-const goAdmin = () => myRouter.push({ name: 'showAllEvents' })
-const goUser = () => myRouter.push({ name: 'booking' })
+// const goHome = () => myRouter.push({ name: 'home' })
+// const goAdmin = () => myRouter.push({ name: 'showAllEvents' })
+// const goUser = () => myRouter.push({ name: 'booking' })
 const goShowAllUser = () => myRouter.push({ name: 'showAllUser' })
 const goShowAllEvent = () => myRouter.push({ name: 'showAllEvents' })
-const goHistory = () => myRouter.push({ name: 'history' })
-const goBooking = () => myRouter.push({ name: 'booking' })
+// const goHistory = () => myRouter.push({ name: 'history' })
+// const goBooking = () => myRouter.push({ name: 'booking' })
 const goWriteS = () => myRouter.push({ name: 'writeS' })
 const goShowAllSolution = () => myRouter.push({ name: 'showAllSolution' })
 const goProblemsList = () => myRouter.push({ name: 'problemsList' })
@@ -54,30 +54,29 @@ let role = ref(JSON.parse(Cookies.get("data")).user_role)
                     </button>
                     <hr class="full border-[1px] border-gray-400">
                 </li>
-                <li class="lg:hover:bg-gray-200 focus:ring-3 focus:ring-gray-400" v-if="role == 'super_admin'" @click="goRegister">
+                <li class="lg:hover:bg-gray-200 focus:ring-3 focus:ring-gray-400" v-if="role == 'super_admin'"
+                    @click="goRegister">
                     <button class="flex w-fit font-semibold text-gray-800">
                         <img src="../assets/admin_page/addUser.png" alt="" class="w-[28px] h-[28] m-3">
                         <span class="m-3">Add User</span>
                     </button>
                     <hr class="full border-[1px] border-gray-400">
-
                 </li>
-                <!-- <li class="mt-3">
-                        <button @click="goWriteS" class="flex w-fit  font-semibold text-gray-800 ">
-                            <img src="../assets/admin_page/new-document.png" alt="" class="w-[28px] h-[28] my-auto">
-                            <span class="ml-3">Write solutions</span> 
-                        </button>
-                        <hr class="full border-[1px] mt-2 border-gray-400">
-                        
-                    </li> -->
-                <!-- <li class="mt-3">
-                        <button @click="goShowAllSolution" class="flex w-fit  font-semibold text-gray-800 ">
-                            <img src="../assets/admin_page/dashboard.png" alt="" class="w-[28px] h-[28] my-auto">
-                            <span class="ml-3">All Solution</span> 
-                        </button>
-                        <hr class="full border-[1px] mt-2 border-gray-400">
-                        
-                    </li> -->
+                <li class="lg:hover:bg-gray-200 focus:ring-3 focus:ring-gray-400" v-if="role != 'admin_pr'"
+                    @click="goWriteS">
+                    <button class="flex w-fit  font-semibold text-gray-800 ">
+                        <img src="../assets/admin_page/new-document.png" alt="" class="w-[28px] h-[28] m-3">
+                        <span class="m-3">Write solutions</span>
+                    </button>
+                    <hr class="full border-[1px] border-gray-400">
+                </li>
+                <li class="lg:hover:bg-gray-200 focus:ring-3 focus:ring-gray-400" @click="goShowAllSolution">
+                    <button class="flex w-fit  font-semibold text-gray-800 ">
+                        <img src="../assets/admin_page/document.png" alt="" class="w-[28px] h-[28] m-3">
+                        <span class="m-3">All Solution</span>
+                    </button>
+                    <hr class="full border-[1px] border-gray-400">
+                </li>
                 <li class="lg:hover:bg-gray-200 focus:ring-3 focus:ring-gray-400" @click="goProblemsList">
                     <button class="flex w-fit font-semibold text-gray-800">
                         <img src="../assets/admin_page/problem.png" alt="" class="w-[28px] h-[28] m-3">
