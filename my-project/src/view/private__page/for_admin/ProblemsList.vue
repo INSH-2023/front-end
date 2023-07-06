@@ -5,6 +5,7 @@ import jsCookie from './../../../JS/cookies';
 import getRefreshToken from './../../../JS/refresh';
 import Cookies from './../../../JS/cookies';
 import BaseShowProblem from '../../../components/problem-list/BaseShowProblem.vue';
+import BaseLoading from '../../../components/BaseLoading.vue';
 
 // const problemsLink='http://localhost:3000/problems'
 const problemsLink = `${import.meta.env.VITE_BACK_END_HOST}/problems`
@@ -26,6 +27,8 @@ const problemMode = ref("show")
 
 const typeProblemsIT = ["hardware", "software", "internet", "printer", "website", "meeting", "application"]
 const typeProblemsPR = ["media", "news"]
+
+const get_status = ref(undefined)
 
 const data_ch = computed(() => {
     return {
@@ -50,30 +53,32 @@ const getP = async (v) => {
         if (ss == 200) {
             status = true
             problemList.value = data_problem.reverse()
-
+            get_status.value=true
             splitProblems(currentPage.value)
             console.log(problemList.value)
         } else {
             status = false
+            get_status.value = false
             console.log(data)
         }
     } else {
         token.value = JSON.parse(jsCookie.get("data")).token
         const [ss, data] = await toBackEnd.getData('problem', problemsLink, token.value)
         if (ss == 200) {
-            status = true
             problemList.value = data.reverse()
             if (role.value == 'admin_it') {
                 problemList.value = problemList.value.filter(p => typeProblemsIT.includes(p.problem_type))
             } else if (role.value == 'admin_pr') {
                 problemList.value = problemList.value.filter(p => typeProblemsPR.includes(p.problem_type))
             }
-
+            status = true
+            get_status.value=true
             splitProblems(currentPage.value)
             console.log(data)
         } else {
             //status something
             status = false
+            get_status.value=false
             console.log(data)
         }
     }
@@ -246,8 +251,58 @@ function encodeImage(input) {
 }
 </script>
 <template>
-    <!-- <div class="overflow-y-auto relative show_up"> -->
-    <div class="">
+    <!-- wait -->
+    <div v-if="get_status == undefined">
+        <div class=" bg-white w-full mx-auto  h-fit ">
+            <div class="w-full text-center font-semibold text-[40px]">
+                <div class="my-auto w-fit mx-auto mt-[250px]">
+                    <!-- <img src="../../../assets/admin_page/request.png" alt="users_icon" class="w-[40px] h-[40px] my-auto mr-4"> -->
+                    <BaseLoading />
+                    <!-- <button @click="getEvents()" class="mt-6 bg-rose-300 focus:bg-rose-400 text-gray-700 focus:text-whte px-2 mx-auto rounded-lg">
+                            Refresh
+                        </button>   -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- no data -->
+    <div v-else-if="get_status == false">
+        <div class=" bg-white w-full mx-auto  h-fit ">
+            <div class="w-full text-center font-semibold text-[40px]">
+                <div class="my-auto w-fit mx-auto mt-[250px]">
+                    <!-- <img src="../../../assets/admin_page/request.png" alt="users_icon" class="w-[40px] h-[40px] my-auto mr-4"> -->
+                    <h4>
+                        No data try again later .😏
+                    </h4>
+                    <!-- <button @click="getEvents()" class="mt-6 bg-rose-300 focus:bg-rose-400 text-gray-700 focus:text-whte px-2 mx-auto rounded-lg">
+                            Refresh
+                        </button>   -->
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- can get data but no data (clean) -->
+    <div v-else-if="get_status == false || problemList.length == 0" class="show_up">
+        <div class=" bg-white w-full mx-auto  h-fit ">
+            <div class="w-full text-center font-semibold text-[40px]">
+                <div class="my-auto w-fit mx-auto mt-[250px]">
+                    <!-- <img src="../../../assets/admin_page/request.png" alt="users_icon" class="w-[40px] h-[40px] my-auto mr-4"> -->
+                    <h4>
+                        Can get data but no data.😏
+                    </h4>
+                    <h4 class="text-[25px]">
+                        Wait for user send request.👌
+                    </h4>
+                    <!-- <button @click="getEvents()" class="mt-6 bg-rose-300 focus:bg-rose-400 text-gray-700 focus:text-whte px-2 mx-auto rounded-lg">
+                            Refresh
+                        </button>   -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="overflow-y-auto relative show_up">
         <div class=" bg-white w-full mx-auto  h-fit ">
             <div class="w-full text-center font-semibold text-[40px] mt-2">
                 <div class="flex w-fit mx-auto tracking-wide">

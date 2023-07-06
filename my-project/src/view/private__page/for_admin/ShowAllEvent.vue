@@ -75,6 +75,7 @@ const getEvents =async(id=undefined)=>{
             }
             
             console.log(showList.value)
+            return status
             // status something
         }
         else {
@@ -97,7 +98,6 @@ const getEvents =async(id=undefined)=>{
             // status something
         }
     }
-
     return status
 }
 
@@ -381,7 +381,6 @@ const searchByKeyW=()=>{
 
 </script>
 <template>
-
         <!-- wait -->
         <div v-if="get_status==undefined">
             <div class=" bg-white w-full mx-auto  h-fit ">
@@ -431,7 +430,6 @@ const searchByKeyW=()=>{
                         </button>   -->
                     </div>
                 </div>
-              
             </div>
         </div>
                 

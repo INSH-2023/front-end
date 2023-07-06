@@ -193,6 +193,9 @@ const submitt = async () => {
         // }) 
         if (status == 201) {
             console.log('add successful')
+        } else if (status == 400) {
+            // console.log(data.error)
+            console.log('bad request')
         } else {
             console.log('error something')
         }
@@ -221,7 +224,7 @@ onBeforeUnmount(() => {
                 <!-- header -->
                 <div class="w-full text-center font-semibold text-[40px] pt-6">
                     <div class="flex w-fit mx-auto">
-                        <img src="../../../assets/admin_page/addUser.png" alt="users_icon"
+                        <img src="../../../assets/admin_page/new-document.png" alt="users_icon"
                             class="w-[50px] h-[50px] mr-4 my-auto">
                         Write Solutions
                     </div>
