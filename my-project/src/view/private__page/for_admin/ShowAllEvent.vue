@@ -352,6 +352,7 @@ const checkEdit=computed(()=>{
 })
 
 const searchByKeyW=()=>{
+    filterList.value = requestList.value
     console.log(f_status.value)
 
     // email
@@ -445,7 +446,7 @@ const searchByKeyW=()=>{
                 </div>
 
                 <!-- filter -->
-                <div  class="relative w-[1200px] h-[70px]  mx-auto ">
+                <div  class="relative w-[1200px] h-[70px] mx-auto">
                     <div v-show="is_filter_open==true" class="absolute w-fit h-fit bottom-0">
                         <div class="flex ">
                             
@@ -481,7 +482,6 @@ const searchByKeyW=()=>{
                                     <option value="meeting"> meeting </option>
                                     <option value="application"> application </option>
                                     <option value="other"> other </option>
-
                                 </select>
                             </div>
 
@@ -493,7 +493,6 @@ const searchByKeyW=()=>{
                                     <option value="open_case"   class="bg-"> open case </option>
                                     <option value="in_progress" class="bg- "> in progress </option>
                                     <option value="finish"      class="bg-"> finish </option>
-
                                 </select>
                             </div>
 
@@ -513,7 +512,7 @@ const searchByKeyW=()=>{
 
 
                     <!-- button -->
-                    <div class="   right-[20px] bottom-0  absolute">
+                    <div class=" right-[20px] bottom-0  absolute">
                         <button @click="is_filter_open= !is_filter_open" class="flex w-fit">
                             <span class="font-semibold my-auto">
                                 ตัวกรอง

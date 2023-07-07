@@ -70,7 +70,8 @@ let role = ref(JSON.parse(Cookies.get("data")).user_role)
                     </button>
                     <hr class="full border-[1px] border-gray-400">
                 </li>
-                <li class="lg:hover:bg-gray-200 focus:ring-3 focus:ring-gray-400" @click="goShowAllSolution">
+                <li class="lg:hover:bg-gray-200 focus:ring-3 focus:ring-gray-400" v-if="role != 'admin_pr'"
+                    @click="goShowAllSolution">
                     <button class="flex w-fit  font-semibold text-gray-800 ">
                         <img src="../assets/admin_page/document.png" alt="" class="w-[28px] h-[28] m-3">
                         <span class="m-3">All Solution</span>

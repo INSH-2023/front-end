@@ -343,7 +343,6 @@ const searchByKeyW = () => {
                                 <option value="" selected hidden> Select status </option>
                                 <option value="active"> active </option>
                                 <option value="inactive"> inactive</option>
-
                             </select>
                         </div>
 
@@ -381,7 +380,6 @@ const searchByKeyW = () => {
                         <img src="../../../assets/admin_page/filter.png" alt="icon" class="w-[20px] ml-[5px] my-auto">
                     </button>
                 </div>
-
             </div>
         </div>
 

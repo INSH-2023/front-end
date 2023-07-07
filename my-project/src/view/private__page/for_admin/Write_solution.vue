@@ -357,7 +357,7 @@ onBeforeUnmount(() => {
                                     X
                                 </div>
                             </div> -->
-                            <div @click="removeElement(index)"
+                            <div v-if="solutions.length > 1" @click="removeElement(index)"
                                 class="absolute right-[8px] top-[0px] font-semibold cursor-pointer">
                                 x
                             </div>

@@ -7,15 +7,19 @@ import toBackEnd from '../../../JS/fetchToBack';
 import BaseLoading from '../../../components/BaseLoading.vue'
 const myRouter = useRouter()
 const isFilter = ref(false)
+const keyword = ref("")
+const tagF = ref("")
 const solutionList = ref([])
+const filterList = ref([])
+const showList = ref([])
 // const solutionLink ='http://localhost:3000/solutions'
 const solutionLink = `${import.meta.env.VITE_BACK_END_HOST}/solutions`
 const solution = ref('')
 const token = ref('')
 const get_status = ref(undefined)
-const isEdit = ref(false)
+// const isEdit = ref(false)
 
-// get solution 
+// get solution
 const getSolu = async (id = undefined) => {
     let status = false
     token.value = JSON.parse(jsCookie.get("data")).token
@@ -23,6 +27,7 @@ const getSolu = async (id = undefined) => {
         let [s, data] = await toBackEnd.getData('solution', solutionLink, token.value)
         if (s == 200) {
             solutionList.value = data.reverse()
+            showList.value = solutionList.value
             get_status.value = true
             status = true
             console.log('get Solution success')
@@ -87,6 +92,51 @@ const changePath = (path = '#') => {
     window.location.href = path
 }
 
+const resetF = () => {
+    keyword.value = ''
+    tagF.value = []
+    showList.value = solutionList.value
+}
+
+
+const searchByKeyW = () => {
+    filterList.value = solutionList.value
+    // console.log(f_status.value)
+
+    // email
+    // if(f_email.value.length != 0){
+    //     filterList.value = requestList.value.filter(e=>e.request_email.toLowerCase().includes(f_email.value.toLowerCase()))
+    //     console.log('this  email filter : '+f_email.value)
+    // }
+
+    // solution title and description
+    if (keyword.value.length != 0) {
+
+        filterList.value = solutionList.value.filter(e => e.solution_title.toLowerCase().includes(keyword.value.toLowerCase()) || e.solution_text.toLowerCase().includes(keyword.value.toLowerCase()))
+    }
+
+    // solution tag
+    else if (tagF.value.length != 0) {
+        filterList.value = solutionList.value.filter(e => e.solution_tag.includes(tagF.value))
+    }
+
+    showList.value = filterList.value
+    console.log(filterList.value)
+}
+
+const tagList = computed(() => {
+    let tags = []
+    solutionList.value.forEach(sol => {
+        sol.solution_tag.forEach(tag => {
+            if (!tags.includes(tag)) {
+                tags.push(tag)
+            }
+        })
+    })
+    console.log(tags)
+    return tags
+})
+
 onBeforeMount(() => {
     getSolu(),
         changePath(),
@@ -96,7 +146,7 @@ onBeforeMount(() => {
 <template>
     <!-- wait -->
     <div v-if="get_status == undefined">
-        <div class=" bg-white w-full mx-auto  h-fit ">
+        <div class=" bg-white w-full mx-auto h-fit ">
             <div class="w-full text-center font-semibold text-[40px]">
                 <div class="my-auto w-fit mx-auto mt-[250px]">
                     <!-- <img src="../../../assets/admin_page/request.png" alt="users_icon" class="w-[40px] h-[40px] my-auto mr-4"> -->
@@ -127,64 +177,71 @@ onBeforeMount(() => {
             </div>
         </div>
     </div>
+
     <div v-else-if="get_status == true" class="show_request show_up">
-        <div class=" bg-white w-full mx-auto  h-fit ">
+        <div class=" bg-white w-full mx-auto h-fit">
             <div class="w-full text-center font-semibold text-[40px] pt-6">
                 <div class="flex w-fit mx-auto">
-                    <img src="../../../assets/admin_page/document.png" alt="users_icon" class="w-[60px] mr-4">
+                    <img src="../../../assets/admin_page/document.png" alt="users_icon"
+                        class="w-[40px] h-[40px] my-auto mr-4">
                     All Solution
                 </div>
-
-            </div>
-            <!-- button -->
-            <div class="right-[80px] top-[115px]  absolute">
-                <button @click="isFilter = !isFilter" class="flex w-fit">
-                    <span class="font-semibold my-auto">
-                        ตัวกรอง
-                    </span>
-                    <img src="../../../assets/admin_page/filter.png" alt="icon" class="w-[20px] ml-[5px] my-auto">
-                </button>
             </div>
 
             <!-- filter -->
-            <div v-show="isFilter == true" class="w-fit mx-auto absolute p-2 left-[20px]">
-                <div class="flex ">
-                    <div class="p-3">
-                        <input type="text" placeholder="searching "
-                            class="w-[200px] h-[30px] p-3 bg-gray-300 rounded-lg focus:outline-0">
-                    </div>
-                    <div class="p-3 my-auto">
-                        <label for="title">
-                            Title :
-                        </label>
-                        <select name="title" id="title" class="focus:outline-0 cursor-pointer">
-                            <option value="">มากไปน้อย</option>
-                            <option value="">น้อยไปมาก</option>
+            <div class="relative w-[1200px] h-[70px] mx-auto">
+                <div v-show="isFilter == true" class="absolute w-fit h-fit bottom-0">
+                    <div class="flex">
+                        <div class="px-2">
+                            <input type="text" placeholder="searching "
+                                class="w-[200px] h-[30px] p-3 bg-gray-300 rounded-lg focus:outline-0" v-model="keyword">
+                        </div>
+                        <!-- <div class="px-2 my-auto">
+                            <label for="title">
+                                Title :
+                            </label>
+                            <select name="title" id="title" class="focus:outline-0 cursor-pointer">
+                                <option value="">มากไปน้อย</option>
+                                <option value="">น้อยไปมาก</option>
+                            </select>
+                        </div> -->
+                        <div class="px-2">
+                            <label for="title">
+                                Tag :
+                            </label>
+                            <select name="title" id="title" class="focus:outline-0 cursor-pointer" v-model="tagF">
+                                <option v-for="tag in tagList" :value="tag">{{ tag }}</option>
+                            </select>
+                        </div>
+                        <div class="flex px-2 font-light">
+                            <button @click="resetF"
+                                class="px-3 mx-1 bg-gray-500 text-rose-300 rounded-xl hover:text-gray-500 hover:bg-rose-300">
+                                รีเซต
+                            </button>
 
-                        </select>
-                    </div>
-                    <div class="p-3 my-auto">
-                        <label for="title">
-                            Tag :
-                        </label>
-                        <select name="title" id="title" class="focus:outline-0 cursor-pointer">
-                            <option value="">มากไปน้อย</option>
-                            <option value="">น้อยไปมาก</option>
-
-                        </select>
-                    </div>
-                    <!-- <div class="p-3">
+                            <button @click="searchByKeyW" class="px-3 mx-1 bg-gray-300 rounded-xl">
+                                ค้นหา
+                            </button>
+                        </div>
+                        <!-- <div class="p-3">
                             testing filter
                         </div> -->
+                    </div>
+                </div>
+                <!-- button -->
+                <div class="right-[20px] buttom-0 absolute">
+                    <button @click="isFilter = !isFilter" class="flex w-fit">
+                        <span class="font-semibold my-auto">
+                            ตัวกรอง
+                        </span>
+                        <img src="../../../assets/admin_page/filter.png" alt="icon" class="w-[20px] ml-[5px] my-auto">
+                    </button>
                 </div>
             </div>
         </div>
 
-
-
-
         <!-- table -->
-        <div class="w-[1200px] mx-auto  h-[450px] mt-16">
+        <div class="w-[1200px] mx-auto h-[450px] mt-2">
             <hr class="mt-3 bg-gray-700  w-[1170px] h-[3px]">
             <div class="overflow-y-auto mx-auto h-[100%] w-[100%] ">
                 <table class="relative w-full table-fixed text-sm text-center text-gray-800">
@@ -208,7 +265,7 @@ onBeforeMount(() => {
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="(data, index) in solutionList" :key="index"
+                        <tr v-for="(data, index) in showList" :key="index"
                             class="text-[15px]  bg-white border-b-2 border-gray-300 hover:border-gray-400 hover:bg-gray-400">
                             <td class="w-[140px] font-medium px-6 py-4 text-left">
                                 <div class="w-[130px] font-semibold truncate mx-auto text-center">
@@ -254,91 +311,91 @@ onBeforeMount(() => {
                 </div>
 
                 <!-- solution detail -->
-                <div v-if="isEdit == false">
-                    <!-- table -->
-                    <div>
-                        <table class="w-full table-fixed mx-auto mt-6 text-[20px]">
-                            <!-- title -->
-                            <tr>
-                                <th class="table_header w-[120px] h-fit pt-2 text-right font-normal">
-                                    Title
-                                </th>
-                                <td class="pt-2 pl-2 indent-[5px] font-semibold text-gray-600 ">
-                                    {{ solution.solution_title }}
-                                </td>
-                            </tr>
-                            <!-- description -->
-                            <tr>
-                                <th class="table_header w-[120px] h-fit pt-2 text-right font-normal">
-                                    Description
-                                    <!-- <span> 
+                <!-- <div v-if="isEdit == false"> -->
+                <!-- table -->
+                <div>
+                    <table class="w-full table-fixed mx-auto mt-6 text-[20px]">
+                        <!-- title -->
+                        <tr>
+                            <th class="table_header w-[120px] h-fit pt-2 text-right font-normal">
+                                Title
+                            </th>
+                            <td class="pt-2 pl-2 indent-[5px] font-semibold text-gray-600 ">
+                                {{ solution.solution_title }}
+                            </td>
+                        </tr>
+                        <!-- description -->
+                        <tr>
+                            <th class="table_header w-[120px] h-fit pt-2 text-right font-normal">
+                                Description
+                                <!-- <span> 
                                             {{  }}
                                         </span> -->
-                                </th>
-                                <td class="pt-2 pl-2 indent-[5px]">
-                                    <span v-html="solution.solution_text"></span>
-                                </td>
-                            </tr>
+                            </th>
+                            <td class="pt-2 pl-2 indent-[5px]">
+                                <span v-html="solution.solution_text"></span>
+                            </td>
+                        </tr>
 
-                            <!-- tag -->
-                            <tr>
-                                <th class="table_header w-[120px] h-fit pt-2 text-right font-normal">
-                                    Tag
-                                </th>
-                                <td class="pt-2 pl-2 indent-[5px] font-light text-gray-600">
-                                    <span v-for="(tag, index) in solution.solution_tag" :key="index"
-                                        class="bg-gray-200 px-2 py-1 mx-1 w-full text-gray-800 rounded-xl">
-                                        {{ tag }}
-                                    </span>
-                                </td>
-                            </tr>
+                        <!-- tag -->
+                        <tr>
+                            <th class="table_header w-[120px] h-fit pt-2 text-right font-normal">
+                                Tag
+                            </th>
+                            <td class="pt-2 pl-2 indent-[5px] font-light text-gray-600">
+                                <span v-for="(tag, index) in solution.solution_tag" :key="index"
+                                    class="bg-gray-200 px-2 py-1 mx-1 w-full text-gray-800 rounded-xl">
+                                    {{ tag }}
+                                </span>
+                            </td>
+                        </tr>
 
-                            <!-- icon -->
-                            <tr>
-                                <th class="table_header w-[120px] h-fit pt-2 text-right font-normal">
-                                    Icon
-                                </th>
-                                <td class="pt-2 pl-2 indent-[5px]">
-                                    <img src="../../../assets/vue.svg" class="w-[40px]">
-                                </td>
-                            </tr>
-                        </table>
+                        <!-- icon -->
+                        <tr>
+                            <th class="table_header w-[120px] h-fit pt-2 text-right font-normal">
+                                Icon
+                            </th>
+                            <td class="pt-2 pl-2 indent-[5px]">
+                                <img src="../../../assets/vue.svg" class="w-[40px]">
+                            </td>
+                        </tr>
+                    </table>
 
-                        <!-- solutions -->
-                        <div>
-                            <div v-for="(step, index) in solution.solution_steps" :key="index">
-                                <h2 class="table_header w-[120px] h-fit pt-2 text-right font-bold text-[24px]">
-                                    Steps {{ step.step_ }} &nbsp;
-                                </h2>
-                                <div class="mx-[60px]">
-                                    <b class="pt-2 pl-2 indent-[5px] text-left text-[20px]">
-                                        {{ step.step_name }}
-                                    </b>
-                                    <p class="pt-2 pl-1 indent-[5px] text-[16px]">
-                                        <span v-html="step.step_description"></span>
-                                    </p>
-                                </div>
+                    <!-- solutions -->
+                    <div>
+                        <div v-for="(step, index) in solution.solution_steps" :key="index">
+                            <h2 class="table_header w-[120px] h-fit pt-2 text-right font-bold text-[24px]">
+                                Steps {{ step.step_ }} &nbsp;
+                            </h2>
+                            <div class="mx-[60px]">
+                                <b class="pt-2 pl-2 indent-[5px] text-left text-[20px]">
+                                    {{ step.step_name }}
+                                </b>
+                                <p class="pt-2 pl-1 indent-[5px] text-[16px]">
+                                    <span v-html="step.step_description"></span>
+                                </p>
                             </div>
                         </div>
-
-                        <div class="w-full flex mt-6 mb-1.5">
-                            <a href="#dele"
-                                class="w-[200px] h-[50px] px-5 mx-auto text-[15px] font-light text-rose-400 bg-gray-300 rounded-2xl hover:bg-rose-400 hover:text-gray-200">
-                                <button class="w-full h-full ">
-                                    ลบข้อมูล
-                                </button>
-                            </a>
-                        </div>
                     </div>
-                    <div class="absolute top-[15px] right-[15px] font-bold text-[30px]">
-                        <a @click="changePath()" id="close_info" href="#" class="">
-                            <img src="../../../assets/admin_page/close.png" alt="close_icon" class="w-[20px]">
+
+                    <div class="w-full flex mt-6 mb-1.5">
+                        <a href="#dele"
+                            class="w-[200px] h-[50px] px-5 mx-auto text-[15px] font-light text-rose-400 bg-gray-300 rounded-2xl hover:bg-rose-400 hover:text-gray-200">
+                            <button class="w-full h-full ">
+                                ลบข้อมูล
+                            </button>
                         </a>
                     </div>
+                </div>
+                <div class="absolute top-[15px] right-[15px] font-bold text-[30px]">
+                    <a @click="changePath()" id="close_info" href="#" class="">
+                        <img src="../../../assets/admin_page/close.png" alt="close_icon" class="w-[20px]">
+                    </a>
                 </div>
             </div>
         </div>
     </div>
+    <!-- </div> -->
     <!-- delete -->
     <div id="dele" class="overlay">
         <div class=" verify_d h-96 overflow-hidden rounded-2xl">
