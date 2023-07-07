@@ -5,32 +5,23 @@ import jsCookie from './../../../JS/cookies';
 import getRefreshToken from './../../../JS/refresh';
 import Cookies from './../../../JS/cookies';
 import BaseShowProblem from '../../../components/problem-list/BaseShowProblem.vue';
-import BaseLoading from '../../../components/BaseLoading.vue';
-
 // const problemsLink='http://localhost:3000/problems'
 const problemsLink = `${import.meta.env.VITE_BACK_END_HOST}/problems`
-const iconLink = `${import.meta.env.VITE_BACK_END_HOST}/images/files/problems`
 
 const problemList = ref([])
-const name = ref('')
-const subjectCr = ref('all')
-const isUpload = ref(false)
+const problemName = ref('')
 const token = ref('')
 const role = ref(JSON.parse(Cookies.get("data")).user_role)
-const file = ref("")
-const base64Img = ref("")
 
 
 
 // length of problem name
-const problemL = 20
+const problemL=20
 // mode use for show template
-const problemMode = ref("show")
+const problemMode=ref("show")
 
-const typeProblemsIT = ["hardware", "software", "internet", "printer", "website", "meeting", "application"]
-const typeProblemsPR = ["media", "news"]
-
-const get_status = ref(undefined)
+const typeProblemsIT=["hardware","software","internet","printer","website","meeting","application"]
+const typeProblemsPR=["media","news"]
 
 const data_ch = computed(() => {
     return {
@@ -42,48 +33,41 @@ const subjectCr = ref('all')
 const subjectCrInput=ref('')
 // get  problem
 const getP = async (v) => {
+
     let status = undefined
 
     if (v != 'all') {
         token.value = JSON.parse(jsCookie.get("data")).token
         const [ss, data_problem] = await toBackEnd.getData('problem', `${problemsLink}/type/${v}`, token.value)
-        console.log(ss)
-        console.log(data_problem)
+        console.log(v)
 
         if (ss == 200) {
             status = true
             problemList.value = data_problem.reverse()
-            get_status.value=true
             splitProblems(currentPage.value)
             console.log(problemList.value)
         } else {
             status = false
-            get_status.value=false
             console.log(data_problem)
         }
+
     } else {
         token.value = JSON.parse(jsCookie.get("data")).token
         const [ss, data] = await toBackEnd.getData('problem', problemsLink, token.value)
         if (ss == 200) {
-            problemList.value = data.reverse()
-            if (role.value == 'admin_it') {
-                problemList.value = problemList.value.filter(p => typeProblemsIT.includes(p.problem_type))
-            } else if (role.value == 'admin_pr') {
-                problemList.value = problemList.value.filter(p => typeProblemsPR.includes(p.problem_type))
-            }
             status = true
-            get_status.value=true
+            problemList.value = data.reverse()
             splitProblems(currentPage.value)
             console.log(data)
         } else {
             //status something
             status = false
-            get_status.value=false
             console.log(data)
         }
     }
 
     return status
+
 }
 
 // split data
@@ -112,6 +96,7 @@ const splitProblems = (N) => {
         if (problemList.value[i]) {
             arr.push(problemList.value[i])
         }
+
     }
     problemSplit.value = arr
     console.log(problemSplit.value)
@@ -141,7 +126,7 @@ const hoverFn = (b, n) => {
         // eEdit.style.visibility="visible"
         eInfo.style.display = "none"
         eEdit.style.display = "block"
-        card.style.background = "#C2E1FD"
+        card.style.background = "#C6AC8F"
 
         // console.log('hover',n)
     } else {
@@ -201,6 +186,7 @@ onBeforeMount(() => {
     getRefreshToken(JSON.parse(jsCookie.get("data")).refreshToken)
 })
 
+
 // auto change subject 
 const subjectCh = (event) => {
     let type = event.target.value.trim()
@@ -212,38 +198,14 @@ const subjectCh = (event) => {
         if (type == subjectCr.value) {
             console.log('subject not change :', subjectCr.value)
         }
+
+
 }
 
-const getDataFromComponent = (value) => {
+
+const getDataFromComponent =(value)=>{
     console.log(value)
-    if (value.status == true) removeProblem(value.id)
-}
-
-const changeMode = (mode) => {
-    if (mode == "add") {
-        problemMode.value = "add"
-    } else {
-        problemMode.value = "show"
-        getP(subjectCr.value)
-    }
-}
-
-function onFileChanged($event) {
-    const target = $event.target;
-    if (target && target.files) {
-        file.value = target.files[0];
-        encodeImage(file.value)
-    }
-}
-
-function encodeImage(input) {
-    if (input) {
-        const reader = new FileReader()
-        reader.onload = (e) => {
-            base64Img.value = e.target.result
-        }
-        reader.readAsDataURL(input)
-    }
+    if(value.status==true)removeProblem(value.id)
 }
 
 
@@ -265,69 +227,18 @@ const editMode =(service=undefined)=>{
 }
 </script>
 <template>
-    <!-- wait -->
-    <div v-if="get_status == undefined">
-        <div class=" bg-white w-full mx-auto  h-fit ">
-            <div class="w-full text-center font-semibold text-[40px]">
-                <div class="my-auto w-fit mx-auto mt-[250px]">
-                    <!-- <img src="../../../assets/admin_page/request.png" alt="users_icon" class="w-[40px] h-[40px] my-auto mr-4"> -->
-                    <BaseLoading />
-                    <!-- <button @click="getEvents()" class="mt-6 bg-rose-300 focus:bg-rose-400 text-gray-700 focus:text-whte px-2 mx-auto rounded-lg">
-                            Refresh
-                        </button>   -->
+    <!-- <div class="overflow-y-auto relative show_up"> -->
+        <div class="">
+            <div class=" bg-white w-full mx-auto  h-fit ">
+                <div class="w-full text-center font-semibold text-[40px] mt-2">
+                    <div class="flex w-fit mx-auto tracking-wide">
+                        <img src="../../../assets/vue.svg" alt="users_icon" class="w-[40px] h-[40px] my-auto mr-4">
+                        <h4 class="text-[#5E503F]">
+                            Problems List
+                        </h4>
+                    </div>
                 </div>
-            </div>
-        </div>
-    </div>
-    <!-- no data -->
-    <div v-else-if="get_status == false">
-        <div class=" bg-white w-full mx-auto  h-fit ">
-            <div class="w-full text-center font-semibold text-[40px]">
-                <div class="my-auto w-fit mx-auto mt-[250px]">
-                    <!-- <img src="../../../assets/admin_page/request.png" alt="users_icon" class="w-[40px] h-[40px] my-auto mr-4"> -->
-                    <h4>
-                        No data try again later .😏
-                    </h4>
-                    <!-- <button @click="getEvents()" class="mt-6 bg-rose-300 focus:bg-rose-400 text-gray-700 focus:text-whte px-2 mx-auto rounded-lg">
-                            Refresh
-                        </button>   -->
-                </div>
-            </div>
-
-        </div>
-    </div>
-
-    <!-- can get data but no data (clean) -->
-    <div v-else-if="get_status == false || problemList.length == 0" class="show_up">
-        <div class=" bg-white w-full mx-auto  h-fit ">
-            <div class="w-full text-center font-semibold text-[40px]">
-                <div class="my-auto w-fit mx-auto mt-[250px]">
-                    <!-- <img src="../../../assets/admin_page/request.png" alt="users_icon" class="w-[40px] h-[40px] my-auto mr-4"> -->
-                    <h4>
-                        Can get data but no data.😏
-                    </h4>
-                    <h4 class="text-[25px]">
-                        Wait for user send request.👌
-                    </h4>
-                    <!-- <button @click="getEvents()" class="mt-6 bg-rose-300 focus:bg-rose-400 text-gray-700 focus:text-whte px-2 mx-auto rounded-lg">
-                            Refresh
-                        </button>   -->
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="overflow-y-auto relative show_up">
-        <div class=" bg-white w-full mx-auto  h-fit ">
-            <div class="w-full text-center font-semibold text-[40px] mt-2">
-                <div class="flex w-fit mx-auto tracking-wide">
-                    <img src="./../../../assets/admin_page/problem.png" alt="users_icon"
-                        class="w-[40px] h-[40px] my-auto mr-4">
-                    <h4>
-                        Problems List
-                    </h4>
-                </div>
-            </div>
-            <!-- button
+                <!-- button
                         <div class="   right-[80px] top-[115px]  absolute">
                             <button @click="isFilter= !isFilter" class="flex w-fit">
                                 <span class="font-semibold my-auto">
@@ -337,7 +248,7 @@ const editMode =(service=undefined)=>{
                             </button>
                         </div> -->
 
-            <!-- filter
+                <!-- filter
                         <div v-show="isFilter==true" class="w-fit mx-auto absolute">
                             <div class="flex ">
                                 <div class="p-3">
@@ -426,37 +337,6 @@ const editMode =(service=undefined)=>{
                             <option v-if="serviceName=='IT'" v-for="(type,index) in typeProblemsIT" :key="index" :value="type">{{type}}</option>
                             <option v-if="serviceName=='PR'" v-for="(type,index) in typeProblemsPR" :key="index" :value="type">{{type}}</option>
 
-                </div>
-                <button @click="addProblem" class="mt-4 p-2 bg-gray-300 hover:bg-gray-500 focus:bg-gray-300 rounded-xl">
-                    สร้างหัวข้อปัญหา
-                </button>
-            </div>
-
-
-            <!-- show all problem -->
-            <div v-else-if="problemMode == 'show'" class="w-fit h-fit m-auto">
-                <!-- <hr class="mt-3 bg-gray-700  w-full h-[3px]"/> -->
-                <!-- select type -->
-                <div class=" flex w-fit h-[53px] mt-[20px] ml-[20px]   ">
-                    <!-- select type -->
-                    <div class="relative w-[250px] h-full">
-                        <h4 v-show="subjectCr != 'none'" class="text ml-2 text-sm font-semiboldd text-[#6FA1CE]">
-                            Type of subject
-                        </h4>
-                        <select @change="subjectCh" name="subject" id="subject"
-                            class="absolute bottom-0 w-[200px] bg-[#6FA1CE] text-[#0A0908] text-[0.875rem] font-light rounded-lg p-[1px]  px-[10px]">
-                            <!-- <option value="none" selected hidden>Type of subject</option> -->
-                            <option value="all" selected>All Problem</option>
-                            <option v-if="['admin_it', 'super_admin'].includes(role)" value="hardware">Hardware</option>
-                            <option v-if="['admin_it', 'super_admin'].includes(role)" value="software">Software</option>
-                            <option v-if="['admin_it', 'super_admin'].includes(role)" value="internet">Internet</option>
-                            <option v-if="['admin_it', 'super_admin'].includes(role)" value="printer">Printer</option>
-                            <option v-if="['admin_it', 'super_admin'].includes(role)" value="website">Website</option>
-                            <option v-if="['admin_it', 'super_admin'].includes(role)" value="meeting">Meeting</option>
-                            <option v-if="['admin_it', 'super_admin'].includes(role)" value="application">Application
-                            </option>
-                            <option v-if="['admin_pr', 'super_admin'].includes(role)" value="media">Media</option>
-                            <option v-if="['admin_pr', 'super_admin'].includes(role)" value="news">News</option>
                         </select>
                     </div>
                     <button @click="addProblem" class="mt-4 p-2 bg-gray-300">
@@ -499,8 +379,8 @@ const editMode =(service=undefined)=>{
                                     </div>
                                 </div> -->
 
-                    <!-- add new problem ใช้ไปก่อน-->
-                    <!-- <div class="flex bg-gray-500 my-auto px-2 py-1.5 rounded-3xl">
+                        <!-- add new problem ใช้ไปก่อน-->
+                        <!-- <div class="flex bg-gray-500 my-auto px-2 py-1.5 rounded-3xl">
                     
                             <input v-model="name" type="text" class=" bg-gray-300 pl-2 p-1 rounded-l-xl focus:outline-0" />
                 
@@ -508,23 +388,23 @@ const editMode =(service=undefined)=>{
                                 Create Problem
                             </button>
                         </div> -->
-                </div>
-
-                <div>
-                    <BaseShowProblem @get-data-status="getDataFromComponent" :problems="problemSplit" />
-                    <!-- page -->
-                    <div class=" inset-x-0 bottom-0 flex w-fit mx-auto mt-4">
-                        <button @click="splitProblems(N)" v-for="N in pageN()"
-                            class=" w-full px-4 py-1 mx-2 text-[15px] bg-[#6FA1CE] text-[#C2E1FD] font-bold rounded-full focus:bg-[#C2E1FD] focus:text-[#6FA1CE] ">
-                            {{ N }}
-                        </button>
                     </div>
+
+                    <div>
+                        <BaseShowProblem @get-data-status="getDataFromComponent" :problems="problemSplit"/>
+                        <!-- page -->
+                        <div class=" inset-x-0 bottom-0 flex w-fit mx-auto mt-4">
+                            <button @click="splitProblems(N)" v-for="N in pageN()"
+                                class=" w-full px-4 py-1 mx-2 text-[15px] bg-[#5E503F] text-[#C6AC8F] font-bold rounded-full focus:bg-[#C6AC8F] focus:text-[#5E503F] ">
+                                {{ N }}
+                            </button>
+                        </div>
+                    </div>
+                    
                 </div>
-
             </div>
+            
         </div>
-
-    </div>
     <!-- </div> -->
 </template>
 <style scoped>

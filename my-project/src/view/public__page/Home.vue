@@ -42,7 +42,7 @@ const goSignIn=()=>myRouter.push({name:'signIn'})
       <div class="mt-3 w-[10rem] mx-auto bg-gray-300 rounded-lg  
          sm:max-sm:text-[0.625rem] sm:text-[1.25rem] sm:w-[16rem]
          md:mt-6
-         lg:w-[15rem] lg:text-[1.3rem] hover:bg-gray-500 hover:text-slate-50 focus:ring-4 focus:ring-blue-300
+         lg:w-[15rem] lg:text-[1.3rem]
       ">
          <button @click="goSignIn()" class=" w-full h-fit p-2">
             เริ่มต้นใช้งาน
