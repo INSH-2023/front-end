@@ -433,12 +433,10 @@ onBeforeMount(() => {
     </div>
 
     <!-- line -->
-    <hr class="hidden mt-[30px] w-[1100px] h-[1px] border-0 mx-auto bg-gray-700
-        lg:block
-    ">
+    <hr class="hidden mt-[30px] w-[1100px] h-[1px] border-0 mx-auto bg-gray-700 lg:block">
 
     <!-- searching -->
-    <div v-if="params.service == 'it'" class="relative w-[600px] h-[150px] mx-auto">
+    <div v-if="params.service == 'it' && solutionList.length != 0" class="relative w-[600px] h-[150px] mx-auto">
         <h3 class="mx-auto w-fit mt-4 text-[30px]">
             หรือค้นหาหัวข้อปัญหาที่คุณเจอ
         </h3>

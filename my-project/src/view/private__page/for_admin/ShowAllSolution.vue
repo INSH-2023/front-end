@@ -14,6 +14,7 @@ const filterList = ref([])
 const showList = ref([])
 // const solutionLink ='http://localhost:3000/solutions'
 const solutionLink = `${import.meta.env.VITE_BACK_END_HOST}/solutions`
+const iconLink = `${import.meta.env.VITE_BACK_END_HOST}/images/files/solutions`
 const solution = ref('')
 const token = ref('')
 const get_status = ref(undefined)
@@ -273,7 +274,7 @@ onBeforeMount(() => {
                                 </div>
                             </td>
                             <td class="w-[90px] px-6 py-4 font-semibold ">
-                                <img src="../../../assets/vue.svg" alt="" class="w-[40px] mx-auto">
+                                <img :src="`${iconLink}/${data.solutionId}`" alt="" class="w-[40px] mx-auto">
                             </td>
                             <td class="w-[130px] px-3 py-4 font-semibold ">
                                 <div class="w-[250px] truncate mx-auto">
@@ -356,7 +357,7 @@ onBeforeMount(() => {
                                 Icon
                             </th>
                             <td class="pt-2 pl-2 indent-[5px]">
-                                <img src="../../../assets/vue.svg" class="w-[40px]">
+                                <img :src="`${iconLink}/${solution.solutionId}`" class="w-[40px]">
                             </td>
                         </tr>
                     </table>

@@ -167,7 +167,7 @@ const addProblem = async () => {
         let [status1, data1] = await toBackEnd.postFile('problem', `${iconLink}/${data.problemId}`, formData)
     }
 
-    if (status == 200) {
+    if (status == 201) {
         console.log('add problem success 😏')
         console.log(data)
         subjectCr.value = 'all'

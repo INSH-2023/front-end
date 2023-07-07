@@ -6,6 +6,7 @@ import getRefreshToken from '../../../JS/refresh'
 
 // const solutionLink ='http://localhost:3000/solutions'
 const solutionLink = `${import.meta.env.VITE_BACK_END_HOST}/solutions`
+const iconLink = `${import.meta.env.VITE_BACK_END_HOST}/images/files/solutions`
 
 const title = ref('')
 const tag = ref('')
@@ -14,7 +15,8 @@ const discription = ref('')
 const stepN = ref(0)
 const solutionT = ref('')
 const solutionD = ref('')
-const solutions = ref([{ step_: 1, step_name: solutionT.value, step_description: solutionD.value }])
+const solutions = ref([{ step_: 1, step_name: solutionT.value, step_description: solutionD.value, step_upload: false}])
+const isUpload = ref(false)
 
 const icon = ref(undefined)
 const iconName = ref('')
@@ -92,7 +94,7 @@ const addNewSolution = () => {
     } else {
         console.log(stepN.value)
         ++stepN.value
-        solutions.value.push({ step_: stepN.value, step_name: solutionT.value, step_description: solutionD.value })
+        solutions.value.push({ step_: stepN.value, step_name: solutionT.value, step_description: solutionD.value, step_upload: false })
         console.log('add new element')
     }
 }
@@ -144,6 +146,10 @@ const validate = async () => {
         console.log('please input ur discription')
         status == true
     }
+    if (icon.value == undefined) {
+        console.log('please upload your article icon')
+        status == true
+    }
     if (solutions.value.length == 0) {
         console.log('please input ur solutions')
         status == true
@@ -164,7 +170,6 @@ const validate = async () => {
     console.log('tagArr' + tagArr.value)
     console.log('discription' + discription.value)
     console.log('solutions' + solutions.value)
-
     return status
 }
 
@@ -173,12 +178,20 @@ const submitt = async () => {
     getTagToArr(tag.value)
 
     console.log(dataCh.value)
+    console.log(icon.value)
 
     if (validate() == true) {
         console.log('please input ur info')
     } else {
         token.value = JSON.parse(jsCookie.get("data")).token
         const [status, data] = await toBackEnd.postData('solution', solutionLink, dataCh.value, token.value)
+
+        if (icon.value.length != 0) {
+            const formData = new FormData()
+            formData.append("file", icon.value)
+            let [status1, data1] = await toBackEnd.postFile('solution', `${iconLink}/${data.solutionId}`, formData)
+        }
+
         // const res =await fetch(solutionLink,{
         //     method:'POST',
         //     headers:{
