@@ -2,7 +2,19 @@
 import{ref,computed,onBeforeMount,onUpdated} from 'vue'
 import toBackEnd from '../../JS/fetchToBack'
 import getRefreshToken from '../../JS/refresh';
-import jsCookie from 'js-cookie';
+import jsCookie from '../../JS/cookies';
+
+import Application from './../../assets/problem/application.png'
+import Internet from './../../assets/problem/internet.png'
+import Media from './../../assets/problem/media.png'
+import Meeting from './../../assets/problem/meeting.png'
+import News from './../../assets/problem/news.png'
+import Printer from './../../assets/problem/printer.png'
+import Hardware from './../../assets/problem/hardware.png'
+import Software from './../../assets/problem/software.png'
+import Website from './../../assets/problem/website.png'
+
+const problemIcon = [Application, Internet, Media, Meeting, News, Printer, Hardware, Software, Website]
 
 const problemsLink = `${import.meta.env.VITE_BACK_END_HOST}/problems`
 const emit =defineEmits(["getProblemSelected"])
@@ -40,11 +52,12 @@ const otherSelection=()=>{
 
 // get problems
 const getProblems=async()=>{
+    let cuurentIcon = []
     token.value = JSON.parse(jsCookie.get("data")).token
     let[status,data]=await toBackEnd.getData('component_problem',`${problemsLink}/type/${props.typeP}`,token.value = JSON.parse(jsCookie.get("data")).token)
     if(status==200){
         problemList.value=data
-        console.log(data)        
+        console.log(data)
         addProperty(problemList.value)
     }else{
         console.log(data)
@@ -75,8 +88,7 @@ const addP =(v)=>{
         for(let value2 of problemList.value){
             if(value2.problem_problem==v){
                 value2.selection= !value2.selection
-            }
-            
+            }  
         }
         check=false
         console.log(problems.value)
@@ -95,6 +107,19 @@ const addP =(v)=>{
         console.log(problems.value)
     }
 }
+
+const getImg = (problem_type) => {
+    let path = `/src/assets/problem/${problem_type}.png`
+    let currentIcon = []
+    problemIcon.forEach( i => {
+        if (path == i) {
+            currentIcon.push(path)
+        }
+    })
+    return currentIcon
+}
+
+
 </script>
 <template>
     <div class="w-full text-[17px] font-normal md:text-[25px] sm:w-fit">
@@ -134,7 +159,7 @@ const addP =(v)=>{
     ">
     <!-- problems -->
         <button  v-for="(value,index) in problemList" :key="index" @click="addP(value.problem_problem)"  :style="[value.selection==true?'background-color:#1E88E5;color:#E3F2FD':'']" class="truncate w-full mx-auto p-2 bg-gray-200 rounded-xl hover:bg-gray-300 md:w-[150px] md:h-fit ">
-            <img src="../../assets/vue.svg" alt="NoteBook" draggable="false" class="w-[30px] mx-auto md:w-[60px]">
+            <img :src="getImg(value.problem_type)" alt="NoteBook" draggable="false" class="w-[30px] mx-auto md:w-[60px]">
             <h3 class="truncate w-fit mx-auto mt-2 text-[0.625rem] md:text-[1.125rem]">
                 {{value.problem_problem}}
             </h3>

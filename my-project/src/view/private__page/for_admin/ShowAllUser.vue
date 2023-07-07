@@ -99,16 +99,15 @@ const role = ref(JSON.parse(Cookies.get("data")).user_role)
 const getUsers = async (id = undefined) => {
     console.log(id)
     let status = false
+    token.value = JSON.parse(jsCookie.get("data")).token
     if (id == undefined) {
-        token.value = JSON.parse(jsCookie.get("data")).token
         let [s, data] = await toBackEnd.getData('user', userLink, token.value)
         if (s == 200) status = true
-        userList.value = data.reverse().sort((a,b)=>(a.user_status < b.user_status) ? -1 : (a.user_status > b.user_status) ? 1 : 0)
+        userList.value = data.reverse().sort((a, b) => (a.user_status < b.user_status) ? -1 : (a.user_status > b.user_status) ? 1 : 0)
 
         showList.value = userList.value
 
     } else {
-        token.value = JSON.parse(jsCookie.get("data")).token
         let [s, data] = await toBackEnd.getDataBy('user', `${userLink}/emp-code`, id, token.value)
         if (s == 200) status = true
         user.value = data
@@ -118,6 +117,7 @@ const getUsers = async (id = undefined) => {
     return status
 }
 
+const goVerify = () => myRouter.push({ name: "verify" })
 
 // delete user
 const deleteUser = async (v) => {
@@ -205,7 +205,7 @@ const submitEdit = async (id) => {
 
     // if(validate.vUserCreate(dataCh.value,lenghtOfInput) !=true){
     token.value = JSON.parse(jsCookie.get("data")).token
-    let [status, data] = await toBackEnd.editData('user', userLink, id, dataCh.value, token.value)
+    let [status, data] = await toBackEnd.editData('user', `${userLink}/${id}`, dataCh.value, token.value)
     console.log(status)
     if (status == 200) {
         await getUsers()
@@ -310,164 +310,147 @@ const searchByKeyW = () => {
 }
 </script>
 <template>
-    <div >
-        <div class="">
-            <div class="">
-
-                <div class=" bg-white w-full mx-auto  h-fit ">
-                    <div class="w-full text-center font-semibold text-[40px] pt-6">
-                        <div class="flex w-fit mx-auto">
-                            <img src="../../../assets/admin_page/allUser.png" alt="users_icon"
-                                class="w-[40px] h-[40px] my-auto mr-4">
-                            All User
-                        </div>
-
+    <div>
+        <div class=" bg-white w-full mx-auto  h-fit ">
+            <div class="w-full text-center font-semibold text-[40px] pt-6">
+                <div class="flex w-fit mx-auto">
+                    <img src="../../../assets/admin_page/allUser.png" alt="users_icon"
+                        class="w-[40px] h-[40px] my-auto mr-4">
+                    All User
                 </div>
+            </div>
+            <!-- filter -->
+            <div class="relative w-[1200px] h-[70px] pl-4 mx-auto ">
+                <div v-show="is_filter_open == true" class="absolute w-fit h-fit bottom-0">
+                    <div class="flex ">
 
-
-                    <!-- filter -->
-                    <div class="relative w-[1200px] h-[70px] pl-4 mx-auto ">
-                        <div v-show="is_filter_open == true" class="absolute w-fit h-fit bottom-0">
-                            <div class="flex ">
-
-                                <!-- name -->
-                                <!-- <div class="px-2 ">
+                        <!-- name -->
+                        <!-- <div class="px-2 ">
                                     <input v-model="f_name" placeholder="Name" type="text" class="px-3 py-[4px] bg-[#E3F2FD] text-gray-600 rounded-xl focus:outline-0">
                                 </div> -->
 
-                                <!-- email -->
-                                <div class="px-2">
-                                    <input v-model="f_email" placeholder="E-mail" type="text"
-                                        class="px-3 py-[4px] bg-[#E3F2FD] text-gray-600 rounded-xl focus:outline-0">
-                                </div>
-
-                                <!-- status -->
-                                <div class="px-2">
-                                    <!-- <input placeholder="" type="text" class="bg-gray-300"> -->
-                                    <select v-model="f_status" name="status" id="status"
-                                        class="px-3 py-[4px] bg-[#E3F2FD] text-gray-600 rounded-xl focus:outline-0">
-                                        <option value="" selected hidden> Select status </option>
-                                        <option value="active"> active </option>
-                                        <option value="inactive"> inactive</option>
-
-                                    </select>
-                                </div>
-
-                                <div class="px-2">
-                                    <!-- <input placeholder="" type="text" class="px-3 py-[4px] bg-gray-300 rounded-xl"> -->
-                                    <select v-model="f_reposibility" name="reposibility" id="reposibility"
-                                        class="px-3 py-[4px] bg-[#E3F2FD] text-gray-600 rounded-xl focus:outline-0">
-                                        <option value="" selected hidden>Select Reposibility</option>
-                                        <option value="user">user</option>
-                                        <option value="admin_pr">Admin PR</option>
-                                        <option value="admin_it">Admin IT</option>
-
-                                    </select>
-                                </div>
-
-                                <div class="flex px-3 font-light">
-                                    <button @click="resetF"
-                                        class="px-3 mx-1 bg-gray-500 text-rose-300  rounded-xl hover:text-gray-500 hover:bg-rose-300">
-                                        รีเซต
-                                    </button>
-
-                                    <button @click="searchByKeyW" class="px-3 mx-1 bg-gray-300 rounded-xl">
-                                        ค้นหา
-                                    </button>
-                                </div>
-                            </div>
+                        <!-- email -->
+                        <div class="px-2">
+                            <input v-model="f_email" placeholder="E-mail" type="text"
+                                class="px-3 py-[4px] bg-[#E3F2FD] text-gray-600 rounded-xl focus:outline-0">
                         </div>
 
+                        <!-- status -->
+                        <div class="px-2">
+                            <!-- <input placeholder="" type="text" class="bg-gray-300"> -->
+                            <select v-model="f_status" name="status" id="status"
+                                class="px-3 py-[4px] bg-[#E3F2FD] text-gray-600 rounded-xl focus:outline-0">
+                                <option value="" selected hidden> Select status </option>
+                                <option value="active"> active </option>
+                                <option value="inactive"> inactive</option>
+                            </select>
+                        </div>
 
-                        <!-- button -->
-                        <div class="   right-[70px] bottom-0  absolute">
-                            <button @click="is_filter_open = !is_filter_open" class="flex w-fit">
-                                <span class="font-semibold my-auto">
-                                    ตัวกรอง
-                                </span>
-                                <img src="../../../assets/admin_page/filter.png" alt="icon"
-                                    class="w-[20px] ml-[5px] my-auto">
+                        <div class="px-2">
+                            <!-- <input placeholder="" type="text" class="px-3 py-[4px] bg-gray-300 rounded-xl"> -->
+                            <select v-model="f_reposibility" name="reposibility" id="reposibility"
+                                class="px-3 py-[4px] bg-[#E3F2FD] text-gray-600 rounded-xl focus:outline-0">
+                                <option value="" selected hidden>Select Reposibility</option>
+                                <option value="user">user</option>
+                                <option value="admin_pr">Admin PR</option>
+                                <option value="admin_it">Admin IT</option>
+
+                            </select>
+                        </div>
+
+                        <div class="flex px-3 font-light">
+                            <button @click="resetF"
+                                class="px-3 mx-1 bg-gray-500 text-rose-300  rounded-xl hover:text-gray-500 hover:bg-rose-300">
+                                รีเซต
+                            </button>
+
+                            <button @click="searchByKeyW" class="px-3 mx-1 bg-gray-300 rounded-xl">
+                                ค้นหา
                             </button>
                         </div>
-
                     </div>
                 </div>
 
-
-
-
-                <!-- table -->
-                <div class="w-[1200px] mx-auto  h-[450px] mt-2">
-                    <hr class="mt-3 bg-gray-700  w-[1170px] h-[3px]">
-                    <div class="overflow-y-auto mx-auto h-[100%] w-[100%] ">
-                        <table class="w-full table-fixed text-sm text-center text-gray-800 ">
-                            <thead class="bg-white text-lg sticky top-0">
-                                <tr class="text-[20px] text-gray-500">
-                                    <th scope="col" class="w-[150px] py-2 px-2  pl-[40px]">
-                                        Name
-                                    </th>
-                                    <th scope="col" class="w-[250px] py-2 px-2">
-                                        Group
-                                    </th>
-                                    <th scope="col" class="w-[100px] py-2 px-2">
-                                        Status
-                                    </th>
-                                    <th scope="col" class="w-[100px] py-2 px-2">
-                                        Reposibility
-                                    </th>
-                                    <th scope="col" class=" w-[150px] py-2 px-2">
-                                        Detail
-                                    </th>
-
-
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr v-for="(data, index) in showList" :key="index"
-                                    class="text-[15px] cursor-default bg-white border-b-2 border-gray-300  hover:border-gray-400 hover:bg-gray-400">
-                                    <td class="]     px-2 py-2 font-medium ">
-                                        <div class="ml-4">
-                                            <div class="w-full ml-3 text-[18px] font-light truncate mx-auto">
-                                                {{ data.user_first_name }} {{ data.user_last_name }}
-                                            </div>
-                                            <div class="w-full ml-3 text-[10px] truncate mx-auto">
-                                                {{ data.user_email }}
-                                            </div>
-                                        </div>
-
-                                    </td>
-                                    <td class=" text-[15px] px-2 py-2 font-light text-l">
-                                        <div class="w-full truncate mx-auto">
-                                            {{ data.user_group }}
-                                        </div>
-                                    </td>
-                                    <td class=" px-2 py-2 text-[20px] font-semibold capitalize">
-                                        <div class="w-full truncate mx-auto"
-                                            :style="data.user_status == 'active' ? 'color:green' : 'color:red'">
-                                            {{ data.user_status }}
-                                        </div>
-
-                                    </td>
-                                    <td class=" px-2 py-2 text-[20px] font-light">
-                                        <div class=" mx-auto truncate">
-                                            {{ data.user_role }}
-                                        </div>
-                                    </td>
-                                    <td class=" px-2 py-2 font-semibold">
-                                        <div class="flex w-fit mx-auto truncate ">
-                                            <a class="goInfo w-[28px] m-2 ">
-                                                <button @click="showInfoByID(data.user_emp_code, index)">
-                                                    <img src="../../../assets/admin_page/edit.png" alt="edit_icon">
-                                                </button>
-                                            </a>
-                                            <!-- <img @click="deleteUser(data.userId)" src="../../../assets/admin_page/bin.png" alt="delete_icon" class="w-[28px] h-[28px] m-2 cursor-pointer"> -->
-                                        </div>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
+                <!-- button -->
+                <div class="   right-[70px] bottom-0  absolute">
+                    <button @click="is_filter_open = !is_filter_open" class="flex w-fit">
+                        <span class="font-semibold my-auto">
+                            ตัวกรอง
+                        </span>
+                        <img src="../../../assets/admin_page/filter.png" alt="icon" class="w-[20px] ml-[5px] my-auto">
+                    </button>
                 </div>
+            </div>
+        </div>
+
+        <!-- table -->
+        <div class="w-[1200px] mx-auto  h-[450px] mt-2">
+            <hr class="mt-3 bg-gray-700  w-[1170px] h-[3px]">
+            <div class="overflow-y-auto mx-auto h-[100%] w-[100%] ">
+                <table class="w-full table-fixed text-sm text-center text-gray-800 ">
+                    <thead class="bg-white text-lg sticky top-0">
+                        <tr class="text-[20px] text-gray-500">
+                            <th scope="col" class="w-[150px] py-2 px-2  pl-[40px]">
+                                Name
+                            </th>
+                            <th scope="col" class="w-[250px] py-2 px-2">
+                                Group
+                            </th>
+                            <th scope="col" class="w-[100px] py-2 px-2">
+                                Status
+                            </th>
+                            <th scope="col" class="w-[100px] py-2 px-2">
+                                Reposibility
+                            </th>
+                            <th scope="col" class=" w-[150px] py-2 px-2">
+                                Detail
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="(data, index) in showList" :key="index"
+                            class="text-[15px] cursor-default bg-white border-b-2 border-gray-300  hover:border-gray-400 hover:bg-gray-400">
+                            <td class="]     px-2 py-2 font-medium ">
+                                <div class="ml-4">
+                                    <div class="w-full ml-3 text-[18px] font-light truncate mx-auto">
+                                        {{ data.user_first_name }} {{ data.user_last_name }}
+                                    </div>
+                                    <div class="w-full ml-3 text-[10px] truncate mx-auto">
+                                        {{ data.user_email }}
+                                    </div>
+                                </div>
+
+                            </td>
+                            <td class=" text-[15px] px-2 py-2 font-light text-l">
+                                <div class="w-full truncate mx-auto">
+                                    {{ data.user_group }}
+                                </div>
+                            </td>
+                            <td class=" px-2 py-2 text-[20px] font-semibold capitalize">
+                                <div class="w-full truncate mx-auto"
+                                    :style="data.user_status == 'active' ? 'color:green' : 'color:red'">
+                                    {{ data.user_status }}
+                                </div>
+
+                            </td>
+                            <td class=" px-2 py-2 text-[20px] font-light">
+                                <div class=" mx-auto truncate">
+                                    {{ data.user_role }}
+                                </div>
+                            </td>
+                            <td class=" px-2 py-2 font-semibold">
+                                <div class="flex w-fit mx-auto truncate ">
+                                    <a class="goInfo w-[28px] m-2 ">
+                                        <button @click="showInfoByID(data.user_emp_code, index)">
+                                            <img src="../../../assets/admin_page/edit.png" alt="edit_icon">
+                                        </button>
+                                    </a>
+                                    <!-- <img @click="deleteUser(data.userId)" src="../../../assets/admin_page/bin.png" alt="delete_icon" class="w-[28px] h-[28px] m-2 cursor-pointer"> -->
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
         <!-- show detail -->
@@ -659,7 +642,7 @@ const searchByKeyW = () => {
                                 <option value="user">User</option>
                                 <option value="admin_it">Admin_IT</option>
                                 <option value="admin_pr">Admin_PR</option>
-                                <option value="super_admin">Admin_PR</option>
+                                <option value="super_admin">Super_Admin</option>
                             </select>
                         </div>
 
@@ -714,7 +697,7 @@ const searchByKeyW = () => {
                         </div>
 
                         <!-- password -->
-                        <div class="relative w-[500px] flex h-[50px] mt-1">
+                        <!-- <div class="relative w-[500px] flex h-[50px] mt-1">
                             <div class="relative w-[249px]">
                                 <h4 h4 class="ml-2 text-sm font-light text-gray-500">
                                     Password
@@ -729,9 +712,15 @@ const searchByKeyW = () => {
                                 <input v-model="eCPw" type="text"
                                     class="absolute bottom-0 w-full h-[30px] p-2 bg-sky-300 font-light text-[20px] text-gray-600 rounded-lg focus:outline-0">
                             </div>
-                        </div>
+                        </div> -->
 
                         <!-- button -->
+                        <div class="mt-6 mb-1.5">
+                            <button @click="goVerify"
+                                class="w-[250px] h-fit bg-gray-600 p-2 text-[#90CAF9] rounded-lg hover:bg-[#90CAF9] hover:text-gray-600">
+                                ขอรหัสผ่านใหม่
+                            </button>
+                        </div>
                         <div class="mt-6 mb-1.5">
                             <button @click="checkInput"
                                 class="w-[250px] h-fit bg-gray-600 p-2 text-[#90CAF9] rounded-lg hover:bg-[#90CAF9] hover:text-gray-600">
@@ -908,4 +897,5 @@ const searchByKeyW = () => {
 
 .table_header::after {
     content: ':';
-}</style>
+}
+</style>

@@ -53,9 +53,8 @@ const getRole=()=>{
 // // }
 
 // switch for admin
-const isAdmin=ref(false)
+const isAdmin=ref(true)
 const toAdmin =()=>{
-    isAdmin.value= !isAdmin.value
     // console.log("before change:",isAdmin.value)
     // isAdmin.value==true?isAdmin.value=false:isAdmin.value=true
 
@@ -66,10 +65,12 @@ const toAdmin =()=>{
     }else{
         if(isAdmin.value==true){
             Cookies.set('isAdmin',isAdmin.value)
+            isAdmin.value= !isAdmin.value
             goShowAllEvent()
         }else
         if(isAdmin.value==false){
             Cookies.set('isAdmin',isAdmin.value)
+            isAdmin.value= !isAdmin.value
             goService()
         }
     }
@@ -122,10 +123,9 @@ onBeforeMount(()=>{
                     </div>
                     <button 
                         v-if="role=='admin_it'||role=='admin_pr'||role=='super_admin'" 
-                        @click="toAdmin" 
-                        :style="[isAdmin===true?'background-color:#e63946 ;color:white':'color:white;']" 
+                        @click="toAdmin"
                         class=" h-fit w-[95px] text-[15px] font-bold  rounded py-[5px] px-[10px] my-auto  
-                            hidden lg:flex 
+                            hidden lg:flex text-white bg-[#e63946] lg:hover:bg-red-600 focus:ring-3 focus:ring-gray-400
                         ">
                         <h4 class="lg:grow">
                           Admin  
@@ -198,6 +198,17 @@ onBeforeMount(()=>{
                                 {{ userName }}
                             </h4>
                             </div>
+                        </li>
+                        <li class="hidden sm:block" v-if="role == 'user'" @click="goHistory">
+                            <div class="flex">
+                                <img src="../assets/requests.png" alt="logo_setting" draggable="false" class="w-[20px] h-[20px] ml-2">
+                                <h4 class="ml-3">
+                                    Show Request
+                                </h4>                                
+                            </div>
+                        </li>
+                        <li v-if="role == 'user'">
+                            <hr class="w-full my-2 ">
                         </li>
                         <li class="hidden sm:block">
                             <div class="flex">

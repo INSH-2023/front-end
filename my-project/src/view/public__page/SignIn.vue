@@ -53,6 +53,12 @@ const logIn=async()=>{
             alert_message.value='สถานะของ user ไม่พร้อมใช้งาน'
             button_status.value=false
         }else
+        if(status==404){
+            alert_status.value=false
+            alert_title.value='Not Found !!'
+            alert_message.value='อีเมลนี้ยังไม่ได้ลงทะเบียน'
+            button_status.value=false
+        }else
         {
             alert_status.value=true
             alert_title.value='Error !!'
@@ -63,17 +69,15 @@ const logIn=async()=>{
     }
 }
 
-// testing button
-const isEmailTesting=ref(false)
 </script>
 <template>
 
     <div class="w-full pt-3 relative ">
        <div class="mt-6 w-fit mx-auto text-[27px] font-semibold text-gray-600
             sm:text-gray-300 md:text-rose-300 lg:text-sky-300 sm:text-[40px]
-          
        ">
-         ลงชื่อเข้าใช้
+       
+        ลงชื่อเข้าใช้
        </div>
        <div class="mt-2 w-[20rem] h-[6.563rem]  mx-auto relative 
             sm:w-[25rem]
@@ -120,7 +124,7 @@ const isEmailTesting=ref(false)
        <!-- button submit -->
        <!-- v-show="isEmailTesting==true" -->
        <div class="w-fit h-fit mx-auto mt-3  md:mt-6 ">
-            <button @click="logIn"  class="  bg-sky-500 w-[13rem] h-[3rem]  rounded-2xl text-white md:w-[16rem]">
+            <button @click="logIn"  class="bg-sky-500 w-[13rem] h-[3rem] rounded-2xl text-white md:w-[16rem] hover:bg-sky-800 focus:ring-4 focus:ring-blue-300">
                 <div class="flex w-fit h-fit mx-auto">
                     <h4 class="w-fit h-fit p-2 mx-auto">
                         login
@@ -151,15 +155,16 @@ const isEmailTesting=ref(false)
                 </h5>
             </button>
        </div> -->
-        
-
-   
+    
+       <div class=" w-fit mx-auto mt-5 font-semibold text-gray-500">
+            <router-link :to="{name:'verify'}">
+                <h5 class="text-[15px] m-auto underline underline-offset-1">
+                    ลืมรหัสผ่าน
+                </h5>
+            </router-link>
+       </div>
        
     </div>
-
-          
-
-
 
 <!--     
     <div class="h-fit w-fit mx-auto font-mono">

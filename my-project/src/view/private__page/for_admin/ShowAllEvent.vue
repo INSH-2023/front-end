@@ -51,6 +51,8 @@ const is_filter_open=ref(false)
 const token = ref('')
 const role = ref(JSON.parse(Cookies.get("data")).user_role)
 
+let diffentNotify = ref(0)
+
 // get data
 const getEvents =async(id=undefined)=>{
 
@@ -61,9 +63,19 @@ const getEvents =async(id=undefined)=>{
         let [s,data] =await toBackEnd.getData('request',requestLink,token.value)
         if(s==200){
             status=true
-            requestList.value = data.sort((a,b)=>(a.request_req_date > b.request_req_date) ? -1 : (a.request_req_date < b.request_req_date) ? 1 : 0);
+            requestList.value = data.data.sort((a,b)=>(a.request_req_date > b.request_req_date) ? -1 : (a.request_req_date < b.request_req_date) ? 1 : 0);
             showList.value = requestList.value
             get_status.value=true
+
+            if(data.request_count != requestList.value.length) {
+                diffentNotify.value = requestList.value.length - data.request_count
+                if(diffentNotify.value != 0) {
+                    notify(requestList.value[0])
+                }
+            }
+            
+            console.log(showList.value)
+            return status
             // status something
         }
         else {
@@ -86,27 +98,48 @@ const getEvents =async(id=undefined)=>{
             // status something
         }
     }
-
     return status
 }
 
-const getAdmin=async()=>{
+// notification
+function notify(data) {
+    console.log(data)
+    let message = `ชื่อ: ${data.request_first_name.length == 0 || data.request_last_name.length == 0 ? '-' : data.request_first_name + ' ' + data.request_last_name} \nอีเมล: ${data.request_email.length == 0 ? '-' : data.request_email}) \nปัญหาที่พบ: ${data.request_problems.length == 0 ? '-' : data.request_problems}`
+    if (!("Notification" in window)) {
+        // Check if the browser supports notifications
+        alert("This browser does not support desktop notification");
+    } else if (Notification.permission !== "denied") {
+        // We need to ask the user for permission
+        Notification.requestPermission().then((permission) => {
+            if (permission === "granted") {
+                new Notification("🔧 คำร้องขอบริการถูกแจ้งแล้ว 🔧", {
+                    body: message
+                })
+            }
+        });
+    }
+}
+
+const getAdmin=async(email)=>{
+    let status = false
     token.value = JSON.parse(jsCookie.get("data")).token
-    let [status,data]=await toBackEnd.getData('request_admin',`${userLink}`,token.value)
-    if(status==200){
-        data = ["super_admin","user"].includes(role) ? data : data.filter(e=>e.user_role==role.value)
-        adminList.value=data.reverse()
+    let [s,data]=await toBackEnd.getData('request_admin',`${userLink}`,token.value)
+    if(s==200){
+        status = true
+        data = ["super_admin"].includes(role.value) ? data : data.filter(e=>e.user_role==role.value)
+        adminList.value=data.reverse().filter(u=>u.user_email != email)
     }else{
         // status something
         console.log(data)
     }
+    return status
 }
 
 // edit by id
 const editInfo = async(v)=>{
     edit_status.value=undefined
     token.value = JSON.parse(jsCookie.get("data")).token
-    let [ss,data] =await toBackEnd.editData('request',requestLink,v,data_ch.value,token.value)
+    let [ss,data] =await toBackEnd.editData('request',`${requestLink}/${v}`,data_ch.value,token.value)
     if(ss==200){
         edit_status.value=true
         console.log(data)
@@ -154,7 +187,6 @@ const submitt =(v)=>{
     }
 }
 
-
 // showInfo
 const showInfoByID=async(v,index)=>{
     let status=false
@@ -165,6 +197,7 @@ const showInfoByID=async(v,index)=>{
     // assign_ch.value=""
 
     status = await getEvents(request_id.value)
+    status = await getAdmin(request.value.request_email)
     console.log(request.value.request_assign)
     assign_ch.value = request.value.request_assign
     if(status && isEmptyOBJ.value !=true){
@@ -178,7 +211,6 @@ const showInfoByID=async(v,index)=>{
         // status something
     }
 }
-
 
 // old version
 const commentCh =ref('')
@@ -233,10 +265,6 @@ const changeColorBy=(v)=>{
     return style
 }
 
-
-
-
-
 const changeST =(v)=>{
     status_ch.value=''
     // status request
@@ -266,8 +294,6 @@ const changeST =(v)=>{
     console.log(status_ch.value)
     // rStatus.value=v
 }
-
-
 
 // add comment
 const addComment =()=>{
@@ -326,16 +352,17 @@ const checkEdit=computed(()=>{
 })
 
 const searchByKeyW=()=>{
+    filterList.value = requestList.value
     console.log(f_status.value)
 
     // email
-    if(f_email.value.length != 0){
-        filterList.value = requestList.value.filter(e=>e.request_email.toLowerCase().includes(f_email.value.toLowerCase()))
-        console.log('this  email filter : '+f_email.value)
-    }
+    // if(f_email.value.length != 0){
+    //     filterList.value = requestList.value.filter(e=>e.request_email.toLowerCase().includes(f_email.value.toLowerCase()))
+    //     console.log('this  email filter : '+f_email.value)
+    // }
 
     // service
-    else if(f_type.value.length !=0){
+    if(f_type.value.length !=0){
         filterList.value = requestList.value.filter(e=>e.request_service_type.toLowerCase()==f_type.value.toLowerCase())
     }
 
@@ -352,9 +379,9 @@ const searchByKeyW=()=>{
     showList.value = filterList.value
     console.log(filterList.value)
 }
+
 </script>
 <template>
-
         <!-- wait -->
         <div v-if="get_status==undefined">
             <div class=" bg-white w-full mx-auto  h-fit ">
@@ -367,7 +394,6 @@ const searchByKeyW=()=>{
                         </button>   -->
                     </div>
                 </div>
-              
             </div>
         </div>
         <!-- no data -->
@@ -405,7 +431,6 @@ const searchByKeyW=()=>{
                         </button>   -->
                     </div>
                 </div>
-              
             </div>
         </div>
                 
@@ -419,10 +444,9 @@ const searchByKeyW=()=>{
                         Request
                     </div>
                 </div>
-                
 
                 <!-- filter -->
-                <div  class="relative w-[1200px] h-[70px]  mx-auto ">
+                <div  class="relative w-[1200px] h-[70px] mx-auto">
                     <div v-show="is_filter_open==true" class="absolute w-fit h-fit bottom-0">
                         <div class="flex ">
                             
@@ -432,9 +456,9 @@ const searchByKeyW=()=>{
                             </div> -->
 
                             <!-- email -->
-                            <div class="px-2">
+                            <!-- <div class="px-2">
                                 <input v-model="f_email" placeholder="E-mail" type="text" class="px-3 py-[4px] bg-[#E3F2FD] text-gray-600 rounded-xl focus:outline-0">
-                            </div>
+                            </div> -->
 
                             <!-- type -->
                             <div class="px-2">
@@ -458,7 +482,6 @@ const searchByKeyW=()=>{
                                     <option value="meeting"> meeting </option>
                                     <option value="application"> application </option>
                                     <option value="other"> other </option>
-
                                 </select>
                             </div>
 
@@ -470,7 +493,6 @@ const searchByKeyW=()=>{
                                     <option value="open_case"   class="bg-"> open case </option>
                                     <option value="in_progress" class="bg- "> in progress </option>
                                     <option value="finish"      class="bg-"> finish </option>
-
                                 </select>
                             </div>
 
@@ -490,7 +512,7 @@ const searchByKeyW=()=>{
 
 
                     <!-- button -->
-                    <div class="   right-[20px] bottom-0  absolute">
+                    <div class=" right-[20px] bottom-0  absolute">
                         <button @click="is_filter_open= !is_filter_open" class="flex w-fit">
                             <span class="font-semibold my-auto">
                                 ตัวกรอง
@@ -539,12 +561,9 @@ const searchByKeyW=()=>{
                         </tr>                        
                     </thead>
                     
-
-
                     <!-- have data -->
                     <tbody class="z-0"> <!-- @click="clickedInfo" -->
-                        <tr  v-for="(data,index) in showList" :key="index" class="relative text-[15px]  bg-white border-b-2 border-gray-300 cursor-default hover:border-gray-400 z-1">
-                            
+                        <tr v-for="(data,index) in showList" :style="[index<diffentNotify?'background-color:#A6F4F9':'']" :key="index" class="relative text-[15px]  bg-white border-b-2 border-gray-300 cursor-default hover:border-gray-400 z-1">
                             <td class=" font-medium py-3 px-2 text-center">
                                 <div class="  font-normal truncate ">
                                     <span class="">
@@ -620,7 +639,7 @@ const searchByKeyW=()=>{
                 </div>
                 <hr class="w-[80%] h-[10px] m-auto my-4">
                 <!-- first -->
-                <table  class="w-full     text-[20px] font-semibold ">
+                <table  class="w-full text-[20px] font-semibold ">
 
                         <!-- username -->
                         <tr >
@@ -772,7 +791,7 @@ const searchByKeyW=()=>{
                 <hr class="w-[80%] h-[10px] m-auto mt-10">
 
                 <!-- massage other -->
-                <div   class=" w-full  ">
+                <div class=" w-full  ">
                     <div v-show="request.request_other!=''"  class="">
                         <label for="other_1" class="ml-2 text-[17px] font-semibold inline-b">
                             กรณีเลือก<span class="text-rose-500 pl-2">อื่นๆโปรดระบุ</span>
@@ -819,12 +838,11 @@ const searchByKeyW=()=>{
                             <h5 class="font-semibold">
                                 Assign
                             </h5>
-                            <select  v-model="assign_ch" name="assign" id="assign" class="w-[200px] mt-2 p-1 bg-gray-400 text-gray-700 font-semibold  rounded">
-                                <option  value="Not_assign" selected disabled>เลือกผู้รับผิดชอบ</option>
+                            <select v-model="assign_ch" name="assign" id="assign" class="w-[200px] mt-2 p-1 bg-gray-400 text-gray-700 font-semibold  rounded">
+                                <option selected disabled value="Not_assign">เลือกผู้รับผิดชอบ</option>
                                 <option v-for="(admin,index) in adminList" :key="index" :value="admin.user_first_name" class="font-semibold bg-gray-300">{{admin.user_first_name}}</option>
                                 <!--<option value="gnitset_testing" class="font-semibold bg-gray-300">gnitset testing</option>
                                 <option value="Testing_Tseing " class="font-semibold bg-gray-300">Testing Tseing</option> -->
-
                             </select>
                         </div>
 
