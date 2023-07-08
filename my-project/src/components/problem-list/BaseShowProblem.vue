@@ -1,7 +1,7 @@
 <script setup>
 import { ref, onUpdated, onMounted } from 'vue'
 
-const path = `${import.meta.env.VITE_BACK_END_HOST}/images/files/problems`
+const path = `${import.meta.env.VITE_BACK_END_HOST}/images/problems`
 const APPLICATION = `${path}/application`
 const INTERNET =`${path}/internet`
 const MEDIA = `${path}/media`
@@ -137,13 +137,13 @@ const removeProblem = async (id) => {
 
 const getImg = (problemId) => {
     let currentList = []
-    let data = `${import.meta.env.VITE_BACK_END_HOST}/images/files/problems/${problemId}`
+    let data = `${import.meta.env.VITE_BACK_END_HOST}/images/problems/${problemId}`
     currentList.push(data)
     return currentList
 }
 const getIcon = (problem_type) => {
     let currentList = []
-    let path = `${import.meta.env.VITE_BACK_END_HOST}/images/files/problems/${problem_type}`
+    let path = `${import.meta.env.VITE_BACK_END_HOST}/images/problems/${problem_type}`
     problemIcon.forEach(i => {
         if (path == i) {
             currentList.push(path)

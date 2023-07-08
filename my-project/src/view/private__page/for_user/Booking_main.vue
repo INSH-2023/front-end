@@ -7,6 +7,7 @@ import jsCookie from './../../../JS/cookies';
 import toBackEnd from '../../../JS/fetchToBack';
 // const solutionLink='http://localhost:3000/solutions'
 const solutionLink = `${import.meta.env.VITE_BACK_END_HOST}/solutions`
+const iconLink = `${import.meta.env.VITE_BACK_END_HOST}/images/solutions`
 
 
 const { params } = useRoute()
@@ -478,7 +479,7 @@ onBeforeMount(() => {
     <!-- list problems searching -->
     <div v-if="params.service == 'it'" class="grid grid-cols-2 grid-rows-2 gap-4 w-[1000px] mx-auto mt-3">
         <div v-for="(data, index) in ranArticle" :key="index" class="bg-gray-100 p-2 rounded-2xl hover:bg-gray-200">
-            <img :src="data.img" alt="logo" class=" w-[45px] mx-3 mt-2">
+            <img :src="`${iconLink}/${data.solutionId}`" alt="logo" class=" w-[45px] mx-3 mt-2">
             <h5 class="ml-[10px] mb-1.5 mt-2 text-[20px] font-semibold">
                 {{ data.solution_title }}
             </h5>

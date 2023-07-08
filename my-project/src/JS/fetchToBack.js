@@ -234,9 +234,9 @@ let toBackEnd={
       
       if(status==201){
          status=res.status
-         console.log(`post ${name} successful`)
+         console.log(`post file ${name} successful`)
          return_data.push(status)
-         return_data.push(await res.json())
+         return_data.push(res.json())
       }else{
          status=500
          console.log(`error cannot post ${name}`)

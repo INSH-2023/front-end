@@ -6,7 +6,7 @@ import getRefreshToken from '../../../JS/refresh'
 
 // const solutionLink ='http://localhost:3000/solutions'
 const solutionLink = `${import.meta.env.VITE_BACK_END_HOST}/solutions`
-const iconLink = `${import.meta.env.VITE_BACK_END_HOST}/images/files/solutions`
+const iconLink = `${import.meta.env.VITE_BACK_END_HOST}/images/solutions`
 
 const title = ref('')
 const tag = ref('')
@@ -15,13 +15,13 @@ const discription = ref('')
 const stepN = ref(0)
 const solutionT = ref('')
 const solutionD = ref('')
-const solutions = ref([{ step_: 1, step_name: solutionT.value, step_description: solutionD.value, step_upload: false}])
+const solutions = ref([{ step_: 1, step_name: solutionT.value, step_description: solutionD.value, step_upload: false, file: "", imgName: "", imgShow: "" }])
 const isUpload = ref(false)
 
 const icon = ref(undefined)
 const iconName = ref('')
-const img = ref(undefined)
-const imgName = ref('')
+// const img = ref(undefined)
+// const imgName = ref('')
 
 const token = ref("")
 
@@ -31,16 +31,17 @@ let dataCh = computed(() => {
         solution_tag: tagArr.value,
         solution_text: discription.value,
         solution_icon: iconName.value,
-        solution_steps: solutions.value
+        solution_steps: solutions.value,
     }
 })
 
+// upload icon
 const uploadIcon = (event) => {
     let iconShow = document.getElementById("previewIcon")
-
+    console.log(event)
     if (icon.value == undefined) {
         if (event.target.files[0].size > 10000001) {
-            console.log("file too big")
+            console.log("The file size cannot be larger then 10 MB")
             iconName.value = ""
             // fileStatus.value=false
         } else {
@@ -50,26 +51,69 @@ const uploadIcon = (event) => {
             console.log(icon.value)
             iconShow.src = URL.createObjectURL(event.target.files[0])
         }
-    } else
-        if (icon.value != undefined) {
-            if (event.target.files[0].size > 10000001) {
-                console.log("The file size cannot be larger then 10 MB ")
-            } else {
-                icon.value = event.target.files[0]
-                iconName.value = icon.value.name
-                // fileStatus.value=true
-                console.log(icon.value)
-                console.log('new file selected')
-                iconShow.src = URL.createObjectURL(event.target.files[0])
-            }
+    } else {
+        if (event.target.files[0].size > 10000001) {
+            console.log("The file size cannot be larger then 10 MB")
+        } else {
+            icon.value = event.target.files[0]
+            iconName.value = icon.value.name
+            // fileStatus.value=true
+            console.log(icon.value)
+            console.log('new file selected')
+            iconShow.src = URL.createObjectURL(event.target.files[0])
         }
+    }
+}
+
+// upload image
+const uploadImg = (event, step) => {
+    console.log(event)
+    console.log(step)
+    // step.imgShow = document.getElementById('previewImg'+step.solutionId)
+    console.log(step.imgShow)
+    if (step.file == '') {
+        if (event.target.files[0].size > 10000001) {
+            console.log("The file size cannot be larger then 10 MB")
+            step.imgName = ""
+            // fileStatus.value=false
+        } else {
+            step.file = event.target.files[0]
+            step.imgName = step.file.name
+            step.imgShow = URL.createObjectURL(event.target.files[0])
+            // fileStatus.value=true
+            step.step_upload = true
+        }
+    } else {
+        if (event.target.files[0].size > 10000001) {
+            console.log("The file size cannot be larger then 10 MB")
+        } else {
+            step.file = event.target.files[0]
+            step.imgName = step.file.name
+            // fileStatus.value=true
+            console.log('new file selected')
+            step.imgShow = URL.createObjectURL(event.target.files[0])
+        }
+    }
+    console.log(step)
 }
 
 // remove icon
 const removeIcon = () => {
     icon.value = undefined
     iconName.value = ''
+    let iconShow = document.getElementById("previewIcon")
+    iconShow.src = '#'
     console.log('remove success')
+}
+
+// remove image
+const removeImg = (sol) => {
+    console.log(sol)
+    sol.file = ''
+    sol.imgName = ''
+    sol.imgShow = ''
+    sol.step_upload = false
+    console.log('remove success : step ' + sol.step_)
 }
 
 // lenght
@@ -94,7 +138,7 @@ const addNewSolution = () => {
     } else {
         console.log(stepN.value)
         ++stepN.value
-        solutions.value.push({ step_: stepN.value, step_name: solutionT.value, step_description: solutionD.value, step_upload: false })
+        solutions.value.push({ step_: stepN.value, step_name: solutionT.value, step_description: solutionD.value, step_upload: false, file: "", imageName: "", imageShow: "" })
         console.log('add new element')
     }
 }
@@ -192,6 +236,18 @@ const submitt = async () => {
             let [status1, data1] = await toBackEnd.postFile('solution', `${iconLink}/${data.solutionId}`, formData)
         }
 
+        console.log(dataCh.value.solution_steps)
+
+        dataCh.value.solution_steps.forEach(async step => {
+            console.log(step.step_upload)
+            if (step.step_upload) {
+                console.log("T")
+                const formData = new FormData()
+                formData.append("file", step.file)
+                let [status1, data1] = await toBackEnd.postFile('step', `${iconLink}/${data.solutionId}?step=${step.step_}`, formData)
+            }
+        })
+
         // const res =await fetch(solutionLink,{
         //     method:'POST',
         //     headers:{
@@ -229,6 +285,11 @@ const submitt = async () => {
 onBeforeUnmount(() => {
     getRefreshToken(JSON.parse(jsCookie.get("data")).refreshToken)
 })
+
+let test = (e, t) => {
+    console.log(e)
+    console.log(t)
+}
 </script>
 <template>
     <div class="overflow-y-auto show_up">
@@ -324,10 +385,12 @@ onBeforeUnmount(() => {
                         </div>
 
                         <!-- solutions step -->
-                        <div v-for="(data, index) in solutions" :key="index" class="solu relative h-[280px]  ">
+                        <div v-for="(data, index) in solutions" :key="index" class="relative h-[280px]">
                             <h4 v-show="data.step_ > 0" class="text text-sm font-semibold text-gray-500 mx-2 py-2">
                                 Step {{ index + 1 }}
                             </h4>
+
+                            <!-- step name -->
                             <div class="relative h-[60px]">
                                 <p v-show="data.step_name.length > 0" class="text text-sm font-semibold text-gray-300"
                                     :style="[data.step_name.length == solutionN ? 'color: rgb(225 29 72);' : '']">
@@ -338,6 +401,8 @@ onBeforeUnmount(() => {
                                     :style="[solutionS == false ? 'border-color: rgb(225 29 72);border-width: 2px;' : '']"
                                     class="resize-none absolute bottom-0 w-full h-[40px] bg-gray-300 text-gray-500 px-2 py-[10px] rounded-lg focus:outline-0">
                             </div>
+
+                            <!-- step description -->
                             <div class="relative h-[160px] mt-1.5">
                                 <p v-show="data.step_description.length > 0"
                                     class="text text-sm font-semibold text-gray-300"
@@ -348,44 +413,44 @@ onBeforeUnmount(() => {
                                     id="solution" type="text" :maxlength="solutionL"
                                     :style="[solutionS == false ? 'border-color: rgb(225 29 72);border-width: 2px;' : '']"
                                     class="resize-none absolute bottom-0 w-full h-[140px] bg-gray-300 text-gray-500 px-2 py-[20px] rounded-lg focus:outline-0">
-                                </textarea>
+                                        </textarea>
                             </div>
 
-                            <!-- solution picture -->
-                            <!-- <div :style="[icon != undefined ? 'background-color: rgb(209 213 219); ' : '']"
+
+                            <!-- detail image -->
+                            <div :style="[data.file != '' ? 'background-color: rgb(209 213 219)' : '']"
                                 class="relative w-full h-fit mt-4 overflow-hidden rounded-lg">
-                                <img v-show="icon != undefined" id="previewIcon" src="#" alt="show image"
-                                    class="w-[80px] mx-auto mt-3 py-3" />
-                                <div :style="[icon != undefined ? 'width: 100%;border-bottom-right-radius: 8px;border-bottom-left-radius: 8px;' : 'width: fit-content; border-radius:8px']"
-                                    class=" mx-auto p-1.5 bg-gray-400  font-light text-center">
-                                    <label for="file" class="w-fit text-white cursor-pointer ">
-                                        <input id="file" type="file" accept=".png,.jpg,.jpeg" class="hidden"
-                                            @change="uploadIcon" />
-                                        <span v-show="icon == undefined">Upload File</span>
-                                        <span v-show="icon != undefined">{{ iconName }}</span>
+                                <img v-show="data.file != ''" :id="'previewImg' + data.solutionId" :src="data.imgShow"
+                                    alt="show image" class="w-[80px] mx-auto mt-3 py-3" />
+                                <div :style="[data.file != '' ? 'width: 100%;border-bottom-right-radius: 8px;border-bottom-left-radius: 8px;' : 'width: fit-content; border-radius:8px']"
+                                    class=" mx-auto p-1.5 bg-gray-400 font-light text-center">
+                                    <label :for="'file' + data.solutionId" class="w-fit text-white cursor-pointer ">
+                                        <input :id="'file' + data.solutionId" type="file" accept=".png,.jpg,.jpeg"
+                                            class="hidden" @change="uploadImg($event, data)" />
+                                        <span v-show="data.file == ''">Upload File</span>
+                                        <span v-show="data.file != ''">{{ data.imgName }}</span>
                                     </label>
                                 </div>
-                                <div v-show="icon != undefined" @click="removeIcon"
+                                <div v-show="data.file != ''" @click="removeImg(data)"
                                     class="absolute top-[3px] right-[10px] text-sm font-semibold cursor-pointer hover:text-rose-700">
                                     X
                                 </div>
-                            </div> -->
+                            </div>
                             <div v-if="solutions.length > 1" @click="removeElement(index)"
                                 class="absolute right-[8px] top-[0px] font-semibold cursor-pointer">
                                 x
                             </div>
                         </div>
 
-
                         <button @click="addNewSolution()"
-                            class="relative w-[40px] h-[40px] mt-6  m-auto bg-transparent   border-gray-400 border-[4px] hover:bg-gray-500 hover:border-gray-200 hover:text-sky-200 rounded-full">
-                            <h4 class="absolute w-full h-full  top-[-23px]  text-[45px] text-sky-400">
+                            class="relative w-[40px] h-[40px] mt-20 m-auto bg-transparent border-gray-400 border-[4px] hover:bg-gray-500 hover:border-gray-200 hover:text-sky-200 rounded-full">
+                            <h4 class="absolute w-full h-full top-[-22.5px] text-[45px] text-sky-400">
                                 +
                             </h4>
                         </button>
 
                         <!-- button -->
-                        <div class="w-fit mx-auto  mt-10">
+                        <div class="w-fit mx-auto mt-10">
                             <button @click="submitt()" :style="['background-color:#77BEFF']"
                                 class="relative w-[200px] h-[40px] p-1 text-[20px]  rounded-2xl">
                                 <h4 @click="true" class="static font-light text-white">

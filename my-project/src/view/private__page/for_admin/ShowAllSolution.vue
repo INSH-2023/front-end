@@ -14,7 +14,7 @@ const filterList = ref([])
 const showList = ref([])
 // const solutionLink ='http://localhost:3000/solutions'
 const solutionLink = `${import.meta.env.VITE_BACK_END_HOST}/solutions`
-const iconLink = `${import.meta.env.VITE_BACK_END_HOST}/images/files/solutions`
+const iconLink = `${import.meta.env.VITE_BACK_END_HOST}/images/solutions`
 const solution = ref('')
 const token = ref('')
 const get_status = ref(undefined)
@@ -375,6 +375,7 @@ onBeforeMount(() => {
                                 <p class="pt-2 pl-1 indent-[5px] text-[16px]">
                                     <span v-html="step.step_description"></span>
                                 </p>
+                                <img v-if="step.step_upload!=0" :src="`${iconLink}/${solution.solutionId}?step=${step.step_}`" class="w-[250px]">
                             </div>
                         </div>
                     </div>

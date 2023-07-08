@@ -9,7 +9,7 @@ import BaseLoading from '../../../components/BaseLoading.vue';
 
 // const problemsLink='http://localhost:3000/problems'
 const problemsLink = `${import.meta.env.VITE_BACK_END_HOST}/problems`
-const iconLink = `${import.meta.env.VITE_BACK_END_HOST}/images/files/problems`
+const iconLink = `${import.meta.env.VITE_BACK_END_HOST}/images/problems`
 
 const problemList = ref([])
 const name = ref('')
