@@ -67,9 +67,9 @@ const findingKeyW = async (keyWord) => {
         //         console.log('this from searching step: ', matchStep(solu.solution_steps, keyWord))
         //     }
     }
-    if (arr.length != 0) {
-        await randomArticle(4, arr.length, arr)
-    }
+    // if (arr.length != 0) {
+    //     await randomArticle(4, arr.length, arr)
+    // }
 }
 
 // get article
@@ -438,7 +438,7 @@ onBeforeMount(() => {
     ">
 
     <!-- searching -->
-    <div v-if="params.service == 'it'" class="relative w-[600px] h-[150px] mx-auto">
+    <!-- <div v-if="params.service == 'it'" class="relative w-[600px] h-[150px] mx-auto">
         <h3 class="mx-auto w-fit mt-4 text-[30px]">
             หรือค้นหาหัวข้อปัญหาที่คุณเจอ
         </h3>
@@ -457,7 +457,7 @@ onBeforeMount(() => {
                 {{ data.solution_title }}
             </div>
         </div>
-    </div>
+    </div> -->
 
     <!-- list article -->
     <!-- <div v-if="params.service == 'it'" class="grid grid-cols-2 grid-rows-2 gap-4 w-[1000px] mx-auto mt-3">

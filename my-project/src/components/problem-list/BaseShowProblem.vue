@@ -155,7 +155,7 @@ const getIcon = (problem_type) => {
 </script>
 <template>
     <!-- การ์ด problems -->
-    <div class=" grid grid-cols-4 gap-4 w-[900px] h-fit mt-[15px]  text-center">
+    <div class=" grid grid-cols-4 gap-4 w-[900px] h-fit mt-[15px] mx-auto text-center">
         <div :id="`card_${index}`" @mouseover="hoverFn(true, index)" @mouseleave="hoverFn(false, index)"
             v-for="(p, index) in props.problems" :key="index"
             class="card block w-full h-[8.438rem] mx-auto bg-[#C2E1FD] rounded-lg">

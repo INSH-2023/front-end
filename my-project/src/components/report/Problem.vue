@@ -159,9 +159,11 @@ const getImg = (problem_type) => {
     ">
     <!-- problems -->
         <button  v-for="(value,index) in problemList" :key="index" @click="addP(value.problem_problem)"  :style="[value.selection==true?'background-color:#1E88E5;color:#E3F2FD':'']" class="truncate w-full mx-auto p-2 bg-gray-200 rounded-xl hover:bg-gray-300 md:w-[150px] md:h-fit ">
-            <img :src="getImg(value.problem_type)" alt="NoteBook" draggable="false" class="w-[30px] mx-auto md:w-[60px]">
+            <img   :src="getImg(value.problem_type)" alt="NoteBook" draggable="false" class="w-[30px] mx-auto md:w-[60px]">
             <h3 class="truncate w-fit mx-auto mt-2 text-[0.625rem] md:text-[1.125rem]">
+                <!-- {{value.problem_problem}} -->
                 {{value.problem_problem}}
+
             </h3>
         </button>
 

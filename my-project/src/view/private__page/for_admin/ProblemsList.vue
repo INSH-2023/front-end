@@ -6,6 +6,7 @@ import getRefreshToken from './../../../JS/refresh';
 import Cookies from './../../../JS/cookies';
 import BaseShowProblem from '../../../components/problem-list/BaseShowProblem.vue';
 import BaseLoading from '../../../components/BaseLoading.vue';
+import validateData from 'json-server/lib/server/router/validate-data';
 
 // const problemsLink='http://localhost:3000/problems'
 const problemsLink = `${import.meta.env.VITE_BACK_END_HOST}/problems`
@@ -14,6 +15,7 @@ const iconLink = `${import.meta.env.VITE_BACK_END_HOST}/images/files/problems`
 const problemList = ref([])
 const name = ref('')
 const subjectCr = ref('all')
+const subjectSec = ref('')
 const isUpload = ref(false)
 const token = ref('')
 const role = ref(JSON.parse(Cookies.get("data")).user_role)
@@ -33,7 +35,7 @@ const get_status = ref(undefined)
 const data_ch = computed(() => {
     return {
         problem_problem: name.value,
-        problem_type: subjectCr.value,
+        problem_type: subjectSec.value,
         problem_upload: isUpload.value
     }
 })
@@ -156,27 +158,37 @@ const hoverFn = (b, n) => {
 
 // add new problem
 const addProblem = async () => {
-    data_ch.value.problem_upload = file.value.length != 0 ? true : false
+    let addPStatus =undefined
+    addPStatus=name.value.length==0?false:true
+    addPStatus=subjectSec.value.length==0?false:true
+    if(addPStatus ==true){
+        data_ch.value.problem_upload = file.value.length != 0 ? true : false
 
-    token.value = JSON.parse(jsCookie.get("data")).token
-    let [status, data] = await toBackEnd.postData('problem', problemsLink, data_ch.value, token.value)
+        token.value = JSON.parse(jsCookie.get("data")).token
+        let [status, data] = await toBackEnd.postData('problem', problemsLink, data_ch.value, token.value)
 
-    if (file.value.length != 0) {
-        const formData = new FormData()
-        formData.append("file", file.value)
-        let [status1, data1] = await toBackEnd.postFile('problem', `${iconLink}/${data.problemId}`, formData)
+        if (file.value.length != 0) {
+            const formData = new FormData()
+            formData.append("file", file.value)
+            let [status1, data1] = await toBackEnd.postFile('problem', `${iconLink}/${data.problemId}`, formData)
+        }
+
+        if (status == 201) {
+            console.log('add problem success 😏')
+            console.log(data)
+            name.value=''
+            subjectSec.value = ''
+            base64Img.value = ''
+            file.value = ''
+            // getP(subjectCr.value)
+        } else {
+            console.log(data)
+        }
+    }else{
+        console.log('Can not create problems!!')
+        console.log('Pls input your infomation first!!')
     }
-
-    if (status == 200) {
-        console.log('add problem success 😏')
-        console.log(data)
-        subjectCr.value = 'all'
-        base64Img.value = ''
-        file.value = ''
-        // getP(subjectCr.value)
-    } else {
-        console.log(data)
-    }
+    
 }
 
 // delete problems
@@ -232,15 +244,15 @@ const changeMode = (mode) => {
     }
 }
 
-function onFileChanged($event) {
-    const target = $event.target;
+const onFileChanged=(event)=> {
+    const target = event.target;
     if (target && target.files) {
         file.value = target.files[0];
         encodeImage(file.value)
     }
 }
 
-function encodeImage(input) {
+const encodeImage=(input)=> {
     if (input) {
         const reader = new FileReader()
         reader.onload = (e) => {
@@ -249,63 +261,15 @@ function encodeImage(input) {
         reader.readAsDataURL(input)
     }
 }
+
+
 </script>
 <template>
-    <!-- wait -->
-    <div v-if="get_status == undefined">
-        <div class=" bg-white w-full mx-auto  h-fit ">
-            <div class="w-full text-center font-semibold text-[40px]">
-                <div class="my-auto w-fit mx-auto mt-[250px]">
-                    <!-- <img src="../../../assets/admin_page/request.png" alt="users_icon" class="w-[40px] h-[40px] my-auto mr-4"> -->
-                    <BaseLoading />
-                    <!-- <button @click="getEvents()" class="mt-6 bg-rose-300 focus:bg-rose-400 text-gray-700 focus:text-whte px-2 mx-auto rounded-lg">
-                            Refresh
-                        </button>   -->
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- no data -->
-    <div v-else-if="get_status == false">
-        <div class=" bg-white w-full mx-auto  h-fit ">
-            <div class="w-full text-center font-semibold text-[40px]">
-                <div class="my-auto w-fit mx-auto mt-[250px]">
-                    <!-- <img src="../../../assets/admin_page/request.png" alt="users_icon" class="w-[40px] h-[40px] my-auto mr-4"> -->
-                    <h4>
-                        No data try again later .😏
-                    </h4>
-                    <!-- <button @click="getEvents()" class="mt-6 bg-rose-300 focus:bg-rose-400 text-gray-700 focus:text-whte px-2 mx-auto rounded-lg">
-                            Refresh
-                        </button>   -->
-                </div>
-            </div>
-
-        </div>
-    </div>
-
-    <!-- can get data but no data (clean) -->
-    <div v-else-if="get_status == false || problemList.length == 0" class="show_up">
-        <div class=" bg-white w-full mx-auto  h-fit ">
-            <div class="w-full text-center font-semibold text-[40px]">
-                <div class="my-auto w-fit mx-auto mt-[250px]">
-                    <!-- <img src="../../../assets/admin_page/request.png" alt="users_icon" class="w-[40px] h-[40px] my-auto mr-4"> -->
-                    <h4>
-                        Can get data but no data.😏
-                    </h4>
-                    <h4 class="text-[25px]">
-                        Wait for user send request.👌
-                    </h4>
-                    <!-- <button @click="getEvents()" class="mt-6 bg-rose-300 focus:bg-rose-400 text-gray-700 focus:text-whte px-2 mx-auto rounded-lg">
-                            Refresh
-                        </button>   -->
-                </div>
-            </div>
-        </div>
-    </div>
+    
     <div class="overflow-y-auto relative show_up">
         <div class=" bg-white w-full mx-auto  h-fit ">
             <div class="w-full text-center font-semibold text-[40px] mt-2">
-                <div class="flex w-fit mx-auto tracking-wide">
+                <div class="flex w-fit mx-auto tracking-wide my-2">
                     <img src="./../../../assets/admin_page/problem.png" alt="users_icon"
                         class="w-[40px] h-[40px] my-auto mr-4">
                     <h4>
@@ -343,10 +307,10 @@ function encodeImage(input) {
 
         </div>
         <div class="relative w-full mx-auto  h-full ">
-            <h5 class="m-3 text-[30px] font-semibold">
+            <!-- <h5 class="m-3 text-[30px] font-semibold">
                 Service IT
-            </h5>
-            <div class="flex justify-around mb-4">
+            </h5> -->
+            <div class="flex justify-around mb-4 m-6">
                 <!-- <button class="ml-4 p-3">
                     &lt; ย้อนกลับ
                 </button> -->
@@ -367,60 +331,78 @@ function encodeImage(input) {
 
             <!-- form for input problem -->
             <div v-if="problemMode == 'add'" class="flex flex-col w-fit h-fit m-auto">
-                <h5 class="mb-3 font-medium text-[20px] text-center font-medium">
-                    Service IT
+                <h5 class="mb-3  text-[20px] text-center font-semibold text-gray-600">
+                    เพิ่มหัวข้อปัญหา
                 </h5>
+
+                <!-- name -->
                 <div class="flex font-light">
                     <h5 class=" shrink w-[150px] m-auto text-right">
                         หัวข้อปัญหา
                     </h5>
-                    <input type="text" :maxlength="problemL" class="grow ml-3 p-2 border-2 border-gray-300 rounded-xl"
+                    <input type="text" :maxlength="problemL" placeholder="ใส่ชื่อปัญหาที่นี่ !!" class="grow ml-3 p-2 border-2 border-gray-300 rounded-xl hover:border-gray-600 focus:border-gray-700"
                         v-model="name">
                 </div>
+
+                <!-- service selection for super admin -->
+                <!-- <div v-if="role == 'super_admin'" class="flex font-light">
+                    <h5 class=" shrink w-[150px] m-auto text-right">
+                        Service
+                    </h5>
+                    <input type="text" :maxlength="problemL" class="grow ml-3 p-2 border-2 border-gray-300 rounded-xl"
+                        v-model="name">
+                    <select name="service_selection"  class="grow ml-3 p-2 border-2 border-gray-300 rounded-xl">
+                        <option value="" selected hidden> เลือก Service ของคุณที่นี่</option>
+                        <option value="IT Service">IT Service</option>
+                        <option value="PR Service">IT Service</option>
+                    </select>
+                </div> -->
+
+                <!-- subject type -->
                 <div class="flex mt-2 font-light">
                     <h5 class="shrink w-[150px]  m-auto text-right">
                         หมวดหมู่ของปัญหา
                     </h5>
-                    <select name="type_problem" id="type_problem" class="grow ml-3 p-2 border-2 border-gray-300 rounded-xl"
-                        v-model="subjectCr">
-                        <option selected disabled hidden value="all">โปรดเลือกหมวดหมู่ของปัญหา
+                    <select name="type_problem" id="type_problem" class=" grow ml-3 p-2 border-2 border-gray-300 rounded-xl capitalize hover:border-gray-600 focus:border-gray-700"
+                        v-model="subjectSec">
+                        <option selected disabled hidden value="">โปรดเลือกหมวดหมู่ของปัญหา
                         </option>
-                        <option v-if="role == 'admin_it'" v-for="(type, index) in typeProblemsIT" :key="index"
-                            :value="type">
+                        <option v-if="role == 'admin_it'||role=='super_admin'" v-for="(type, index) in typeProblemsIT" :key="index"
+                            :value="type" class="bg-[#ADE8F4]">
                             {{ type }}
                         </option>
-                        <option v-if="role == 'admin_pr'" v-for="(type, index) in typeProblemsPR" :key="index"
-                            :value="type">
+                        <option v-if="role == 'admin_pr'||role=='super_admin'" v-for="(type, index) in typeProblemsPR" :key="index"
+                            :value="type" class="bg-[#e9d8a6]">
                             {{ type }}
                         </option>
-                        <option v-if="role == 'super_admin'"
+                        <!-- <option v-if="role == 'super_admin'"
                             v-for="(type, index) in typeProblemsIT.concat(...typeProblemsPR)" :key="index" :value="type">
                             {{ type }}
-                        </option>
+                        </option> -->
                     </select>
                 </div>
                 <div class="flex mt-2 font-light">
                     <h5 class=" shrink w-[150px] m-auto text-right">
                         รูปภาพของปัญหา (Optional)
                     </h5>
-                    <div class="grow ml-3 p-2 border-2 border-gray-300 rounded-xl">
+                    <div class="grow ml-3 p-2 border-2 border-gray-300 rounded-xl hover:border-gray-600 focus:border-gray-700">
                         <input type="file" @change="onFileChanged($event)" accept="image/png, image/jpeg, image/jpg"
                             capture />
                         <img :src="base64Img" width="400" height="400" v-if="base64Img.length != 0">
                     </div>
 
                 </div>
-                <button @click="addProblem" class="mt-4 p-2 bg-gray-300 hover:bg-gray-500 focus:bg-gray-300 rounded-xl">
-                    สร้างหัวข้อปัญหา
+                <button @click="addProblem" class="mt-4 p-2 bg-gray-300 hover:bg-[#457b9d] hover:text-white active:bg-[#a8dadc] rounded-xl ">
+                    สร้างหัวข้อปัญหาของคุณ
                 </button>
             </div>
 
 
             <!-- show all problem -->
-            <div v-else-if="problemMode == 'show'" class="w-fit h-fit m-auto">
+            <div v-else-if="problemMode == 'show'" class="w-[60rem] h-fit m-auto">
                 <!-- <hr class="mt-3 bg-gray-700  w-full h-[3px]"/> -->
                 <!-- select type -->
-                <div class=" flex w-fit h-[53px] mt-[20px] ml-[20px]   ">
+                <div class=" flex w-fit h-[53px] mt-[20px] ml-[20px]  mx-auto ">
                     <!-- select type -->
                     <div class="relative w-[250px] h-full">
                         <h4 v-show="subjectCr != 'none'" class="text ml-2 text-sm font-semiboldd text-[#6FA1CE]">
@@ -430,7 +412,7 @@ function encodeImage(input) {
                             class="absolute bottom-0 w-[200px] bg-[#6FA1CE] text-[#0A0908] text-[0.875rem] font-light rounded-lg p-[1px]  px-[10px]">
                             <!-- <option value="none" selected hidden>Type of subject</option> -->
                             <option value="all" selected>All Problem</option>
-                            <option v-if="['admin_it', 'super_admin'].includes(role)" value="hardware">Hardware</option>
+                            <!-- <option v-if="['admin_it', 'super_admin'].includes(role)" value="hardware">Hardware</option>
                             <option v-if="['admin_it', 'super_admin'].includes(role)" value="software">Software</option>
                             <option v-if="['admin_it', 'super_admin'].includes(role)" value="internet">Internet</option>
                             <option v-if="['admin_it', 'super_admin'].includes(role)" value="printer">Printer</option>
@@ -439,7 +421,15 @@ function encodeImage(input) {
                             <option v-if="['admin_it', 'super_admin'].includes(role)" value="application">Application
                             </option>
                             <option v-if="['admin_pr', 'super_admin'].includes(role)" value="media">Media</option>
-                            <option v-if="['admin_pr', 'super_admin'].includes(role)" value="news">News</option>
+                            <option v-if="['admin_pr', 'super_admin'].includes(role)" value="news">News</option> -->
+                            <option v-if="role == 'admin_it'||role=='super_admin'" v-for="(type, index) in typeProblemsIT" :key="index"
+                                :value="type" class="bg-[#ADE8F4]">
+                                {{ type }}
+                            </option>
+                            <option v-if="role == 'admin_pr'||role=='super_admin'" v-for="(type, index) in typeProblemsPR" :key="index"
+                                :value="type" class="bg-[#e9d8a6]">
+                                {{ type }}
+                        </option>
                         </select>
                     </div>
 
@@ -468,7 +458,59 @@ function encodeImage(input) {
                         </div> -->
                 </div>
 
-                <div>
+
+            <!-- wait -->
+                <div v-if="get_status == undefined">
+                    <div class=" bg-white w-full mx-auto  h-fit ">
+                        <div class="w-full text-center font-semibold text-[40px]">
+                            <div class="my-auto w-fit mx-auto mt-[5rem]">
+                                <!-- <img src="../../../assets/admin_page/request.png" alt="users_icon" class="w-[40px] h-[40px] my-auto mr-4"> -->
+                                <BaseLoading />
+                                <!-- <button @click="getEvents()" class="mt-6 bg-rose-300 focus:bg-rose-400 text-gray-700 focus:text-whte px-2 mx-auto rounded-lg">
+                                        Refresh
+                                    </button>   -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- no data -->
+                <div v-else-if="get_status == false">
+                    <div class=" bg-white w-full mx-auto  h-fit ">
+                        <div class="w-full text-center font-semibold text-[40px]">
+                            <div class="my-auto w-fit mx-auto mt-[5rem]">
+                                <!-- <img src="../../../assets/admin_page/request.png" alt="users_icon" class="w-[40px] h-[40px] my-auto mr-4"> -->
+                                <h4>
+                                    No data try again later .😏
+                                </h4>
+                                <!-- <button @click="getEvents()" class="mt-6 bg-rose-300 focus:bg-rose-400 text-gray-700 focus:text-whte px-2 mx-auto rounded-lg">
+                                        Refresh
+                                    </button>   -->
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- can get data but no data (clean) -->
+                <div v-else-if="get_status == false || problemList.length == 0" class="show_up">
+                    <div class=" bg-white w-full mx-auto  h-fit ">
+                        <div class="w-full text-center font-semibold text-[40px]">
+                            <div class="my-auto w-fit mx-auto mt-[5rem] ">
+                                <!-- <img src="../../../assets/admin_page/request.png" alt="users_icon" class="w-[40px] h-[40px] my-auto mr-4"> -->
+                                <h4 class="text-gray-700 ">
+                                    No result.😏
+                                </h4>
+                                <h5 class="text-[25px] text-gray-600 ">
+                                    Data not found !!
+                                </h5>
+                                <!-- <button @click="getEvents()" class="mt-6 bg-rose-300 focus:bg-rose-400 text-gray-700 focus:text-whte px-2 mx-auto rounded-lg">
+                                        Refresh
+                                    </button>   -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div v-else>
                     <BaseShowProblem @get-data-status="getDataFromComponent" :problems="problemSplit" />
                     <!-- page -->
                     <div class=" inset-x-0 bottom-0 flex w-fit mx-auto mt-4">
