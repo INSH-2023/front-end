@@ -145,10 +145,9 @@ const showPd =()=>{
     pd.value= !pd.value
     if(pd.value==false){
         b.setAttribute('type','password')
-
     }else
     if(pd.value==true){
-        b.setAttribute('type','text')
+        b.setAttribute('type','text')     
     }
     // console.log('hello world')
 }
@@ -174,8 +173,6 @@ const goRotate =()=>{
         document.getElementById('submitB').classList.add('spin')
         console.log('spin left')
     }
-
-    
 }
 
 </script>
@@ -336,10 +333,10 @@ const goRotate =()=>{
                         <div class="absolute w-full bottom-0">
                             <div class="relative  ">
                                 <input v-model="passW" placeholder="Password" id="pw" type="password" :maxlength="lenghtOfInput.passWL" :style="[passWS==false?'border-color: rgb(225 29 72);border-width: 2px;':'']" class="w-full h-[40px] bg-gray-300 text-gray-500  px-2 rounded-lg focus:outline-0" >
-                                <img v-show="passW.length>0" @click="showPd" src="../../../assets/vue.svg" alt="eye"  class="absolute top-[10px] right-[15px] w-[20px] cursor-pointer ">
+                                <img v-show="passW.length>0" v-if="pd" @click="showPd" src="../../../assets/password/eye.png" alt="eye"  class="absolute top-[12px] right-[15px] w-[20px] cursor-pointer ">
+                                <img v-show="passW.length>0" v-else @click="showPd" src="../../../assets/password/blind.png" alt="blind"  class="absolute top-[10px] right-[15px] w-[20px] cursor-pointer ">
                             </div>                            
                         </div> 
-
                     </div>
                     
                     <!-- confirm -->
@@ -368,11 +365,7 @@ const goRotate =()=>{
                         </button>
                     </div>
                 </div>
-
-
-               
             </div>
-
         </div>
     </div>
 </div>

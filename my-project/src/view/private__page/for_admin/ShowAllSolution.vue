@@ -243,21 +243,21 @@ onBeforeMount(() => {
 
         <!-- table -->
         <div class="w-[1200px] mx-auto h-[450px] mt-2">
-            <hr class="mt-3 bg-gray-700  w-[1170px] h-[3px]">
+            <hr class="mt-3 bg-gray-700 w-[1170px] h-[3px]">
             <div class="overflow-y-auto mx-auto h-[100%] w-[100%] ">
                 <table class="relative w-full table-fixed text-sm text-center text-gray-800">
                     <thead class="absolute bg-white text-lg sticky top-0 z-10">
                         <tr class="">
-                            <th scope="col" class="py-2 px-6 ">
+                            <th scope="col" class="py-2 px-6 w-[250px]">
                                 Title
                             </th>
-                            <th scope="col" class="py-2 px-6">
+                            <th scope="col" class="py-2 px-6 w-[100px]">
                                 Icon
                             </th>
-                            <th scope="col" class="py-2 px-6">
+                            <th scope="col" class="py-2 px-6 w-[210px]">
                                 Tag
                             </th>
-                            <th scope="col" class="py-2 px-6">
+                            <th scope="col" class="py-2 px-6 w-[400px]">
                                 Description
                             </th>
                             <th scope="col" class="py-2 px-6">
@@ -276,20 +276,20 @@ onBeforeMount(() => {
                             <td class="w-[90px] px-6 py-4 font-semibold ">
                                 <img :src="`${iconLink}/${data.solutionId}`" alt="" class="w-[40px] mx-auto">
                             </td>
-                            <td class="w-[130px] px-3 py-4 font-semibold ">
-                                <div class="w-[250px] truncate mx-auto">
+                            <td class="w-[140px] px-3 py-4 font-semibold ">
+                                <div class="w-[200px] truncate mx-auto">
                                     <span v-for="(tag, index) in data.solution_tag" :key="index"
                                         class="bg-gray-200 p-2 mx-1 w-full text-gray-800">
                                         {{ tag }}
                                     </span>
                                 </div>
                             </td>
-                            <td class="w-[130px] px-3 py-4 font-semibold ">
+                            <td class="w-[300px] px-3 py-4">
                                 <div class="w-[300px] truncate mx-auto">
                                     <span v-html="data.solution_text"></span>
                                 </div>
                             </td>
-                            <td class="w-[130px] px-6 py-4 font-semibold">
+                            <td class="w-[90px] px-6 py-4 font-semibold">
                                 <div class="flex w-fit mx-auto truncate ">
                                     <img @click="showInfoByID(data.solutionId)" src="../../../assets/admin_page/edit.png"
                                         alt="delete_icon" class="w-[28px] m-2 cursor-pointer">
@@ -452,7 +452,7 @@ onBeforeMount(() => {
     padding-left: 30px;
     padding-right: 16px;
     background: #fff;
-    width: 40%;
+    width: 60%;
     height: 600px;
     border-radius: 20px;
     position: relative;

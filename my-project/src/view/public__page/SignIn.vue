@@ -69,6 +69,19 @@ const logIn=async()=>{
     }
 }
 
+const pd =ref(false)
+const showPd =()=>{
+    let b = document.getElementById('pw')
+    pd.value= !pd.value
+    if(pd.value==false){
+        b.setAttribute('type','password')
+    }else
+    if(pd.value==true){
+        b.setAttribute('type','text')     
+    }
+    // console.log('hello world')
+}
+
 </script>
 <template>
 
@@ -91,8 +104,8 @@ const logIn=async()=>{
             </h4>
             <!-- input zone -->
             <div class=" w-full h-fit border-2 border-gray-400 rounded-[10px]">
-                <div class="flex px-2 py-1.5">
-                    <input v-model="email" type="text" placeholder="E-mail" class="w-[90%] focus:outline-0 my-auto">
+                <div class="flex pl-2 py-1.5">
+                    <input v-model="email" type="text" placeholder="E-mail" class="w-[90%] px-2 focus:outline-0 my-auto">
                     <!-- <button v-show="isEmailTesting==false && email.length!=0" @click="isEmailTesting=true"  class=" ml-[2px] mx-auto rounded-full border-2 border-gray-500 text-gray-500 w-[25px] h-[25px] hover:bg-gray-700 hover:text-gray-200">
                        <h2  class="p-[1px] mx-auto text-[13px] " >
                          > 
@@ -102,9 +115,11 @@ const logIn=async()=>{
                 </div>
                 <!-- ค่อยมาทำต่อ -->
                 <!-- v-show="isEmailTesting==true" -->
-                <hr  class="w-[100%] h-[3px]   bg-gray-400 ">
-                <div  class="flex px-2 py-1.5  ">
-                    <input v-model="pw" @keyup.enter="logIn" type="password" placeholder="Password" class="w-[90%]  focus:outline-0 my-auto">
+                <hr class="w-[100%] h-[3px] bg-gray-400 ">
+                <div class="flex pl-2 py-1.5">
+                    <input v-model="pw" @keyup.enter="logIn" type="password" id="pw" placeholder="Password" class="w-[90%] px-2 focus:outline-0 my-auto">
+                    <img v-show="pw.length>0" v-if="pd" @click="showPd" src="../../assets/password/eye.png" alt="eye"  class="w-[25px] cursor-pointer ">
+                    <img v-show="pw.length>0" v-else @click="showPd" src="../../assets/password/blind.png" alt="blind"  class="w-[25px] cursor-pointer ">
                     <!-- <button class="w-[10%] ml-[2px] mx-auto">
                         <h2 class="p-[1px] mx-auto rounded-full border-2 border-gray-500 text-gray-500 w-[30px]" >
                          > 
