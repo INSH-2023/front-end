@@ -68,9 +68,9 @@ const findingKeyW = async (keyWord) => {
         //         console.log('this from searching step: ', matchStep(solu.solution_steps, keyWord))
         //     }
     }
-    if (arr.length != 0) {
-        await randomArticle(4, arr.length, arr)
-    }
+    // if (arr.length != 0) {
+    //     await randomArticle(4, arr.length, arr)
+    // }
 }
 
 // get article
