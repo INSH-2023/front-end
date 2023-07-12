@@ -78,7 +78,6 @@ const addP =(v)=>{
     let check=false
     for(let value of problems.value){
         if(value==v)check=true;
-       
     } 
     if(check==true){
         // console.log(problems.value.indexOf(v))
@@ -87,7 +86,7 @@ const addP =(v)=>{
 
         // animation
         for(let value2 of problemList.value){
-            if(value2.problem_problem==v){
+            if(value2.problemId==v){
                 value2.selection= !value2.selection
             }  
         }
@@ -99,7 +98,7 @@ const addP =(v)=>{
 
         // animation
         for(let value2 of problemList.value){
-            if(value2.problem_problem==v){
+            if(value2.problemId==v){
                 value2.selection= !value2.selection
             }
             
@@ -164,9 +163,9 @@ const getIcon = (problem_type) => {
             lg:sm:gap-y-4
     ">
     <!-- problems -->
-        <button  v-for="(value,index) in problemList" :key="index" @click="addP(value.problem_problem)"  :style="[value.selection==true?'background-color:#1E88E5;color:#E3F2FD':'']" class="truncate w-full mx-auto p-2 bg-gray-200 rounded-xl hover:bg-gray-300 md:w-[150px] md:h-fit ">
+        <button  v-for="(value,index) in problemList" :key="index" @click="addP(value.problemId)"  :style="[value.selection?'background-color:#1E88E5;color:#E3F2FD':'']" class="truncate w-full mx-auto p-2 bg-gray-200 rounded-xl hover:bg-gray-300 md:w-[150px] md:h-fit ">
             <img :src="getImg(value.problemId)" alt="NoteBook" draggable="false" class="w-[30px] h-[60px] mx-auto md:w-[60px]" v-if="value.problem_upload">
-            <img :src="getIcon(value.problem_type)" alt="NoteBook" draggable="false" class="w-[30px] h-auto mx-auto md:w-[60px]" v-else>
+            <img :src="getIcon(value.problem_type)" alt="NoteBook" draggable="false" class="w-[30px] h-[60px] mx-auto md:w-[60px]" v-else>
             <h3 class="truncate w-fit mx-auto mt-2 text-[0.625rem] md:text-[1.125rem]">
                 <!-- {{value.problem_problem}} -->
                 {{value.problem_problem}}

@@ -36,6 +36,7 @@ const goService = () => {
 // searching 
 const searching = ref('')
 const findingKeyW = async (keyWord) => {
+
     let arr = []
 
     // let matchStep = (a, kw) => {
@@ -48,29 +49,28 @@ const findingKeyW = async (keyWord) => {
     //     }
     //     return check
     // }
-
     for (let solu of solutionList.value) {
         if (solu.solution_title.toLowerCase() == keyWord) {
             arr.push(solu)
             console.log('This from searching title', solu.solution_title)
-        }
-        if (solu.solution_tag.includes(keyWord)) {
-            arr.push(solu)
-            console.log('this from searching tag :', solu.solution_tag.includes(keyWord))
         } else
-            if (solu.solution_text.toLowerCase().includes(keyWord)) {
+            if (solu.solution_tag.includes(keyWord)) {
                 arr.push(solu)
-                console.log('this from searching text: ', solu.solution_text.includes(keyWord))
-            }
+                console.log('this from searching tag :', solu.solution_tag.includes(keyWord))
+            } else
+                if (solu.solution_text.toLowerCase().includes(keyWord)) {
+                    arr.push(solu)
+                    console.log('this from searching text: ', solu.solution_text.includes(keyWord))
+                }
         // else
         //     if (matchStep(solu.solution_steps, keyWord)) {
         //         arr.push(solu)
         //         console.log('this from searching step: ', matchStep(solu.solution_steps, keyWord))
         //     }
     }
-    // if (arr.length != 0) {
-    //     await randomArticle(4, arr.length, arr)
-    // }
+    if (arr.length != 0) {
+        await randomArticle(4, arr.length, arr)
+    }
 }
 
 // get article
@@ -89,6 +89,7 @@ const getArticle = async (service) => {
 // random article
 const ranArticle = ref([])
 const randomArticle = async (n, max, data) => {
+    ranArticle.value = []
     let ranN = undefined
     let i = 0
     for (i = 0; i < n; i++) {
@@ -442,7 +443,7 @@ onBeforeMount(() => {
             หรือค้นหาหัวข้อปัญหาที่คุณเจอ
         </h3>
         <div class="flex overflow-hidden w-[500px] h-[30px] mt-3 mx-auto border rounded-[20px] border-gray-400">
-            <label for="searching">
+            <label for="searching" @click="findingKeyW(searching)">
                 <img src="../../../assets/loupe.png" alt="" class="w-[20px] mx-3 inline-block">
             </label>
             <input id="searching" type="text" v-model="searching" placeholder="ลองพิมพ์ปัญหาของคุณมาสิ."
@@ -477,14 +478,14 @@ onBeforeMount(() => {
 
 
     <!-- list problems searching -->
-    <div v-if="params.service == 'it'" class="grid grid-cols-2 grid-rows-2 gap-4 w-[1000px] mx-auto mt-3">
+    <div v-if="params.service == 'it'" class="grid grid-cols-2 grid-rows-2 gap-4 w-auto mx-3 mt-3">
         <div v-for="(data, index) in ranArticle" :key="index" class="bg-gray-100 p-2 rounded-2xl hover:bg-gray-200">
             <img :src="`${iconLink}/${data.solutionId}`" alt="logo" class=" w-[45px] mx-3 mt-2">
             <h5 class="ml-[10px] mb-1.5 mt-2 text-[20px] font-semibold">
                 {{ data.solution_title }}
             </h5>
             <p class="resize-none w-full h-[100px] px-2 text-[15px] text-ellipsis whitespace-normal break-words">
-                {{ data.solution_text }}
+                <span v-html="data.solution_text"></span>
             </p>
             <button @click="goHowTo(data.solutionId)" class="w-fit text-left p-2 text-sky-500 hover:text-sky-700 block">
                 ดูรายละเอียดเพิ่มเติม &#62;&nbsp;
