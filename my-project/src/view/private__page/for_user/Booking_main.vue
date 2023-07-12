@@ -68,7 +68,7 @@ const findingKeyW = async (keyWord) => {
         //         console.log('this from searching step: ', matchStep(solu.solution_steps, keyWord))
         //     }
     }
-    if (arr.length != 0 && solutionList.length >= 4 ) {
+    if (arr.length != 0 && solutionList.value.length >= 4) {
         await randomArticle(4, arr.length, arr)
     }
 }

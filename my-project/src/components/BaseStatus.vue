@@ -3,15 +3,19 @@
 defineProps({
     nRequest: {
         type: Number,
-        default: 0
+        require: true
     },
     nProgress: {
         type: Number,
-        default: 0
+        require: true
     },
     nFinish: {
         type: Number,
-        default: 0
+        require: true
+    },
+    nOpencase: {
+        type: Number,
+        require: true
     },
     isRequest: {
         type: Boolean,
@@ -20,12 +24,12 @@ defineProps({
 })
 </script>
 <template>
-    <div class="flex mx-auto w-fit text-[40px] px-4 py-2 mt-4 bg-gray-300 rounded-3xl">
+    <div class="flex mx-auto w-fit text-[24px] px-4 py-2 mt-4 bg-gray-300 rounded-3xl">
 
         <!-- การแจ้งซ่อม -->
-        <button class=" flex mx-2  px-7 bg-amber-500 text-gray-100  rounded-2xl ">
+        <button class=" flex mx-2 px-6 py-1 bg-amber-500 text-gray-100  rounded-2xl ">
             <h5>
-                การแจ้งซ่อม
+                รับแจ้ง
             </h5>
             <h5 class="ml-4">
                 {{ nRequest }}
@@ -33,7 +37,7 @@ defineProps({
         </button>
 
         <!-- กำลังดำเนินการ -->
-        <button class=" flex mx-2  px-7 bg-sky-500 text-gray-100  rounded-2xl ">
+        <button class=" flex mx-2 px-6 py-1 bg-sky-500 text-gray-100  rounded-2xl ">
             <h5>
                 กำลังดำเนินการ
             </h5>
@@ -42,7 +46,7 @@ defineProps({
             </h5>
         </button>
 
-        <button class=" flex mx-2  px-7 bg-teal-400 text-gray-100  rounded-2xl ">
+        <button class=" flex mx-2 px-6 py-1 bg-teal-400 text-gray-100  rounded-2xl ">
             <h5>
                 เสร็จสิ้น
             </h5>
@@ -56,7 +60,7 @@ defineProps({
         <!-- แจ้งซ่อม -->
         <button v-if="isRequest == true" class=" flex mx-2  px-7 bg-rose-500 text-gray-100  rounded-2xl ">
             <h5>
-                แจ้งซ่อม
+                ขอรับบริการ
             </h5>
         </button>
     </div>

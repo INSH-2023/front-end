@@ -40,11 +40,9 @@ onBeforeMount(() => {
 <template>
     <div class="overflow-auto">
         <div class="pt-2">
-            <!-- this is for nav status -->
-            <BaseStatus />
 
             <!-- this is for infomation -->
-            <div class="mt-[50px] w-[1000px] mx-auto">
+            <div class="mt-[50px] w-auto mx-2">
 
                 <!-- title -->
                 <div class="flex ml-[30px] w-[500px]">
@@ -79,11 +77,10 @@ onBeforeMount(() => {
                             :src="`${iconLink}/${info.solutionId}?step=${data.step_}`">
                     </div>
                 </div>
-
             </div>
 
             <!-- button back -->
-            <div class="w-fit mx-auto mt-[40px]">
+            <div class="w-fit mx-auto my-[40px]">
                 <button @click="goMain"
                     class="rounded-xl text-[25px] font-semibold text-white px-[40px] py-[4px] bg-gray-400">
                     ย้อนกลับ
