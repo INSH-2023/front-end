@@ -4,17 +4,18 @@ import toBackEnd from '../../JS/fetchToBack'
 import getRefreshToken from '../../JS/refresh';
 import jsCookie from '../../JS/cookies';
 
-import Application from './../../assets/problem/application.png'
-import Internet from './../../assets/problem/internet.png'
-import Media from './../../assets/problem/media.png'
-import Meeting from './../../assets/problem/meeting.png'
-import News from './../../assets/problem/news.png'
-import Printer from './../../assets/problem/printer.png'
-import Hardware from './../../assets/problem/hardware.png'
-import Software from './../../assets/problem/software.png'
-import Website from './../../assets/problem/website.png'
+const path = `${import.meta.env.VITE_BACK_END_HOST}/images/problems`
+const APPLICATION = `${path}/application`
+const INTERNET =`${path}/internet`
+const MEDIA = `${path}/media`
+const MEETING =  `${path}/meeting`
+const NEWS =  `${path}/news`
+const PRINTER =  `${path}/printer`
+const HARDWARE =  `${path}/hardware`
+const SOFTWARE =  `${path}/software`
+const WEBSITE = `${path}/website`
 
-const problemIcon = [Application, Internet, Media, Meeting, News, Printer, Hardware, Software, Website]
+const problemIcon = [APPLICATION, INTERNET, MEDIA, MEETING, NEWS, PRINTER, HARDWARE, SOFTWARE, WEBSITE]
 
 const problemsLink = `${import.meta.env.VITE_BACK_END_HOST}/problems`
 const emit =defineEmits(["getProblemSelected"])
@@ -108,32 +109,37 @@ const addP =(v)=>{
     }
 }
 
-const getImg = (problem_type) => {
-    let path = `/src/assets/problem/${problem_type}.png`
-    let currentIcon = []
-    problemIcon.forEach( i => {
+const getImg = (problemId) => {
+    let currentList = []
+    let data = `${import.meta.env.VITE_BACK_END_HOST}/images/problems/${problemId}`
+    currentList.push(data)
+    return currentList
+}
+const getIcon = (problem_type) => {
+    let currentList = []
+    let path = `${import.meta.env.VITE_BACK_END_HOST}/images/problems/${problem_type}`
+    problemIcon.forEach(i => {
         if (path == i) {
-            currentIcon.push(path)
+            currentList.push(path)
         }
     })
-    return currentIcon
+    return currentList
 }
-
 
 </script>
 <template>
     <div class="w-full text-[17px] font-normal md:text-[25px] sm:w-fit">
         <h3 v-if="props.typeP=='hardware'">
-            3. เลือก <span class="text-rose-500">ปัญหา</span> Hardware ที่ต้องการให้ช่วยเหลือ
+            3. เลือก ปัญหา<span class="text-rose-500">Hardware</span> ที่ต้องการให้ช่วยเหลือ
         </h3>
         <h3 v-if="props.typeP=='software'">
-            3. เลือก <span class="text-rose-500">ปัญหา</span>Software ที่ต้องการให้ช่วยเหลือ
+            3. เลือก ปัญหา<span class="text-rose-500">Software</span> ที่ต้องการให้ช่วยเหลือ
         </h3>
         <h3 v-if="props.typeP=='internet'">
-            3. เลือก <span class="text-rose-500">ปัญหา</span> Internet ที่ต้องการให้ช่วยเหลือ
+            3. เลือก ปัญหา<span class="text-rose-500">Internet</span> ที่ต้องการให้ช่วยเหลือ
         </h3>
         <h3 v-if="props.typeP=='printer'">
-            1. เลือก <span class="text-rose-500">ปัญหา</span> Printer ที่ต้องการให้ช่วยเหลือ
+            1. เลือก ปัญหา<span class="text-rose-500">Printer</span> ที่ต้องการให้ช่วยเหลือ
         </h3>
         <h3 v-if="props.typeP=='website'">
             1. เลือก หัวข้อ <span class="text-rose-500">Website</span> ที่ต้องการให้ช่วยเหลือ
@@ -159,11 +165,11 @@ const getImg = (problem_type) => {
     ">
     <!-- problems -->
         <button  v-for="(value,index) in problemList" :key="index" @click="addP(value.problem_problem)"  :style="[value.selection==true?'background-color:#1E88E5;color:#E3F2FD':'']" class="truncate w-full mx-auto p-2 bg-gray-200 rounded-xl hover:bg-gray-300 md:w-[150px] md:h-fit ">
-            <img   :src="getImg(value.problem_type)" alt="NoteBook" draggable="false" class="w-[30px] mx-auto md:w-[60px]">
+            <img :src="getImg(value.problemId)" alt="NoteBook" draggable="false" class="w-[30px] h-[60px] mx-auto md:w-[60px]" v-if="value.problem_upload">
+            <img :src="getIcon(value.problem_type)" alt="NoteBook" draggable="false" class="w-[30px] h-auto mx-auto md:w-[60px]" v-else>
             <h3 class="truncate w-fit mx-auto mt-2 text-[0.625rem] md:text-[1.125rem]">
                 <!-- {{value.problem_problem}} -->
                 {{value.problem_problem}}
-
             </h3>
         </button>
 
