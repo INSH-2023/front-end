@@ -308,10 +308,6 @@ onBeforeUnmount(() => {
     getRefreshToken(JSON.parse(jsCookie.get("data")).refreshToken)
 })
 
-let test = (e, t) => {
-    console.log(e)
-    console.log(t)
-}
 </script>
 <template>
     <div class="overflow-y-auto show_up">

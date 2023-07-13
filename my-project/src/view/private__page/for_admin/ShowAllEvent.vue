@@ -1,5 +1,5 @@
 <script setup>
-import{ref,computed,onBeforeMount}from'vue'
+import { ref, computed, onBeforeMount } from 'vue'
 import { useRouter } from 'vue-router';
 import BaseLoading from '../../../components/BaseLoading.vue';
 import toBackEnd from '../../../JS/fetchToBack';
@@ -7,99 +7,112 @@ import validate from '../../../JS//validate'
 import jsCookie from '../../../JS/cookies';
 import getRefreshToken from './../../../JS/refresh';
 import Cookies from '../../../JS/cookies';
+import BaseStatus from '../../../components/BaseStatus.vue';
 // const requestLink="http://localhost:3000/events"
-const requestLink=`${import.meta.env.VITE_BACK_END_HOST}/requests`
-const userLink =`${import.meta.env.VITE_BACK_END_HOST}/users`
+const requestLink = `${import.meta.env.VITE_BACK_END_HOST}/requests`
+const userLink = `${import.meta.env.VITE_BACK_END_HOST}/users`
 // const linkTesting=`${import.meta.env.VITE_BACK_END}/`
 
 const myRouter = useRouter()
 
-onBeforeMount(()=>{
-    navigation()
-    getEvents()
-    getAdmin()
+onBeforeMount(() => {
+    navigation(),
+    getEvents(),
+    getAdmin(),
     getRefreshToken(JSON.parse(jsCookie.get("data")).refreshToken)
 })
 
 // get variable
-const requestList=ref([])
-const showList =ref([])
-const filterList=ref([])
-const request=ref({})
-const adminList =ref([])
+const requestList = ref([])
+const showList = ref([])
+const filterList = ref([])
+const request = ref({})
+const adminList = ref([])
 
 // edit variable
-const assign_ch=ref("Not_assign")
-const status_ch=ref("")
-const data_ch=computed(()=>{
-    return{
-        request_status:status_ch.value,
-        request_assign:assign_ch.value        
+const assign_ch = ref("Not_assign")
+const status_ch = ref("")
+const data_ch = computed(() => {
+    return {
+        request_status: status_ch.value,
+        request_assign: assign_ch.value
     }
 })
 
 // delete variable
-const request_id=ref(undefined)
+const request_id = ref(undefined)
 
 // status
-const get_status=ref(undefined)
+const get_status = ref(undefined)
 const delete_status = ref(undefined)
 const edit_status = ref(undefined)
 
-const is_filter_open=ref(false)
+const is_filter_open = ref(false)
 
 const token = ref('')
 const role = ref(JSON.parse(Cookies.get("data")).user_role)
 
 let diffentNotify = ref(0)
 
-// get data
-const getEvents =async(id=undefined)=>{
+let nRequest = ref(0)
+let nOpencase = ref(0)
+let nProgress = ref(0)
+let nFinish = ref(0)
 
+// get data
+const getEvents = async (id = undefined) => {
     let status = false
 
-    if(id==undefined){
+    if (id == undefined) {
         token.value = JSON.parse(jsCookie.get("data")).token
-        let [s,data] =await toBackEnd.getData('request',requestLink,token.value)
-        if(s==200){
-            status=true
-            requestList.value = data.data.sort((a,b)=>(a.request_req_date > b.request_req_date) ? -1 : (a.request_req_date < b.request_req_date) ? 1 : 0);
+        let [s, data] = await toBackEnd.getData('request', requestLink, token.value)
+        let [s1, count] = await toBackEnd.getData('request status', `${requestLink}/status/admin`, token.value)
+        if (s == 200 || s1 == 200) {
+            status = true
+            requestList.value = data.data.sort((a, b) => (a.request_req_date > b.request_req_date) ? -1 : (a.request_req_date < b.request_req_date) ? 1 : 0);
             showList.value = requestList.value
-            get_status.value=true
+            get_status.value = true
 
-            if(data.request_count != requestList.value.length) {
+            nRequest.value = count.request
+            nFinish.value = count.finish
+            nOpencase.value = count.opencase
+            nProgress.value = count.inProgress
+
+            if (data.request_count != requestList.value.length) {
                 diffentNotify.value = requestList.value.length - data.request_count
-                if(diffentNotify.value != 0) {
+                if (diffentNotify.value != 0) {
                     notify(requestList.value[0])
                 }
             }
-            
-            console.log(showList.value)
+
+            // console.log(showList.value)
             return status
             // status something
         }
         else {
-            get_status.value=false
+            get_status.value = false
             // status something
         }
 
-    }else{
+    } else {
         token.value = JSON.parse(jsCookie.get("data")).token
-        let [s,data]= await toBackEnd.getDataBy('request',requestLink,id,token.value)
-        if(s==200){
-            status=true
-            request.value= data
+        let [s, data] = await toBackEnd.getDataBy('request', requestLink, id, token.value)
+        if (s == 200) {
+            status = true
+            request.value = data
             console.log(data)
-            get_status.value=true
+            get_status.value = true
             // status something
         }
-        else{
-            get_status.value=false
+        else {
+            get_status.value = false
             // status something
         }
     }
     return status
 }
+
+
 
 // notification
 function notify(data) {
@@ -120,15 +133,15 @@ function notify(data) {
     }
 }
 
-const getAdmin=async(email)=>{
+const getAdmin = async (email) => {
     let status = false
     token.value = JSON.parse(jsCookie.get("data")).token
-    let [s,data]=await toBackEnd.getData('request_admin',`${userLink}`,token.value)
-    if(s==200){
+    let [s, data] = await toBackEnd.getData('request_admin', `${userLink}`, token.value)
+    if (s == 200) {
         status = true
-        data = ["super_admin"].includes(role.value) ? data : data.filter(e=>e.user_role==role.value)
-        adminList.value=data.reverse().filter(u=>u.user_email != email)
-    }else{
+        data = ["super_admin"].includes(role.value) ? data : data.filter(e => e.user_role == role.value)
+        adminList.value = data.reverse().filter(u => u.user_email != email)
+    } else {
         // status something
         console.log(data)
     }
@@ -136,40 +149,40 @@ const getAdmin=async(email)=>{
 }
 
 // edit by id
-const editInfo = async(v)=>{
-    edit_status.value=undefined
+const editInfo = async (v) => {
+    edit_status.value = undefined
     token.value = JSON.parse(jsCookie.get("data")).token
-    let [ss,data] =await toBackEnd.editData('request',`${requestLink}/${v}`,data_ch.value,token.value)
-    if(ss==200){
-        edit_status.value=true
+    let [ss, data] = await toBackEnd.editData('request', `${requestLink}/${v}`, data_ch.value, token.value)
+    if (ss == 200) {
+        edit_status.value = true
         console.log(data)
         await getEvents()
         navigation()
         //status something
         console.log(data)
 
-    }else{
+    } else {
         //status something
-        edit_status.value=false
+        edit_status.value = false
         console.log(data)
         myRouter.go(-1)
     }
 }
 
 // delete
-const deleteItem =async (v)=>{
-    delete_status.value=undefined
+const deleteItem = async (v) => {
+    delete_status.value = undefined
     token.value = JSON.parse(jsCookie.get("data")).token
-    let [status,data] = await toBackEnd.delete('request',requestLink,v,token.value)
-    if(status==200){
-        delete_status.value=true
+    let [status, data] = await toBackEnd.delete('request', requestLink, v, token.value)
+    if (status == 200) {
+        delete_status.value = true
         await getEvents()
         navigation()
         // status something
         console.log(data)
-    }else{
+    } else {
         // status something
-        delete_status.value=false
+        delete_status.value = false
         console.log(data)
     }
 }
@@ -177,22 +190,22 @@ const deleteItem =async (v)=>{
 // callback
 
 // edit request
-const submitt =(v)=>{
-    if(validate.vRequestEdit(data_ch.value)){
+const submitt = (v) => {
+    if (validate.vRequestEdit(data_ch.value)) {
         // return something
-        
+
     }
-    else{
+    else {
         editInfo(v)
     }
 }
 
 // showInfo
-const showInfoByID=async(v,index)=>{
-    let status=false
-    request_id.value=v
-    request.value={}
-    console.log(v,index)
+const showInfoByID = async (v, index) => {
+    let status = false
+    request_id.value = v
+    request.value = {}
+    console.log(v, index)
     // status_ch.value=""
     // assign_ch.value=""
 
@@ -200,158 +213,156 @@ const showInfoByID=async(v,index)=>{
     status = await getAdmin(request.value.request_email)
     console.log(request.value.request_assign)
     assign_ch.value = request.value.request_assign
-    if(status && isEmptyOBJ.value !=true){
+    if (status && isEmptyOBJ.value != true) {
 
         changeST(request.value.request_status)
         assign_ch.value = request.value.request_assign
         console.log(assign_ch.value)
         navigation('#showInfo')
-    }else{
+    } else {
         navigation()
         // status something
     }
 }
 
 // old version
-const commentCh =ref('')
-const commentArr =ref([])
+const commentCh = ref('')
+const commentArr = ref([])
 
 // change status
-const sIsR=ref(false)
-const sIsO=ref(false)
-const sIsI=ref(false)
-const sIsF=ref(false)
+const sIsR = ref(false)
+const sIsO = ref(false)
+const sIsI = ref(false)
+const sIsF = ref(false)
 
 // variable filter
-const f_name=ref('')
-const f_email=ref('')
-const f_type=ref('')
-const f_subject=ref('')
-const f_status=ref('')
-
-
+const f_name = ref('')
+const f_email = ref('')
+const f_type = ref('')
+const f_subject = ref('')
+const f_status = ref('')
 
 // bg color status
-const changeColorBy=(v)=>{
-    let style=[]
-    
-    if(v=='request'){
+const changeColorBy = (v) => {
+    let style = []
+
+    if (v == 'request') {
         style.push('background-color:rgb(31 41 55)')
         style.push('color: rgb(255 255 255);')
-        
-    }else
-    if(v=='open_case'){
-        style.push('background-color:rgb(245 158 11)')
-        style.push('color: rgb(255 255 255);')
-    }else
-    if(v=='in_progress'){
-        style.push('background-color:rgb(56 189 248)')
-        style.push('color: rgb(255 255 255);')
-    }else
-    if(v=='finish'){
-        style.push('background-color: rgb(45 212 191)')
-        style.push('color: rgb(255 255 255);')
-    }
 
-    if(v=='IT_Service'){
+    } else
+        if (v == 'open_case') {
+            style.push('background-color:rgb(245 158 11)')
+            style.push('color: rgb(255 255 255);')
+        } else
+            if (v == 'in_progress') {
+                style.push('background-color:rgb(56 189 248)')
+                style.push('color: rgb(255 255 255);')
+            } else
+                if (v == 'finish') {
+                    style.push('background-color: rgb(45 212 191)')
+                    style.push('color: rgb(255 255 255);')
+                }
+
+    if (v == 'IT_Service') {
         style.push('color: rgb(14 165 233);')
-        
-    }else
-    if(v=='PR_Service'){
-        style.push('color: rgb(217 119 6);')
-        
-    }
+
+    } else
+        if (v == 'PR_Service') {
+            style.push('color: rgb(217 119 6);')
+
+        }
 
     return style
 }
 
-const changeST =(v)=>{
-    status_ch.value=''
+const changeST = (v) => {
+    status_ch.value = ''
     // status request
-    sIsR.value=false
+    sIsR.value = false
     // status open case
-    sIsO.value=false
+    sIsO.value = false
     // status in progress
-    sIsI.value=false
+    sIsI.value = false
     // status finish
-    sIsF.value=false
-    if(v=='request'){
-        sIsR.value=true
-        status_ch.value=v
+    sIsF.value = false
+    if (v == 'request') {
+        sIsR.value = true
+        status_ch.value = v
     }
-    else if(v=='open_case'){
-        sIsO.value=true
-        status_ch.value=v
+    else if (v == 'open_case') {
+        sIsO.value = true
+        status_ch.value = v
     }
-    else if(v=='in_progress'){
-        sIsI.value=true
-        status_ch.value=v
+    else if (v == 'in_progress') {
+        sIsI.value = true
+        status_ch.value = v
     }
-    else if(v=='finish'){
-        sIsF.value=true
-        status_ch.value=v
+    else if (v == 'finish') {
+        sIsF.value = true
+        status_ch.value = v
     }
     console.log(status_ch.value)
     // rStatus.value=v
 }
 
 // add comment
-const addComment =()=>{
-    let date =new Date()
-    let timeDate =`${date.getHours()}:${date.getMinutes()} ${date.getDate()}/${date.getMonth()}/${date.getFullYear()}`
-    
-    if(commentCh.value.length!=0){
-        commentArr.value.push({date:timeDate,comment:commentCh.value})
+const addComment = () => {
+    let date = new Date()
+    let timeDate = `${date.getHours()}:${date.getMinutes()} ${date.getDate()}/${date.getMonth()}/${date.getFullYear()}`
+
+    if (commentCh.value.length != 0) {
+        commentArr.value.push({ date: timeDate, comment: commentCh.value })
         console.log('add new comment successful ✅')
         console.log(commentArr.value)
         // editInfo()
-        commentCh.value=''
-    }else{
+        commentCh.value = ''
+    } else {
         console.log('input ur comment first ❌')
     }
-    
+
 }
 
 
 // check obj empty
-const isEmptyOBJ =computed(()=> {
-    let boolean = Object.keys(request.value).length === 0 && request.value.constructor ===Object
+const isEmptyOBJ = computed(() => {
+    let boolean = Object.keys(request.value).length === 0 && request.value.constructor === Object
     console.log(boolean)
     return boolean
 })
 
 
 // close pop up
-const navigation =(p='#')=>window.location.href=p
+const navigation = (p = '#') => window.location.href = p
 
 
 
 //filter
-const resetF=()=>{
-    f_name.value=''
-    f_email.value=''
-    f_type.value=''
-    f_subject.value=''
-    f_status.value=''
-    showList.value=requestList.value
+const resetF = () => {
+    f_name.value = ''
+    f_email.value = ''
+    f_type.value = ''
+    f_subject.value = ''
+    f_status.value = ''
+    showList.value = requestList.value
 }
 
-const statusChange=ref(false)
-const checkEdit=computed(()=>{
-    let status=statusChange.value
-    if(status_ch.value.length==0||status_ch.value == 'request'||request.value.request_status == status_ch.value){
-        status=false
-    }else
-    if(assign_ch.value.length ==0 ||assign_ch.value=='Not_assign'){
-        status=false
-    }else{
-        status=true
-    }
+const statusChange = ref(false)
+const checkEdit = computed(() => {
+    let status = statusChange.value
+    if (status_ch.value.length == 0 || status_ch.value == 'request' || request.value.request_status == status_ch.value) {
+        status = false
+    } else
+        if (assign_ch.value.length == 0 || assign_ch.value == 'Not_assign') {
+            status = false
+        } else {
+            status = true
+        }
 
     return status
 })
 
-const searchByKeyW=()=>{
+const searchByKeyW = () => {
     filterList.value = requestList.value
     console.log(f_status.value)
 
@@ -362,18 +373,18 @@ const searchByKeyW=()=>{
     // }
 
     // service
-    if(f_type.value.length !=0){
-        filterList.value = requestList.value.filter(e=>e.request_service_type.toLowerCase()==f_type.value.toLowerCase())
+    if (f_type.value.length != 0) {
+        filterList.value = requestList.value.filter(e => e.request_service_type.toLowerCase() == f_type.value.toLowerCase())
     }
 
     // service
-    else if(f_subject.value.length !=0){
-        filterList.value = requestList.value.filter(e=>e.request_subject.toLowerCase()==f_subject.value.toLowerCase())
+    else if (f_subject.value.length != 0) {
+        filterList.value = requestList.value.filter(e => e.request_subject.toLowerCase() == f_subject.value.toLowerCase())
     }
 
     // stauts
-    else if(f_status.value.length !=0){
-        filterList.value = requestList.value.filter(e=>e.request_status.toLowerCase() == f_status.value.toLowerCase())
+    else if (f_status.value.length != 0) {
+        filterList.value = requestList.value.filter(e => e.request_status.toLowerCase() == f_status.value.toLowerCase())
     }
 
     showList.value = filterList.value
@@ -382,153 +393,160 @@ const searchByKeyW=()=>{
 
 </script>
 <template>
-        <!-- wait -->
-        <div v-if="get_status==undefined">
-            <div class=" bg-white w-full mx-auto  h-fit ">
-                <div class="w-full text-center font-semibold text-[40px]">
-                    <div class="my-auto w-fit mx-auto mt-[250px]">
-                        <!-- <img src="../../../assets/admin_page/request.png" alt="users_icon" class="w-[40px] h-[40px] my-auto mr-4"> -->
-                        <BaseLoading/>
-                        <!-- <button @click="getEvents()" class="mt-6 bg-rose-300 focus:bg-rose-400 text-gray-700 focus:text-whte px-2 mx-auto rounded-lg">
+    <!-- wait -->
+    <div v-if="get_status == undefined">
+        <div class=" bg-white w-full mx-auto  h-fit ">
+            <div class="w-full text-center font-semibold text-[40px]">
+                <div class="my-auto w-fit mx-auto mt-[250px]">
+                    <!-- <img src="../../../assets/admin_page/request.png" alt="users_icon" class="w-[40px] h-[40px] my-auto mr-4"> -->
+                    <BaseLoading />
+                    <!-- <button @click="getEvents()" class="mt-6 bg-rose-300 focus:bg-rose-400 text-gray-700 focus:text-whte px-2 mx-auto rounded-lg">
                             Refresh
                         </button>   -->
-                    </div>
                 </div>
             </div>
         </div>
-        <!-- no data -->
-        <div v-else-if="get_status==false">
-            <div class=" bg-white w-full mx-auto  h-fit ">
-                <div class="w-full text-center font-semibold text-[40px]">
-                    <div class="my-auto w-fit mx-auto mt-[250px]">
-                        <!-- <img src="../../../assets/admin_page/request.png" alt="users_icon" class="w-[40px] h-[40px] my-auto mr-4"> -->
-                        <h4>
-                            No data try again later .😏
-                        </h4>
-                        <!-- <button @click="getEvents()" class="mt-6 bg-rose-300 focus:bg-rose-400 text-gray-700 focus:text-whte px-2 mx-auto rounded-lg">
+    </div>
+    <!-- no data -->
+    <div v-else-if="get_status == false">
+        <div class=" bg-white w-full mx-auto  h-fit ">
+            <div class="w-full text-center font-semibold text-[40px]">
+                <div class="my-auto w-fit mx-auto mt-[250px]">
+                    <!-- <img src="../../../assets/admin_page/request.png" alt="users_icon" class="w-[40px] h-[40px] my-auto mr-4"> -->
+                    <h4>
+                        No data try again later .😏
+                    </h4>
+                    <!-- <button @click="getEvents()" class="mt-6 bg-rose-300 focus:bg-rose-400 text-gray-700 focus:text-whte px-2 mx-auto rounded-lg">
                             Refresh
                         </button>   -->
-                    </div>
-                </div>
-              
-            </div>
-        </div>
-        
-        <!-- can get data but no data (clean) -->
-        <div v-else-if="get_status==false ||requestList.length==0" class="show_up">
-            <div class=" bg-white w-full mx-auto  h-fit ">
-                <div class="w-full text-center font-semibold text-[40px]">
-                    <div class="my-auto w-fit mx-auto mt-[250px]">
-                        <!-- <img src="../../../assets/admin_page/request.png" alt="users_icon" class="w-[40px] h-[40px] my-auto mr-4"> -->
-                        <h4>
-                            Can get data but no data.😏
-                        </h4>
-                        <h4 class="text-[25px]">
-                            Wait for user send request.👌
-                        </h4>
-                        <!-- <button @click="getEvents()" class="mt-6 bg-rose-300 focus:bg-rose-400 text-gray-700 focus:text-whte px-2 mx-auto rounded-lg">
-                            Refresh
-                        </button>   -->
-                    </div>
                 </div>
             </div>
-        </div>
-                
 
-        <!-- have data -->
-        <div v-else-if="get_status==true" class="show_request show_up">
-            <div class=" bg-white w-full mx-auto  h-fit ">
-                <div class="w-full text-center font-semibold text-[40px] pt-6">
-                    <div class="flex w-fit mx-auto">
-                        <img src="../../../assets/admin_page/request.png" alt="users_icon" class="w-[40px] h-[40px] my-auto mr-4">
-                        Request
-                    </div>
-                </div>
+        </div>
+    </div>
 
-                <!-- filter -->
-                <div  class="relative w-[1200px] h-[70px] mx-auto">
-                    <div v-show="is_filter_open==true" class="absolute w-fit h-fit bottom-0">
-                        <div class="flex ">
-                            
-                            <!-- name -->
-                            <!-- <div class="px-2 ">
+    <!-- can get data but no data (clean) -->
+    <div v-else-if="get_status == false || requestList.length == 0" class="show_up">
+        <div class=" bg-white w-full mx-auto  h-fit ">
+            <div class="w-full text-center font-semibold text-[40px]">
+                <div class="my-auto w-fit mx-auto mt-[250px]">
+                    <!-- <img src="../../../assets/admin_page/request.png" alt="users_icon" class="w-[40px] h-[40px] my-auto mr-4"> -->
+                    <h4>
+                        Can get data but no data.😏
+                    </h4>
+                    <h4 class="text-[25px]">
+                        Wait for user send request.👌
+                    </h4>
+                    <!-- <button @click="getEvents()" class="mt-6 bg-rose-300 focus:bg-rose-400 text-gray-700 focus:text-whte px-2 mx-auto rounded-lg">
+                            Refresh
+                        </button>   -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- have data -->
+    <div v-else-if="get_status == true" class="show_request show_up">
+        <div class=" bg-white w-full mx-auto  h-fit ">
+            <div class="w-full text-center font-semibold text-[40px] pt-6">
+                <div class="flex w-fit mx-auto">
+                    <img src="../../../assets/admin_page/request.png" alt="users_icon"
+                        class="w-[40px] h-[40px] my-auto mr-4">
+                    Request
+                </div>
+            </div>
+            <!-- navigation bar -->
+            <BaseStatus :n-request="nRequest" :n-finish="nFinish" :n-progress="nProgress" :n-opencase="nOpencase" />
+
+            <!-- filter -->
+            <div class="relative w-[1200px] h-[40px] mx-auto">
+                <div v-show="is_filter_open == true" class="absolute w-fit h-fit bottom-0">
+                    <div class="flex ">
+
+                        <!-- name -->
+                        <!-- <div class="px-2 ">
                                 <input v-model="f_name" placeholder="Name" type="text" class="px-3 py-[4px] bg-[#E3F2FD] text-gray-600 rounded-xl focus:outline-0">
                             </div> -->
 
-                            <!-- email -->
-                            <!-- <div class="px-2">
+                        <!-- email -->
+                        <!-- <div class="px-2">
                                 <input v-model="f_email" placeholder="E-mail" type="text" class="px-3 py-[4px] bg-[#E3F2FD] text-gray-600 rounded-xl focus:outline-0">
                             </div> -->
 
-                            <!-- type -->
-                            <div class="px-2">
-                                <select v-model="f_type" name="status" id="status" class="px-3 py-[4px] bg-[#E3F2FD] text-gray-600 rounded-xl focus:outline-0">
-                                    <option value="" selected hidden> Service type </option>
-                                    <option value="IT_Service" class="bg-gray-100 text-[#0ea5e9] "> IT Service </option>
-                                    <option value="PR_Service" class="bg-gray-100 text-[#d97706]"> PR Service </option>
+                        <!-- type -->
+                        <div class="px-2">
+                            <select v-model="f_type" name="status" id="status"
+                                class="px-3 py-[4px] bg-[#E3F2FD] text-gray-600 rounded-xl focus:outline-0">
+                                <option value="" selected hidden> Service type </option>
+                                <option value="IT_Service" class="bg-gray-100 text-[#0ea5e9] "> IT Service </option>
+                                <option value="PR_Service" class="bg-gray-100 text-[#d97706]"> PR Service </option>
 
-                                </select>
-                            </div>
+                            </select>
+                        </div>
 
-                            <!-- Subject -->
-                            <div class="px-2">
-                                <select v-model="f_subject" name="Subject" id="Subject" class="px-3 py-[4px] bg-[#E3F2FD] text-gray-600 rounded-xl focus:outline-0">
-                                    <option value="" selected hidden> Select Subject </option>
-                                    <option value="hardware"> hardware </option>
-                                    <option value="software"> software </option>
-                                    <option value="internet"> internet </option>
-                                    <option value="printer"> printer </option>
-                                    <option value="website"> website </option>
-                                    <option value="meeting"> meeting </option>
-                                    <option value="application"> application </option>
-                                    <option value="other"> other </option>
-                                </select>
-                            </div>
+                        <!-- Subject -->
+                        <div class="px-2">
+                            <select v-model="f_subject" name="Subject" id="Subject"
+                                class="px-3 py-[4px] bg-[#E3F2FD] text-gray-600 rounded-xl focus:outline-0">
+                                <option value="" selected hidden> Select Subject </option>
+                                <option value="hardware"> hardware </option>
+                                <option value="software"> software </option>
+                                <option value="internet"> internet </option>
+                                <option value="printer"> printer </option>
+                                <option value="website"> website </option>
+                                <option value="meeting"> meeting </option>
+                                <option value="application"> application </option>
+                                <option value="other"> other </option>
+                            </select>
+                        </div>
 
-                            <!-- status -->
-                            <div class="px-2">
-                                <select v-model="f_status" name="status" id="status" class="px-3 py-[4px] bg-[#E3F2FD] text-gray-600 rounded-xl focus:outline-0">
-                                    <option value="" selected hidden> Select Status </option>
-                                    <option value="request"     class="bg-"> request </option>
-                                    <option value="open_case"   class="bg-"> open case </option>
-                                    <option value="in_progress" class="bg- "> in progress </option>
-                                    <option value="finish"      class="bg-"> finish </option>
-                                </select>
-                            </div>
+                        <!-- status -->
+                        <div class="px-2">
+                            <select v-model="f_status" name="status" id="status"
+                                class="px-3 py-[4px] bg-[#E3F2FD] text-gray-600 rounded-xl focus:outline-0">
+                                <option value="" selected hidden> Select Status </option>
+                                <option value="request" class="bg-"> request </option>
+                                <option value="open_case" class="bg-"> open case </option>
+                                <option value="in_progress" class="bg- "> in progress </option>
+                                <option value="finish" class="bg-"> finish </option>
+                            </select>
+                        </div>
 
-                            
 
-                            <div class="flex px-2 font-light">
-                                <button @click="resetF" class="px-3 mx-1 bg-gray-500 text-rose-300  rounded-xl hover:text-gray-500 hover:bg-rose-300">
-                                    รีเซต
-                                </button>
 
-                                <button @click="searchByKeyW()" class="px-3 mx-1 bg-gray-300 rounded-xl">
-                                    ค้นหา
-                                </button>
-                            </div>
+                        <div class="flex px-2 font-light">
+                            <button @click="resetF"
+                                class="px-3 mx-1 bg-gray-500 text-rose-300  rounded-xl hover:text-gray-500 hover:bg-rose-300">
+                                รีเซต
+                            </button>
+
+                            <button @click="searchByKeyW()" class="px-3 mx-1 bg-gray-300 rounded-xl">
+                                ค้นหา
+                            </button>
                         </div>
                     </div>
-
-
-                    <!-- button -->
-                    <div class=" right-[20px] bottom-0  absolute">
-                        <button @click="is_filter_open= !is_filter_open" class="flex w-fit">
-                            <span class="font-semibold my-auto">
-                                ตัวกรอง
-                            </span> 
-                            <img src="../../../assets/admin_page/filter.png" alt="icon" class="w-[20px] ml-[5px] my-auto">                                
-                        </button>
-                    </div>
-
                 </div>
-            </div>
-                
-            
 
-        
-              <!-- table -->    
-        <div class="w-[1200px] mx-auto  h-[450px] mt-2 "> 
+
+                <!-- button -->
+                <div class=" right-[20px] bottom-0  absolute">
+                    <button @click="is_filter_open = !is_filter_open" class="flex w-fit">
+                        <span class="font-semibold my-auto">
+                            ตัวกรอง
+                        </span>
+                        <img src="../../../assets/admin_page/filter.png" alt="icon" class="w-[20px] ml-[5px] my-auto">
+                    </button>
+                </div>
+
+            </div>
+        </div>
+
+
+
+
+        <!-- table -->
+        <div class="w-[1200px] mx-auto  h-[450px] mt-2 ">
             <hr class="mt-3 bg-gray-700  w-[1170px] h-[3px]">
             <div class="overflow-y-auto mx-auto h-[100%] w-[100%] ">
                 <table class="relative w-full table-fixed text-sm text-center text-gray-800 ">
@@ -558,25 +576,26 @@ const searchByKeyW=()=>{
                             <th scope="col" class="w-[100px] p-2">
                                 Details
                             </th>
-                        </tr>                        
+                        </tr>
                     </thead>
-                    
+
                     <!-- have data -->
                     <tbody class="z-0"> <!-- @click="clickedInfo" -->
-                        <tr v-for="(data,index) in showList" :style="[index<diffentNotify?'background-color:#A6F4F9':'']" :key="index" class="relative text-[15px]  bg-white border-b-2 border-gray-300 cursor-default hover:border-gray-400 z-1">
+                        <tr v-for="(data, index) in showList"
+                            :style="[index < diffentNotify ? 'background-color:#A6F4F9' : '']" :key="index"
+                            class="relative text-[15px]  bg-white border-b-2 border-gray-300 cursor-default hover:border-gray-400 z-1">
                             <td class=" font-medium py-3 px-2 text-center">
                                 <div class="  font-normal truncate ">
                                     <span class="">
-                                        {{data.request_first_name}}
+                                        {{ data.request_first_name }}
                                     </span>
                                     <span class=" pl-3">
                                         {{ data.request_last_name }}
                                     </span>
-                                    
                                 </div>
                                 <div class=" text-[10px] truncate font-light">
                                     {{ data.request_email }}
-                                </div> 
+                                </div>
                             </td>
                             <!-- <td class=" py-3 px-2 font-light">
                                 <div class="w-full truncate">
@@ -584,65 +603,68 @@ const searchByKeyW=()=>{
                                 </div>
                             </td> -->
                             <td class=" py-3 px-2 font-semibold">
-                                <div :style="[changeColorBy(data.request_service_type)] " class="w-[100px] text-center mx-auto truncate">
-                                    {{data.request_service_type}}
+                                <div :style="[changeColorBy(data.request_service_type)]"
+                                    class="w-[100px] text-center mx-auto truncate">
+                                    {{ data.request_service_type }}
                                 </div>
                             </td>
                             <td class=" py-3 px-2 font-semibold">
                                 <div class=" truncate capitalize">
-                                    {{data.request_subject}}                                    
+                                    {{ data.request_subject }}
                                 </div>
 
                             </td>
                             <td class=" py-3 px-2 font-light">
                                 <div class=" ">
-                                    {{data.request_req_date}}
+                                    {{ data.request_req_date }}
                                 </div>
                             </td>
                             <td class=" p-2 text-center ">
-                                <div :style="[changeColorBy(data.request_status)]" class="w-[120px] mx-auto static  py-[4px] px-[8px] rounded-2xl text-[15px] font-semibold ">
-                                    {{data.request_status}}
-                                </div> 
+                                <div :style="[changeColorBy(data.request_status)]"
+                                    class="w-[120px] mx-auto static  py-[4px] px-[8px] rounded-2xl text-[15px] font-semibold ">
+                                    {{ data.request_status }}
+                                </div>
                             </td>
                             <td class=" p-2 font-normal">
                                 <div class=" ">
-                                    {{data.request_assign}}
+                                    {{ data.request_assign }}
                                 </div>
-                            </td>                            
+                            </td>
                             <td class=" p-2 font-semibold">
                                 <div class="flex w-fit mx-auto  ">
-                                    <a    class="goInfo ">
-                                        <button @click="showInfoByID(data.requestId,index)">
-                                            <img src="../../../assets/admin_page/edit.png" alt="edit_icon" class="w-[28px] h-[28px] mr-2 ">
+                                    <a class="goInfo ">
+                                        <button @click="showInfoByID(data.requestId, index)">
+                                            <img src="../../../assets/admin_page/edit.png" alt="edit_icon"
+                                                class="w-[28px] h-[28px] mr-2 ">
                                         </button>
                                     </a>
                                     <!-- <img id="delete" @click="deleteItem(data.id)" src="../../../assets/admin_page/bin.png" alt="delete_icon" class="w-[28px] h-[28px] mx-1 hover:bg-rose-300 rounded "> -->
                                 </div>
                             </td>
-                            
+
                         </tr>
                     </tbody>
-                    
-                </table>    
-            </div>    
+
+                </table>
+            </div>
         </div>
 
 
-    <!-- show detail -->
-    <div id="showInfo" class="overlay">
-        <div class=" popup2 h-96 ">
-            <div  class="h-[100%] p-3 overflow-y-auto">
-                <div id="summaryInfo" class=" w-fit mx-auto text-[25px] font-semibold">
-                    <h3>
-                        ข้อมูลเพิ่มเติม 
-                    </h3>
-                </div>
-                <hr class="w-[80%] h-[10px] m-auto my-4">
-                <!-- first -->
-                <table  class="w-full text-[20px] font-semibold ">
+        <!-- show detail -->
+        <div id="showInfo" class="overlay">
+            <div class=" popup2 h-96 ">
+                <div class="h-[100%] p-3 overflow-y-auto">
+                    <div id="summaryInfo" class=" w-fit mx-auto text-[25px] font-semibold">
+                        <h3>
+                            ข้อมูลเพิ่มเติม
+                        </h3>
+                    </div>
+                    <hr class="w-[80%] h-[10px] m-auto my-4">
+                    <!-- first -->
+                    <table class="w-full text-[20px] font-semibold ">
 
                         <!-- username -->
-                        <tr >
+                        <tr>
                             <th class="table_header text-right w-[115px]">
                                 ของผู้ใช้
                             </th>
@@ -657,7 +679,7 @@ const searchByKeyW=()=>{
                         </tr>
 
                         <!-- email -->
-                        <tr >
+                        <tr>
                             <th class="table_header text-right w-[115px]">
                                 Email
                             </th>
@@ -667,7 +689,7 @@ const searchByKeyW=()=>{
                         </tr>
 
                         <!-- group -->
-                        <tr >
+                        <tr>
                             <th class="table_header text-right w-[115px]">
                                 Group
                             </th>
@@ -678,7 +700,7 @@ const searchByKeyW=()=>{
 
                         <!-- service -->
                         <tr>
-                            <th class="table_header text-right w-[115px]" >
+                            <th class="table_header text-right w-[115px]">
                                 Service
                             </th>
                             <td :style="[changeColorBy(request.request_service_type)]" class="indent-[5px] font-normal">
@@ -687,39 +709,41 @@ const searchByKeyW=()=>{
                         </tr>
 
                         <!-- is OR or SF -->
-                        <tr v-show="request.request_service_type=='IT_Service'&&request.request_subject!='other'">
+                        <tr v-show="request.request_service_type == 'IT_Service' && request.request_subject != 'other'">
                             <th class="table_header text-right w-[115px]">
                                 type of use
                             </th>
                             <td class="indent-[5px] font-normal">
-                                {{request.request_use_type=='or'?'เป็นขององค์กร':'เป็นของส่วนตัว'}}
+                                {{ request.request_use_type == 'or' ? 'เป็นขององค์กร' : 'เป็นของส่วนตัว' }}
                             </td>
                         </tr>
 
                         <!-- brand -->
-                        <tr v-show="request.request_service_type=='IT_Service'&&(request.request_subject=='hardware'||request.request_subject=='software'||request.request_subject=='internet')">
+                        <tr
+                            v-show="request.request_service_type == 'IT_Service' && (request.request_subject == 'hardware' || request.request_subject == 'software' || request.request_subject == 'internet')">
                             <th class="table_header text-right w-[115px]">
                                 ยี่ห้อ
                             </th>
                             <td class="indent-[5px] font-normal">
-                                {{request.request_brand}}
+                                {{ request.request_brand }}
                             </td>
                         </tr>
 
                         <!-- number -->
-                        <tr v-show="request.request_service_type=='IT_Service'&&request.request_use_type=='or'&&request.request_subject=='hardware'">
+                        <tr
+                            v-show="request.request_service_type == 'IT_Service' && request.request_use_type == 'or' && request.request_subject == 'hardware'">
                             <th class="table_header text-right w-[115px]">
                                 S/N
                             </th>
                             <td class="indent-[5px] font-normal">
-                                {{request.request_sn}}
+                                {{ request.request_sn }}
                             </td>
                         </tr>
-                </table>
+                    </table>
 
-                <hr class="w-[80%] h-[10px] m-auto my-3">
-                
-                <!-- <div  class="mt-10  text-[20px] font-semibold ">
+                    <hr class="w-[80%] h-[10px] m-auto my-3">
+
+                    <!-- <div  class="mt-10  text-[20px] font-semibold ">
                     <div class="w-fit">
                         <h3>
                             ของ : 
@@ -736,142 +760,160 @@ const searchByKeyW=()=>{
                     </div>
                 </div> -->
 
-                <!-- second  -->
-                <div v-show="request.request_service_type=='IT_Service'&& (request.request_subject=='hardware'||request.request_subject=='software'||request.request_subject=='internet')" class="mt-4 ">
-                    <div class="text-[20px] font-semibold">
-                        <h3 >
-                        ชนิดของ Hardware 
-                        </h3>
-                                            
-                    </div>
-
-                    
-                    <div v-if="request.request_subject=='software'||request.request_subject=='hardware'||request.request_subject=='internet'" class=" w-full grid grid-cols-4 gap-y-2 gap-x-2 mt-4 text-[15px] font-medium">
-                        <!-- notebook -->
-                        <div class="w-[85px] mx-auto p-2 bg-gray-200 rounded-xl">
-                            <img src="../../../assets/vue.svg" alt="NoteBook" class="w-[40px] mx-auto">
-                            <h3 class="w-fit mx-auto text-[10px]">
-                            {{request.request_type_matchine}}
+                    <!-- second  -->
+                    <div v-show="request.request_service_type == 'IT_Service' && (request.request_subject == 'hardware' || request.request_subject == 'software' || request.request_subject == 'internet')"
+                        class="mt-4 ">
+                        <div class="text-[20px] font-semibold">
+                            <h3>
+                                ชนิดของ Hardware
                             </h3>
 
-                        </div >
-                    </div>
-                </div>
+                        </div>
 
-                <!-- problem -->
-                <div   class="mt-4 " >
-                    <div class="text-[20px] font-semibold">
-                        <h3 v-show="request.request_service_type=='IT_Service'" class="capitalize">
-                            อาการของ {{request.request_subject}} ที่พบ
-                        </h3>  
-                        <h3 v-show="request.request_service_type=='PR_Service'">
-                            ความช่วยเหลือที่ต้องการเกี่ยวกับ<span class="text-rose-500 pl-2">{{request.request_subject}}</span> 
-                        </h3> 
+
+                        <div v-if="request.request_subject == 'software' || request.request_subject == 'hardware' || request.request_subject == 'internet'"
+                            class=" w-full grid grid-cols-4 gap-y-2 gap-x-2 mt-4 text-[15px] font-medium">
+                            <!-- notebook -->
+                            <div class="w-[85px] mx-auto p-2 bg-gray-200 rounded-xl">
+                                <img src="../../../assets/vue.svg" alt="NoteBook" class="w-[40px] mx-auto">
+                                <h3 class="w-fit mx-auto text-[10px]">
+                                    {{ request.request_type_matchine }}
+                                </h3>
+
+                            </div>
+                        </div>
                     </div>
 
-                    
-                    <div class="w-full grid grid-cols-4 gap-y-2 gap-x-2 mt-4 text-[15px] font-medium">
-                        
-                        <div v-for="(data,index) of request.request_problems" :key="index"  class="w-[85px] mx-auto p-2 bg-gray-200 rounded-xl ">
-                            <img src="../../../assets/vue.svg" alt="NoteBook" class="w-[40px] mx-auto">
-                            <h3 class="w-fit mx-auto text-[10px]">
-                            {{data}}
+                    <!-- problem -->
+                    <div class="mt-4 ">
+                        <div class="text-[20px] font-semibold">
+                            <h3 v-show="request.request_service_type == 'IT_Service'" class="capitalize">
+                                อาการของ {{ request.request_subject }} ที่พบ
                             </h3>
-                        </div >
-                        <!-- <div v-if="request.request_other!=''"  class="w-[70px] mx-auto p-2 bg-gray-200 rounded-xl ">
+                            <h3 v-show="request.request_service_type == 'PR_Service'">
+                                ความช่วยเหลือที่ต้องการเกี่ยวกับ<span class="text-rose-500 pl-2">{{ request.request_subject
+                                }}</span>
+                            </h3>
+                        </div>
+
+
+                        <div class="w-full grid grid-cols-4 gap-y-2 gap-x-2 mt-4 text-[15px] font-medium">
+
+                            <div v-for="(data, index) of request.request_problems" :key="index"
+                                class="w-[85px] mx-auto p-2 bg-gray-200 rounded-xl ">
+                                <img src="../../../assets/vue.svg" alt="NoteBook" class="w-[40px] mx-auto">
+                                <h3 class="w-fit mx-auto text-[10px]">
+                                    {{ data }}
+                                </h3>
+                            </div>
+                            <!-- <div v-if="request.request_other!=''"  class="w-[70px] mx-auto p-2 bg-gray-200 rounded-xl ">
                             <img src="../../../assets/vue.svg" alt="NoteBook" class="w-[40px] mx-auto">
                             <h3 class="w-fit mx-auto text-[8px]">
                             other
                             </h3>
                         </div > -->
 
+                        </div>
                     </div>
-                </div>
 
-                <hr class="w-[80%] h-[10px] m-auto mt-10">
+                    <hr class="w-[80%] h-[10px] m-auto mt-10">
 
-                <!-- massage other -->
-                <div class=" w-full  ">
-                    <div v-show="request.request_other!=''"  class="">
-                        <label for="other_1" class="ml-2 text-[17px] font-semibold inline-b">
-                            กรณีเลือก<span class="text-rose-500 pl-2">อื่นๆโปรดระบุ</span>
-                        </label>
-                        <span class="text-[13px] ml-2">(กรณีไม่พบปัญหาข้างต้น)</span>
-                        <textarea v-model="request.request_other"  name="other" id="other_1"  disabled class="w-full h-[100px] resize-none pt-[10px] block rounded-xl bg-gray-300 p-2 focus:outline-0" ></textarea>
+                    <!-- massage other -->
+                    <div class=" w-full  ">
+                        <div v-show="request.request_other != ''" class="">
+                            <label for="other_1" class="ml-2 text-[17px] font-semibold inline-b">
+                                กรณีเลือก<span class="text-rose-500 pl-2">อื่นๆโปรดระบุ</span>
+                            </label>
+                            <span class="text-[13px] ml-2">(กรณีไม่พบปัญหาข้างต้น)</span>
+                            <textarea v-model="request.request_other" name="other" id="other_1" disabled
+                                class="w-full h-[100px] resize-none pt-[10px] block rounded-xl bg-gray-300 p-2 focus:outline-0"></textarea>
+                        </div>
+
+                        <div v-show="request.request_message != ''" class="mt-3">
+                            <label for="other_2" class="ml-2 text-[17px] font-semibold">
+                                ระบุรายละเอียดของปัญหาที่พบ (ถ้ามี)
+                            </label>
+                            <textarea v-model="request.request_message" name="other" id="other_2" disabled
+                                class="w-full h-[100px] resize-none block bg-gray-300 rounded-xl p-2 focus:outline-0"></textarea>
+                        </div>
+                        <div>
+
+                        </div>
                     </div>
-                    
-                    <div v-show="request.request_message!=''" class="mt-3">
-                        <label for="other_2" class="ml-2 text-[17px] font-semibold">
-                            ระบุรายละเอียดของปัญหาที่พบ (ถ้ามี)
-                        </label>
-                        <textarea v-model="request.request_message"  name="other" id="other_2"  disabled class="w-full h-[100px] resize-none block bg-gray-300 rounded-xl p-2 focus:outline-0"></textarea>
-                    </div>
-                    <div>
 
-                    </div>
-                </div>
-
-                <!-- edit status and assign -->
-                <div class="w-full mt-4">
-                    <div class="flex">
-                        <div class="ml-3 w-[250px]">
-                            <h5 class="font-semibold">
-                                Status
-                            </h5>
-                            <div class="grid grid-cols-2 gap-y-2 gap-x-2 mt-1 text-[15px] font-bold">
-                                <button id="request" name="status" @click="changeST('request')" :style="[sIsR==true?changeColorBy('request'):'']" class="bg-gray-600 text-gray-300 p-2 text-center rounded-lg hover:bg-gray-300 hover:text-gray-600">
-                                    Request
-                                </button>
-                                <button id="open_case" name="status" @click="changeST('open_case')" :style="[sIsO==true?changeColorBy('open_case'):'']" class="bg-gray-600 text-gray-300 p-2 text-center rounded-lg hover:bg-gray-300 hover:text-gray-600">
-                                    Open Case
-                                </button>
-                                <button id="in_progress" name="status" @click="changeST('in_progress')" :style="[sIsI==true?changeColorBy('in_progress'):'']" class="bg-gray-600 text-gray-300 p-2 text-center rounded-lg hover:bg-gray-300 hover:text-gray-600">
-                                    In Progress
-                                </button>
-                                <button id="finish" name="status" @click="changeST('finish')" :style="[sIsF==true?changeColorBy('finish'):'']" class="bg-gray-600 text-gray-300 p-2 text-center rounded-lg hover:bg-gray-300 hover:text-gray-600">
-                                    Finish
-                                </button>
+                    <!-- edit status and assign -->
+                    <div class="w-full mt-4">
+                        <div class="flex">
+                            <div class="ml-3 w-[250px]">
+                                <h5 class="font-semibold">
+                                    Status
+                                </h5>
+                                <div class="grid grid-cols-2 gap-y-2 gap-x-2 mt-1 text-[15px] font-bold">
+                                    <button id="request" name="status" @click="changeST('request')"
+                                        :style="[sIsR == true ? changeColorBy('request') : '']"
+                                        class="bg-gray-600 text-gray-300 p-2 text-center rounded-lg hover:bg-gray-300 hover:text-gray-600">
+                                        Request
+                                    </button>
+                                    <button id="open_case" name="status" @click="changeST('open_case')"
+                                        :style="[sIsO == true ? changeColorBy('open_case') : '']"
+                                        class="bg-gray-600 text-gray-300 p-2 text-center rounded-lg hover:bg-gray-300 hover:text-gray-600">
+                                        Open Case
+                                    </button>
+                                    <button id="in_progress" name="status" @click="changeST('in_progress')"
+                                        :style="[sIsI == true ? changeColorBy('in_progress') : '']"
+                                        class="bg-gray-600 text-gray-300 p-2 text-center rounded-lg hover:bg-gray-300 hover:text-gray-600">
+                                        In Progress
+                                    </button>
+                                    <button id="finish" name="status" @click="changeST('finish')"
+                                        :style="[sIsF == true ? changeColorBy('finish') : '']"
+                                        class="bg-gray-600 text-gray-300 p-2 text-center rounded-lg hover:bg-gray-300 hover:text-gray-600">
+                                        Finish
+                                    </button>
+                                </div>
                             </div>
-                        </div>
 
-                        <div class="w-fit mx-auto">
-                            <h5 class="font-semibold">
-                                Assign
-                            </h5>
-                            <select v-model="assign_ch" name="assign" id="assign" class="w-[200px] mt-2 p-1 bg-gray-400 text-gray-700 font-semibold  rounded">
-                                <option selected disabled value="Not_assign">เลือกผู้รับผิดชอบ</option>
-                                <option v-for="(admin,index) in adminList" :key="index" :value="admin.user_first_name" class="font-semibold bg-gray-300">{{admin.user_first_name}}</option>
-                                <!--<option value="gnitset_testing" class="font-semibold bg-gray-300">gnitset testing</option>
+                            <div class="w-fit mx-auto">
+                                <h5 class="font-semibold">
+                                    Assign
+                                </h5>
+                                <select v-model="assign_ch" name="assign" id="assign"
+                                    class="w-[200px] mt-2 p-1 bg-gray-400 text-gray-700 font-semibold  rounded">
+                                    <option selected disabled value="Not_assign">เลือกผู้รับผิดชอบ</option>
+                                    <option v-for="(admin, index) in adminList" :key="index" :value="admin.user_first_name"
+                                        class="font-semibold bg-gray-300">{{ admin.user_first_name }}</option>
+                                    <!--<option value="gnitset_testing" class="font-semibold bg-gray-300">gnitset testing</option>
                                 <option value="Testing_Tseing " class="font-semibold bg-gray-300">Testing Tseing</option> -->
-                            </select>
-                        </div>
+                                </select>
+                            </div>
 
+                        </div>
                     </div>
-                </div>
-                
-                <!-- button -->
-                <div  class="w-fit flex mx-auto mt-10">
-                    <!-- ลบข้อมูล -->
-                        <button v-show="role=='super_admin'" @click="navigation('#dele')"  class="w-[130px] mx-3 p-2 font-normal bg-gray-300  text-rose-400 rounded-xl hover:text-gray-200 hover:bg-rose-400">
+
+                    <!-- button -->
+                    <div class="w-fit flex mx-auto mt-10">
+                        <!-- ลบข้อมูล -->
+                        <button v-show="role == 'super_admin'" @click="navigation('#dele')"
+                            class="w-[130px] mx-3 p-2 font-normal bg-gray-300  text-rose-400 rounded-xl hover:text-gray-200 hover:bg-rose-400">
                             <h4>
                                 ลบคำร้องนี้
                             </h4>
-                        </button>                        
-
-                    <!-- แก้ไขข้อมูล -->
-                    <a href="#veri">
-                        <button v-show="checkEdit"  class="w-[130px] mx-3 p-2 font-normal bg-gray-300  text-[#64B5F6] rounded-xl hover:bg-[#64B5F6] hover:text-gray-200">
-                            <h4>
-                                ทำการแก้ไข
-                            </h4>
                         </button>
-                    </a>
-                </div>
 
-                <!-- <hr class="w-full h-[10px] mt-10"> -->
+                        <!-- แก้ไขข้อมูล -->
+                        <a href="#veri">
+                            <button v-show="checkEdit"
+                                class="w-[130px] mx-3 p-2 font-normal bg-gray-300  text-[#64B5F6] rounded-xl hover:bg-[#64B5F6] hover:text-gray-200">
+                                <h4>
+                                    ทำการแก้ไข
+                                </h4>
+                            </button>
+                        </a>
+                    </div>
 
-                <!-- comment -->
-                <!-- <div   class=" w-full mt-4 ">
+                    <!-- <hr class="w-full h-[10px] mt-10"> -->
+
+                    <!-- comment -->
+                    <!-- <div   class=" w-full mt-4 ">
 
 
                     <label for="other_1" class="ml-2 text-[20px] font-light inline-b">
@@ -905,130 +947,141 @@ const searchByKeyW=()=>{
                         </button>                            
                     </div>
                 </div> -->
-            </div>
+                </div>
 
-            <button @click="navigation()" class="absolute top-[15px] right-[15px] font-bold text-[30px]">
-                <img src="../../../assets/admin_page/close.png" alt="close_icon" class="w-[20px]">
-            </button>
-        </div>
-    </div>
-
-
-    <!-- verify -->
-    <div id="veri" class="overlay">
-        <div class=" verify_s h-96 overflow-hidden rounded-2xl">
-            <h2 class="w-fit mx-auto text-[20px]">
-                คุณต้องการที่จะแก้ไขข้อมูลใช่หรือไม่ ?
-            </h2>
-            <div class=" absolute bottom-0 w-full  flex m-auto">
-                <button @click="myRouter.go(-1)" class="w-full h-fit text-center mx-auto p-2 bg-gray-300 hover:bg-rose-300">
-                    ย้อนกลับ
+                <button @click="navigation()" class="absolute top-[15px] right-[15px] font-bold text-[30px]">
+                    <img src="../../../assets/admin_page/close.png" alt="close_icon" class="w-[20px]">
                 </button>
-                <button @click="submitt(request.requestId)" class="w-full h-fit text-center mx-auto p-2 bg-gray-300 hover:bg-green-300" >
-                    ทำการแก้ไข
-                </button>                    
+            </div>
+        </div>
+
+
+        <!-- verify -->
+        <div id="veri" class="overlay">
+            <div class=" verify_s h-96 overflow-hidden rounded-2xl">
+                <h2 class="w-fit mx-auto text-[20px]">
+                    คุณต้องการที่จะแก้ไขข้อมูลใช่หรือไม่ ?
+                </h2>
+                <div class=" absolute bottom-0 w-full  flex m-auto">
+                    <button @click="myRouter.go(-1)"
+                        class="w-full h-fit text-center mx-auto p-2 bg-gray-300 hover:bg-rose-300">
+                        ย้อนกลับ
+                    </button>
+                    <button @click="submitt(request.requestId)"
+                        class="w-full h-fit text-center mx-auto p-2 bg-gray-300 hover:bg-green-300">
+                        ทำการแก้ไข
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- delete -->
+        <div id="dele" class="overlay">
+            <div class=" verify_d h-96 overflow-hidden rounded-2xl ">
+                <h2 class="w-fit mx-auto text-[20px]">
+                    คุณต้องการที่จะลบข้อมูลนี้หรือไม่ ?
+                </h2>
+                <div class=" absolute bottom-0 w-full  flex m-auto">
+                    <button @click="myRouter.go(-1)"
+                        class="w-full h-fit text-center mx-auto p-2 bg-gray-300 hover:bg-rose-300">
+                        ย้อนกลับ
+                    </button>
+                    <button @click="deleteItem(request.requestId)"
+                        class="w-full h-fit text-center mx-auto p-2 bg-gray-300 hover:bg-green-300">
+                        ลบเลย !!
+                    </button>
+                </div>
             </div>
         </div>
     </div>
-
-    <!-- delete -->
-    <div id="dele" class="overlay">
-        <div class=" verify_d h-96 overflow-hidden rounded-2xl ">
-            <h2 class="w-fit mx-auto text-[20px]">
-                คุณต้องการที่จะลบข้อมูลนี้หรือไม่ ?
-            </h2>
-            <div class=" absolute bottom-0 w-full  flex m-auto">
-                <button @click="myRouter.go(-1)" class="w-full h-fit text-center mx-auto p-2 bg-gray-300 hover:bg-rose-300">
-                    ย้อนกลับ
-                </button>
-                <button @click="deleteItem(request.requestId)" class="w-full h-fit text-center mx-auto p-2 bg-gray-300 hover:bg-green-300">
-                    ลบเลย !!
-                </button>                    
-            </div>
-        </div>
-    </div>
-</div>
-
-
 </template>
 <style scoped>
-::selection{
+::selection {
     background-color: black;
-    color:white;
+    color: white;
     text-transform: uppercase;
 }
 
 /* info detail */
 /* submit */
 .overlay {
-  position: fixed;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background: rgba(0, 0, 0, 0.7);
-  transition: opacity 500ms;
-  visibility: hidden;
-  opacity: 0;
-  z-index: 50;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0, 0, 0, 0.7);
+    transition: opacity 500ms;
+    visibility: hidden;
+    opacity: 0;
+    z-index: 50;
 }
+
 .overlay:target {
-  visibility: visible;
-  opacity: 1;
+    visibility: visible;
+    opacity: 1;
 }
+
 .popup2 {
-  margin: auto;
-  margin-top: 3%;
-  /* overflow-y: auto; */
-  padding: 35px;
-  padding-top: 45px;
-  padding-left: 30px;
-  padding-right: 16px;
-  background: #fff;
-  width: 40%;
-  height: 600px;
-  border-radius: 20px;
-  position: relative;
-  transition: all 5s ease-in-out;
+    margin: auto;
+    margin-top: 3%;
+    /* overflow-y: auto; */
+    padding: 35px;
+    padding-top: 45px;
+    padding-left: 30px;
+    padding-right: 16px;
+    background: #fff;
+    width: 40%;
+    height: 600px;
+    border-radius: 20px;
+    position: relative;
+    transition: all 5s ease-in-out;
 }
+
 .popup2 h2 {
-  margin-top: 0;
-  color: #333;
+    margin-top: 0;
+    color: #333;
 }
+
 .popup2 .option {
-  bottom: 0;
+    bottom: 0;
 }
+
 @media screen and (max-width: 700px) {
-  .popup2 {
-    width: 70%;
-  }
-  .verify_s {
-    width: 70%;
-  }
-  .option {
-    width: 20%;
-  }
+    .popup2 {
+        width: 70%;
+    }
+
+    .verify_s {
+        width: 70%;
+    }
+
+    .option {
+        width: 20%;
+    }
 }
 
 .verify_s {
-  margin: auto;
-  margin-top: 20%;
-  /* overflow-y: auto; */
-  /* padding: 2px; */
-   padding-top: 2px;
-  /*padding-left: 30px;
+    margin: auto;
+    margin-top: 20%;
+    /* overflow-y: auto; */
+    /* padding: 2px; */
+    padding-top: 2px;
+    /*padding-left: 30px;
   padding-right: 16px; */
-  background: #fff;
-  width: 20%;
-  height: 150px;
-  /* border-radius: 20px; */
-  position: relative;
-  transition: all 5s ease-in-out;
+    background: #fff;
+    width: 20%;
+    height: 150px;
+    /* border-radius: 20px; */
+    position: relative;
+    transition: all 5s ease-in-out;
 }
+
 .verify_s h2 {
-  margin-top: 30px;
-  color: #333;
+    margin-top: 30px;
+    color: #333;
 }
+
 /* .verify .option {
   bottom: 0;
 } */
@@ -1036,32 +1089,34 @@ const searchByKeyW=()=>{
 
 /* delete */
 .verify_d {
-  margin: auto;
-  margin-top: 20%;
-  /* overflow-y: auto; */
-  /* padding: 2px; */
-   padding-top: 2px;
-  /*padding-left: 30px;
+    margin: auto;
+    margin-top: 20%;
+    /* overflow-y: auto; */
+    /* padding: 2px; */
+    padding-top: 2px;
+    /*padding-left: 30px;
   padding-right: 16px; */
-  background: #fff;
-  width: 20%;
-  height: 150px;
-  /* border-radius: 20px; */
-  position: relative;
-  transition: all 5s ease-in-out;
+    background: #fff;
+    width: 20%;
+    height: 150px;
+    /* border-radius: 20px; */
+    position: relative;
+    transition: all 5s ease-in-out;
 }
+
 .verify_d h2 {
-  margin-top: 30px;
-  color: #333;
+    margin-top: 30px;
+    color: #333;
 }
 
 
-.comment_new{
+.comment_new {
     position: relative;
     z-index: 5;
 
 }
-.comment_new_button{
+
+.comment_new_button {
     position: absolute;
     animation: tada 1.5s;
     /* transition: opacity 500ms; */
@@ -1071,44 +1126,45 @@ const searchByKeyW=()=>{
 }
 
 
-@keyframes tada{
-    0%{
+@keyframes tada {
+    0% {
         opacity: 0;
         /* transition-property: all 1s; */
         margin-top: -30px;
     }
-    100%{
+
+    100% {
         opacity: 1;
         /* transition-property: all 1s; */
-        margin-top:0px;
+        margin-top: 0px;
 
     }
 }
 
-::-webkit-scrollbar{
+::-webkit-scrollbar {
     width: 10px;
     background-color: rgb(119, 173, 212);
     border-radius: 20px;
 }
 
-::-webkit-scrollbar-thumb{
+::-webkit-scrollbar-thumb {
     background-color: rgb(104, 104, 104);
     border-radius: 20px;
 }
+
 /* scroll bar of comments */
-.comment_old::-webkit-scrollbar{
+.comment_old::-webkit-scrollbar {
     background-color: transparent;
-    width:10px
+    width: 10px
 }
 
-.comment_old::-webkit-scrollbar-thumb{
+.comment_old::-webkit-scrollbar-thumb {
     background-color: rgb(119, 173, 212);
     border-top-right-radius: 20px;
     border-bottom-right-radius: 20px;
 }
 
-.table_header::after{
+.table_header::after {
     content: ':';
 }
-
 </style>

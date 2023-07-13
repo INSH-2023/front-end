@@ -167,7 +167,7 @@ let toBackEnd={
       let return_data =[]
       let status =undefined
       let res= undefined
-      console.log(data)
+      // console.log(data)
       // show log
       console.log(`post data ${name} => ${link}`)
       // fetch

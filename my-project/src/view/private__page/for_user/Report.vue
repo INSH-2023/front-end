@@ -367,14 +367,13 @@ const submitt = async () => {
         console.log(data)
         button_status.value = false
 
-        // send notify to user
-        notify(data_ch.value)
-
         // play audio for notification
         const audio = new Audio();
         audio.src = 'https://drive.google.com/uc?id=1HFqk6XDY_5aF-OKtOXITlHEtM0Ek67CJ&export=download'
         audio.play();
 
+        // send notify to user
+        notify(data_ch.value)
     } else
         if (status == 400) {
             // console.log(data)
@@ -410,8 +409,6 @@ const getDataFromComponent = (value) => {
             typeOfMachine.value.sn = data.item.sn
 
             console.log('type of machine : ', typeOfMachine.value)
-
-
         } else
             if (data.name == 'problems') {
                 problems.value = data.problems

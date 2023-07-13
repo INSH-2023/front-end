@@ -8,7 +8,7 @@ import BaseNav from '../../components/BaseNav.vue';
 
 
     <div class="w-full h-[60px]  z-50">
-        <BaseNav   />   
+        <BaseNav />   
    </div>
    <div class="w-full h-full z-10">
       <router-view />    
