@@ -49,7 +49,6 @@ const edit_status = ref(undefined)
 const is_filter_open = ref(false)
 
 const token = ref('')
-const role = ref(JSON.parse(Cookies.get("data")).user_role)
 
 // get data
 const getEvents = async (id = undefined) => {
@@ -59,9 +58,10 @@ const getEvents = async (id = undefined) => {
     if (id == undefined) {
         token.value = JSON.parse(jsCookie.get("data")).token
         let [s, data] = await toBackEnd.getData('request', requestLink, token.value)
+        console.log(data)
         if (s == 200) {
             status = true
-            requestList.value = data.sort((a, b) => (a.request_req_date > b.request_req_date) ? -1 : (a.request_req_date < b.request_req_date) ? 1 : 0);
+            requestList.value = data.data.sort((a, b) => (a.request_req_date > b.request_req_date) ? -1 : (a.request_req_date < b.request_req_date) ? 1 : 0);
             showList.value = requestList.value
             get_status.value = true
 
@@ -91,38 +91,6 @@ const getEvents = async (id = undefined) => {
 
     return status
 }
-
-// delete
-const deleteItem = async (v) => {
-    delete_status.value = undefined
-    token.value = JSON.parse(jsCookie.get("data")).token
-    let [status, data] = await toBackEnd.delete('request', requestLink, v, token.value)
-    if (status == 200) {
-        delete_status.value = true
-        await getEvents()
-        navigation()
-        // status something
-        console.log(data)
-    } else {
-        // status something
-        delete_status.value = false
-        console.log(data)
-    }
-}
-
-// callback
-
-// edit request
-const submitt = (v) => {
-    if (validate.vRequestEdit(data_ch.value)) {
-        // return something
-
-    }
-    else {
-        editInfo(v)
-    }
-}
-
 
 // showInfo
 const showInfoByID = async (v, index) => {
@@ -415,7 +383,6 @@ const searchByKeyW = () => {
                                 <option value="" selected hidden> Service type </option>
                                 <option value="IT_Service" class="bg-gray-100 text-[#0ea5e9] "> IT Service </option>
                                 <option value="PR_Service" class="bg-gray-100 text-[#d97706]"> PR Service </option>
-
                             </select>
                         </div>
 
@@ -432,7 +399,6 @@ const searchByKeyW = () => {
                                 <option value="meeting"> meeting </option>
                                 <option value="application"> application </option>
                                 <option value="other"> other </option>
-
                             </select>
                         </div>
 
@@ -445,7 +411,6 @@ const searchByKeyW = () => {
                                 <option value="open_case" class="bg-"> open case </option>
                                 <option value="in_progress" class="bg- "> in progress </option>
                                 <option value="finish" class="bg-"> finish </option>
-
                             </select>
                         </div>
 
@@ -482,8 +447,8 @@ const searchByKeyW = () => {
 
 
         <!-- table -->
-        <div class="w-[1200px] mx-auto  h-[450px] mt-2 ">
-            <hr class="mt-3 bg-gray-700  w-[1170px] h-[3px]">
+        <div class="w-[1200px] mx-auto h-[400px] mt-2 ">
+            <hr class="mt-3 bg-gray-700 w-[1170px] h-[3px]">
             <div class="overflow-y-auto mx-auto h-[100%] w-[100%] ">
                 <table class="relative w-full table-fixed text-sm text-center text-gray-800 ">
                     <thead class="absolute bg-white text-lg sticky top-0 z-10">

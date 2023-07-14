@@ -3,6 +3,7 @@ import { useRouter } from 'vue-router'
 import { ref, onBeforeMount } from 'vue'
 import Cookies from '../JS/cookies';
 import toBackEnd from '../JS/fetchToBack'
+import getRefreshToken from '../JS/refresh'
 const props = defineProps({
     role: {
         type: String,
@@ -31,6 +32,7 @@ const comingSoon = () => myRouter.push({ name: 'notAvaliable' })
 
 const token = ref("")
 const notifyList = ref([])
+const notify = ref(0)
 
 // get role from local
 const role = ref(undefined)
@@ -80,18 +82,66 @@ const toAdmin = () => {
     }
 }
 
+// bg color status
+const changeColorStatus = (v) => {
+    let style = []
+
+    if (v == 'request') {
+        style.push('color:rgb(31 41 55);')
+    } else
+        if (v == 'open_case') {
+            style.push('color:rgb(245 158 11);')
+        } else
+            if (v == 'in_progress') {
+                style.push('color: rgb(56 189 248);')
+            } else
+                if (v == 'finish') {
+                    style.push('color: rgb(45 212 191);')
+                }
+    return style
+}
+const isUpdate = ref(false)
+const isNotifyShow = ref(false)
 const getNotify = async () => {
-    token.value = JSON.parse(Cookies.get("data")).token
-    let [s, data] = await toBackEnd.getData('notify message',requestLink,token.value)
-    if (s==200) {
-        notifyList.value = data.reverse()
+    if (Cookies.get("data").length != 0) {
+        getRefreshToken(JSON.parse(Cookies.get("data")).refreshToken)
+        token.value = JSON.parse(Cookies.get("data")).token
+        let [s, data] = await toBackEnd.getData('notify message', requestLink, token.value)
+        if (s == 200) {
+            notifyList.value = data.reverse()
+            notify.value = notifyList.value[0].request_update
+            if (notify.value) {
+                isUpdate.value = true
+            }
+        } else {
+            console.log("error with something")
+        }
     }
 }
 
-const isUpdate = ref(false)
+const deleteNotify = async (id) => {
+    if (Cookies.get("data").length != 0) {
+        token.value = JSON.parse(Cookies.get("data")).token
+        let [s, data] = await toBackEnd.delete('delete message', requestLink, id, token.value)
+        if (s == 200) {
+            getNotify()
+        } else {
+            console.log("error with something")
+        }
+    }
+}
+
+const showNotify = async () => {
+    isNotifyShow.value = !isNotifyShow.value
+    isUpdate.value = false
+    isSetting.value = false
+    token.value = JSON.parse(Cookies.get("data")).token
+    let [s, data] = await toBackEnd.editData("notification", requestLink, {}, token.value)
+}
 
 const logOut = () => {
     Cookies.remove('data')
+    Cookies.remove('isAdmin')
     goHome()
 }
 
@@ -165,15 +215,51 @@ onBeforeMount(() => {
             <!-- </div> -->
 
         </div>
-        <!-- menu username -->
+        <!-- notification update & menu username -->
         <div class="flex flex-row w-fit h-full">
             <!-- <audio   autoplay >
                     <source src="../assets/bp.mp3" type="audio/mpeg">
                     Your browser does not support the audio element.
                 </audio> -->
-            <div>
-                <img v-if="!isUpdate" src="../assets/bell.png" alt="alert" class="mx-1 w-[25px] m-auto">
-                <img v-else src="../assets/alert.png" alt="alert" class="mx-1 w-[25px] m-auto">
+            <button class="mx-1 w-[25px] m-auto" @click="showNotify()">
+                <img v-if="!isUpdate" src="../assets/bell.png" alt="alert">
+                <img v-else src="../assets/alert.png" alt="alert">
+            </button>
+
+            <div v-show="isNotifyShow" id="notify" class="w-[100vw] font-semibold text-black
+                absolute right-0 top-[100%] z-0 w-30 rounded-b bg-gray-200
+                divide-y divide-gray-800 sm:w-[25rem] sm:rounded-l ">
+                <div class="flex flex-col p-2 m-auto">
+                    <h4 class="ml-3">
+                        Notification
+                    </h4>
+                </div>
+
+                <div class="h-[500px] mx-auto overflow-y-auto overflow-hidden">
+                    <ul class="flex flex-col p-2 m-auto" v-for="(message, index) in notifyList" :key="index">
+                        <li class="pl-3"
+                            :style="[message.request_update > index ? 'background-color: rgb(155,235,199); border-radius: 0.75rem;' : '']">
+                            <h2 class="flex text-[18px]">
+                                {{ message.request_problems }}
+                            </h2>
+                            <p class="flex text-[14px]">message : {{ message.request_message }}</p>
+                            <p class="flex text-[14px]">status : &nbsp;
+                                <span :style="[changeColorStatus(message.history_status)]">{{
+                                    message.history_status == "request" ? "รับแจ้ง" :
+                                    message.history_status == "in_progress" ? "กำลังดำเนินการ" :
+                                        message.history_status == "finish" ? "เสร็จสิ้น" : "เปิดเคส" }}
+                                </span>
+                            </p>
+                            <p class="flex text-[14px]">assign : {{ message.history_assign }}</p>
+                            <p class="flex text-[14px]">updated : {{ message.history_req_date }}</p>
+
+                            <div @click="deleteNotify(message.request_historyId)"
+                                class="relative bottom-[100px] left-[325px] text-sm font-semibold cursor-pointer hover:text-rose-700">
+                                X
+                            </div>
+                        </li>
+                    </ul>
+                </div>
             </div>
 
             <h3 class="hidden truncate w-full h-fit px-3 max-w-sm m-auto text-[17px]  text-white font-semibold text-justify
@@ -184,14 +270,14 @@ onBeforeMount(() => {
 
 
             <!-- ตั้งค่า drop down -->
-            <div class=" ">
-                <button @click="isSetting = !isSetting, isLanguage = false"
+            <div>
+                <button @click="isSetting = !isSetting, isLanguage = false, isNotifyShow = false"
                     class="w-full h-full font-semibold text-[#8DA9C4]  rounded ">
                     <img src="../assets/burger_menu.png" alt="menu"
                         class="w-[25px] h-[25px] lg:w-[30px] lg:h-[30px] mx-auto active:bg-[#90CAF9] active:text-[#0D47A1]  ">
                 </button>
 
-                <div v-show="isSetting == true" id="dropdown" class="w-[100vw] h-fit font-semibold text-[#8DA9C4] absolute  right-0 top-[100%]  z-20 w-30 rounded-b bg-gray-700 divide-y divide-gray-800
+                <div v-show="isSetting" id="dropdown" class="w-[100vw] h-fit font-semibold text-[#8DA9C4] absolute  right-0 top-[100%]  z-20 w-30 rounded-b bg-gray-700 divide-y divide-gray-800
                             sm:w-[11.5rem] sm:rounded-l
                         ">
                     <ul class="flex flex-col p-2 m-auto">
@@ -205,8 +291,8 @@ onBeforeMount(() => {
                                 </h4>
                             </div>
                         </li> -->
-                        <li class="hidden sm:block" v-if="role == 'user'" @click="goHistory">
-                            <div class="flex">
+                        <li v-if="role == 'user'" @click="goHistory">
+                            <div class="flex cursor-pointer">
                                 <img src="../assets/requests.png" alt="logo_setting" draggable="false"
                                     class="w-[20px] h-[20px] ml-2">
                                 <h4 class="ml-3">
@@ -217,8 +303,8 @@ onBeforeMount(() => {
                         <li v-if="role == 'user'">
                             <hr class="w-full my-2 ">
                         </li>
-                        <li class="hidden sm:block">
-                            <div class="flex">
+                        <li>
+                            <div class="flex cursor-pointer">
                                 <img src="../assets/settings.png" alt="logo_setting" draggable="false"
                                     class="w-[20px] h-[20px] ml-2">
                                 <h4 class="ml-3">
@@ -264,7 +350,6 @@ onBeforeMount(() => {
     width: 70px;
     height: 28px;
     background-color: transparent;
-
 }
 
 .switch input {
@@ -313,8 +398,6 @@ input:checked+.slider:before {
     -webkit-transform: translateX(26px);
     -ms-transform: translateX(26px);
     transform: translateX(40px);
-
-
 }
 
 /* Rounded sliders */
@@ -444,5 +527,28 @@ input:checked+.slider:before {
 #button-1 .knobs:before,
 #button-1 .layer {
     transition: 0.3s ease all;
+}
+
+::-webkit-scrollbar {
+    width: 10px;
+    background-color: rgb(119, 173, 212);
+    border-radius: 20px;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: rgb(104, 104, 104);
+    border-radius: 20px;
+}
+
+/* scroll bar of comments */
+.comment_old::-webkit-scrollbar {
+    background-color: transparent;
+    width: 10px
+}
+
+.comment_old::-webkit-scrollbar-thumb {
+    background-color: rgb(119, 173, 212);
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
 }
 </style>

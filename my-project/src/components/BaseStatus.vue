@@ -53,10 +53,9 @@ defineProps({
 
         <!-- <hr v-if="isRequest == true" class="bg-gray-700 h-[35px] w-[2px] m-auto mx-2"> -->
 
-        <!-- แจ้งซ่อม -->
         <div class="flex mx-2 px-6 py-1 bg-rose-500 text-gray-100 rounded-2xl">
             <h5>
-                ขอรับบริการ
+                เปิดเคส
             </h5>
             <h5 class="ml-2">
                 {{ nOpencase }}

@@ -29,7 +29,7 @@ const getCountStatus = async () => {
 
 onBeforeMount(() => {
     getCountStatus(),
-        getRefreshToken(token.value)
+    getRefreshToken(JSON.parse(Cookies.get("data")).refreshToken)
 })
 
 </script>
