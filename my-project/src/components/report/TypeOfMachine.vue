@@ -29,7 +29,7 @@ onUpdated(()=>{
     })
 })
 onBeforeMount(()=>{
-    getRefreshToken(JSON.parse(jsCookie.get("data")).refreshToken)
+    // getRefreshToken(JSON.parse(jsCookie.get("data")).refreshToken)
     getItem(JSON.parse(jsCookie.get("data")).user_emp_code)
 })
 

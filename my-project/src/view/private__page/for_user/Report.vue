@@ -282,7 +282,7 @@ const getUser = async (emp_code) => {
 }
 
 onBeforeMount(() => {
-    getUser(validate.getUserDataFromLocal('user_emp_code')),
+    getUser(validate.getUserDataFromLocal('user_emp_code'))
         getRefreshToken(JSON.parse(jsCookie.get("data")).refreshToken)
 })
 

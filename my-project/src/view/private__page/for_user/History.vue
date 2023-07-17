@@ -9,8 +9,10 @@ import getRefreshToken from './../../../JS/refresh';
 import Cookies from '../../../JS/cookies';
 // const requestLink="http://localhost:3000/events"
 const requestLink = `${import.meta.env.VITE_BACK_END_HOST}/requests`
-const userLink = `${import.meta.env.VITE_BACK_END_HOST}/users`
+// const userLink = `${import.meta.env.VITE_BACK_END_HOST}/users`
 // const linkTesting=`${import.meta.env.VITE_BACK_END}/`
+
+const path = ref(`${import.meta.env.VITE_BACK_END_HOST}/images/problems`)
 
 const myRouter = useRouter()
 
@@ -337,14 +339,13 @@ const searchByKeyW = () => {
                         </button>   -->
                 </div>
             </div>
-
         </div>
     </div>
 
 
     <!-- have data -->
     <div v-else-if="get_status == true" class="show_request show_up">
-        <div class=" bg-white w-full mx-auto  h-fit ">
+        <div class=" bg-white w-full mx-auto h-fit ">
             <div class="w-full text-center font-semibold text-[40px] pt-6">
                 <div class="flex w-fit mx-auto">
                     <img src="../../../assets/admin_page/request.png" alt="users_icon"
@@ -353,16 +354,16 @@ const searchByKeyW = () => {
                 </div>
             </div>
 
-            <!-- filter -->
+            <!-- back -->
             <div class="relative w-[1200px] h-[60px] mx-auto ">
-                <div class="absolute w-fit h-fit bottom-0 flex">
+                <div class="absolute w-fit h-fit bottom-0 left-10 flex">
                     <div class="px-2">
                         <button v-show="!is_filter_open" @click="goMain">
-                            <img class="w-[25px] ml-[5px] my-[-4px]" src="./../../../assets/back.png" alt="filter-icon">
+                            <img class="w-[25px]" src="./../../../assets/back.png" alt="filter-icon">
                         </button>
                     </div>
                 </div>
-                <div v-show="is_filter_open" class="absolute w-fit h-fit bottom-0">
+                <div v-show="is_filter_open" class="absolute w-fit h-fit bottom-0 left-5">
                     <div class="flex ">
 
                         <!-- name -->
@@ -371,10 +372,10 @@ const searchByKeyW = () => {
                             </div> -->
 
                         <!-- email -->
-                        <div class="px-2">
+                        <!-- <div class="px-2">
                             <input v-model="f_email" placeholder="E-mail" type="text"
                                 class="px-3 py-[4px] bg-[#E3F2FD] text-gray-600 rounded-xl focus:outline-0">
-                        </div>
+                        </div> -->
 
                         <!-- type -->
                         <div class="px-2">
@@ -431,7 +432,7 @@ const searchByKeyW = () => {
 
 
                 <!-- button -->
-                <div class="   right-[20px] bottom-0  absolute">
+                <div class="right-10 fixed">
                     <button @click="is_filter_open = !is_filter_open" class="flex w-fit">
                         <span class="font-semibold my-auto">
                             ตัวกรอง
@@ -447,24 +448,24 @@ const searchByKeyW = () => {
 
 
         <!-- table -->
-        <div class="w-[1200px] mx-auto h-[400px] mt-2 ">
-            <hr class="mt-3 bg-gray-700 w-[1170px] h-[3px]">
+        <div class="w-fit mx-auto h-[400px] mt-2 mx-10">
+            <hr class="mt-3 bg-gray-700 h-[3px] my-2">
             <div class="overflow-y-auto mx-auto h-[100%] w-[100%] ">
                 <table class="relative w-full table-fixed text-sm text-center text-gray-800 ">
                     <thead class="absolute bg-white text-lg sticky top-0 z-10">
                         <tr class="">
-                            <th scope="col" class="w-[180px] p-2">
+                            <!-- <th scope="col" class="w-[180px] p-2">
                                 User
-                            </th>
+                            </th> -->
                             <!-- <th scope="col" class="w-[200px] p-2">
                                 Group
                             </th> -->
                             <th scope="col" class="w-[100px] p-2">
                                 Type
                             </th>
-                            <th scope="col" class="w-[100px] p-2">
+                            <!-- <th scope="col" class="w-[100px] p-2">
                                 Subject
-                            </th>
+                            </th> -->
                             <th scope="col" class="w-[120px] p-2">
                                 Date
                             </th>
@@ -484,7 +485,7 @@ const searchByKeyW = () => {
                     <tbody class="z-0"> <!-- @click="clickedInfo" -->
                         <tr v-for="(data, index) in showList" :key="index"
                             class="relative text-[15px]  bg-white border-b-2 border-gray-300 cursor-default hover:border-gray-400 z-1">
-                            <td class=" font-medium py-3 px-2 text-center">
+                            <!-- <td class=" font-medium py-3 px-2 text-center">
                                 <div class="  font-normal truncate ">
                                     <span class="">
                                         {{ data.request_first_name }}
@@ -497,26 +498,25 @@ const searchByKeyW = () => {
                                 <div class=" text-[10px] truncate font-light">
                                     {{ data.request_email }}
                                 </div>
-                            </td>
+                            </td> -->
                             <!-- <td class=" py-3 px-2 font-light">
                                 <div class="w-full truncate">
                                     {{data.group_work}}
                                 </div>
                             </td> -->
-                            <td class=" py-3 px-2 font-semibold">
+                            <td class="py-3 px-2 font-semibold">
                                 <div :style="[changeColorBy(data.request_service_type)]"
                                     class="w-[100px] text-center mx-auto truncate">
                                     {{ data.request_service_type }}
                                 </div>
                             </td>
-                            <td class=" py-3 px-2 font-semibold">
-                                <div class=" truncate capitalize">
+                            <!-- <td class="py-3 px-2 font-semibold">
+                                <div class="truncate capitalize">
                                     {{ data.request_subject }}
                                 </div>
-
-                            </td>
+                            </td> -->
                             <td class=" py-3 px-2 font-light">
-                                <div class=" ">
+                                <div class="">
                                     {{ data.request_req_date }}
                                 </div>
                             </td>
@@ -527,7 +527,7 @@ const searchByKeyW = () => {
                                 </div>
                             </td>
                             <td class=" p-2 font-normal">
-                                <div class=" ">
+                                <div class="">
                                     {{ data.request_assign }}
                                 </div>
                             </td>
@@ -676,7 +676,7 @@ const searchByKeyW = () => {
                             class=" w-full grid grid-cols-4 gap-y-2 gap-x-2 mt-4 text-[15px] font-medium">
                             <!-- notebook -->
                             <div class="w-[85px] mx-auto p-2 bg-gray-200 rounded-xl">
-                                <img src="../../../assets/vue.svg" alt="NoteBook" class="w-[40px] mx-auto">
+                                <img :src="`${path}/${request.request_subject}`" alt="NoteBook" class="w-[40px] mx-auto">
                                 <h3 class="w-fit mx-auto text-[10px]">
                                     {{ request.request_type_matchine }}
                                 </h3>
@@ -702,7 +702,8 @@ const searchByKeyW = () => {
 
                             <div v-for="(data, index) of request.request_problems" :key="index"
                                 class="w-[85px] mx-auto p-2 bg-gray-200 rounded-xl ">
-                                <img src="../../../assets/vue.svg" alt="NoteBook" class="w-[40px] mx-auto">
+                                <img v-if="request.problem_upload" :src="`${path}/${request.request_subject}`" alt="NoteBook" class="w-[40px] mx-auto">
+                                <img v-else :src="`${path}/${request.request_subject}`" alt="NoteBook" class="w-[40px] mx-auto">
                                 <h3 class="w-fit mx-auto text-[10px]">
                                     {{ data }}
                                 </h3>
@@ -824,7 +825,7 @@ const searchByKeyW = () => {
                     </div>
                 </div>
 
-                <button @click="navigation()" class="absolute top-[15px] right-[15px] font-bold text-[30px]">
+                <button @click="navigation()" class="absolute top-[45px] right-[15px] font-bold text-[30px]">
                     <img src="../../../assets/admin_page/close.png" alt="close_icon" class="w-[20px]">
                 </button>
             </div>
@@ -863,11 +864,11 @@ const searchByKeyW = () => {
     margin-top: 3%;
     /* overflow-y: auto; */
     padding: 35px;
-    padding-top: 45px;
+    padding-top: 70px;
     padding-left: 30px;
     padding-right: 16px;
     background: #fff;
-    width: 40%;
+    width: 600px;
     height: 600px;
     border-radius: 20px;
     position: relative;

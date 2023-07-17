@@ -89,18 +89,30 @@ const getP = async (v) => {
 }
 
 // split data
+// const maxOfL = ref(0)
+// const minOfL = ref(0)
+// const sumP = ref(0)
 const maxOfPage = ref(8)
-const maxOfL = ref(0)
-const minOfL = ref(0)
-const sumP = ref(0)
 const problemSplit = ref([])
-// const pageN=ref(1)
+const pageN=ref(3)
+const currentPageList=ref(1)
+const maxPage = computed(()=> Math.ceil(problemList.value.length / maxOfPage.value))
 // for count N of page
-const pageN = () => {
-    let length = problemList.value.length / maxOfPage.value
-    let number = Math.ceil(length)
+const pageLeft = () => {
+    // let length = problemList.value.length / maxOfPage.value
+    // let number = Math.ceil(length)
+    currentPageList.value=currentPageList.value-1
     // sumP.value=number
-    return number
+    // return number
+}
+
+// for count N of page
+const pageRight = () => {
+    // let length = problemList.value.length / maxOfPage.value
+    // let number = Math.ceil(length)
+    currentPageList.value=currentPageList.value+1
+    // sumP.value=number
+    // return number
 }
 
 // for click and first value
@@ -485,7 +497,6 @@ const encodeImage = (input) => {
                                     </button>   -->
                             </div>
                         </div>
-
                     </div>
                 </div>
 
@@ -512,9 +523,21 @@ const encodeImage = (input) => {
                     <BaseShowProblem @get-data-status="getDataFromComponent" :problems="problemSplit" />
                     <!-- page -->
                     <div class=" inset-x-0 bottom-0 flex w-fit mx-auto mt-4">
-                        <button @click="splitProblems(N)" v-for="N in pageN()"
-                            class=" w-full px-4 py-1 mx-2 text-[15px] bg-[#6FA1CE] text-[#C2E1FD] font-bold rounded-full focus:bg-[#C2E1FD] focus:text-[#6FA1CE] ">
-                            {{ N }}
+                        <button  @click="pageLeft()" v-if="currentPageList > 1"
+                            class=" w-full px-4 py-1 mx-2 text-[15px] bg-[#6FA1CE] text-[#C2E1FD] font-bold rounded-full hover:bg-[#C2E1FD] hover:text-[#6FA1CE]"
+                            >
+                            &lt;
+                        </button>
+                        <button @click="splitProblems(N + currentPageList - 1)" v-for="N in (problemList.length < maxOfPage*pageN ? maxPage : pageN)" 
+                            class="w-full px-4 py-1 mx-2 text-[15px] bg-[#6FA1CE] text-[#C2E1FD] font-bold rounded-full"
+                            :style="[currentPage == N + currentPageList - 1 ? {'background-color': '#C2E1FD', 'color': '#6FA1CE'} : {}]"
+                            >
+                            <!--  -->
+                            {{ N + currentPageList - 1 }}
+                        </button>
+                        <button @click="pageRight()" v-if="currentPageList < maxPage - pageN + 1"
+                            class=" w-full px-4 py-1 mx-2 text-[15px] bg-[#6FA1CE] text-[#C2E1FD] font-bold rounded-full hover:bg-[#C2E1FD] hover:text-[#6FA1CE]">
+                            &gt;
                         </button>
                     </div>
                 </div>

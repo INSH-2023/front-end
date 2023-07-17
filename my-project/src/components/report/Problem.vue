@@ -29,8 +29,8 @@ const props = defineProps({
 const token = ref('')
 
 onBeforeMount(()=>{
-    getProblems(),
-    getRefreshToken(JSON.parse(jsCookie.get("data")).refreshToken)
+    getProblems()
+    // getRefreshToken(JSON.parse(jsCookie.get("data")).refreshToken)
 })
 
 onUpdated(()=>{

@@ -4,6 +4,7 @@ import { ref, onBeforeMount } from 'vue'
 import Cookies from '../JS/cookies';
 import toBackEnd from '../JS/fetchToBack'
 import getRefreshToken from '../JS/refresh'
+import getUserDataFromLocal from '../JS/validate'
 const props = defineProps({
     role: {
         type: String,
@@ -104,7 +105,6 @@ const isUpdate = ref(false)
 const isNotifyShow = ref(false)
 const getNotify = async () => {
     if (Cookies.get("data").length != 0) {
-        getRefreshToken(JSON.parse(Cookies.get("data")).refreshToken)
         token.value = JSON.parse(Cookies.get("data")).token
         let [s, data] = await toBackEnd.getData('notify message', requestLink, token.value)
         if (s == 200) {
@@ -240,7 +240,11 @@ onBeforeMount(() => {
                         <li class="pl-3"
                             :style="[message.request_update > index ? 'background-color: rgb(155,235,199); border-radius: 0.75rem;' : '']">
                             <h2 class="flex text-[18px]">
-                                {{ message.request_problems }}
+                                <div v-for="(problem,index) in message.request_problems.split(',')" :key="index">
+                                    <span v-if="message.request_problems.split(',').length == 1">{{ problem }}</span>
+                                    <span v-else-if="index < message.request_problems.split(',').length - 1">{{ problem }} &nbsp;</span>
+                                    <span v-else>และ {{ problem }}</span>
+                                </div>
                             </h2>
                             <p class="flex text-[14px]">message : {{ message.request_message }}</p>
                             <p class="flex text-[14px]">status : &nbsp;
@@ -335,6 +339,7 @@ onBeforeMount(() => {
                                 </ul>
                             </div>
                         </li> -->
+
                     </ul>
                 </div>
             </div>

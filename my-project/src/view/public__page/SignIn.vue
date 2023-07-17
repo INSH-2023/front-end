@@ -37,7 +37,7 @@ const logIn=async()=>{
         let [status,data]=await toBackEnd.postData('login',loginLink,data_ch.value)
         if(status==200){
             console.log('login successfully')
-            console.log(data)
+            // console.log(data)
             Cookies.set("data",JSON.stringify(data))
             button_status.value=false
             goMain()
@@ -179,7 +179,6 @@ const showPd =()=>{
                 </h5>
             </router-link>
        </div>
-       
     </div>
 
 <!--     

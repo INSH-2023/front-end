@@ -13,12 +13,13 @@ const requestLink = `${import.meta.env.VITE_BACK_END_HOST}/requests`
 const userLink = `${import.meta.env.VITE_BACK_END_HOST}/users`
 // const linkTesting=`${import.meta.env.VITE_BACK_END}/`
 
+const path = ref(`${import.meta.env.VITE_BACK_END_HOST}/images/problems`)
 const myRouter = useRouter()
 
 onBeforeMount(() => {
     navigation(),
     getEvents(),
-    getAdmin(),
+    getAdmin()
     getRefreshToken(JSON.parse(jsCookie.get("data")).refreshToken)
 })
 
@@ -530,7 +531,7 @@ const searchByKeyW = () => {
 
 
                 <!-- button -->
-                <div class=" right-[20px] bottom-0  absolute">
+                <div class=" right-[20px] bottom-0 absolute">
                     <button @click="is_filter_open = !is_filter_open" class="flex w-fit">
                         <span class="font-semibold my-auto">
                             ตัวกรอง
@@ -775,7 +776,7 @@ const searchByKeyW = () => {
                             class=" w-full grid grid-cols-4 gap-y-2 gap-x-2 mt-4 text-[15px] font-medium">
                             <!-- notebook -->
                             <div class="w-[85px] mx-auto p-2 bg-gray-200 rounded-xl">
-                                <img src="../../../assets/vue.svg" alt="NoteBook" class="w-[40px] mx-auto">
+                                <img :src="`${path}/${request.request_subject}`" alt="NoteBook" class="w-[40px] mx-auto">
                                 <h3 class="w-fit mx-auto text-[10px]">
                                     {{ request.request_type_matchine }}
                                 </h3>
@@ -801,7 +802,8 @@ const searchByKeyW = () => {
 
                             <div v-for="(data, index) of request.request_problems" :key="index"
                                 class="w-[85px] mx-auto p-2 bg-gray-200 rounded-xl ">
-                                <img src="../../../assets/vue.svg" alt="NoteBook" class="w-[40px] mx-auto">
+                                <img v-if="request.problem_upload" :src="`${path}/${request.request_subject}`" alt="NoteBook" class="w-[40px] mx-auto">
+                                <img v-else :src="`${path}/${request.request_subject}`" alt="NoteBook" class="w-[40px] mx-auto">
                                 <h3 class="w-fit mx-auto text-[10px]">
                                     {{ data }}
                                 </h3>
@@ -949,7 +951,7 @@ const searchByKeyW = () => {
                 </div> -->
                 </div>
 
-                <button @click="navigation()" class="absolute top-[15px] right-[15px] font-bold text-[30px]">
+                <button @click="navigation()" class="absolute top-[45px] right-[15px] font-bold text-[30px]">
                     <img src="../../../assets/admin_page/close.png" alt="close_icon" class="w-[20px]">
                 </button>
             </div>
@@ -1027,11 +1029,11 @@ const searchByKeyW = () => {
     margin-top: 3%;
     /* overflow-y: auto; */
     padding: 35px;
-    padding-top: 45px;
+    padding-top: 70px;
     padding-left: 30px;
     padding-right: 16px;
     background: #fff;
-    width: 40%;
+    width: 600px;
     height: 600px;
     border-radius: 20px;
     position: relative;

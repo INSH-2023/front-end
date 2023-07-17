@@ -106,7 +106,7 @@ const randomArticle = async (n, max, data) => {
 }
 
 onBeforeMount(() => {
-    getArticle(params.service),
+    getArticle(params.service)
         getRefreshToken(JSON.parse(jsCookie.get("data")).refreshToken)
 })
 </script>

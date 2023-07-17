@@ -33,7 +33,7 @@ const getInfo = async () => {
 }
 
 onBeforeMount(() => {
-    getInfo(),
+    getInfo()
         getRefreshToken(JSON.parse(jsCookie.get("data")).refreshToken)
 })
 </script>

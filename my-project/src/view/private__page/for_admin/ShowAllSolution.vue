@@ -31,6 +31,7 @@ const getSolu = async (id = undefined) => {
             showList.value = solutionList.value
             get_status.value = true
             status = true
+            splitSolutions(currentPage.value)
             console.log('get Solution success')
         } else {
             get_status.value = false
@@ -99,7 +100,6 @@ const resetF = () => {
     showList.value = solutionList.value
 }
 
-
 const searchByKeyW = () => {
     filterList.value = solutionList.value
     // console.log(f_status.value)
@@ -134,13 +134,57 @@ const tagList = computed(() => {
             }
         })
     })
-    console.log(tags)
     return tags
 })
 
+// split data
+// const maxOfL = ref(0)
+// const minOfL = ref(0)
+// const sumP = ref(0)
+const maxOfPage = ref(8)
+const soluSplit = ref([])
+const pageN=ref(5)
+const currentPageList=ref(1)
+const maxPage = computed(()=> Math.ceil(solutionList.value.length / maxOfPage.value))
+// for count N of page
+const pageLeft = () => {
+    // let length = problemList.value.length / maxOfPage.value
+    // let number = Math.ceil(length)
+    currentPageList.value=currentPageList.value-1
+    // sumP.value=number
+    // return number
+}
+
+// for count N of page
+const pageRight = () => {
+    // let length = problemList.value.length / maxOfPage.value
+    // let number = Math.ceil(length)
+    currentPageList.value=currentPageList.value+1
+    // sumP.value=number
+    // return number
+}
+
+// for click and first value
+const currentPage = ref(1)
+const splitSolutions = (N) => {
+    soluSplit.value = []
+    currentPage.value = N
+    let max = (N * maxOfPage.value) - 1
+    let min = (max - maxOfPage.value) + 1
+    for (let i = min; i <= max; i++) {
+        if (showList.value[i]) {
+            soluSplit.value.push(showList.value[i])
+        }
+    }
+    console.log(soluSplit.value)
+    console.log('A max : ', max)
+    console.log('A min : ', min)
+}
+
+
 onBeforeMount(() => {
     getSolu(),
-        changePath(),
+        changePath()
         getRefreshToken(JSON.parse(jsCookie.get("data")).refreshToken)
 })
 </script>
@@ -242,7 +286,7 @@ onBeforeMount(() => {
         </div>
 
         <!-- table -->
-        <div class="w-[1200px] mx-auto h-[450px] mt-2">
+        <div class="w-[1200px] mx-auto h-[425px] mt-2">
             <hr class="mt-3 bg-gray-700 w-[1170px] h-[3px]">
             <div class="overflow-y-auto mx-auto h-[100%] w-[100%] ">
                 <table class="relative w-full table-fixed text-sm text-center text-gray-800">
@@ -266,7 +310,7 @@ onBeforeMount(() => {
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="(data, index) in showList" :key="index"
+                        <tr v-for="(data, index) in soluSplit" :key="index"
                             class="text-[15px]  bg-white border-b-2 border-gray-300 hover:border-gray-400 hover:bg-gray-400">
                             <td class="w-[140px] font-medium px-6 py-4 text-left">
                                 <div class="w-[130px] font-semibold truncate mx-auto text-center">
@@ -292,13 +336,29 @@ onBeforeMount(() => {
                             <td class="w-[90px] px-6 py-4 font-semibold">
                                 <div class="flex w-fit mx-auto truncate ">
                                     <img @click="showInfoByID(data.solutionId)" src="../../../assets/admin_page/edit.png"
-                                        alt="delete_icon" class="w-[28px] m-2 cursor-pointer">
+                                        alt="detail_icon" class="w-[28px] m-2 cursor-pointer">
                                 </div>
                             </td>
                         </tr>
                     </tbody>
                 </table>
             </div>
+        </div>
+        <!-- page -->
+        <div class=" inset-x-0 bottom-0 flex w-fit mx-auto mt-4">
+            <button @click="pageLeft()" v-if="currentPageList > 1"
+                class=" w-full px-4 py-1 mx-2 text-[15px] bg-[#6FA1CE] text-[#C2E1FD] font-bold rounded-full hover:bg-[#C2E1FD] hover:text-[#6FA1CE]">
+                &lt;
+            </button>
+            <button @click="splitSolutions(N + currentPageList - 1)" v-for="N in (showList.length < maxOfPage*pageN ? maxPage : pageN)"
+                class="w-full px-4 py-1 mx-2 text-[15px] bg-[#6FA1CE] text-[#C2E1FD] font-bold rounded-full"
+                :style="[currentPage == N + currentPageList - 1 ? { 'background-color': '#C2E1FD', 'color': '#6FA1CE' } : {}]">
+                {{ N + currentPageList - 1 }}
+            </button>
+            <button @click="pageRight()" v-if="currentPageList < maxPage - pageN + 1"
+                class=" w-full px-4 py-1 mx-2 text-[15px] bg-[#6FA1CE] text-[#C2E1FD] font-bold rounded-full hover:bg-[#C2E1FD] hover:text-[#6FA1CE]">
+                &gt; 
+            </button>
         </div>
     </div>
     <!-- show detail -->
@@ -375,7 +435,8 @@ onBeforeMount(() => {
                                 <p class="pt-2 pl-1 indent-[5px] text-[16px]">
                                     <span v-html="step.step_description"></span>
                                 </p>
-                                <img v-if="step.step_upload!=0" :src="`${iconLink}/${solution.solutionId}?step=${step.step_}`" class="w-[250px]">
+                                <img v-if="step.step_upload != 0"
+                                    :src="`${iconLink}/${solution.solutionId}?step=${step.step_}`" class="w-[250px]">
                             </div>
                         </div>
                     </div>
