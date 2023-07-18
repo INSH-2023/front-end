@@ -109,7 +109,7 @@ const getNotify = async () => {
         let [s, data] = await toBackEnd.getData('notify message', requestLink, token.value)
         if (s == 200) {
             notifyList.value = data.reverse()
-            notify.value = notifyList.value[0].request_update
+            notify.value = notifyList.value.length == 0 ? 0 : notifyList.value[0].request_update
             if (notify.value) {
                 isUpdate.value = true
             }
@@ -133,10 +133,12 @@ const deleteNotify = async (id) => {
 
 const showNotify = async () => {
     isNotifyShow.value = !isNotifyShow.value
-    isUpdate.value = false
     isSetting.value = false
-    token.value = JSON.parse(Cookies.get("data")).token
-    let [s, data] = await toBackEnd.editData("notification", requestLink, {}, token.value)
+    if(notifyList.value != 0){
+        isUpdate.value = false
+        token.value = JSON.parse(Cookies.get("data")).token
+        let [s, data] = await toBackEnd.editData("notification", requestLink, {}, token.value)
+    }
 }
 
 const logOut = () => {
