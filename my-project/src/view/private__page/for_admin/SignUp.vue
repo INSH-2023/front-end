@@ -5,13 +5,15 @@ import toBackEnd from '../../../JS/fetchToBack'
 import BaseHeader from '../../../components/BaseHeader.vue';
 import Cookies from '../../../JS/cookies';
 import getRefreshToken from './../../../JS/refresh';
+import BaseLoading from '../../../components/BaseLoading.vue'
+import BaseAlert from '../../../components/BaseAlert.vue';
 // const userLink ='http://localhost:3000/users'
 const userLink =`${import.meta.env.VITE_BACK_END_HOST}/users`
 // const userLink ='http://localhost:5000/api/users'
 
 
 onBeforeMount(()=>{
-    getRefreshToken(JSON.parse(Cookies.get("data")).refreshToken)
+    getRefreshToken(validate.getUserDataFromLocal('refreshToken'))
 })
 
 const empCode=ref('')
@@ -26,6 +28,9 @@ const passW = ref('')
 const cPassW = ref('')
 const organization ='@moralcenter.or.th'
 
+const alert_status=ref(undefined)
+const alert_message=ref([])
+const alert_title=ref('')
 // lenght
 
 // const fNameL=30
@@ -78,14 +83,23 @@ let dataCh =computed(()=>{
 // }
 
 // submit
-const submittS =ref(undefined)
+const submittS =ref(false)
 const submittform =async()=>{
+    alert_status.value=undefined
+    let {status:vStatus,msg:vMsg}=validate.vUserCreate(dataCh.value,lenghtOfInput)
+    console.log('this status from validate ',vStatus)
+    console.log(vMsg)
     // let status=undefined
     // goRotate()
-    if(validate.vUserCreate(dataCh.value,lenghtOfInput)){
+    if(vStatus){
         console.log('cannot create new user')
+        alert_title.value='Cannot create new user!!'
+        
+        alert_message.value=vMsg
+        alert_status.value=false
     }else{
-        token.value = JSON.parse(Cookies.get("data")).token
+        submittS.value=true
+        token.value = validate.getUserDataFromLocal('token')
         console.log(token.value)
         let [status,data]=await toBackEnd.postData('signUp',userLink,dataCh.value,token.value)
         if(status==200){
@@ -101,8 +115,20 @@ const submittform =async()=>{
             role.value = ''
             passW.value = ''
             cPassW.value =''
+            submittS.value=false
         }else{
-            console.log(data)
+            let errorMsg =undefined
+                submittS.value=false
+                alert_title.value='Cannot create user!!'
+            if(data.error==null||data.error==undefined){
+                errorMsg=[data]
+            }else{
+                errorMsg=[data.error]
+            }
+            alert_message.value=errorMsg
+            alert_status.value=true
+            console.log(errorMsg)
+            
         }
     }
     
@@ -197,33 +223,32 @@ const goRotate =()=>{
                         <input v-model="empCode" placeholder="Employee code" id="empCode" type="text" :maxlength="lenghtOfInput.empCodeL" :style="[empCodeS==false?'border-color: rgb(225 29 72);border-width: 2px;':'']" class="absolute bottom-0 w-full h-[40px]  bg-gray-300 text-gray-500   px-2 rounded-lg focus:outline-0" >
                     </div>
 
-                    <!-- first name -->
-                    <div class="relative h-[60px]">
-                        <!-- <label for="fName" class="w-[120px] font-semibold m-2">
-                            First Name
-                        </label> -->
-                        <h4 v-show="fName.length>0" class="text-sm font-semibold text-gray-500 mx-2  transition-opacity fade-in delay-150">
-                            First Name
-                            <span class="" :style="[fName.length==lenghtOfInput.fNameL?'color: rgb(225 29 72);':'']">
-                                {{fName.length}}/{{lenghtOfInput.fNameL}}
-                            </span>
-                        </h4>
-                        <input v-model="fName" placeholder="First Name" id="fName" type="text" :maxlength="lenghtOfInput.fNameL" :style="[fNameS==false?'border-color: rgb(225 29 72);border-width: 2px;':'']" class="absolute bottom-0 w-full h-[40px]  bg-gray-300 text-gray-500   px-2 rounded-lg focus:outline-0" >
-                    </div>
+                    
+                    <div class="flex h-fit">
+                        <!-- first name -->
+                        <div class="relative h-[60px] w-full">
+                            <h4 v-show="fName.length>0" class="text-sm font-semibold text-gray-500 mx-2  transition-opacity fade-in delay-150">
+                                First Name
+                                <span class="" :style="[fName.length==lenghtOfInput.fNameL?'color: rgb(225 29 72);':'']">
+                                    {{fName.length}}/{{lenghtOfInput.fNameL}}
+                                </span>
+                            </h4>
+                            <input v-model="fName" placeholder="First Name" id="fName" type="text" :maxlength="lenghtOfInput.fNameL" :style="[fNameS==false?'border-color: rgb(225 29 72);border-width: 2px;':'']" class="absolute bottom-0 w-full  h-[40px]  bg-gray-300 text-gray-500   px-2 rounded-lg focus:outline-0" >
+                        
+                        </div>
 
-                    <!-- last name -->
-                    <div class="relative h-[60px] mt-1.5 ">
-                        <!-- <label for="lName" class="w-[120px] font-semibold m-2">
-                            Last Name
-                        </label> -->
-                        <h4 v-show="lName.length>0" class="text-sm font-semibold text-gray-500 mx-2">
-                            Last Name
-                            <span class="" :style="[lName.length==lenghtOfInput.fNameL?'color: rgb(225 29 72);':'']">
-                                {{lName.length}}/{{lenghtOfInput.lNameL}}
-                            </span>
-                        </h4>                        
-                        <input v-model="lName" placeholder="Last Name" id="lName" type="text" :maxlength="lenghtOfInput.lNameL" :style="[lNameS==false?'border-color: rgb(225 29 72);border-width: 2px;':'']" class="absolute bottom-0 w-full h-[40px] bg-gray-300 text-gray-500    px-2 rounded-lg focus:outline-0" >
-                    </div>
+                        <!-- last name -->
+                        <div class="relative h-[60px] w-full ml-1">
+                            <h4 v-show="lName.length>0" class="text-sm font-semibold text-gray-500 mx-2">
+                                Last Name
+                                <span class="" :style="[lName.length==lenghtOfInput.fNameL?'color: rgb(225 29 72);':'']">
+                                    {{lName.length}}/{{lenghtOfInput.lNameL}}
+                                </span>
+                            </h4>                        
+                            <input v-model="lName" placeholder="Last Name" id="lName" type="text" :maxlength="lenghtOfInput.lNameL" :style="[lNameS==false?'border-color: rgb(225 29 72);border-width: 2px;':'']" class="absolute bottom-0 w-full  h-[40px] bg-gray-300 text-gray-500    px-2 rounded-lg focus:outline-0" >
+                        
+                        </div>
+                      </div>
 
                     <!-- group -->
                     <div class="h-[60px] mt-2 text-sm">
@@ -354,14 +379,18 @@ const goRotate =()=>{
                         <input v-model="cPassW" placeholder="Confirm Password"  id="cPd" type="password" :maxlength="lenghtOfInput.passWL" :style="[cPassWS==false?'border-color: rgb(225 29 72);border-width: 2px;':'']" class="absolute bottom-0 w-full h-[40px] text-gray-500 bg-gray-300   px-2 rounded-lg focus:outline-0" >
                     </div>
 
+                    <div class="my-2 lg:my-auto">
+                        <BaseAlert :title="alert_title" :msgArr="alert_message"  :status="alert_status" :type="'CU'" />
+                    </div>
 
                     <!-- button -->
                     <div class="w-fit mx-auto  mt-10">
-                        <button id="submitB" @click="submittform()" class=" relative w-[200px] h-[40px] p-1 text-[20px] rounded-2xl bg-[#77BEFF] hover:bg-[#6098CC] focus:bg-[#C4E3FF]">
-                            <h4 @click="submittS=true" class=" static font-light text-white">
+                        <button id="submitB" @click="submittform()"  class="relative flex w-[200px] h-[40px] p-1 text-[20px] rounded-2xl bg-[#77BEFF] hover:bg-[#6098CC] active:bg-[#C4E3FF]">
+                            <h4 class="w-fit h-fit  mx-auto font-light text-white">
                                 Create User
                             </h4>
-                            <img  v-show="submittS==true"  src="../../../assets/vue.svg" alt="spin_loading" class="absolute top-[10px] right-[25px] w-[20px] animate-spin">
+                            <BaseLoading v-show="submittS==true" class="absolute right-[1.2rem] top-[0.6rem]" type="circle" w="20" h="20" r="2"/>                               
+                            <!-- <img  v-show="submittS==true"  src="../../../assets/vue.svg" alt="spin_loading" class="absolute top-[10px] right-[25px] w-[20px] animate-spin"> -->
                         </button>
                     </div>
                 </div>

@@ -4,6 +4,7 @@ import { useRouter } from 'vue-router';
 import toBackEnd from '../../../JS/fetchToBack';
 import jsCookie from '../../../JS/cookies'
 import getRefreshToken from '../../../JS/refresh'
+import validate from '../../../JS/validate';
 
 // const solutionLink ='http://localhost:3000/solutions'
 const solutionLink = `${import.meta.env.VITE_BACK_END_HOST}/solutions`
@@ -158,7 +159,7 @@ const getTagToArr = (v) => {
 }
 
 // validate
-const validate = () => {
+const validateData = () => {
     let status = undefined
 
     // more than limit
@@ -243,11 +244,11 @@ const submitt = async () => {
 
     isUpload.value = true
 
-    console.log(validate())
-    if (validate() == true) {
+    console.log(validateData())
+    if (validateData() == true) {
         console.log('please input ur info')
     } else {
-        token.value = JSON.parse(jsCookie.get("data")).token
+        token.value =validate.getUserDataFromLocal('token') 
         const [status, data] = await toBackEnd.postData('solution', solutionLink, dataCh.value, token.value)
 
         if (icon.value.length != 0) {
@@ -305,7 +306,8 @@ const submitt = async () => {
 }
 
 onBeforeUnmount(() => {
-    getRefreshToken(JSON.parse(jsCookie.get("data")).refreshToken)
+    let refreshToken=validate.getUserDataFromLocal('refreshToken')
+    getRefreshToken(refreshToken)
 })
 
 </script>

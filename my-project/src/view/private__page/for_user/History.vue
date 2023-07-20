@@ -19,9 +19,10 @@ const myRouter = useRouter()
 const goMain = () => myRouter.push({ name: "services" })
 
 onBeforeMount(() => {
+    let refreshToken= validate.getUserDataFromLocal('refreshToken')
     navigation()
     getEvents()
-    getRefreshToken(JSON.parse(jsCookie.get("data")).refreshToken)
+    getRefreshToken(refreshToken)
 })
 
 // get variable
@@ -58,7 +59,7 @@ const getEvents = async (id = undefined) => {
     let status = false
 
     if (id == undefined) {
-        token.value = JSON.parse(jsCookie.get("data")).token
+        token.value = validate.getUserDataFromLocal('token') 
         let [s, data] = await toBackEnd.getData('request', requestLink, token.value)
         console.log(data)
         if (s == 200) {
@@ -76,7 +77,7 @@ const getEvents = async (id = undefined) => {
         }
 
     } else {
-        token.value = JSON.parse(jsCookie.get("data")).token
+        token.value = validate.getUserDataFromLocal('token')
         let [s, data] = await toBackEnd.getDataBy('request', requestLink, id, token.value)
         if (s == 200) {
             status = true

@@ -33,8 +33,9 @@ const getInfo = async () => {
 }
 
 onBeforeMount(() => {
+    let refreshToken =validate.getUserDataFromLocal('refreshToken')
     getInfo()
-        getRefreshToken(JSON.parse(jsCookie.get("data")).refreshToken)
+        getRefreshToken(refreshToken)
 })
 </script>
 <template>

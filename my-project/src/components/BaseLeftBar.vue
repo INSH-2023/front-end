@@ -2,6 +2,7 @@
 import { useRouter } from 'vue-router'
 import { ref } from 'vue'
 import Cookies from '../JS/cookies';
+import validate from '../JS/validate';
 const myRouter = useRouter()
 // const goSignIn = () => myRouter.push({ name: 'signIn' })
 const goRegister = () => myRouter.push({ name: 'signUp' })
@@ -17,7 +18,7 @@ const goShowAllSolution = () => myRouter.push({ name: 'showAllSolution' })
 const goProblemsList = () => myRouter.push({ name: 'problemsList' })
 const goDashboard = () => myRouter.push({ name: 'dashboard'})
 
-let role = ref(JSON.parse(Cookies.get("data")).user_role)
+let role = ref(validate.getUserDataFromLocal('user_role') )
 
 </script>
 <template>

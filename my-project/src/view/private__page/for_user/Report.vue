@@ -266,7 +266,7 @@ const problem_to_text = computed(() => {
 })
 
 const getUser = async (emp_code) => {
-    token.value = JSON.parse(jsCookie.get("data")).token
+    token.value = validate.getUserDataFromLocal('token') 
     const [status, data_user] = await toBackEnd.getData('report_user', `${userLink}/emp-code/${emp_code}`, token.value)
     if (status == 200) {
         let [{ user_first_name, user_last_name, user_group, user_email }] = data_user
@@ -282,8 +282,9 @@ const getUser = async (emp_code) => {
 }
 
 onBeforeMount(() => {
+    let refreshToken = validate.getUserDataFromLocal('refreshToken')
     getUser(validate.getUserDataFromLocal('user_emp_code'))
-        getRefreshToken(JSON.parse(jsCookie.get("data")).refreshToken)
+        getRefreshToken(refreshToken)
 })
 
 // compute stage report
@@ -357,7 +358,7 @@ const submitt = async () => {
         // myNotify.addList(data_ch.value)
     button_status.value = true
     console.log(data_ch.value)
-    token.value = JSON.parse(jsCookie.get("data")).token
+    token.value = validate.getUserDataFromLocal('token')
     let [status, data] = await toBackEnd.postData('report', requestLink, data_ch.value, token.value)
     if (status == 201) {
 
@@ -490,7 +491,7 @@ const getDataFromComponent = (value) => {
 
 
         <div class="my-2 lg:my-auto">
-            <BaseAlert :title="alert_title" :message="alert_message" :status="alert_status" type="login" />
+            <BaseAlert :title="alert_title" :message="alert_message" :status="alert_status" type='report' />
         </div>
 
 
