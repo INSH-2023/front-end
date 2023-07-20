@@ -20,7 +20,7 @@ onBeforeMount(() => {
     navigation(),
     getEvents(),
     getAdmin()
-    getRefreshToken(JSON.parse(jsCookie.get("data")).refreshToken)
+    getRefreshToken(validate.getUserDataFromLocal('refreshToken') )
 })
 
 // get variable
@@ -51,7 +51,7 @@ const edit_status = ref(undefined)
 const is_filter_open = ref(false)
 
 const token = ref('')
-const role = ref(JSON.parse(Cookies.get("data")).user_role)
+const role = ref(validate.getUserDataFromLocal('user_role'))
 
 let diffentNotify = ref(0)
 
@@ -65,7 +65,7 @@ const getEvents = async (id = undefined) => {
     let status = false
 
     if (id == undefined) {
-        token.value = JSON.parse(jsCookie.get("data")).token
+        token.value =validate.getUserDataFromLocal('token') 
         let [s, data] = await toBackEnd.getData('request', requestLink, token.value)
         let [s1, count] = await toBackEnd.getData('request status', `${requestLink}/status/admin`, token.value)
         if (s == 200 || s1 == 200) {
@@ -96,7 +96,7 @@ const getEvents = async (id = undefined) => {
         }
 
     } else {
-        token.value = JSON.parse(jsCookie.get("data")).token
+        token.value = validate.getUserDataFromLocal('token') 
         let [s, data] = await toBackEnd.getDataBy('request', requestLink, id, token.value)
         if (s == 200) {
             status = true
@@ -136,7 +136,7 @@ function notify(data) {
 
 const getAdmin = async (email) => {
     let status = false
-    token.value = JSON.parse(jsCookie.get("data")).token
+    token.value =validate.getUserDataFromLocal('token') 
     let [s, data] = await toBackEnd.getData('request_admin', `${userLink}`, token.value)
     if (s == 200) {
         status = true
@@ -152,7 +152,7 @@ const getAdmin = async (email) => {
 // edit by id
 const editInfo = async (v) => {
     edit_status.value = undefined
-    token.value = JSON.parse(jsCookie.get("data")).token
+    token.value =validate.getUserDataFromLocal('token') 
     let [ss, data] = await toBackEnd.editData('request', `${requestLink}/${v}`, data_ch.value, token.value)
     if (ss == 200) {
         edit_status.value = true
@@ -173,7 +173,7 @@ const editInfo = async (v) => {
 // delete
 const deleteItem = async (v) => {
     delete_status.value = undefined
-    token.value = JSON.parse(jsCookie.get("data")).token
+    token.value = validate.getUserDataFromLocal('token') 
     let [status, data] = await toBackEnd.delete('request', requestLink, v, token.value)
     if (status == 200) {
         delete_status.value = true

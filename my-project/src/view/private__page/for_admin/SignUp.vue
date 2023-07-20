@@ -13,7 +13,7 @@ const userLink =`${import.meta.env.VITE_BACK_END_HOST}/users`
 
 
 onBeforeMount(()=>{
-    getRefreshToken(JSON.parse(Cookies.get("data")).refreshToken)
+    getRefreshToken(validate.getUserDataFromLocal('refreshToken'))
 })
 
 const empCode=ref('')
@@ -99,7 +99,7 @@ const submittform =async()=>{
         alert_status.value=false
     }else{
         submittS.value=true
-        token.value = JSON.parse(Cookies.get("data")).token
+        token.value = validate.getUserDataFromLocal('token')
         console.log(token.value)
         let [status,data]=await toBackEnd.postData('signUp',userLink,dataCh.value,token.value)
         if(status==200){

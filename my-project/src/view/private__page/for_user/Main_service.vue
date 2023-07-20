@@ -5,6 +5,7 @@ import BaseStatus from '../../../components/BaseStatus.vue'
 import getRefreshToken from '../../../JS/refresh';
 import Cookies from '../../../JS/cookies';
 import toBackEnd from '../../../JS/fetchToBack';
+import validate from '../../../JS/validate';
 const myRouter = useRouter()
 const goMainMenu = (v) => myRouter.push({ name: 'booking', params: { service: v } })
 const token = ref('')
@@ -15,7 +16,7 @@ const finish = ref(0)
 const opencase = ref(0)
 
 const getCountStatus = async () => {
-    token.value = JSON.parse(Cookies.get("data")).token
+    token.value = validate.getUserDataFromLocal('token') 
     let [status, data] = await toBackEnd.getData("request", `${requestLink}/status/user`, token.value)
     if (status == 200) {
         request.value = data.request

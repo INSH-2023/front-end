@@ -6,8 +6,7 @@ import getRefreshToken from './../../../JS/refresh';
 import Cookies from './../../../JS/cookies';
 import BaseShowProblem from '../../../components/problem-list/BaseShowProblem.vue';
 import BaseLoading from '../../../components/BaseLoading.vue';
-import validateData from 'json-server/lib/server/router/validate-data';
-
+import validate from '../../../JS/validate';
 // const problemsLink='http://localhost:3000/problems'
 const problemsLink = `${import.meta.env.VITE_BACK_END_HOST}/problems`
 const iconLink = `${import.meta.env.VITE_BACK_END_HOST}/images/problems`
@@ -18,7 +17,7 @@ const subjectCr = ref('all')
 const subjectSec = ref('')
 const isUpload = ref(false)
 const token = ref('')
-const role = ref(JSON.parse(Cookies.get("data")).user_role)
+const role = ref(validate.getUserDataFromLocal('user_role') )
 const file = ref("")
 const base64Img = ref("")
 
@@ -47,7 +46,7 @@ const getP = async (v) => {
     let status = undefined
 
     if (v != 'all') {
-        token.value = JSON.parse(jsCookie.get("data")).token
+        token.value =validate.getUserDataFromLocal('token')
         const [ss, data_problem] = await toBackEnd.getData('problem', `${problemsLink}/type/${v}`, token.value)
         console.log(ss)
         console.log(data_problem)
@@ -64,7 +63,7 @@ const getP = async (v) => {
             console.log(data)
         }
     } else {
-        token.value = JSON.parse(jsCookie.get("data")).token
+        token.value = validate.getUserDataFromLocal('token')
         const [ss, data] = await toBackEnd.getData('problem', problemsLink, token.value)
         if (ss == 200) {
             problemList.value = data.reverse()
@@ -176,7 +175,7 @@ const addProblem = async () => {
     if (addPStatus == true) {
         data_ch.value.problem_upload = file.value.length != 0 ? true : false
 
-        token.value = JSON.parse(jsCookie.get("data")).token
+        token.value = validate.getUserDataFromLocal('token')
         let [status, data] = await toBackEnd.postData('problem', problemsLink, data_ch.value, token.value)
 
         if (file.value.length != 0) {
@@ -201,7 +200,7 @@ const addProblem = async () => {
 // delete problems
 const removeProblem = async (id) => {
     console.log(id)
-    token.value = JSON.parse(jsCookie.get("data")).token
+    token.value = validate.getUserDataFromLocal('token')
     let [status, data] = await toBackEnd.delete("problem", problemsLink, id, token.value)
     if (status == 200) {
         console.log(data)
@@ -220,8 +219,9 @@ const editProblem = () => {
 }
 
 onBeforeMount(() => {
+    let refreshToken=validate.getUserDataFromLocal('refreshToken')
     getP(subjectCr.value)
-    getRefreshToken(JSON.parse(jsCookie.get("data")).refreshToken)
+    getRefreshToken(refreshToken)
 })
 
 // auto change subject 

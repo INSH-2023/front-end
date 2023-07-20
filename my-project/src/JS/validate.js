@@ -253,7 +253,7 @@ const validate={
         // console.log(cookie)
         if(cookie == null ||cookie == undefined||cookie == NaN||cookie.length==0){
             console.log("login first !!")
-            return cookie
+            return null
         }else{
             // console.log(cookie)
             let data =JSON.parse(Cookies.get("data"))

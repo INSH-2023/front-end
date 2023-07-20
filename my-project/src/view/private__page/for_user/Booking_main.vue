@@ -5,6 +5,7 @@ import BaseStatus from '../../../components/BaseStatus.vue'
 import getRefreshToken from './../../../JS/refresh';
 import jsCookie from './../../../JS/cookies';
 import toBackEnd from '../../../JS/fetchToBack';
+import validate from '../../../JS/validate';
 // const solutionLink='http://localhost:3000/solutions'
 const solutionLink = `${import.meta.env.VITE_BACK_END_HOST}/solutions`
 const iconLink = `${import.meta.env.VITE_BACK_END_HOST}/images/solutions`
@@ -77,7 +78,7 @@ const findingKeyW = async (keyWord) => {
 const solutionList = ref([])
 const getArticle = async (service) => {
     if (service == "it") {
-        token.value = JSON.parse(jsCookie.get("data")).token
+        token.value =validate.getUserDataFromLocal('token') 
         let [status, data] = await toBackEnd.getData('solution', solutionLink, token.value)
         if (status == 200) {
             solutionList.value = data
@@ -106,8 +107,9 @@ const randomArticle = async (n, max, data) => {
 }
 
 onBeforeMount(() => {
+    let refreshToken=validate.getUserDataFromLocal('refreshToken')
     getArticle(params.service)
-        getRefreshToken(JSON.parse(jsCookie.get("data")).refreshToken)
+    getRefreshToken(refreshToken)
 })
 </script>
 <template>

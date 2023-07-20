@@ -10,7 +10,7 @@ import Cookies from '../../../JS/cookies';
 onBeforeMount(() => {
     changePath()
     getUsers()
-    getRefreshToken(JSON.parse(jsCookie.get("data")).refreshToken)
+    getRefreshToken(validate.getUserDataFromLocal('refreshToken'))
 })
 
 //variable 
@@ -93,13 +93,13 @@ const is_edit_open = ref(false)
 const is_active_open = ref(false)
 
 const token = ref('')
-const role = ref(JSON.parse(Cookies.get("data")).user_role)
+const role = ref(validate.getUserDataFromLocal('user_role'))
 
 // get user
 const getUsers = async (id = undefined) => {
     console.log(id)
     let status = false
-    token.value = JSON.parse(jsCookie.get("data")).token
+    token.value = validate.getUserDataFromLocal('token')
     if (id == undefined) {
         let [s, data] = await toBackEnd.getData('user', userLink, token.value)
         if (s == 200) status = true
@@ -121,7 +121,7 @@ const goVerify = () => myRouter.push({ name: "verify" })
 
 // delete user
 const deleteUser = async (v) => {
-    token.value = JSON.parse(jsCookie.get("data")).token
+    token.value = validate.getUserDataFromLocal('token')
     let [status, data] = await toBackEnd.delete('user', userLink, v, token.value)
 
     if (status == 200) {
@@ -204,7 +204,7 @@ const assignDetail = (b) => {
 const submitEdit = async (id) => {
 
     // if(validate.vUserCreate(dataCh.value,lenghtOfInput) !=true){
-    token.value = JSON.parse(jsCookie.get("data")).token
+    token.value = validate.getUserDataFromLocal('token')
     let [status, data] = await toBackEnd.editData('user', `${userLink}/${id}`, dataCh.value, token.value)
     console.log(status)
     if (status == 200) {
