@@ -3,6 +3,7 @@ import {useRouter} from 'vue-router'
 const validate={
     vUserCreate(data,lenghtOfText){
         let vStatus=false
+        let return_data=[]
         let organization ='@moralcenter.or.th'
 
         console.log(data)
@@ -38,39 +39,57 @@ const validate={
         //     vStatus =true
         // }
         if(fname.length == 0){
-            console.log('Please input ur first name')
+            let msg='First name is Null'
+            console.log('First name ')
+            return_data.push(msg)
             vStatus =true
         }
         if(lname.length==0){
-            console.log('Please input ur last name')
+            let msg='Last name is Null'
+            console.log('Last name ')
+            return_data.push(msg)
             vStatus =true
         }
         if(email.length==0){
+            let msg='Email is Null'
             console.log('Please input ur email')
+            return_data.push(msg)
             vStatus =true
         }
         if(group.length==0){
-            console.log('Please input ur group')
+            let msg='Group is Null'
+            console.log('Please input ur group ')
+            return_data.push(msg)
             vStatus =true
         }
         if(position.length==0){
-            console.log('Please input ur position')
+            let msg='Position is Null'
+            console.log('Please input ur position ')
+            return_data.push(msg)
             vStatus =true
         }
         if(office.length==0){
-            console.log('Please input ur office')
+            let msg='Office is Null'
+            console.log('Please input ur office ')
+            return_data.push(msg)
             vStatus =true
         }
         if(role.length==0){
-            console.log('Please input ur role')
+            let msg='Role is Null'
+            console.log('Please input ur role ')
+            return_data.push(msg)
             vStatus =true
         }
         if([null,undefined].includes(password) || password.length==0){
-            console.log('Please input ur password')
+            let msg='Password is Null'
+            console.log('Please input ur password ')
+            return_data.push(msg)
             vStatus =true
         }
         if([null,undefined].includes(cPassword) || cPassword.length==0){
-            console.log('Please input ur confirm password')
+            let msg='Confirm password is Null'
+            console.log('Please input ur confirm password ')
+            return_data.push(msg)
             vStatus =true
         }
         // if(status.length==0){
@@ -82,35 +101,49 @@ const validate={
         //     vStatus =true
         // }
         if(fname.length>fnameL){
-            console.log(`lenght of first name more then ${fnameL}`)
+            let msg=`lenght of first name more then ${fnameL}`
+            console.log(msg)
+            return_data.push(msg)
             vStatus =true
         }
         if(lname.length>lnameL){
-            console.log(`lenght of last name more then ${lnameL}`)
+            let msg=`lenght of last name more then ${lnameL}`
+            console.log(msg)
+            return_data.push(msg)
             vStatus =true
         }
         if(email.length>emailL){
-            console.log(`lenght of email more then ${emailL}`)
+            let msg=`lenght of email more then ${emailL}`
+            console.log(msg)
+            return_data.push(msg)
             vStatus =true
         }
         if(!this.vEmail(email)){
-            console.log('this email invalid')
+            let msg=`this email invalid`
+            console.log(msg)
+            return_data.push(msg)
             vStatus =true
         }
         if(password.length>passwordL){
-            console.log(`lenght of password more then ${passwordL}`)
+            let msg=`lenght of password more then ${passwordL}`
+            console.log(msg)
+            return_data.push(msg)
             vStatus =true
         }
         if(cPassword.length>passwordL){
-            console.log(`lenght of password more then ${passwordL}`)
+            let msg=`lenght of password more then ${passwordL}`
+            console.log(msg)
+            return_data.push(msg)
             vStatus =true
         }  
         if(password !=cPassword){
-            console.log('password not match')
+            let msg=` password not match`
+            console.log(msg)
+            return_data.push(msg)
             vStatus =true
         }
     
-        return vStatus
+        return {status:vStatus,msg: return_data}
     },
 
     vEmail(email){
@@ -216,11 +249,14 @@ const validate={
         return problemArr
     },
     getUserDataFromLocal(property=undefined){
-        let data = JSON.parse(Cookies.get("data"))
-        if(data == null ||data == undefined){
+        let cookie = Cookies.get("data")
+        // console.log(cookie)
+        if(cookie == null ||cookie == undefined||cookie == NaN||cookie.length==0){
             console.log("login first !!")
-            return data
+            return cookie
         }else{
+            // console.log(cookie)
+            let data =JSON.parse(Cookies.get("data"))
             if(property!=undefined||property!=null){
                 return data[property]
             }else{
