@@ -23,6 +23,7 @@ import ShowAllEvent from'../view/private__page/for_admin/ShowAllEvent.vue'
 import WriteSolutions from '../view/private__page/for_admin/Write_solution.vue'
 import ShowAllSolution from '../view/private__page/for_admin/ShowAllSolution.vue'
 import ProblemsList from '../view/private__page/for_admin/ProblemsList.vue'
+import Dashboard from '../view/private__page/for_admin/Dashboard.vue'
 
 // public
 import SignIn from '../view/public__page/SignIn.vue'
@@ -35,6 +36,7 @@ import ComingSoon from '../view/ComingSoon.vue'
 import ErrorServer from '../view/ErrorServer.vue'
 // private
 import Main_for_navbar from '../view/private__page/Main_for_navbar.vue'
+
 
 const history=createWebHistory()
 const routes=[
@@ -181,6 +183,11 @@ const routes=[
                         path:'add-problems',
                         name:'problemsList',
                         component:ProblemsList
+                    },
+                    {
+                        path:'dashboard',
+                        name: 'dashboard',
+                        component: Dashboard
                     }
                 ]
         
