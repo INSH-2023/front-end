@@ -1,7 +1,7 @@
 import Cookies from './cookies'
 import {useRouter} from 'vue-router'
 const validate={
-    vUserCreate(data,lenghtOfText){
+    vUser(data,lenghtOfText,passw=false,oldData=undefined){
         let vStatus=false
         let return_data=[]
         let organization ='@moralcenter.or.th'
@@ -21,7 +21,34 @@ const validate={
             user_cPassW:cPassword
             } = data
         
+
         let {fnameL,lnameL,emailL,passwordL,empCodeL}= lenghtOfText
+
+        let {user_first_name:old_fname,
+            user_last_name:old_lname,
+            user_email:old_email,
+            user_role:old_role,
+            user_office:old_office,
+            user_position:old_position,
+            user_group:old_group,
+            user_status:old_status,
+            }=oldData
+        
+        if(oldData!=undefined){
+            if( old_fname==fname&&
+                old_lname==lname&&
+                old_email==email&&
+                old_role==role&&
+                old_office==office&&
+                old_position==position&&
+                old_group==group&&
+                old_status==status
+              ){
+                vStatus=true
+                return_data.push('Infomation not change.')
+            }
+           return {status:vStatus,msg: return_data}
+        }
     //     let email = eEmail.value+organization
     //     // fNameS.value=undefined
     //     // eNameS.value=undefined
@@ -80,13 +107,13 @@ const validate={
             return_data.push(msg)
             vStatus =true
         }
-        if([null,undefined].includes(password) || password.length==0){
+        if(passw!=false&&([null,undefined].includes(password) || password.length==0)){
             let msg='Password is Null'
             console.log('Please input ur password ')
             return_data.push(msg)
             vStatus =true
         }
-        if([null,undefined].includes(cPassword) || cPassword.length==0){
+        if(passw!=false&&([null,undefined].includes(cPassword) || cPassword.length==0)){
             let msg='Confirm password is Null'
             console.log('Please input ur confirm password ')
             return_data.push(msg)
@@ -124,24 +151,26 @@ const validate={
             return_data.push(msg)
             vStatus =true
         }
-        if(password.length>passwordL){
+        if(passw!=false&&(password.length>passwordL)){
             let msg=`lenght of password more then ${passwordL}`
             console.log(msg)
             return_data.push(msg)
             vStatus =true
         }
-        if(cPassword.length>passwordL){
+        if(passw!=false&&(cPassword.length>passwordL)){
             let msg=`lenght of password more then ${passwordL}`
             console.log(msg)
             return_data.push(msg)
             vStatus =true
         }  
-        if(password !=cPassword){
+        if(passw!=false&&(password !=cPassword)){
             let msg=` password not match`
             console.log(msg)
             return_data.push(msg)
             vStatus =true
         }
+
+        
     
         return {status:vStatus,msg: return_data}
     },
