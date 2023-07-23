@@ -7,7 +7,7 @@ import BaseLoading from '../../components/BaseLoading.vue'
 import Cookies from '../../JS/cookies'
 // src\components\BaseLoading.vue
 const myRouter = useRouter()
-const goMain = () => myRouter.go(-1)
+const goMain = () => myRouter.push({name:'showAllUser'})
 const goResetPassword = () => myRouter.push({ name: 'resetPassword' })
 
 const alert_message = ref('')
