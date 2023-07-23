@@ -86,7 +86,7 @@ let dataCh =computed(()=>{
 const submittS =ref(false)
 const submittform =async()=>{
     alert_status.value=undefined
-    let {status:vStatus,msg:vMsg}=validate.vUserCreate(dataCh.value,lenghtOfInput)
+    let {status:vStatus,msg:vMsg}=validate.vUser(dataCh.value,lenghtOfInput,passW=true)
     console.log('this status from validate ',vStatus)
     console.log(vMsg)
     // let status=undefined
