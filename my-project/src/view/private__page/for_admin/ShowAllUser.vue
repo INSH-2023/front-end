@@ -7,6 +7,7 @@ import validate from '../../../JS/validate.js'
 import jsCookie from '../../../JS/cookies';
 import getRefreshToken from './../../../JS/refresh';
 import Cookies from '../../../JS/cookies';
+import BaseAlert from '../../../components/BaseAlert.vue'
 onBeforeMount(() => {
     changePath()
     getUsers()
@@ -19,6 +20,10 @@ const myRouter = useRouter()
 // const userLink ='http://localhost:3000/users'
 // const userLink ='http://localhost:5000/api/users'
 const userLink = `${import.meta.env.VITE_BACK_END_HOST}/users`
+
+const alert_status=ref(undefined)
+const alert_message=ref([])
+const alert_title=ref('')
 
 // get variable
 const userList = ref([])
@@ -35,20 +40,20 @@ const eOffice = ref('')
 const eGroup = ref('')
 const ePosition = ref('')
 const eStatus = ref('')
-const eCPw = ref('')
-const ePw = ref('')
+// const eCPw = ref('')
+// const ePw = ref('')
 let dataCh = computed(() => {
     return {
         user_first_name: eFName.value,
         user_last_name: eLName.value,
-        user_email: eEmail.value,
+        user_email: eEmail.value+"@moralcenter.or.th",
         user_role: eRole.value,
         user_office: eOffice.value,
         user_position: ePosition.value,
-        user_password: ePw.value,
+        // user_password: ePw.value,
         user_group: eGroup.value,
         user_status: eStatus.value,
-        user_cPassW: eCPw.value
+        // user_cPassW: eCPw.value
     }
 })
 
@@ -56,11 +61,10 @@ let dataCh = computed(() => {
 const user_id = ref(undefined)
 
 const lenghtOfInput = {
-    fnameL: 30,
-    lnameL: 61,
-    emailL: 30,
-    passwordL: 14,
-    // cPasswordL: 14
+    fNameL:50,
+    lNameL:50,
+    emailL:50,
+    positionL:80
 }
 
 
@@ -141,7 +145,9 @@ const deleteUser = async (v) => {
 const showInfoByID = async (v, index) => {
     user.value = {}
     user_id.value = v
-
+    alert_status.value=undefined
+    alert_message.value=[]
+    alert_title.value=''
     let status = false
     console.log('value : ', v)
     console.log('index : ', index)
@@ -170,14 +176,14 @@ const assignDetail = (b) => {
             is_edit_open.value = b
             eFName.value = user.value.user_first_name
             eLName.value = user.value.user_last_name
-            eEmail.value = user.value.user_email
+            eEmail.value = user.value.user_email.split("@")[0]
             eRole.value = user.value.user_role
             eOffice.value = user.value.user_office
             eGroup.value = user.value.user_group
             ePosition.value = user.value.user_position
             eStatus.value = user.value.user_status
-            ePw.value = user.value.user_password
-            eCPw.value = user.value.user_password
+            // ePw.value = user.value.user_password
+            // eCPw.value = user.value.user_password
             is_active_open.value = user.value.user_status == 'active' ? true : false
             console.log('open edit mode')
         } else if (b == false) {
@@ -190,8 +196,8 @@ const assignDetail = (b) => {
             eGroup.value = ''
             ePosition.value = ''
             eStatus.value = ''
-            ePw.value = ''
-            eCPw.value = ''
+            // ePw.value = ''
+            // eCPw.value = ''
             console.log('close edit mode')
         }
     } else {
@@ -202,7 +208,9 @@ const assignDetail = (b) => {
 
 
 const submitEdit = async (id) => {
-
+    alert_status.value=undefined
+    alert_message.value=[]
+    alert_title.value=''
     // if(validate.vUserCreate(dataCh.value,lenghtOfInput) !=true){
     token.value = validate.getUserDataFromLocal('token')
     let [status, data] = await toBackEnd.editData('user', `${userLink}/${id}`, dataCh.value, token.value)
@@ -217,6 +225,9 @@ const submitEdit = async (id) => {
         changePath('#showInfo')
         console.log(data)
         // status something
+        alert_title.value='Server error'
+        alert_message.value=[data]
+        alert_status.value=true
     }
     // }else{
     //     // status something
@@ -238,10 +249,16 @@ const isEmptyOBJ = computed(() => {
 
 // validate input
 const checkInput = () => {
-    if (validate.vUserCreate(dataCh.value, lenghtOfInput) != true) {
+    let {status=status,msg:vMsg} = validate.vUser(dataCh.value, lenghtOfInput,false,user.value)
+    if ( status== false) {
         window.location.href = '#veri'
     } else {
         console.log('input invalid value pls fix it 😂')
+        console.log(vMsg)
+        alert_title.value='Cannot update user detail!!'
+        alert_message.value=vMsg
+        alert_status.value=false
+        
     }
 }
 
@@ -458,7 +475,7 @@ const searchByKeyW = () => {
             <div class=" popup2 h-96 ">
                 <div class="h-[100%] p-3 overflow-y-auto">
                     <div class="w-full">
-                        <h4 class="w-fit h-fit mx-auto font-semibold text-[30px] text-gray-500">
+                        <h4 class="w-fit h-fit mx-auto font-semibold text-[1.25rem] text-gray-500">
                             User Detail
                         </h4>
                     </div>
@@ -467,7 +484,7 @@ const searchByKeyW = () => {
                     <div v-if="is_edit_open == false">
                         <!-- table -->
                         <div>
-                            <table class="w-full table-fixed mx-auto mt-6 text-[20px]">
+                            <table class="w-[600px]  table-fixed mx-auto mt-6 text-[20px]">
                                 <tr>
                                     <th class="table_header w-[120px] h-fit pt-2 text-right font-normal">
                                         Status
@@ -484,7 +501,7 @@ const searchByKeyW = () => {
                                             {{  }}
                                         </span> -->
                                     </th>
-                                    <td class="pt-2 pl-2 indent-[5px] font-light text-gray-600">
+                                    <td class="pt-2 pl-2 indent-[5px] break-all font-light text-gray-600">
                                         {{ user.user_first_name }} {{ user.user_last_name }}
                                     </td>
                                 </tr>
@@ -494,7 +511,7 @@ const searchByKeyW = () => {
                                     <th class="table_header w-[120px] h-fit pt-2 text-right font-normal">
                                         E-mail
                                     </th>
-                                    <td class="pt-2 pl-2 indent-[5px] font-light text-gray-600">
+                                    <td class="pt-2 pl-2 indent-[5px] break-all font-light text-gray-600">
                                         {{ user.user_email }}
                                     </td>
                                 </tr>
@@ -504,7 +521,7 @@ const searchByKeyW = () => {
                                     <th class="table_header w-[120px] h-fit pt-2 text-right font-normal">
                                         Role
                                     </th>
-                                    <td class="pt-2 pl-2 indent-[5px] font-light text-gray-600">
+                                    <td class="pt-2 pl-2 indent-[5px] break-all font-light text-gray-600">
                                         {{ user.user_role }}
                                     </td>
                                 </tr>
@@ -514,7 +531,7 @@ const searchByKeyW = () => {
                                     <th class="table_header w-[120px] h-fit pt-2 text-right font-normal">
                                         Office
                                     </th>
-                                    <td class="pt-2 pl-2 indent-[5px] font-light text-gray-600">
+                                    <td class="pt-2 pl-2 indent-[5px] break-all font-light text-gray-600">
                                         {{ user.user_office }}
                                     </td>
                                 </tr>
@@ -524,7 +541,7 @@ const searchByKeyW = () => {
                                     <th class="table_header w-[120px] text-right  font-normal">
                                         Group
                                     </th>
-                                    <td class="pt-2 pl-2 indent-[5px]  font-light text-gray-600">
+                                    <td class="pt-2 pl-2 indent-[5px] break-all  font-light text-gray-600">
                                         {{ user.user_group }}
                                     </td>
                                 </tr>
@@ -534,7 +551,7 @@ const searchByKeyW = () => {
                                     <th class="table_header w-[120px] h-fit  text-right font-normal">
                                         Position
                                     </th>
-                                    <td class="w-[100px] h-fit pt-2 pl-2 indent-[5px] font-light text-gray-600">
+                                    <td class="w-[100px] h-fit pt-2 pl-2 indent-[5px] break-all font-light text-gray-600">
                                         {{ user.user_position }}
                                     </td>
                                 </tr>
@@ -561,10 +578,9 @@ const searchByKeyW = () => {
                     </div>
 
                     <!-- edit detail  -->
-                    <div v-else-if="is_edit_open == true" class="w-[500px] mx-auto">
-
+                    <div v-else-if="is_edit_open == true" class=" w-[60rem] mx-auto">
                         <!-- active -->
-                        <div class="relative flex t  w-full h-[40px] mt-3">
+                        <div class="relative flex  w-full h-[40px] mt-3 mb-2 ">
                             <button @click="change_s" id="container_active"
                                 class="relative w-[150px] h-[30px] my-auto bg-gray-700 text-gray-100 text-[15px] z-0 rounded-lg">
                                 <div v-if="is_active_open == true" id="active" class="w-full h-full z-10 flex ">
@@ -595,147 +611,176 @@ const searchByKeyW = () => {
                                 </select>
                             </div> -->
                         </div>
+                        <div class="flex flex-row">
+                            <div class="w-full mt-2">
+                                <!-- first name  and last name-->
+                                <div class="relative flex w-[500px]">
+                                    <!-- name -->
+                                    <div class="relative w-[250px]  h-[50px]  text-sm">
+                                        <h4 class="ml-2 text-sm font-light text-gray-500">
+                                            First Name
+                                            <span class="" :style="[eFName.length==lenghtOfInput.fNameL?'color: rgb(225 29 72);':'']">
+                                                {{eFName.length}}/{{lenghtOfInput.fNameL}}
+                                            </span>
+                                        </h4>
+                                        <input v-model="eFName" :maxlength="lenghtOfInput.fNameL" type="text"
+                                            class="absolute bottom-0 w-full h-[30px] px-2 bg-sky-300 font-light text-[20px] text-gray-600 rounded-lg focus:outline-0">
+                                    </div>
+                                    <!-- role -->
+                                    <div class="relative w-[250px] h-[50px] ml-[2px] text-sm">
+                                        <h4 class="ml-2  font-light text-gray-500">
+                                            Last Name
+                                            <span class="" :style="[eLName.length==lenghtOfInput.lNameL?'color: rgb(225 29 72);':'']">
+                                                {{eLName.length}}/{{lenghtOfInput.lNameL}}
+                                            </span>
+                                        </h4>
+                                        <input v-model="eLName" :maxlength="lenghtOfInput.lNameL" type="text"
+                                            class="absolute bottom-0 w-full h-[30px] px-2 bg-sky-300 font-light text-[20px] text-gray-600 rounded-lg focus:outline-0">
+                                        <!-- <select v-model="eRole" name="role" id="role" class="absolute bottom-0 w-full h-[30px] px-2 bg-sky-300 font-light text-[20px] text-gray-600 rounded-lg focus:outline-0">
+                                            <option value="user">User</option>
+                                            <option value="admin_it">Admin_IT</option>
+                                            <option value="admin_pr">Admin_PR</option>
+                                        </select> -->
+                                        <!-- <input type="text" class="absolute bottom-0 w-full h-[30px] p-2 bg-sky-300 font-light text-gray-600 rounded-lg focus:outline-0"> -->
+                                    </div>
+                                </div>
 
+                                <!-- email -->
+                                <div class="relative w-full h-[50px] mt-2">
+                                    <h4 class="ml-2 text-sm font-light text-gray-500">
+                                        E-mail
+                                        <span class="" :style="[eEmail.length==lenghtOfInput.emailL-18?'color: rgb(225 29 72);':'']">
+                                            {{eEmail.length}}/{{lenghtOfInput.emailL-18}}
+                                        </span>
+                                    </h4>
+                                    <div class="flex absolute bottom-0 w-full h-[30px] px-2 bg-sky-300 rounded-lg font-light text-[20px] text-gray-600">
+                                        <input v-model="eEmail" :maxlength="lenghtOfInput.emailL-18" type="text"
+                                            class="w-full bg-inherit    focus:outline-0">
+                                        <h5 class="w-fit m-auto mx-1 cursor-default">
+                                            @moralcenter.or.th
+                                        </h5>
+                                    </div>
+                                </div>
 
-                        <!-- first name  and last name-->
-                        <div class="relative flex w-[500px]">
-                            <!-- name -->
-                            <div class="relative w-[250px]  h-[50px]  text-sm">
-                                <h4 class="ml-2 text-sm font-light text-gray-500">
-                                    First Name
-                                </h4>
-                                <input v-model="eFName" type="text"
-                                    class="absolute bottom-0 w-full h-[30px] px-2 bg-sky-300 font-light text-[20px] text-gray-600 rounded-lg focus:outline-0">
+                                <!-- role -->
+                                <div class="relative w-full h-[50px] mt-2">
+                                    <h4 class="ml-2 text-sm font-light text-gray-500">
+                                        Role
+                                    </h4>
+                                    <select v-model="eRole" name="role" id="role"
+                                        class="absolute bottom-0 w-full h-[30px] px-2 bg-sky-300 font-light text-[20px] text-gray-600 rounded-lg focus:outline-0">
+                                        <option value="user">User</option>
+                                        <option value="admin_it">Admin_IT</option>
+                                        <option value="admin_pr">Admin_PR</option>
+                                        <option value="super_admin">Super_Admin</option>
+                                    </select>
+                                </div>
+
+                                
+
+                                <!-- password -->
+                                <!-- <div class="relative w-[500px] flex h-[50px] mt-1">
+                                    <div class="relative w-[249px]">
+                                        <h4 h4 class="ml-2 text-sm font-light text-gray-500">
+                                            Password
+                                        </h4>
+                                        <input v-model="ePw" type="text"
+                                            class="absolute bottom-0 w-full h-[30px] p-2 bg-sky-300 font-light text-[20px] text-gray-600 rounded-lg focus:outline-0">
+                                    </div>
+                                    <div class="relative w-[249px] ml-[2px]">
+                                        <h4 h4 class="ml-2 text-sm font-light text-gray-500">
+                                            Confirm Password
+                                        </h4>
+                                        <input v-model="eCPw" type="text"
+                                            class="absolute bottom-0 w-full h-[30px] p-2 bg-sky-300 font-light text-[20px] text-gray-600 rounded-lg focus:outline-0">
+                                    </div>
+                                </div> -->
+
+                            
                             </div>
-                            <!-- role -->
-                            <div class="relative w-[250px] h-[50px] ml-[2px] text-sm">
-                                <h4 class="ml-2  font-light text-gray-500">
-                                    Last Name
-                                </h4>
-                                <input v-model="eLName" type="text"
-                                    class="absolute bottom-0 w-full h-[30px] px-2 bg-sky-300 font-light text-[20px] text-gray-600 rounded-lg focus:outline-0">
-                                <!-- <select v-model="eRole" name="role" id="role" class="absolute bottom-0 w-full h-[30px] px-2 bg-sky-300 font-light text-[20px] text-gray-600 rounded-lg focus:outline-0">
-                                    <option value="user">User</option>
-                                    <option value="admin_it">Admin_IT</option>
-                                    <option value="admin_pr">Admin_PR</option>
-                                </select> -->
-                                <!-- <input type="text" class="absolute bottom-0 w-full h-[30px] p-2 bg-sky-300 font-light text-gray-600 rounded-lg focus:outline-0"> -->
+
+                            <div class="w-full  ml-3">
+                                <!-- office -->
+                                <div class="relative w-full h-[50px] mt-2">
+                                    <h4 class="ml-2 text-sm font-light text-gray-500">
+                                        Office
+                                    </h4>
+                                    <select v-model="eOffice" name="office" id="office"
+                                        class="absolute bottom-0 w-full h-[30px] px-2 px- bg-sky-300 font-light text-[20px] text-gray-600 rounded-lg focus:outline-0">
+                                        <option value="" selected disabled hidden>Office</option>
+                                        <option value="ผู้บริหาร">ผู้บริหาร</option>
+                                        <option value="สำนักส่งเสริมและขับเคลื่อนเครือข่ายทางสังคม">
+                                            สำนักส่งเสริมและขับเคลื่อนเครือข่ายทางสังคม</option>
+                                        <option value="สำนักบริหารจัดการองค์กรและยุทธศาสตร์">สำนักบริหารจัดการองค์กรและยุทธศาสตร์
+                                        </option>
+                                        <option value="สำนักพัฒนาองค์ความรู้นวัตกรรมและสื่อสารสนเทศ">
+                                            สำนักพัฒนาองค์ความรู้นวัตกรรมและสื่อสารสนเทศ</option>
+                                        <option value="งานตรวจสอบภายใน">งานตรวจสอบภายใน</option>
+                                    </select>
+                                    <!-- <input type="text" class="absolute bottom-0 w-full h-[30px] p-2 bg-sky-300 font-light text-gray-600 rounded-lg focus:outline-0"> -->
+                                </div>
+
+                                <!-- group -->
+                                <div class="relative w-full h-[50px] mt-2">
+                                    <h4 class="ml-2 text-sm font-light text-gray-500">
+                                        Group
+                                    </h4>
+                                    <select v-model="eGroup" name="group" id="group"
+                                        class="absolute bottom-0 w-full h-[30px] px-2 bg-sky-300 font-light text-[20px] text-gray-600 rounded-lg focus:outline-0">
+                                        <option value="" selected disabled hidden>Group</option>
+                                        <option value="ผู้บริหาร">ผู้บริหาร</option>
+                                        <option value="บริหารจัดการองค์กร">บริหารจัดการองค์กร</option>
+                                        <option value="นโยบายและยุทธศาสตร์">นโยบายและยุทธศาสตร์</option>
+                                        <option value="วิจัยนวัตกรรมและระบบพฤติกรรมไทย">วิจัยนวัตกรรมและระบบพฤติกรรมไทย</option>
+                                        <option value="สื่อสารและรณรงค์ทางสังคม">สื่อสารและรณรงค์ทางสังคม</option>
+                                        <option value="ศูนย์ข้อมูลและเทคโนโลยีสารสนเทศ">ศูนย์ข้อมูลและเทคโนโลยีสารสนเทศ</option>
+                                        <option value="สมัชชาคุณธรรมและความร่วมมือนานาชาติ">สมัชชาคุณธรรมและความร่วมมือนานาชาติ
+                                        </option>
+                                        <option value="ส่งเสริมคุณธรรมเครือข่ายทางสังคม">ส่งเสริมคุณธรรมเครือข่ายทางสังคม</option>
+                                    </select>
+                                    <!-- <input type="text" class="absolute bottom-0 w-full h-[30px] p-2 bg-sky-300 font-light text-gray-600 rounded-lg focus:outline-0"> -->
+                                </div>
+
+                                <!-- position -->
+                                <div class="relative w-full h-[50px] mt-2">
+                                    <h4 class="ml-2 text-sm font-light text-gray-500">
+                                        Position
+                                        <span class="" :style="[ePosition.length==lenghtOfInput.positionL?'color: rgb(225 29 72);':'']">
+                                            {{ePosition.length}}/{{lenghtOfInput.positionL}}
+                                        </span>
+                                    </h4>
+                                    <input v-model="ePosition" :maxlength="lenghtOfInput.positionL" type="text"
+                                        class="absolute bottom-0 w-full h-[30px] p-2 bg-sky-300 font-light text-[20px] text-gray-600 rounded-lg focus:outline-0">
+                                </div>
                             </div>
                         </div>
-
-                        <!-- email -->
-                        <div class="relative w-full h-[50px] mt-1">
-                            <h4 class="ml-2 text-sm font-light text-gray-500">
-                                E-mail
-                            </h4>
-                            <input v-model="eEmail" type="text"
-                                class="absolute bottom-0 w-full h-[30px] px-2 bg-sky-300 font-light text-[20px] text-gray-600 rounded-lg focus:outline-0">
-                        </div>
-
-                        <!-- role -->
-                        <div class="relative w-full h-[50px] mt-1">
-                            <h4 class="ml-2 text-sm font-light text-gray-500">
-                                Role
-                            </h4>
-                            <select v-model="eRole" name="role" id="role"
-                                class="absolute bottom-0 w-full h-[30px] px-2 bg-sky-300 font-light text-[20px] text-gray-600 rounded-lg focus:outline-0">
-                                <option value="user">User</option>
-                                <option value="admin_it">Admin_IT</option>
-                                <option value="admin_pr">Admin_PR</option>
-                                <option value="super_admin">Super_Admin</option>
-                            </select>
-                        </div>
-
-                        <!-- office -->
-                        <div class="relative w-full h-[50px] mt-1">
-                            <h4 class="ml-2 text-sm font-light text-gray-500">
-                                Office
-                            </h4>
-                            <select v-model="eOffice" name="office" id="office"
-                                class="absolute bottom-0 w-full h-[30px] px-2 px- bg-sky-300 font-light text-[20px] text-gray-600 rounded-lg focus:outline-0">
-                                <option value="" selected disabled hidden>Office</option>
-                                <option value="ผู้บริหาร">ผู้บริหาร</option>
-                                <option value="สำนักส่งเสริมและขับเคลื่อนเครือข่ายทางสังคม">
-                                    สำนักส่งเสริมและขับเคลื่อนเครือข่ายทางสังคม</option>
-                                <option value="สำนักบริหารจัดการองค์กรและยุทธศาสตร์">สำนักบริหารจัดการองค์กรและยุทธศาสตร์
-                                </option>
-                                <option value="สำนักพัฒนาองค์ความรู้นวัตกรรมและสื่อสารสนเทศ">
-                                    สำนักพัฒนาองค์ความรู้นวัตกรรมและสื่อสารสนเทศ</option>
-                                <option value="งานตรวจสอบภายใน">งานตรวจสอบภายใน</option>
-                            </select>
-                            <!-- <input type="text" class="absolute bottom-0 w-full h-[30px] p-2 bg-sky-300 font-light text-gray-600 rounded-lg focus:outline-0"> -->
-                        </div>
-
-                        <!-- group -->
-                        <div class="relative w-full h-[50px] mt-1">
-                            <h4 class="ml-2 text-sm font-light text-gray-500">
-                                Group
-                            </h4>
-                            <select v-model="eGroup" name="group" id="group"
-                                class="absolute bottom-0 w-full h-[30px] px-2 bg-sky-300 font-light text-[20px] text-gray-600 rounded-lg focus:outline-0">
-                                <option value="" selected disabled hidden>Group</option>
-                                <option value="ผู้บริหาร">ผู้บริหาร</option>
-                                <option value="บริหารจัดการองค์กร">บริหารจัดการองค์กร</option>
-                                <option value="นโยบายและยุทธศาสตร์">นโยบายและยุทธศาสตร์</option>
-                                <option value="วิจัยนวัตกรรมและระบบพฤติกรรมไทย">วิจัยนวัตกรรมและระบบพฤติกรรมไทย</option>
-                                <option value="สื่อสารและรณรงค์ทางสังคม">สื่อสารและรณรงค์ทางสังคม</option>
-                                <option value="ศูนย์ข้อมูลและเทคโนโลยีสารสนเทศ">ศูนย์ข้อมูลและเทคโนโลยีสารสนเทศ</option>
-                                <option value="สมัชชาคุณธรรมและความร่วมมือนานาชาติ">สมัชชาคุณธรรมและความร่วมมือนานาชาติ
-                                </option>
-                                <option value="ส่งเสริมคุณธรรมเครือข่ายทางสังคม">ส่งเสริมคุณธรรมเครือข่ายทางสังคม</option>
-                            </select>
-                            <!-- <input type="text" class="absolute bottom-0 w-full h-[30px] p-2 bg-sky-300 font-light text-gray-600 rounded-lg focus:outline-0"> -->
-                        </div>
-
-                        <!-- position -->
-                        <div class="relative w-full h-[50px] mt-1">
-                            <h4 class="ml-2 text-sm font-light text-gray-500">
-                                Position
-                            </h4>
-                            <input v-model="ePosition" type="text"
-                                class="absolute bottom-0 w-full h-[30px] p-2 bg-sky-300 font-light text-[20px] text-gray-600 rounded-lg focus:outline-0">
-                        </div>
-
-                        <!-- password -->
-                        <!-- <div class="relative w-[500px] flex h-[50px] mt-1">
-                            <div class="relative w-[249px]">
-                                <h4 h4 class="ml-2 text-sm font-light text-gray-500">
-                                    Password
-                                </h4>
-                                <input v-model="ePw" type="text"
-                                    class="absolute bottom-0 w-full h-[30px] p-2 bg-sky-300 font-light text-[20px] text-gray-600 rounded-lg focus:outline-0">
-                            </div>
-                            <div class="relative w-[249px] ml-[2px]">
-                                <h4 h4 class="ml-2 text-sm font-light text-gray-500">
-                                    Confirm Password
-                                </h4>
-                                <input v-model="eCPw" type="text"
-                                    class="absolute bottom-0 w-full h-[30px] p-2 bg-sky-300 font-light text-[20px] text-gray-600 rounded-lg focus:outline-0">
-                            </div>
-                        </div> -->
+                        
+                        <BaseAlert :status="alert_status" :title="alert_title" :msg-arr="alert_message" type="EU" />
 
                         <!-- button -->
-                        <div class="mt-6 mb-1.5">
-                            <button @click="goVerify"
-                                class="w-[250px] h-fit bg-gray-600 p-2 text-[#90CAF9] rounded-lg hover:bg-[#90CAF9] hover:text-gray-600">
-                                ขอรหัสผ่านใหม่
-                            </button>
-                        </div>
-                        <div class="mt-6 mb-1.5">
-                            <button @click="checkInput"
-                                class="w-[250px] h-fit bg-gray-600 p-2 text-[#90CAF9] rounded-lg hover:bg-[#90CAF9] hover:text-gray-600">
-                                ทำการแก้ไข ->
-                            </button>
+                        <div class="flex mx-auto w-fit h-fit mt-3">
+                            <div class="mt-6 m-1 mb-1.5">
+                                <button @click="goVerify"
+                                    class="w-[250px] h-fit bg-gray-600 p-2 text-[#e0aaff] rounded-lg  hover:bg-[#e0aaff] hover:text-gray-600 ">
+                                    ขอรหัสผ่านใหม่
+                                </button>
+                            </div>
+                            <div class="mt-6 m-1 mb-1.5">
+                                <button @click="checkInput"
+                                    class="w-[250px] h-fit bg-gray-600 p-2 text-[#b8e0d2] rounded-lg hover:bg-[#b8e0d2] hover:text-gray-600">
+                                    ทำการแก้ไข ->
+                                </button>
+                            </div>    
                         </div>
 
                         <!-- back -->
                         <div class="absolute top-[20px] left-[15px] font-light text-[20px]">
-                            <button @click="assignDetail(false)"
-                                class="flex rounded-full pr-3 hover:bg-[#90CAF9] hover:text-[#E3F2FD]">
-                                <img src="../../../assets/left-arrow.svg" alt="left-arrow" class="w-[30px] h-[30px] p-1.5 ">
-                                <h4 class="my-auto text-[15px]">ย้อนกลับ</h4>
-                            </button>
-                        </div>
+                                <button @click="assignDetail(false)"
+                                    class="flex rounded-full pr-3 hover:bg-[#90CAF9] hover:text-[#E3F2FD]">
+                                    <img src="../../../assets/left-arrow.svg" alt="left-arrow" class="w-[30px] h-[30px] p-1.5 ">
+                                    <h4 class="my-auto text-[15px]">ย้อนกลับ</h4>
+                                </button>
+                            </div>
                     </div>
 
                     <div class="absolute top-[15px] right-[15px] font-bold text-[30px]">
@@ -755,7 +800,7 @@ const searchByKeyW = () => {
                     คุณต้องการที่จะแก้ไขข้อมูลใช่หรือไม่ ?
                 </h2>
                 <div class=" absolute bottom-0 w-full  flex m-auto">
-                    <button @click="myRouter.go(-1)"
+                    <button @click="myRouter.go(-1),alert_status=undefined"
                         class="w-full h-fit text-center mx-auto p-2 bg-gray-300 hover:bg-rose-300">
                         ย้อนกลับ
                     </button>
@@ -800,7 +845,7 @@ const searchByKeyW = () => {
     transition: opacity 500ms;
     visibility: hidden;
     opacity: 0;
-    z-index: 50;
+    z-index: 20;
 }
 
 .overlay:target {
@@ -810,14 +855,14 @@ const searchByKeyW = () => {
 
 .popup2 {
     margin: auto;
-    margin-top: 3%;
+    margin-top: 5%;
     /* overflow-y: auto; */
-    padding: 30px;
-    padding-top: 30px;
-    padding-left: 30px;
+    padding: 20px;
+    padding-top: 20px;
+    padding-left: 20px;
     padding-right: 16px;
     background: #fff;
-    width: 45%;
+    width: fit-content;
     height: fit-content;
     border-radius: 20px;
     position: relative;
