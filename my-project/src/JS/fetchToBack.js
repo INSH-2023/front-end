@@ -143,10 +143,11 @@ let toBackEnd={
             body:JSON.stringify(data),
          })         
          status=res.status
+         console.log(res.status)
       } catch (error) {
          console.log(name,error)
       }
-      console.log(res.status)
+      
 
       if(status==200){
          console.log(`update ${name} successful`)
