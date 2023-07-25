@@ -1,15 +1,12 @@
 <script setup>
 import { onBeforeMount, ref, computed } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-import BaseStatus from '../../../components/BaseStatus.vue'
 import getRefreshToken from './../../../JS/refresh';
-import jsCookie from './../../../JS/cookies';
 import toBackEnd from '../../../JS/fetchToBack';
 import validate from '../../../JS/validate';
 // const solutionLink='http://localhost:3000/solutions'
 const solutionLink = `${import.meta.env.VITE_BACK_END_HOST}/solutions`
 const iconLink = `${import.meta.env.VITE_BACK_END_HOST}/images/solutions`
-
 
 const { params } = useRoute()
 
@@ -78,8 +75,8 @@ const findingKeyW = async (keyWord) => {
 const solutionList = ref([])
 const getArticle = async (service) => {
     if (service == "it") {
-        token.value =validate.getUserDataFromLocal('token') 
-        let [status, data] = await toBackEnd.getData('solution', solutionLink, token.value)
+        // token.value =validate.getUserDataFromLocal('token') 
+        let [status, data] = await toBackEnd.getData('solution', solutionLink)
         if (status == 200) {
             solutionList.value = data
             findingKeyW(searching.value.toLowerCase())
@@ -107,9 +104,9 @@ const randomArticle = async (n, max, data) => {
 }
 
 onBeforeMount(() => {
-    let refreshToken=validate.getUserDataFromLocal('refreshToken')
+    // let refreshToken=validate.getUserDataFromLocal('refreshToken')
     getArticle(params.service)
-    getRefreshToken(refreshToken)
+    getRefreshToken()
 })
 </script>
 <template>

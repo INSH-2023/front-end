@@ -1,6 +1,6 @@
 let toBackEnd = {
 
-   async delete(name, link, id, token) {
+   async delete(name, link, id="") {
       // variable
       let return_data = []
       let status = undefined
@@ -11,9 +11,9 @@ let toBackEnd = {
       try {
          res = await fetch(`${link}/${id}`, {
             method: 'DELETE',
-            headers: {
-               Authorization: "Bearer " + token
-            },
+            // headers: {
+            //    Authorization: "Bearer " + token
+            // },
             credentials: 'include'
          })
          status = res.status
@@ -33,7 +33,7 @@ let toBackEnd = {
       return return_data
    },
 
-   async getData(name, link, token) {
+   async getData(name, link) {
       // variable
       let return_data = []
       let status = undefined
@@ -89,7 +89,7 @@ let toBackEnd = {
 
    },
 
-   async getDataBy(name, link, id, token) {
+   async getDataBy(name, link, id) {
       // variable
       let return_data = []
       let status = undefined
@@ -130,7 +130,7 @@ let toBackEnd = {
       return return_data
    },
 
-   async editData(name, link, data, token) {
+   async editData(name, link, data={}) {
       // variable
       let return_data = []
       let status = undefined
@@ -170,7 +170,7 @@ let toBackEnd = {
       return return_data
    },
 
-   async postData(name, link, data, token) {
+   async postData(name, link, data={}) {
       // variable
       let return_data = []
       let status = undefined
@@ -225,7 +225,7 @@ let toBackEnd = {
 
       return return_data
    },
-   async postFile(name, link, data) {
+   async postFile(name, link, data={}) {
       // variable
       let return_data = []
       let status = undefined

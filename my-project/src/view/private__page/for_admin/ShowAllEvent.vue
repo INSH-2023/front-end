@@ -4,9 +4,7 @@ import { useRouter } from 'vue-router';
 import BaseLoading from '../../../components/BaseLoading.vue';
 import toBackEnd from '../../../JS/fetchToBack';
 import validate from '../../../JS//validate'
-import jsCookie from '../../../JS/cookies';
 import getRefreshToken from './../../../JS/refresh';
-import Cookies from '../../../JS/cookies';
 import BaseStatus from '../../../components/BaseStatus.vue';
 // const requestLink="http://localhost:3000/events"
 const requestLink = `${import.meta.env.VITE_BACK_END_HOST}/requests`
@@ -20,7 +18,7 @@ onBeforeMount(() => {
     navigation(),
     getEvents(),
     getAdmin()
-    getRefreshToken(validate.getUserDataFromLocal('refreshToken') )
+    getRefreshToken()
 })
 
 // get variable
@@ -65,9 +63,9 @@ const getEvents = async (id = undefined) => {
     let status = false
 
     if (id == undefined) {
-        token.value =validate.getUserDataFromLocal('token') 
-        let [s, data] = await toBackEnd.getData('request', requestLink, token.value)
-        let [s1, count] = await toBackEnd.getData('request status', `${requestLink}/status/admin`, token.value)
+        // token.value =validate.getUserDataFromLocal('token') 
+        let [s, data] = await toBackEnd.getData('request', requestLink)
+        let [s1, count] = await toBackEnd.getData('request status', `${requestLink}/status/admin`)
         if (s == 200 || s1 == 200) {
             status = true
             requestList.value = data.data.sort((a, b) => (a.request_req_date > b.request_req_date) ? -1 : (a.request_req_date < b.request_req_date) ? 1 : 0);
@@ -96,8 +94,8 @@ const getEvents = async (id = undefined) => {
         }
 
     } else {
-        token.value = validate.getUserDataFromLocal('token') 
-        let [s, data] = await toBackEnd.getDataBy('request', requestLink, id, token.value)
+        // token.value = validate.getUserDataFromLocal('token') 
+        let [s, data] = await toBackEnd.getDataBy('request', requestLink, id)
         if (s == 200) {
             status = true
             request.value = data
@@ -112,8 +110,6 @@ const getEvents = async (id = undefined) => {
     }
     return status
 }
-
-
 
 // notification
 function notify(data) {
@@ -136,8 +132,8 @@ function notify(data) {
 
 const getAdmin = async (email) => {
     let status = false
-    token.value =validate.getUserDataFromLocal('token') 
-    let [s, data] = await toBackEnd.getData('request_admin', `${userLink}`, token.value)
+    // token.value =validate.getUserDataFromLocal('token') 
+    let [s, data] = await toBackEnd.getData('request_admin', `${userLink}`)
     if (s == 200) {
         status = true
         data = ["super_admin"].includes(role.value) ? data : data.filter(e => e.user_role == role.value)
@@ -152,8 +148,8 @@ const getAdmin = async (email) => {
 // edit by id
 const editInfo = async (v) => {
     edit_status.value = undefined
-    token.value =validate.getUserDataFromLocal('token') 
-    let [ss, data] = await toBackEnd.editData('request', `${requestLink}/${v}`, data_ch.value, token.value)
+    // token.value =validate.getUserDataFromLocal('token') 
+    let [ss, data] = await toBackEnd.editData('request', `${requestLink}/${v}`, data_ch.value)
     if (ss == 200) {
         edit_status.value = true
         console.log(data)
@@ -173,8 +169,8 @@ const editInfo = async (v) => {
 // delete
 const deleteItem = async (v) => {
     delete_status.value = undefined
-    token.value = validate.getUserDataFromLocal('token') 
-    let [status, data] = await toBackEnd.delete('request', requestLink, v, token.value)
+    // token.value = validate.getUserDataFromLocal('token') 
+    let [status, data] = await toBackEnd.delete('request', requestLink, v)
     if (status == 200) {
         delete_status.value = true
         await getEvents()

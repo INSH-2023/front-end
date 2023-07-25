@@ -1,9 +1,7 @@
 <script setup>
 import { ref, computed, onBeforeMount } from 'vue'
 import toBackEnd from '../../../JS/fetchToBack';
-import jsCookie from './../../../JS/cookies';
 import getRefreshToken from './../../../JS/refresh';
-import Cookies from './../../../JS/cookies';
 import BaseShowProblem from '../../../components/problem-list/BaseShowProblem.vue';
 import BaseLoading from '../../../components/BaseLoading.vue';
 import validate from '../../../JS/validate';
@@ -46,8 +44,8 @@ const getP = async (v) => {
     let status = undefined
 
     if (v != 'all') {
-        token.value =validate.getUserDataFromLocal('token')
-        const [ss, data_problem] = await toBackEnd.getData('problem', `${problemsLink}/type/${v}`, token.value)
+        // token.value =validate.getUserDataFromLocal('token')
+        const [ss, data_problem] = await toBackEnd.getData('problem', `${problemsLink}/type/${v}`)
         console.log(ss)
         console.log(data_problem)
 
@@ -63,8 +61,8 @@ const getP = async (v) => {
             console.log(data)
         }
     } else {
-        token.value = validate.getUserDataFromLocal('token')
-        const [ss, data] = await toBackEnd.getData('problem', problemsLink, token.value)
+        // token.value = validate.getUserDataFromLocal('token')
+        const [ss, data] = await toBackEnd.getData('problem', problemsLink)
         if (ss == 200) {
             problemList.value = data.reverse()
             if (role.value == 'admin_it') {
@@ -175,8 +173,8 @@ const addProblem = async () => {
     if (addPStatus == true) {
         data_ch.value.problem_upload = file.value.length != 0 ? true : false
 
-        token.value = validate.getUserDataFromLocal('token')
-        let [status, data] = await toBackEnd.postData('problem', problemsLink, data_ch.value, token.value)
+        // token.value = validate.getUserDataFromLocal('token')
+        let [status, data] = await toBackEnd.postData('problem', problemsLink, data_ch.value)
 
         if (file.value.length != 0) {
             const formData = new FormData()
@@ -200,8 +198,8 @@ const addProblem = async () => {
 // delete problems
 const removeProblem = async (id) => {
     console.log(id)
-    token.value = validate.getUserDataFromLocal('token')
-    let [status, data] = await toBackEnd.delete("problem", problemsLink, id, token.value)
+    // token.value = validate.getUserDataFromLocal('token')
+    let [status, data] = await toBackEnd.delete("problem", problemsLink, id)
     if (status == 200) {
         console.log(data)
         getP(subjectCr.value)
@@ -219,9 +217,9 @@ const editProblem = () => {
 }
 
 onBeforeMount(() => {
-    let refreshToken=validate.getUserDataFromLocal('refreshToken')
+    // let refreshToken=validate.getUserDataFromLocal('refreshToken')
     getP(subjectCr.value)
-    getRefreshToken(refreshToken)
+    getRefreshToken()
 })
 
 // auto change subject 

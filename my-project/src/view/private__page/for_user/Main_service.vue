@@ -16,8 +16,8 @@ const finish = ref(0)
 const opencase = ref(0)
 
 const getCountStatus = async () => {
-    token.value = validate.getUserDataFromLocal('token') 
-    let [status, data] = await toBackEnd.getData("request", `${requestLink}/status/user`, token.value)
+    // token.value = validate.getUserDataFromLocal('token') 
+    let [status, data] = await toBackEnd.getData("request", `${requestLink}/status/user`)
     if (status == 200) {
         request.value = data.request
         inProgress.value = data.inProgress

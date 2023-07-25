@@ -1,5 +1,6 @@
 import Cookies from './cookies'
 import {useRouter} from 'vue-router'
+import cryptoJs from 'crypto-js';
 const validate={
     vUser(data,lenghtOfText,passw=false,oldData=undefined){
         let vStatus=false
@@ -285,7 +286,10 @@ const validate={
             return null
         }else{
             // console.log(cookie)
-            let data =JSON.parse(Cookies.get("data"))
+
+            let data = JSON.parse(cryptoJs.AES.decrypt(
+                    Cookies.get("data"),
+                    import.meta.env.VITE_PERSONAL_SECRET ).toString(cryptoJs.enc.Utf8))
             if(property!=undefined||property!=null){
                 return data[property]
             }else{

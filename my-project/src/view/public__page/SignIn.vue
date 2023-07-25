@@ -5,6 +5,8 @@ import toBackEnd from '../../JS/fetchToBack'
 import BaseAlert from '../../components/BaseAlert.vue'
 import BaseLoading from '../../components/BaseLoading.vue'
 import Cookies from '../../JS/cookies'
+import cryptoJs from 'crypto-js';
+import validate from "../../JS/validate"
 // src\components\BaseLoading.vue
 const myRouter = useRouter()
 const goMain=()=>myRouter.push({name:'services'})
@@ -38,7 +40,11 @@ const logIn=async()=>{
         if(status==200){
             console.log('login successfully')
             // console.log(data)
-            Cookies.set("data",JSON.stringify(data))
+            let ciphertext = cryptoJs.AES.encrypt(JSON.stringify(data),import.meta.env.VITE_PERSONAL_SECRET)
+            // console.log(cryptoJs.AES)
+            // console.log(cryptoJs.AES.decrypt(ciphertext,import.meta.env.VITE_PERSONAL_SECRET).toString(cryptoJs.enc.Utf8))
+            // console.log(validate.getUserDataFromLocal())
+            Cookies.set("data",ciphertext)
             button_status.value=false
             goMain()
         }else 

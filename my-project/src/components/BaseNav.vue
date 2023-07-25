@@ -3,8 +3,6 @@ import { useRouter } from 'vue-router'
 import { ref, onBeforeMount } from 'vue'
 import Cookies from '../JS/cookies';
 import toBackEnd from '../JS/fetchToBack'
-import getRefreshToken from '../JS/refresh'
-import getUserDataFromLocal from '../JS/validate'
 const props = defineProps({
     role: {
         type: String,
@@ -38,6 +36,7 @@ const notify = ref(0)
 // get role from local
 const role = ref(undefined)
 const requestLink = `${import.meta.env.VITE_BACK_END_HOST}/requests/updated/notify`
+const signoutLink = `${import.meta.env.VITE_BACK_END_HOST}/authentication/signout`
 const getRole = () => {
 
     isAdmin.value = Cookies.get('isAdmin') === 'false' || Cookies.get('isAdmin') == null ? false : true
@@ -105,8 +104,8 @@ const isUpdate = ref(false)
 const isNotifyShow = ref(false)
 const getNotify = async () => {
     if (Cookies.get("data").length != 0) {
-        token.value = JSON.parse(Cookies.get("data")).token
-        let [s, data] = await toBackEnd.getData('notify message', requestLink, token.value)
+        // token.value = JSON.parse(Cookies.get("data")).token
+        let [s, data] = await toBackEnd.getData('notify message', requestLink)
         if (s == 200) {
             notifyList.value = data.reverse()
             notify.value = notifyList.value.length == 0 ? 0 : notifyList.value[0].request_update
@@ -121,8 +120,8 @@ const getNotify = async () => {
 
 const deleteNotify = async (id) => {
     if (Cookies.get("data").length != 0) {
-        token.value = JSON.parse(Cookies.get("data")).token
-        let [s, data] = await toBackEnd.delete('delete message', requestLink, id, token.value)
+        // token.value = JSON.parse(Cookies.get("data")).token
+        let [s, data] = await toBackEnd.delete('delete message', requestLink, id)
         if (s == 200) {
             getNotify()
         } else {
@@ -136,14 +135,19 @@ const showNotify = async () => {
     isSetting.value = false
     if(notifyList.value != 0){
         isUpdate.value = false
-        token.value = JSON.parse(Cookies.get("data")).token
-        let [s, data] = await toBackEnd.editData("notification", requestLink, {}, token.value)
+        // token.value = JSON.parse(Cookies.get("data")).token
+        let [s, data] = await toBackEnd.editData("notification", requestLink)
     }
 }
 
-const logOut = () => {
+const logOut = async () => {
     Cookies.remove('data')
     Cookies.remove('isAdmin')
+
+    // remove httpOnly cookies
+    let [s, data] = await toBackEnd.getData("sign out", signoutLink)
+    console.log(data.message)
+
     goHome()
 }
 

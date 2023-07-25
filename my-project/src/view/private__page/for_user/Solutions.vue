@@ -3,7 +3,7 @@ import BaseStatus from '../../../components/BaseStatus.vue';
 import { useRoute, useRouter } from 'vue-router';
 import { onBeforeMount, ref } from 'vue';
 import getRefreshToken from './../../../JS/refresh';
-import jsCookie from '../../../JS/cookies';
+// import jsCookie from '../../../JS/cookies';
 import toBackEnd from '../../../JS/fetchToBack';
 
 const { params } = useRoute()
@@ -21,8 +21,8 @@ const info = ref({})
 // get infomation
 // ถ้า get เป็น id จะดีมาก
 const getInfo = async () => {
-    token.value = JSON.parse(jsCookie.get("data")).token
-    let [status, data] = await toBackEnd.getDataBy('solution', infoLink, id, token.value)
+    // token.value = JSON.parse(jsCookie.get("data")).token
+    let [status, data] = await toBackEnd.getDataBy('solution', infoLink, id)
     if (status == 200) {
         console.log("get info already")
         info.value = data
@@ -33,9 +33,9 @@ const getInfo = async () => {
 }
 
 onBeforeMount(() => {
-    let refreshToken =validate.getUserDataFromLocal('refreshToken')
+    // let refreshToken =validate.getUserDataFromLocal('refreshToken')
     getInfo()
-        getRefreshToken(refreshToken)
+        getRefreshToken()
 })
 </script>
 <template>

@@ -282,9 +282,9 @@ const getUser = async (emp_code) => {
 }
 
 onBeforeMount(() => {
-    let refreshToken = validate.getUserDataFromLocal('refreshToken')
+    // let refreshToken = validate.getUserDataFromLocal('refreshToken')
     getUser(validate.getUserDataFromLocal('user_emp_code'))
-        getRefreshToken(refreshToken)
+        getRefreshToken()
 })
 
 // compute stage report

@@ -248,8 +248,8 @@ const submitt = async () => {
     if (validateData() == true) {
         console.log('please input ur info')
     } else {
-        token.value =validate.getUserDataFromLocal('token') 
-        const [status, data] = await toBackEnd.postData('solution', solutionLink, dataCh.value, token.value)
+        // token.value =validate.getUserDataFromLocal('token') 
+        const [status, data] = await toBackEnd.postData('solution', solutionLink, dataCh.value)
 
         if (icon.value.length != 0) {
             const formData = new FormData()

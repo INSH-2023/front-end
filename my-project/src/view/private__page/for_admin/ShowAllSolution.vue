@@ -2,10 +2,8 @@
 import { ref, onBeforeMount, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import getRefreshToken from './../../../JS/refresh';
-import jsCookie from '../../../JS/cookies'
 import toBackEnd from '../../../JS/fetchToBack';
 import BaseLoading from '../../../components/BaseLoading.vue'
-import validate from '../../../JS/validate';
 const myRouter = useRouter()
 const isFilter = ref(false)
 const keyword = ref("")
@@ -24,7 +22,7 @@ const get_status = ref(undefined)
 // get solution
 const getSolu = async (id = undefined) => {
     let status = false
-    token.value =validate.getUserDataFromLocal('token') 
+    // token.value =validate.getUserDataFromLocal('token') 
     if (id == undefined) {
         let [s, data] = await toBackEnd.getData('solution', solutionLink, token.value)
         if (s == 200) {
@@ -56,8 +54,7 @@ const getSolu = async (id = undefined) => {
 // delete
 const deleteItem = async (v) => {
     changePath("#dele")
-
-    token.value = validate.getUserDataFromLocal('token')
+    // token.value = validate.getUserDataFromLocal('token')
     let [status] = await toBackEnd.delete('solution', solutionLink, v, token.value)
     if (status == 200) {
         console.log('delete success')
@@ -184,10 +181,10 @@ const splitSolutions = (N) => {
 
 
 onBeforeMount(() => {
-    let refreshToken=validate.getUserDataFromLocal('refreshToken')
+    // let refreshToken=validate.getUserDataFromLocal('refreshToken')
     getSolu(),
         changePath()
-        getRefreshToken(refreshToken)
+        getRefreshToken()
 })
 </script>
 <template>

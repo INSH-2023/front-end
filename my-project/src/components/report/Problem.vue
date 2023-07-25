@@ -30,7 +30,7 @@ const token = ref('')
 
 onBeforeMount(()=>{
     getProblems()
-    // getRefreshToken(JSON.parse(jsCookie.get("data")).refreshToken)
+    getRefreshToken()
 })
 
 onUpdated(()=>{

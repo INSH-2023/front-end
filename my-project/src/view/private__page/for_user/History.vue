@@ -3,10 +3,7 @@ import { ref, computed, onBeforeMount } from 'vue'
 import { useRouter } from 'vue-router';
 import BaseLoading from '../../../components/BaseLoading.vue';
 import toBackEnd from '../../../JS/fetchToBack';
-import validate from '../../../JS//validate'
-import jsCookie from '../../../JS/cookies';
 import getRefreshToken from './../../../JS/refresh';
-import Cookies from '../../../JS/cookies';
 // const requestLink="http://localhost:3000/events"
 const requestLink = `${import.meta.env.VITE_BACK_END_HOST}/requests`
 // const userLink = `${import.meta.env.VITE_BACK_END_HOST}/users`
@@ -19,10 +16,10 @@ const myRouter = useRouter()
 const goMain = () => myRouter.push({ name: "services" })
 
 onBeforeMount(() => {
-    let refreshToken= validate.getUserDataFromLocal('refreshToken')
+    // let refreshToken= validate.getUserDataFromLocal('refreshToken')
     navigation()
     getEvents()
-    getRefreshToken(refreshToken)
+    getRefreshToken()
 })
 
 // get variable
@@ -59,7 +56,7 @@ const getEvents = async (id = undefined) => {
     let status = false
 
     if (id == undefined) {
-        token.value = validate.getUserDataFromLocal('token') 
+        // token.value = validate.getUserDataFromLocal('token') 
         let [s, data] = await toBackEnd.getData('request', requestLink, token.value)
         console.log(data)
         if (s == 200) {
@@ -77,7 +74,7 @@ const getEvents = async (id = undefined) => {
         }
 
     } else {
-        token.value = validate.getUserDataFromLocal('token')
+        // token.value = validate.getUserDataFromLocal('token')
         let [s, data] = await toBackEnd.getDataBy('request', requestLink, id, token.value)
         if (s == 200) {
             status = true

@@ -5,6 +5,7 @@ import toBackEnd from '../../JS/fetchToBack'
 import BaseAlert from '../../components/BaseAlert.vue'
 import BaseLoading from '../../components/BaseLoading.vue'
 import Cookies from '../../JS/cookies'
+import validate from '../../JS/validate';
 // src\components\BaseLoading.vue
 const myRouter = useRouter()
 const goLogin = () => myRouter.push({ name: 'signIn' })

@@ -11,7 +11,7 @@ import BaseAlert from '../../../components/BaseAlert.vue'
 onBeforeMount(() => {
     changePath()
     getUsers()
-    getRefreshToken(validate.getUserDataFromLocal('refreshToken'))
+    getRefreshToken()
 })
 
 //variable 
@@ -103,9 +103,9 @@ const role = ref(validate.getUserDataFromLocal('user_role'))
 const getUsers = async (id = undefined) => {
     console.log(id)
     let status = false
-    token.value = validate.getUserDataFromLocal('token')
+    // token.value = validate.getUserDataFromLocal('token')
     if (id == undefined) {
-        let [s, data] = await toBackEnd.getData('user', userLink, token.value)
+        let [s, data] = await toBackEnd.getData('user', userLink)
         if (s == 200) status = true
         userList.value = data.reverse().sort((a, b) => (a.user_status < b.user_status) ? -1 : (a.user_status > b.user_status) ? 1 : 0)
 
@@ -125,8 +125,8 @@ const goVerify = () => myRouter.push({ name: "verify" })
 
 // delete user
 const deleteUser = async (v) => {
-    token.value = validate.getUserDataFromLocal('token')
-    let [status, data] = await toBackEnd.delete('user', userLink, v, token.value)
+    // token.value = validate.getUserDataFromLocal('token')
+    let [status, data] = await toBackEnd.delete('user', userLink, v)
 
     if (status == 200) {
         await getUsers()
@@ -212,8 +212,8 @@ const submitEdit = async (id) => {
     alert_message.value=[]
     alert_title.value=''
     // if(validate.vUserCreate(dataCh.value,lenghtOfInput) !=true){
-    token.value = validate.getUserDataFromLocal('token')
-    let [status, data] = await toBackEnd.editData('user', `${userLink}/${id}`, dataCh.value, token.value)
+    // token.value = validate.getUserDataFromLocal('token')
+    let [status, data] = await toBackEnd.editData('user', `${userLink}/${id}`, dataCh.value)
     console.log(status)
     if (status == 200) {
         await getUsers()

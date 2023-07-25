@@ -3,7 +3,6 @@ import {ref,computed, onBeforeMount} from 'vue'
 import validate from '../../../JS/validate';
 import toBackEnd from '../../../JS/fetchToBack'
 import BaseHeader from '../../../components/BaseHeader.vue';
-import Cookies from '../../../JS/cookies';
 import getRefreshToken from './../../../JS/refresh';
 import BaseLoading from '../../../components/BaseLoading.vue'
 import BaseAlert from '../../../components/BaseAlert.vue';
@@ -86,7 +85,7 @@ let dataCh =computed(()=>{
 const submittS =ref(false)
 const submittform =async()=>{
     alert_status.value=undefined
-    let {status:vStatus,msg:vMsg}=validate.vUser(dataCh.value,lenghtOfInput,passW=true)
+    let {status:vStatus,msg:vMsg}=validate.vUser(dataCh.value,lenghtOfInput,passW.value=true)
     console.log('this status from validate ',vStatus)
     console.log(vMsg)
     // let status=undefined
@@ -99,9 +98,9 @@ const submittform =async()=>{
         alert_status.value=false
     }else{
         submittS.value=true
-        token.value = validate.getUserDataFromLocal('token')
-        console.log(token.value)
-        let [status,data]=await toBackEnd.postData('signUp',userLink,dataCh.value,token.value)
+        // token.value = validate.getUserDataFromLocal('token')
+        // console.log(token.value)
+        let [status,data]=await toBackEnd.postData('signUp',userLink,dataCh.value)
         if(status==200){
             console.log(data)
             // clear()
