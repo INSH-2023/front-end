@@ -55,7 +55,7 @@ defineProps({
 
         <div class="flex mx-2 px-6 py-1 bg-rose-500 text-gray-100 rounded-2xl">
             <h5>
-                เปิดเคส
+                งานค้าง
             </h5>
             <h5 class="ml-2">
                 {{ nOpencase }}

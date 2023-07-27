@@ -20,8 +20,6 @@ defineProps({
     }
 })
 
-
-
 const closeP =(id)=>{
     let button =document.getElementById(id)
     button.setAttribute("href","#")

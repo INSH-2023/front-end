@@ -16,8 +16,8 @@ const myRouter = useRouter()
 
 onBeforeMount(() => {
     navigation(),
-    getEvents(),
-    getAdmin()
+        getEvents(),
+        getAdmin()
     getRefreshToken()
 })
 
@@ -342,25 +342,26 @@ const resetF = () => {
     f_subject.value = ''
     f_status.value = ''
     showList.value = requestList.value
+    console.log("filter has been reset !!")
 }
 
-const statusChange = ref(false)
+// const statusChange = ref(false)
 const checkEdit = computed(() => {
-    let status = statusChange.value
-    if (status_ch.value.length == 0 || status_ch.value == 'request' || request.value.request_status == status_ch.value) {
-        status = false
-    } else
-        if (assign_ch.value.length == 0 || assign_ch.value == 'Not_assign') {
-            status = false
-        } else {
-            status = true
-        }
-
+    let status = false
+    // if (status_ch.value.length == 0 || status_ch.value == 'request' || assign_ch.value.length == 0 || assign_ch.value == 'Not_assign') {
+    //     status = false
+    // } else
+    if (request.value.request_status != status_ch.value || request.value.request_assign != assign_ch.value){
+        status = true
+    }
+    console.log(status)
     return status
 })
 
 const searchByKeyW = () => {
     filterList.value = requestList.value
+    console.log(f_type.value)
+    console.log(f_subject.value)
     console.log(f_status.value)
 
     // email
@@ -370,22 +371,33 @@ const searchByKeyW = () => {
     // }
 
     // service
-    if (f_type.value.length != 0) {
-        filterList.value = requestList.value.filter(e => e.request_service_type.toLowerCase() == f_type.value.toLowerCase())
-    }
+    // if (f_type.value.length != 0) {
+    filterList.value = requestList.value.filter(e =>
+        (f_type.value.length == 0 ? true :
+            e.request_service_type.toLowerCase() == f_type.value.toLowerCase()) &&
+        (f_subject.value.length == 0 ? true :
+            e.request_subject.toLowerCase() == f_subject.value.toLowerCase()) &&
+        (f_status.value.length == 0 ? true :
+            e.request_status.toLowerCase() == f_status.value.toLowerCase())
+    )
+    // }
 
     // service
-    else if (f_subject.value.length != 0) {
-        filterList.value = requestList.value.filter(e => e.request_subject.toLowerCase() == f_subject.value.toLowerCase())
-    }
+    // else if (f_subject.value.length != 0) {
+    // filterList.value = requestList.value.filter(e => e.request_subject.toLowerCase() == f_subject.value.toLowerCase())
+    // }
 
-    // stauts
-    else if (f_status.value.length != 0) {
-        filterList.value = requestList.value.filter(e => e.request_status.toLowerCase() == f_status.value.toLowerCase())
-    }
+    // status
+    // else if (f_status.value.length != 0) {
+    // filterList.value = requestList.value.filter(e => e.request_status.toLowerCase() == f_status.value.toLowerCase())
+    // }
 
     showList.value = filterList.value
     console.log(filterList.value)
+}
+
+const resetSubject = () => {
+    f_subject.value = ""
 }
 
 </script>
@@ -418,13 +430,12 @@ const searchByKeyW = () => {
                         </button>   -->
                 </div>
             </div>
-
         </div>
     </div>
 
     <!-- can get data but no data (clean) -->
     <div v-else-if="get_status == false || requestList.length == 0" class="show_up">
-        <div class=" bg-white w-full mx-auto  h-fit ">
+        <div class=" bg-white w-full mx-auto h-fit ">
             <div class="w-full text-center font-semibold text-[40px]">
                 <div class="my-auto w-fit mx-auto mt-[250px]">
                     <!-- <img src="../../../assets/admin_page/request.png" alt="users_icon" class="w-[40px] h-[40px] my-auto mr-4"> -->
@@ -445,7 +456,7 @@ const searchByKeyW = () => {
 
     <!-- have data -->
     <div v-else-if="get_status == true" class="show_request show_up">
-        <div class=" bg-white w-full mx-auto  h-fit ">
+        <div class=" bg-white h-full w-full mx-auto">
             <div class="w-full text-center font-semibold text-[40px] pt-6">
                 <div class="flex w-fit mx-auto">
                     <img src="../../../assets/admin_page/request.png" alt="users_icon"
@@ -454,10 +465,11 @@ const searchByKeyW = () => {
                 </div>
             </div>
             <!-- navigation bar -->
-            <BaseStatus :n-request="nRequest" :n-finish="nFinish" :n-progress="nProgress" :n-opencase="nOpencase" />
+            <BaseStatus class="my-3" :n-request="nRequest" :n-finish="nFinish" :n-progress="nProgress"
+                :n-opencase="nOpencase" />
 
             <!-- filter -->
-            <div class="relative w-[1200px] h-[40px] mx-auto">
+            <div class="relative h-[40px] mx-auto right-0">
                 <div v-show="is_filter_open == true" class="absolute w-fit h-fit bottom-0">
                     <div class="flex ">
 
@@ -474,11 +486,10 @@ const searchByKeyW = () => {
                         <!-- type -->
                         <div class="px-2">
                             <select v-model="f_type" name="status" id="status"
-                                class="px-3 py-[4px] bg-[#E3F2FD] text-gray-600 rounded-xl focus:outline-0">
+                                class="px-3 py-[4px] bg-[#E3F2FD] text-gray-600 rounded-xl focus:outline-0" @click="resetSubject">
                                 <option value="" selected hidden> Service type </option>
-                                <option value="IT_Service" class="bg-gray-100 text-[#0ea5e9] "> IT Service </option>
+                                <option value="IT_Service" class="bg-gray-100 text-[#0ea5e9]"> IT Service </option>
                                 <option value="PR_Service" class="bg-gray-100 text-[#d97706]"> PR Service </option>
-
                             </select>
                         </div>
 
@@ -487,13 +498,15 @@ const searchByKeyW = () => {
                             <select v-model="f_subject" name="Subject" id="Subject"
                                 class="px-3 py-[4px] bg-[#E3F2FD] text-gray-600 rounded-xl focus:outline-0">
                                 <option value="" selected hidden> Select Subject </option>
-                                <option value="hardware"> hardware </option>
-                                <option value="software"> software </option>
-                                <option value="internet"> internet </option>
-                                <option value="printer"> printer </option>
-                                <option value="website"> website </option>
-                                <option value="meeting"> meeting </option>
-                                <option value="application"> application </option>
+                                <option value="hardware" :hidden="f_type=='PR_Service'"> hardware </option>
+                                <option value="software" :hidden="f_type=='PR_Service'"> software </option>
+                                <option value="internet" :hidden="f_type=='PR_Service'"> internet </option>
+                                <option value="printer" :hidden="f_type=='PR_Service'"> printer </option>
+                                <option value="website" :hidden="f_type=='PR_Service'"> website </option>
+                                <option value="meeting" :hidden="f_type=='PR_Service'"> meeting </option>
+                                <option value="application" :hidden="f_type=='PR_Service'"> application </option>
+                                <option value="media" :hidden="f_type=='IT_Service'"> media </option>
+                                <option value="news" :hidden="f_type=='IT_Service'"> news </option>
                                 <option value="other"> other </option>
                             </select>
                         </div>
@@ -503,14 +516,12 @@ const searchByKeyW = () => {
                             <select v-model="f_status" name="status" id="status"
                                 class="px-3 py-[4px] bg-[#E3F2FD] text-gray-600 rounded-xl focus:outline-0">
                                 <option value="" selected hidden> Select Status </option>
-                                <option value="request" class="bg-"> request </option>
-                                <option value="open_case" class="bg-"> open case </option>
-                                <option value="in_progress" class="bg- "> in progress </option>
-                                <option value="finish" class="bg-"> finish </option>
+                                <option value="request"> request </option>
+                                <option value="open_case"> open case </option>
+                                <option value="in_progress"> in progress </option>
+                                <option value="finish"> finish </option>
                             </select>
                         </div>
-
-
 
                         <div class="flex px-2 font-light">
                             <button @click="resetF"
@@ -525,7 +536,6 @@ const searchByKeyW = () => {
                     </div>
                 </div>
 
-
                 <!-- button -->
                 <div class=" right-[20px] bottom-0 absolute">
                     <button @click="is_filter_open = !is_filter_open" class="flex w-fit">
@@ -535,19 +545,15 @@ const searchByKeyW = () => {
                         <img src="../../../assets/admin_page/filter.png" alt="icon" class="w-[20px] ml-[5px] my-auto">
                     </button>
                 </div>
-
             </div>
         </div>
 
-
-
-
         <!-- table -->
-        <div class="w-[1200px] mx-auto  h-[450px] mt-2 ">
-            <hr class="mt-3 bg-gray-700  w-[1170px] h-[3px]">
-            <div class="overflow-y-auto mx-auto h-[100%] w-[100%] ">
+        <div class="w-auto mx-auto h-full mt-2 ">
+            <hr class="mt-3 bg-gray-700 w-[100%] h-[3px]">
+            <div class="overflow-y-auto mx-auto h-fit w-[100%]">
                 <table class="relative w-full table-fixed text-sm text-center text-gray-800 ">
-                    <thead class="absolute bg-white text-lg sticky top-0 z-10">
+                    <thead class="absolute bg-white text-lg sticky top-0 z-10 ">
                         <tr class="">
                             <th scope="col" class="w-[180px] p-2">
                                 User
@@ -580,9 +586,9 @@ const searchByKeyW = () => {
                     <tbody class="z-0"> <!-- @click="clickedInfo" -->
                         <tr v-for="(data, index) in showList"
                             :style="[index < diffentNotify ? 'background-color:#A6F4F9' : '']" :key="index"
-                            class="relative text-[15px]  bg-white border-b-2 border-gray-300 cursor-default hover:border-gray-400 z-1">
-                            <td class=" font-medium py-3 px-2 text-center">
-                                <div class="  font-normal truncate ">
+                            class="relative text-[15px] bg-white border-b-2 border-gray-300 cursor-default hover:border-gray-400 z-1">
+                            <td class="font-medium py-3 px-2 text-center">
+                                <div class="font-normal truncate ">
                                     <span class="">
                                         {{ data.request_first_name }}
                                     </span>
@@ -798,8 +804,10 @@ const searchByKeyW = () => {
 
                             <div v-for="(data, index) of request.request_problems" :key="index"
                                 class="w-[85px] mx-auto p-2 bg-gray-200 rounded-xl ">
-                                <img v-if="request.problem_upload" :src="`${path}/${request.request_subject}`" alt="NoteBook" class="w-[40px] mx-auto">
-                                <img v-else :src="`${path}/${request.request_subject}`" alt="NoteBook" class="w-[40px] mx-auto">
+                                <img v-if="request.problem_upload" :src="`${path}/${request.request_subject}`"
+                                    alt="NoteBook" class="w-[40px] mx-auto">
+                                <img v-else :src="`${path}/${request.request_subject}`" alt="NoteBook"
+                                    class="w-[40px] mx-auto">
                                 <h3 class="w-fit mx-auto text-[10px]">
                                     {{ data }}
                                 </h3>
@@ -1164,5 +1172,4 @@ const searchByKeyW = () => {
 
 .table_header::after {
     content: ':';
-}
-</style>
+}</style>
