@@ -43,7 +43,6 @@ const props =defineProps({
             <div class="relative block  w-[300px] h-fit mx-auto mt-2 mb-3 p-3 border-2 border-[#fcbf49] rounded sm:w-[400px] lg:hidden lg:hidden">
                 <h4 class="font-semibold text-[16px] text-[#fcbf49]">
                     {{props.title}}
-                    sdfsdf
                 </h4>
                 <!-- article -->
                 <h5  class="font-light text-[14px] text-[#fcbf49]">
