@@ -10,5 +10,5 @@ FROM nginx:stable-alpine as client-dev
 COPY --from=build /app/dist /app
 RUN rm /etc/nginx/conf.d/default.conf
 COPY default.conf /etc/nginx/nginx.conf
-EXPOSE 80
+EXPOSE 3000
 CMD ["nginx","-g","daemon off;"]
