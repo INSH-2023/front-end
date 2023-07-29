@@ -11,7 +11,7 @@ export default defineConfig({
     proxy: {
       // Focus here
       '/api':{
-        target: `http://localhost:5000`,
+        target: `http://10.1.1.41:5000`,
         changeOrigin: true,
         secure: false,
         rewrite: (path) => {

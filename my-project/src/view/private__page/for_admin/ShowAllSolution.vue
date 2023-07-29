@@ -233,7 +233,7 @@ onBeforeMount(() => {
             </div>
 
             <!-- filter -->
-            <div class="relative w-[1200px] h-[70px] mx-auto">
+            <div class="relative h-[40px] mx-auto right-0">
                 <div v-show="isFilter == true" class="absolute w-fit h-fit bottom-0">
                     <div class="flex">
                         <div class="px-2">
@@ -285,12 +285,12 @@ onBeforeMount(() => {
         </div>
 
         <!-- table -->
-        <div class="w-[1200px] mx-auto h-[425px] mt-2">
-            <hr class="mt-3 bg-gray-700 w-[1170px] h-[3px]">
-            <div class="overflow-y-auto mx-auto h-[100%] w-[100%] ">
+        <div class="w-auto mx-auto h-[420px] mt-2">
+            <hr class="mt-3 bg-gray-700 w-[100%] h-[3px]">
+            <div class="overflow-y-auto mx-auto h-[100%] w-[100%] border-b-2 boder-gray-500">
                 <table class="relative w-full table-fixed text-sm text-center text-gray-800">
-                    <thead class="absolute bg-white text-lg sticky top-0 z-10">
-                        <tr class="">
+                    <thead class="absolute bg-white text-lg sticky top-0 z-10 border-b-2 border-b-gray-500">
+                        <tr class="text-[20px]">
                             <th scope="col" class="py-2 px-6 w-[250px]">
                                 Title
                             </th>

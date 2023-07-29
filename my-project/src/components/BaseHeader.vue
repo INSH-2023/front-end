@@ -21,7 +21,7 @@ const path="../assets/vue.svg"
             {{title}}
         </div>
 
-        <hr class="mt-3 bg-gray-700  w-[1170px] h-[3px]">
+        <hr class="mt-3 bg-gray-700 w-full h-[3px]">
     </div>
 </template>
 <style scoped>

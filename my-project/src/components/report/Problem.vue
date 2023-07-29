@@ -54,8 +54,8 @@ const otherSelection=()=>{
 // get problems
 const getProblems=async()=>{
     let cuurentIcon = []
-    token.value = JSON.parse(jsCookie.get("data")).token
-    let[status,data]=await toBackEnd.getData('component_problem',`${problemsLink}/type/${props.typeP}`,token.value = JSON.parse(jsCookie.get("data")).token)
+    // token.value = JSON.parse(jsCookie.get("data")).token
+    let[status,data]=await toBackEnd.getData('component_problem',`${problemsLink}/type/${props.typeP}`)
     if(status==200){
         problemList.value=data
         console.log(data)

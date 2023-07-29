@@ -306,21 +306,32 @@ const searchByKeyW = () => {
     //     console.log('this name filter : '+f_name.value)
     // }
 
-    // email
-    if (f_email.value.length != 0) {
-        filterList.value = userList.value.filter(u => u.user_email.toLowerCase().includes(f_email.value.toLowerCase()))
-        console.log('this  email filter : ' + f_email.value)
-    }
-    // status
-    else if (f_status.value.length != 0) {
-        filterList.value = userList.value.filter(u => u.user_status == f_status.value)
-        console.log('this status filter : ' + f_status.value)
-    }
-    // reposibility
-    else if (f_reposibility.value.length != 0) {
-        filterList.value = userList.value.filter(u => u.user_role.toLowerCase() == f_reposibility.value.toLowerCase())
-        console.log('this role filter : ' + f_reposibility.value)
-    }
+
+    filterList.value = userList.value.filter( u =>
+        (f_email.value.length == 0 ? true :
+            u.user_email.toLowerCase().includes(f_email.value.toLowerCase())) &&
+        (f_status.value.length == 0 ? true :
+            u.user_status == f_status.value) &&
+        (f_reposibility.value.length == 0 ? true :
+            u.user_role.toLowerCase() == f_reposibility.value.toLowerCase())
+    )
+    console.log("user list has been searching...")
+
+    // // email
+    // if (f_email.value.length != 0) {
+    //     filterList.value = userList.value.filter(u => u.user_email.toLowerCase().includes(f_email.value.toLowerCase()))
+    //     console.log('this  email filter : ' + f_email.value)
+    // }
+    // // status
+    // else if (f_status.value.length != 0) {
+    //     filterList.value = userList.value.filter(u => u.user_status == f_status.value)
+    //     console.log('this status filter : ' + f_status.value)
+    // }
+    // // reposibility
+    // else if (f_reposibility.value.length != 0) {
+    //     filterList.value = userList.value.filter(u => u.user_role.toLowerCase() == f_reposibility.value.toLowerCase())
+    //     console.log('this role filter : ' + f_reposibility.value)
+    // }
 
     showList.value = filterList.value
     console.log(filterList.value)
@@ -328,7 +339,7 @@ const searchByKeyW = () => {
 </script>
 <template>
     <div>
-        <div class=" bg-white w-full mx-auto  h-fit ">
+        <div class=" bg-white w-full mx-auto h-full ">
             <div class="w-full text-center font-semibold text-[40px] pt-6">
                 <div class="flex w-fit mx-auto">
                     <img src="../../../assets/admin_page/allUser.png" alt="users_icon"
@@ -337,7 +348,7 @@ const searchByKeyW = () => {
                 </div>
             </div>
             <!-- filter -->
-            <div class="relative w-[1200px] h-[70px] pl-4 mx-auto ">
+            <div class="relative h-[40px] mx-auto right-0">
                 <div v-show="is_filter_open == true" class="absolute w-fit h-fit bottom-0">
                     <div class="flex ">
 
@@ -389,7 +400,7 @@ const searchByKeyW = () => {
                 </div>
 
                 <!-- button -->
-                <div class="   right-[70px] bottom-0  absolute">
+                <div class=" right-[20px] bottom-0 absolute">
                     <button @click="is_filter_open = !is_filter_open" class="flex w-fit">
                         <span class="font-semibold my-auto">
                             ตัวกรอง
@@ -401,12 +412,12 @@ const searchByKeyW = () => {
         </div>
 
         <!-- table -->
-        <div class="w-[1200px] mx-auto  h-[450px] mt-2">
-            <hr class="mt-3 bg-gray-700  w-[1170px] h-[3px]">
+        <div class="w-auto mx-auto h-[420px] mt-2">
+            <hr class="mt-3 bg-gray-700  w-[100%] h-[3px]">
             <div class="overflow-y-auto mx-auto h-[100%] w-[100%] ">
-                <table class="w-full table-fixed text-sm text-center text-gray-800 ">
-                    <thead class="bg-white text-lg sticky top-0">
-                        <tr class="text-[20px] text-gray-500">
+                <table class="relative w-full table-fixed text-sm text-center text-gray-800">
+                    <thead class="bg-white text-lg sticky top-0 border-b-2 border-b-gray-500">
+                        <tr class="text-[20px]">
                             <th scope="col" class="w-[150px] py-2 px-2  pl-[40px]">
                                 Name
                             </th>
@@ -942,5 +953,43 @@ const searchByKeyW = () => {
 
 .table_header::after {
     content: ':';
+}
+
+@keyframes tada {
+    0% {
+        opacity: 0;
+        /* transition-property: all 1s; */
+        margin-top: -30px;
+    }
+
+    100% {
+        opacity: 1;
+        /* transition-property: all 1s; */
+        margin-top: 0px;
+
+    }
+}
+
+::-webkit-scrollbar {
+    width: 10px;
+    background-color: rgb(119, 173, 212);
+    border-radius: 20px;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: rgb(104, 104, 104);
+    border-radius: 20px;
+}
+
+/* scroll bar of comments */
+.comment_old::-webkit-scrollbar {
+    background-color: transparent;
+    width: 10px
+}
+
+.comment_old::-webkit-scrollbar-thumb {
+    background-color: rgb(119, 173, 212);
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
 }
 </style>

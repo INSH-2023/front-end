@@ -24,8 +24,8 @@ const goHowTo = (v) => {
     myRouter.push({ name: 'solution', params: { id: v } })
 }
 const goReport = (v) => {
-    myRouter.push({ name: 'report', params: { id: v, service: params.service } })
     console.log('this is report of :', v)
+    myRouter.push({ name: 'report', params: { id: v, service: params.service } })
 }
 const goService = () => {
     myRouter.push({ name: 'services' })

@@ -380,6 +380,7 @@ const searchByKeyW = () => {
         (f_status.value.length == 0 ? true :
             e.request_status.toLowerCase() == f_status.value.toLowerCase())
     )
+    console.log("request list has been searching...")
     // }
 
     // service
@@ -549,12 +550,12 @@ const resetSubject = () => {
         </div>
 
         <!-- table -->
-        <div class="w-auto mx-auto h-full mt-2 ">
+        <div class="w-auto mx-auto h-[400px] mt-2 ">
             <hr class="mt-3 bg-gray-700 w-[100%] h-[3px]">
-            <div class="overflow-y-auto mx-auto h-fit w-[100%]">
+            <div class="overflow-y-auto mx-auto h-[100%] w-[100%]">
                 <table class="relative w-full table-fixed text-sm text-center text-gray-800 ">
-                    <thead class="absolute bg-white text-lg sticky top-0 z-10 ">
-                        <tr class="">
+                    <thead class="absolute bg-white text-lg sticky top-0 z-10 border-b-2 border-b-gray-500">
+                        <tr class="text-[20px]">
                             <th scope="col" class="w-[180px] p-2">
                                 User
                             </th>
@@ -1172,4 +1173,5 @@ const resetSubject = () => {
 
 .table_header::after {
     content: ':';
-}</style>
+}
+</style>

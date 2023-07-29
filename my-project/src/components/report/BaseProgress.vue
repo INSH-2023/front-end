@@ -57,11 +57,15 @@ onBeforeMount(()=>{
     countAllStage()
 })
 onMounted(()=>{
-    document.getElementsByClassName('stage_color')[0].classList.replace("bg-[#EDEDE9]","bg-[#b7e4c7]")
+    getAllStage()
 })
 onUpdated(()=>{
     setStage()
 })
+
+const getAllStage = () => {
+    document.getElementsByClassName('stage_color')[0].classList.replace("bg-[#EDEDE9]","bg-[#b7e4c7]")
+}
 
 const countAllStage =()=>{
     let number = props.full_stage

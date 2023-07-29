@@ -2,8 +2,8 @@
 import {ref,computed,onUpdated,onBeforeMount} from 'vue'
 import toBackEnd from '../../JS/fetchToBack';
 import validate from '../../JS/validate';
-import getRefreshToken from '../../JS/refresh';
-import jsCookie from '../../JS/cookies';
+// import getRefreshToken from '../../JS/refresh';
+// import jsCookie from '../../JS/cookies';
 const itemLink =`${import.meta.env.VITE_BACK_END_HOST}/items`;
 
 const token = ref('')
@@ -30,7 +30,7 @@ onUpdated(()=>{
 })
 onBeforeMount(()=>{
     // getRefreshToken(JSON.parse(jsCookie.get("data")).refreshToken)
-    getItem(JSON.parse(jsCookie.get("data")).user_emp_code)
+    getItem()
 })
 
 // item variable
@@ -45,9 +45,9 @@ const item=ref({
 
 const itemList=ref([])
 // get item for use type = or
-const getItem=async(emp_code)=>{
-    token.value = JSON.parse(jsCookie.get("data")).token
-    let [status,data]= await toBackEnd.getData('component_item',`${itemLink}/emp-code/${emp_code}`,token.value)
+const getItem=async()=>{
+    let emp_code = validate.getUserDataFromLocal('user_emp_code')
+    let [status,data]= await toBackEnd.getData('component_item',`${itemLink}/emp-code/${emp_code}`)
     if(status==200){
         itemList.value =data
         console.log('data item :',itemList.value)
