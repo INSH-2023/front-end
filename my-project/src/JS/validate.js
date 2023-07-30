@@ -25,31 +25,31 @@ const validate={
 
         let {fnameL,lnameL,emailL,passwordL,empCodeL}= lenghtOfText
 
-        let {user_first_name:old_fname,
-            user_last_name:old_lname,
-            user_email:old_email,
-            user_role:old_role,
-            user_office:old_office,
-            user_position:old_position,
-            user_group:old_group,
-            user_status:old_status,
-            }=oldData
+        // let {user_first_name:old_fname,
+        //     user_last_name:old_lname,
+        //     user_email:old_email,
+        //     user_role:old_role,
+        //     user_office:old_office,
+        //     user_position:old_position,
+        //     user_group:old_group,
+        //     user_status:old_status,
+        //     }=oldData
         
-        if(oldData!=undefined){
-            if( old_fname==fname&&
-                old_lname==lname&&
-                old_email==email&&
-                old_role==role&&
-                old_office==office&&
-                old_position==position&&
-                old_group==group&&
-                old_status==status
-              ){
-                vStatus=true
-                return_data.push('Infomation not change.')
-            }
-           return {status:vStatus,msg: return_data}
-        }
+        // if(oldData!=undefined){
+        //     if( old_fname==fname&&
+        //         old_lname==lname&&
+        //         old_email==email&&
+        //         old_role==role&&
+        //         old_office==office&&
+        //         old_position==position&&
+        //         old_group==group&&
+        //         old_status==status
+        //       ){
+        //         vStatus=true
+        //         return_data.push('Infomation not change.')
+        //     }
+        //    return {status:vStatus,msg: return_data}
+        // }
     //     let email = eEmail.value+organization
     //     // fNameS.value=undefined
     //     // eNameS.value=undefined
@@ -170,8 +170,6 @@ const validate={
             return_data.push(msg)
             vStatus =true
         }
-
-        
     
         return {status:vStatus,msg: return_data}
     },

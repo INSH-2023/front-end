@@ -11,7 +11,8 @@ const requestLink = `${import.meta.env.VITE_BACK_END_HOST}/requests`
 const userLink = `${import.meta.env.VITE_BACK_END_HOST}/users`
 // const linkTesting=`${import.meta.env.VITE_BACK_END}/`
 
-const path = ref(`${import.meta.env.VITE_BACK_END_HOST}/images/problems`)
+const problemPath = ref(`${import.meta.env.VITE_BACK_END_HOST}/images/problems`)
+const itemPath = ref(`${import.meta.env.VITE_BACK_END_HOST}/images/items`)
 const myRouter = useRouter()
 
 onBeforeMount(() => {
@@ -48,7 +49,7 @@ const edit_status = ref(undefined)
 
 const is_filter_open = ref(false)
 
-const token = ref('')
+// const token = ref('')
 const role = ref(validate.getUserDataFromLocal('user_role'))
 
 let diffentNotify = ref(0)
@@ -136,7 +137,9 @@ const getAdmin = async (email) => {
     let [s, data] = await toBackEnd.getData('request_admin', `${userLink}`)
     if (s == 200) {
         status = true
-        data = ["super_admin"].includes(role.value) ? data : data.filter(e => e.user_role == role.value)
+        data = ["super_admin"].includes(role.value) ?
+            data.filter(e => e.user_role != 'user') :
+            data.filter(e => e.user_role == role.value)
         adminList.value = data.reverse().filter(u => u.user_email != email)
     } else {
         // status something
@@ -348,9 +351,9 @@ const resetF = () => {
 // const statusChange = ref(false)
 const checkEdit = computed(() => {
     let status = false
-    // if (status_ch.value.length == 0 || status_ch.value == 'request' || assign_ch.value.length == 0 || assign_ch.value == 'Not_assign') {
-    //     status = false
-    // } else
+    if (status_ch.value.length == 0 || status_ch.value == 'request' || assign_ch.value.length == 0 || assign_ch.value == 'Not_assign') {
+        status = false
+    } else
     if (request.value.request_status != status_ch.value || request.value.request_assign != assign_ch.value){
         status = true
     }
@@ -779,7 +782,7 @@ const resetSubject = () => {
                             class=" w-full grid grid-cols-4 gap-y-2 gap-x-2 mt-4 text-[15px] font-medium">
                             <!-- notebook -->
                             <div class="w-[85px] mx-auto p-2 bg-gray-200 rounded-xl">
-                                <img :src="`${path}/${request.request_subject}`" alt="NoteBook" class="w-[40px] mx-auto">
+                                <img :src="`${itemPath}/${request.request_type_matchine}`" alt="NoteBook" class="w-[40px] mx-auto">
                                 <h3 class="w-fit mx-auto text-[10px]">
                                     {{ request.request_type_matchine }}
                                 </h3>
@@ -805,10 +808,7 @@ const resetSubject = () => {
 
                             <div v-for="(data, index) of request.request_problems" :key="index"
                                 class="w-[85px] mx-auto p-2 bg-gray-200 rounded-xl ">
-                                <img v-if="request.problem_upload" :src="`${path}/${request.request_subject}`"
-                                    alt="NoteBook" class="w-[40px] mx-auto">
-                                <img v-else :src="`${path}/${request.request_subject}`" alt="NoteBook"
-                                    class="w-[40px] mx-auto">
+                                <img :src="`${problemPath}/${request.request_subject}`" alt="NoteBook" class="w-[40px] mx-auto">
                                 <h3 class="w-fit mx-auto text-[10px]">
                                     {{ data }}
                                 </h3>

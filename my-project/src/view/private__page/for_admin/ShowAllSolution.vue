@@ -99,8 +99,11 @@ const resetF = () => {
 }
 
 const searchByKeyW = () => {
+    soluSplit.value = []
     filterList.value = solutionList.value
     // console.log(f_status.value)
+    currentPageList.value = 1
+    currentPage.value = 1
 
     // email
     // if(f_email.value.length != 0){
@@ -108,18 +111,20 @@ const searchByKeyW = () => {
     //     console.log('this  email filter : '+f_email.value)
     // }
 
-    // solution title and description
-    if (keyword.value.length != 0) {
+    // solution title or description and tag
+    filterList.value = solutionList.value.filter(e =>
+            ( keyword.value.length == 0 ? true :
+            e.solution_title.toLowerCase().includes(keyword.value.toLowerCase()) || e.solution_text.toLowerCase().includes(keyword.value.toLowerCase()) ) &&
+            (tagF.value.length == 0 ? true : e.solution_tag.includes(tagF.value))
+    )
 
-        filterList.value = solutionList.value.filter(e => e.solution_title.toLowerCase().includes(keyword.value.toLowerCase()) || e.solution_text.toLowerCase().includes(keyword.value.toLowerCase()))
-    }
+    maxPage.value = Math.ceil(filterList.value.length / maxOfPage.value)
+    console.log(maxPage.value)
 
     // solution tag
-    else if (tagF.value.length != 0) {
-        filterList.value = solutionList.value.filter(e => e.solution_tag.includes(tagF.value))
-    }
-
     showList.value = filterList.value
+    splitSolutions(1)
+    console.log(showList.value)
     console.log(filterList.value)
 }
 
@@ -143,7 +148,7 @@ const maxOfPage = ref(8)
 const soluSplit = ref([])
 const pageN=ref(5)
 const currentPageList=ref(1)
-const maxPage = computed(()=> Math.ceil(solutionList.value.length / maxOfPage.value))
+const maxPage = ref(Math.ceil(solutionList.value.length / maxOfPage.value))
 // for count N of page
 const pageLeft = () => {
     // let length = problemList.value.length / maxOfPage.value
