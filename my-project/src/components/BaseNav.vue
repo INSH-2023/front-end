@@ -101,9 +101,11 @@ const changeColorStatus = (v) => {
     return style
 }
 const isUpdate = ref(false)
+const isNotify = ref(true)
 const isNotifyShow = ref(false)
+const isDark = ref(false)
 const getNotify = async () => {
-    if (Cookies.get("data").length != 0) {
+    if (Cookies.get("data").length != 0 && isNotify) {
         // token.value = JSON.parse(Cookies.get("data")).token
         let [s, data] = await toBackEnd.getData('notify message', requestLink)
         if (s == 200) {
@@ -119,7 +121,7 @@ const getNotify = async () => {
 }
 
 const deleteNotify = async (id) => {
-    if (Cookies.get("data").length != 0) {
+    if (Cookies.get("data").length != 0 && isNotify) {
         // token.value = JSON.parse(Cookies.get("data")).token
         let [s, data] = await toBackEnd.delete('delete message', requestLink, id)
         if (s == 200) {
@@ -133,7 +135,7 @@ const deleteNotify = async (id) => {
 const showNotify = async () => {
     isNotifyShow.value = !isNotifyShow.value
     isSetting.value = false
-    if(notifyList.value != 0){
+    if (notifyList.value != 0 && isNotify) {
         isUpdate.value = false
         // token.value = JSON.parse(Cookies.get("data")).token
         let [s, data] = await toBackEnd.editData("notification", requestLink)
@@ -180,7 +182,7 @@ onBeforeMount(() => {
 
 
     <!-- admin page -->
-    <div v-else class="flex  h-full w-full px-[20px] justify-between p-2 relative bg-[#0920aa]  sticky top-0">
+    <div v-else class="flex h-full w-full px-[20px] justify-between p-2 relative bg-[#0920aa]  sticky top-0">
         <div class="flex ml-[20px] w-fit ">
             <img src="../assets/Moral_Fainal.png" alt="" class="w-[30px] h-[30px] my-auto">
             <div class="text-[20px] font-bold text-white my-auto m-3 
@@ -227,7 +229,7 @@ onBeforeMount(() => {
                     <source src="../assets/bp.mp3" type="audio/mpeg">
                     Your browser does not support the audio element.
                 </audio> -->
-            <button class="mx-1 w-[25px] m-auto" @click="showNotify()">
+            <button class="mx-1 w-[25px] m-auto" @click="showNotify()" v-show="isNotify">
                 <img v-if="!isUpdate" src="../assets/bell.png" alt="alert">
                 <img v-else src="../assets/alert.png" alt="alert">
             </button>
@@ -246,9 +248,10 @@ onBeforeMount(() => {
                         <li class="pl-3"
                             :style="[message.request_update > index ? 'background-color: rgb(155,235,199); border-radius: 0.75rem;' : '']">
                             <h2 class="flex text-[18px]">
-                                <div v-for="(problem,index) in message.request_problems.split(',')" :key="index">
+                                <div v-for="(problem, index) in message.request_problems.split(',')" :key="index">
                                     <span v-if="message.request_problems.split(',').length == 1">{{ problem }}</span>
-                                    <span v-else-if="index < message.request_problems.split(',').length - 1">{{ problem }} &nbsp;</span>
+                                    <span v-else-if="index < message.request_problems.split(',').length - 1">{{ problem
+                                    }} &nbsp;</span>
                                     <span v-else>และ {{ problem }}</span>
                                 </div>
                             </h2>
@@ -272,6 +275,7 @@ onBeforeMount(() => {
                 </div>
             </div>
 
+
             <h3 class="hidden truncate w-full h-fit px-3 max-w-sm m-auto text-[17px]  text-white font-semibold text-justify
                     sm:block 
                 ">
@@ -281,7 +285,7 @@ onBeforeMount(() => {
 
             <!-- ตั้งค่า drop down -->
             <div>
-                <button @click="isSetting = !isSetting, isLanguage = false, isNotifyShow = false"
+                <button @click="isSetting = !isSetting, isNotifyShow = false"
                     class="w-full h-full font-semibold text-[#8DA9C4]  rounded ">
                     <img src="../assets/burger_menu.png" alt="menu"
                         class="w-[25px] h-[25px] lg:w-[30px] lg:h-[30px] mx-auto active:bg-[#90CAF9] active:text-[#0D47A1]  ">
@@ -313,12 +317,24 @@ onBeforeMount(() => {
                         <li v-if="role == 'user'">
                             <hr class="w-full my-2 ">
                         </li>
-                        <li>
+                        <li @click='isDark = !isDark'>
                             <div class="flex cursor-pointer">
                                 <img src="../assets/settings.png" alt="logo_setting" draggable="false"
                                     class="w-[20px] h-[20px] ml-2">
                                 <h4 class="ml-3">
-                                    Option
+                                    Theme: Light
+                                </h4>
+                            </div>
+                        </li>
+                        <li>
+                            <hr class="w-full my-2 ">
+                        </li>
+                        <li @click='isNotify.value = !isNotify.value'>
+                            <div class="flex cursor-pointer">
+                                <img src="../assets/settings.png" alt="logo_setting" draggable="false"
+                                    class="w-[20px] h-[20px] ml-2">
+                                <h4 class="ml-3">
+                                    Notification: {{ (isNotify ? "ON" : "OFF") }}
                                 </h4>
                             </div>
                         </li>
