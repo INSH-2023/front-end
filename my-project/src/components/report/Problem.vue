@@ -1,8 +1,8 @@
 <script setup>
 import{ref,computed,onBeforeMount,onUpdated} from 'vue'
 import toBackEnd from '../../JS/fetchToBack'
-import getRefreshToken from '../../JS/refresh';
-import jsCookie from '../../JS/cookies';
+// import getRefreshToken from '../../JS/refresh';
+// import jsCookie from '../../JS/cookies';
 
 const path = `${import.meta.env.VITE_BACK_END_HOST}/images/problems`
 const APPLICATION = `${path}/application`
@@ -30,7 +30,6 @@ const token = ref('')
 
 onBeforeMount(()=>{
     getProblems()
-    getRefreshToken()
 })
 
 onUpdated(()=>{

@@ -3,7 +3,7 @@ import { ref, computed, onBeforeMount } from 'vue'
 import validate from '../../../JS/validate';
 import toBackEnd from '../../../JS/fetchToBack'
 import BaseHeader from '../../../components/BaseHeader.vue';
-import getRefreshToken from './../../../JS/refresh';
+// import getRefreshToken from './../../../JS/refresh';
 import BaseLoading from '../../../components/BaseLoading.vue'
 import BaseAlert from '../../../components/BaseAlert.vue';
 // const userLink ='http://localhost:3000/users'
@@ -11,9 +11,9 @@ const userLink = `${import.meta.env.VITE_BACK_END_HOST}/users`
 // const userLink ='http://localhost:5000/api/users'
 
 
-onBeforeMount(() => {
-    getRefreshToken(validate.getUserDataFromLocal('refreshToken'))
-})
+// onBeforeMount(() => {
+//     getRefreshToken()
+// })
 
 const empCode = ref('')
 const fName = ref('')

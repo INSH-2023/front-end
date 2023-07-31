@@ -1,9 +1,9 @@
 <script setup>
 import { onBeforeMount, ref, computed } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-import getRefreshToken from './../../../JS/refresh';
+// import getRefreshToken from './../../../JS/refresh';
 import toBackEnd from '../../../JS/fetchToBack';
-import validate from '../../../JS/validate';
+// import validate from '../../../JS/validate';
 // const solutionLink='http://localhost:3000/solutions'
 const solutionLink = `${import.meta.env.VITE_BACK_END_HOST}/solutions`
 const iconLink = `${import.meta.env.VITE_BACK_END_HOST}/images/solutions`
@@ -106,7 +106,7 @@ const randomArticle = async (n, max, data) => {
 onBeforeMount(() => {
     // let refreshToken=validate.getUserDataFromLocal('refreshToken')
     getArticle(params.service)
-    getRefreshToken()
+    // getRefreshToken()
 })
 </script>
 <template>

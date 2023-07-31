@@ -1,4 +1,6 @@
 import {createRouter, createWebHistory} from 'vue-router'
+import getRefreshToken from '../JS/refresh'
+import validate from '../JS/validate'
 
 // user
 import Booking_main from '../view/private__page/for_user/Booking_main.vue'
@@ -36,6 +38,9 @@ import ComingSoon from '../view/ComingSoon.vue'
 import ErrorServer from '../view/ErrorServer.vue'
 // private
 import Main_for_navbar from '../view/private__page/Main_for_navbar.vue'
+
+// cookie
+import Cookies from '../JS/cookies'
 
 
 const history=createWebHistory()
@@ -144,7 +149,7 @@ const routes=[
     },
 
     {
-        path:'/account/admin',
+        // path:'/account',
         name:'mainForNavbar',
         component:Main_for_navbar,
         children:[
@@ -193,7 +198,7 @@ const routes=[
         
             },
             {
-                path:'/account/user/services',
+                path:'/account/user/service',
                 name:'mainPrivateUser',
                 component:Main_private_user,
                 children:[
@@ -253,4 +258,22 @@ const routes=[
     }
 ]
 const router=createRouter({history,routes})
+
+// vue nav guard
+router.beforeEach((to, from, next) => {
+    // if personal data was remove that redirect to login page
+    // if user or admin redirect on admin service the user is not allow and admin can go to service by normally
+    // when refresh page, cookie is refresh page
+    if (to.name !== 'signIn' && Cookies.get("data") == undefined) next({ name: 'signIn' })
+    else if (to.name == 'mainPrivateAdmin' && validate.getUserDataFromLocal("user_role") == "user") next({ name: 'services' })
+    else if (to.name == 'mainPrivateAdmin' && validate.getUserDataFromLocal("user_role") != "user") next({ name: 'showAllEvents' })
+    else {
+        getRefreshToken()
+        next()
+    }
+})
+
+// when router is error
+router.onError({name: 'errorServer'})
+
 export default router

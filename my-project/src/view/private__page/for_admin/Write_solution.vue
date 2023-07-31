@@ -2,9 +2,9 @@
 import { ref, computed, onBeforeUnmount } from 'vue'
 import { useRouter } from 'vue-router';
 import toBackEnd from '../../../JS/fetchToBack';
-import jsCookie from '../../../JS/cookies'
-import getRefreshToken from '../../../JS/refresh'
-import validate from '../../../JS/validate';
+// import jsCookie from '../../../JS/cookies'
+// import getRefreshToken from '../../../JS/refresh'
+// import validate from '../../../JS/validate';
 
 // const solutionLink ='http://localhost:3000/solutions'
 const solutionLink = `${import.meta.env.VITE_BACK_END_HOST}/solutions`
@@ -305,10 +305,9 @@ const submitt = async () => {
     // console.log(solutions.value)
 }
 
-onBeforeUnmount(() => {
-    let refreshToken = validate.getUserDataFromLocal('refreshToken')
-    getRefreshToken(refreshToken)
-})
+// onBeforeUnmount(() => {
+//     getRefreshToken()
+// })
 
 </script>
 <template>

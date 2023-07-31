@@ -1,7 +1,7 @@
 <script setup>
 import { ref, onBeforeMount, computed } from 'vue'
 import { useRouter } from 'vue-router'
-import getRefreshToken from './../../../JS/refresh';
+// import getRefreshToken from './../../../JS/refresh';
 import toBackEnd from '../../../JS/fetchToBack';
 import BaseLoading from '../../../components/BaseLoading.vue'
 const myRouter = useRouter()
@@ -189,7 +189,7 @@ onBeforeMount(() => {
     // let refreshToken=validate.getUserDataFromLocal('refreshToken')
     getSolu(),
         changePath()
-        getRefreshToken()
+        // getRefreshToken()
 })
 </script>
 <template>

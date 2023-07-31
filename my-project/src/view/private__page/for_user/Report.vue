@@ -11,7 +11,7 @@ import validate from '../../../JS/validate';
 import SummaryReport from '../../../components/report/SummaryReport.vue';
 import BaseAlert from '../../../components/BaseAlert.vue';
 import BaseLoading from '../../../components/BaseLoading.vue';
-import getRefreshToken from './../../../JS/refresh';
+// import getRefreshToken from './../../../JS/refresh';
 
 const myRouter = useRouter()
 const goBack = () => myRouter.go(-1)
@@ -283,7 +283,7 @@ const getUser = async (emp_code) => {
 onBeforeMount(() => {
     // let refreshToken = validate.getUserDataFromLocal('refreshToken')
     getUser(validate.getUserDataFromLocal('user_emp_code'))
-        getRefreshToken()
+        // getRefreshToken()
 })
 
 // compute stage report

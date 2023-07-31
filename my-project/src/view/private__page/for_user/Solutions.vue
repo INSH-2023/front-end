@@ -2,7 +2,7 @@
 import BaseStatus from '../../../components/BaseStatus.vue';
 import { useRoute, useRouter } from 'vue-router';
 import { onBeforeMount, ref } from 'vue';
-import getRefreshToken from './../../../JS/refresh';
+// import getRefreshToken from './../../../JS/refresh';
 // import jsCookie from '../../../JS/cookies';
 import toBackEnd from '../../../JS/fetchToBack';
 
@@ -35,7 +35,7 @@ const getInfo = async () => {
 onBeforeMount(() => {
     // let refreshToken =validate.getUserDataFromLocal('refreshToken')
     getInfo()
-        getRefreshToken()
+        // getRefreshToken()
 })
 </script>
 <template>

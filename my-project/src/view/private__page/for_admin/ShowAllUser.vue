@@ -1,17 +1,17 @@
 <script setup>
-import { EMPTY_ARR } from '@vue/shared';
+// import { EMPTY_ARR } from '@vue/shared';
 import { ref, computed, onBeforeMount } from 'vue'
 import { useLink, useRouter } from 'vue-router'
 import toBackEnd from '../../../JS/fetchToBack.js'
 import validate from '../../../JS/validate.js'
-import jsCookie from '../../../JS/cookies';
-import getRefreshToken from './../../../JS/refresh';
-import Cookies from '../../../JS/cookies';
+// import jsCookie from '../../../JS/cookies';
+// import getRefreshToken from './../../../JS/refresh';
+// import Cookies from '../../../JS/cookies';
 import BaseAlert from '../../../components/BaseAlert.vue'
 onBeforeMount(() => {
     changePath()
     getUsers()
-    getRefreshToken()
+    // getRefreshToken()
 })
 
 //variable 

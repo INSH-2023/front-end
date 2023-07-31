@@ -1,7 +1,7 @@
 <script setup>
 import { ref, computed, onBeforeMount } from 'vue'
 import toBackEnd from '../../../JS/fetchToBack';
-import getRefreshToken from './../../../JS/refresh';
+// import getRefreshToken from './../../../JS/refresh';
 import BaseShowProblem from '../../../components/problem-list/BaseShowProblem.vue';
 import BaseLoading from '../../../components/BaseLoading.vue';
 import validate from '../../../JS/validate';
@@ -219,7 +219,6 @@ const editProblem = () => {
 onBeforeMount(() => {
     // let refreshToken=validate.getUserDataFromLocal('refreshToken')
     getP(subjectCr.value)
-    getRefreshToken()
 })
 
 // auto change subject 

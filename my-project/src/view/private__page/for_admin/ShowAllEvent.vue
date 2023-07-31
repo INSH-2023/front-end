@@ -4,7 +4,7 @@ import { useRouter } from 'vue-router';
 import BaseLoading from '../../../components/BaseLoading.vue';
 import toBackEnd from '../../../JS/fetchToBack';
 import validate from '../../../JS//validate'
-import getRefreshToken from './../../../JS/refresh';
+// import getRefreshToken from './../../../JS/refresh';
 import BaseStatus from '../../../components/BaseStatus.vue';
 // const requestLink="http://localhost:3000/events"
 const requestLink = `${import.meta.env.VITE_BACK_END_HOST}/requests`
@@ -19,7 +19,7 @@ onBeforeMount(() => {
     navigation(),
         getEvents(),
         getAdmin()
-    getRefreshToken()
+    // getRefreshToken()
 })
 
 // get variable

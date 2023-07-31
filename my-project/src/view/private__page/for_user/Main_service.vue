@@ -2,13 +2,13 @@
 import { ref, onBeforeMount } from 'vue';
 import { useRouter } from 'vue-router'
 import BaseStatus from '../../../components/BaseStatus.vue'
-import getRefreshToken from '../../../JS/refresh';
-import Cookies from '../../../JS/cookies';
+// import getRefreshToken from '../../../JS/refresh';
+// import Cookies from '../../../JS/cookies';
 import toBackEnd from '../../../JS/fetchToBack';
-import validate from '../../../JS/validate';
+// import validate from '../../../JS/validate';
 const myRouter = useRouter()
 const goMainMenu = (v) => myRouter.push({ name: 'booking', params: { service: v } })
-const token = ref('')
+// const token = ref('')
 const requestLink = `${import.meta.env.VITE_BACK_END_HOST}/requests`
 const request = ref(0)
 const inProgress = ref(0)

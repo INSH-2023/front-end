@@ -3,7 +3,7 @@ import { ref, computed, onBeforeMount } from 'vue'
 import { useRouter } from 'vue-router';
 import BaseLoading from '../../../components/BaseLoading.vue';
 import toBackEnd from '../../../JS/fetchToBack';
-import getRefreshToken from './../../../JS/refresh';
+// import getRefreshToken from './../../../JS/refresh';
 // const requestLink="http://localhost:3000/events"
 const requestLink = `${import.meta.env.VITE_BACK_END_HOST}/requests`
 // const userLink = `${import.meta.env.VITE_BACK_END_HOST}/users`
@@ -19,7 +19,7 @@ onBeforeMount(() => {
     // let refreshToken= validate.getUserDataFromLocal('refreshToken')
     navigation()
     getEvents()
-    getRefreshToken()
+    // getRefreshToken()
 })
 
 // get variable
