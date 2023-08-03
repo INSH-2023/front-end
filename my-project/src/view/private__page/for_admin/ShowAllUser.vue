@@ -40,13 +40,14 @@ const eOffice = ref('')
 const eGroup = ref('')
 const ePosition = ref('')
 const eStatus = ref('')
+const organization = '@moralcenter.or.th'
 // const eCPw = ref('')
 // const ePw = ref('')
 let dataCh = computed(() => {
     return {
         user_first_name: eFName.value,
         user_last_name: eLName.value,
-        user_email: eEmail.value+"@moralcenter.or.th",
+        user_email: `${eEmail.value}${organization}`,
         user_role: eRole.value,
         user_office: eOffice.value,
         user_position: ePosition.value,
@@ -253,7 +254,7 @@ const checkInput = () => {
     if ( status== false) {
         window.location.href = '#veri'
     } else {
-        console.log('input invalid value pls fix it 😂')
+        console.log('input invalid value pls fix it ')
         console.log(vMsg)
         alert_title.value='Cannot update user detail!!'
         alert_message.value=vMsg

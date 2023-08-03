@@ -85,7 +85,7 @@ let dataCh = computed(() => {
 const submittS = ref(false)
 const submittform = async () => {
     alert_status.value = undefined
-    let { status: vStatus, msg: vMsg } = validate.vUser(dataCh.value, lenghtOfInput, passW.value = true)
+    let { status: vStatus, msg: vMsg } = validate.vUser(dataCh.value, lenghtOfInput,true)
     console.log('this status from validate ', vStatus)
     console.log(vMsg)
     // let status=undefined
@@ -97,11 +97,11 @@ const submittform = async () => {
         alert_message.value = vMsg
         alert_status.value = false
     } else {
-        submittS.value = true
+        submittS.value = undefined
         // token.value = validate.getUserDataFromLocal('token')
         // console.log(token.value)
         let [status, data] = await toBackEnd.postData('signUp', userLink, dataCh.value)
-        if (status == 200) {
+        if (status == 201) {
             console.log(data)
             // clear()
             empCode.value = ''
@@ -114,7 +114,9 @@ const submittform = async () => {
             role.value = ''
             passW.value = ''
             cPassW.value = ''
-            submittS.value = false
+            submittS.value = true
+            setTimeout(()=>submittS.value = false ,1000)
+            
         } else {
             let errorMsg = undefined
             submittS.value = false
@@ -424,8 +426,13 @@ const goRotate = () => {
                         <h4 class="w-fit h-fit  mx-auto font-light text-white">
                             Create User
                         </h4>
-                        <BaseLoading v-show="submittS==true" class="absolute right-[1.2rem] top-[0.6rem]" type="circle"
+                        <BaseLoading v-show="submittS==undefined" class="absolute right-[1.2rem] top-[0.6rem]" type="circle"
                             w="20" h="20" r="2" />
+                        <div v-show="submittS==true" class="absolute right-[1.1rem] top-[0.4rem] ">
+                            <h4>
+                                ✅
+                            </h4>
+                        </div>
                         <!-- <img  v-show="submittS==true"  src="../../../assets/vue.svg" alt="spin_loading" class="absolute top-[10px] right-[25px] w-[20px] animate-spin"> -->
                     </button>
                 </div>
