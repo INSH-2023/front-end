@@ -32,7 +32,7 @@ let role = ref(validate.getUserDataFromLocal('user_role') )
             </div> -->
 
         <div class=" w-full h-fit  bg-white p-3 ">
-            <img src="../assets/Moralcenter_IT.png" alt="moralcenter" class="w-[80px] h-[80px] mx-auto">
+            <img src="../assets/Moralcenter_2022.png" alt="moralcenter" class="w-[80px] h-[80px] mx-auto">
             <!-- <label for="searching" class="mx-2 my-auto">
                     <img src="../assets/loupe.png" alt="" class="w-[20px] h-[20px] ">
                 </label>
