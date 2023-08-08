@@ -185,9 +185,11 @@ const addProblem = async () => {
         if (status == 201) {
             console.log('add problem success 😏')
             console.log(data)
-            subjectCr.value = 'all'
+            name.value=''
+            subjectSec.value = ''
             base64Img.value = ''
             file.value = ''
+            
             // getP(subjectCr.value)
         } else {
             console.log(data)

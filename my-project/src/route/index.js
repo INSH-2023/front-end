@@ -17,6 +17,8 @@ import Solutions from '../view/private__page/for_user/Solutions.vue'
 // user/report
 import Report from '../view/private__page/for_user/Report.vue'
 
+import Profile from '../view/private__page/for_user/Profile.vue'
+
 // admin
 import SignUp from '../view/private__page/for_admin/SignUp.vue'
 import Main_private_admin from '../view/private__page/for_admin/Main_private_admin.vue'
@@ -237,7 +239,12 @@ const routes=[
                     }
                 ]
             }
-
+            ,
+            {
+                path:'/account/user/profile/:emp_code?',
+                name:'profile',
+                component: Profile
+            }
         ]
     }
     ,

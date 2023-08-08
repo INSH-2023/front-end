@@ -27,7 +27,6 @@ onUpdated(() => {
     console.log(props.problems)
 })
 onMounted(() => {
-    console.log("helloooooo")
     console.log(props.problems)
 })
 

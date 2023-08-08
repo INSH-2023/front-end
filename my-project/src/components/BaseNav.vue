@@ -3,6 +3,7 @@ import { useRouter } from 'vue-router'
 import { ref, onBeforeMount } from 'vue'
 import Cookies from '../JS/cookies';
 import toBackEnd from '../JS/fetchToBack'
+import validate from '../JS/validate';
 const props = defineProps({
     role: {
         type: String,
@@ -28,8 +29,9 @@ const goHistory = () => myRouter.push({ name: 'history' })
 const goBooking = () => myRouter.push({ name: 'booking' })
 const goService = () => myRouter.push({ name: 'services' })
 const comingSoon = () => myRouter.push({ name: 'notAvaliable' })
+const goProfile=(emp_code)=> myRouter.push({name:'profile',params:{emp_code:emp_code}})
 
-const token = ref("")
+const empCode = ref("")
 const notifyList = ref([])
 const notify = ref(0)
 
@@ -157,6 +159,8 @@ onBeforeMount(() => {
     // let user_info =JSON.parse(localStorage.getItem('user_info')) 
     getRole()
     getNotify()
+    empCode.value =validate.getUserDataFromLocal('user_emp_code')
+    // console.log(empCode.value)
 })
 </script>
 <template>
@@ -279,7 +283,7 @@ onBeforeMount(() => {
             <h3 class="hidden truncate w-full h-fit px-3 max-w-sm m-auto text-[17px]  text-white font-semibold text-justify
                     sm:block 
                 ">
-                สวัสดี! &nbsp;&nbsp; {{ userName }}
+                สวัสดี! &nbsp;&nbsp; <span @click="goProfile(empCode)" class="cursor-pointer">{{ userName }}</span>
             </h3>
 
 
@@ -317,7 +321,19 @@ onBeforeMount(() => {
                         <li v-if="role == 'user'">
                             <hr class="w-full my-2 ">
                         </li>
-                        <li @click='isDark = !isDark'>
+                            <li >
+                                <div @click="goProfile(empCode)" class="flex cursor-pointer ">
+                                    <div class="w-fit h-fit  ml-2">
+                                        <img src="../assets/user.png" alt="logo_setting" draggable="false"
+                                                                                class="w-[20px] h-[20px] ">                                        
+                                    </div>
+                                    
+                                    <h4 class="ml-3 mx-auto">
+                                        User profile
+                                    </h4>
+                                </div>
+                            </li>
+                        <!-- <li @click='isDark = !isDark'>
                             <div class="flex cursor-pointer">
                                 <img src="../assets/settings.png" alt="logo_setting" draggable="false"
                                     class="w-[20px] h-[20px] ml-2">
@@ -325,11 +341,11 @@ onBeforeMount(() => {
                                     Theme: Light
                                 </h4>
                             </div>
-                        </li>
+                        </li> -->
                         <li>
                             <hr class="w-full my-2 ">
                         </li>
-                        <li @click='isNotify.value = !isNotify.value'>
+                        <li @click='isNotify = !isNotify'>
                             <div class="flex cursor-pointer">
                                 <img src="../assets/settings.png" alt="logo_setting" draggable="false"
                                     class="w-[20px] h-[20px] ml-2">

@@ -432,7 +432,7 @@ const getDataFromComponent = (value) => {
     <div class="pt-3"> -->
 
     <!-- for write report -->
-    <div v-if="isSubmitt == false" class=" w-full h-fit py-3 mx-auto lg:w-[800px] lg:h-fit">
+    <div v-if="isSubmitt == false" class=" w-full h-fit py-3 mx-auto lg:w-[800px] lg:h-fit show_up">
 
 
         <!-- header -->
@@ -524,7 +524,7 @@ const getDataFromComponent = (value) => {
     </div>
 
     <!-- submitt report -->
-    <div v-else-if="isSubmitt == true" class="w-[250px] h-fit mx-auto md:w-[500px] lg:w-[1000px] md:h-fit ">
+    <div v-else-if="isSubmitt == true" class="w-[250px] h-fit mx-auto md:w-[500px] lg:w-[1000px] md:h-fit show_up">
         <div class="w-fit mx-auto">
             <img src="../../../assets/check.png" alt="check_icon"
                 class="w-[80px] h-[80px] mt-[20px] lg:w-[130px] lg:h-[130px] lg:mt-[60px]">

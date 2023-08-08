@@ -116,7 +116,7 @@ onBeforeMount(() => {
     <!-- <BaseStatus/> -->
 
     <!-- ส่วนล่าง -->
-    <div class="w-fit mx-auto mt-4 text-[27px] text-gray-600 font-bold 
+    <div class="w-fit mx-auto mt-4 text-[27px] text-gray-600 font-bold show_up
         md:text-[50px]
         lg:text-[60px]
     ">
@@ -458,8 +458,8 @@ onBeforeMount(() => {
         </div>
     </div>
 
-    <!-- list article -->
-    <!-- <div v-if="params.service == 'it'" class="grid grid-cols-2 grid-rows-2 gap-4 w-[1000px] mx-auto mt-3">
+    <!-- list article
+    <div v-if="params.service == 'it'" class="grid grid-cols-2 grid-rows-2 gap-4 w-[1000px] mx-auto mt-3">
         <div v-for="(data, index) in ranArticle" :key="index" class="bg-gray-100 p-2 rounded-2xl hover:bg-gray-200">
             <img :src="data.img" alt="logo" class=" w-[45px] mx-3 mt-2">
             <h5 class="ml-[10px] mb-1.5 mt-2 text-[20px] font-semibold">
