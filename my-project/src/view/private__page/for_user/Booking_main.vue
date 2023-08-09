@@ -66,8 +66,8 @@ const findingKeyW = async (keyWord) => {
         //         console.log('this from searching step: ', matchStep(solu.solution_steps, keyWord))
         //     }
     }
-    if (arr.length != 0 && solutionList.value.length >= 4) {
-        await randomArticle(4, arr.length, arr)
+    if (arr.length != 0) {
+        await randomArticle(4, arr)
     }
 }
 
@@ -86,20 +86,42 @@ const getArticle = async (service) => {
 
 // random article
 const ranArticle = ref([])
-const randomArticle = async (n, max, data) => {
+const randomArticle = async (n, data) => {
     ranArticle.value = []
     let ranN = undefined
     let i = 0
-    for (i = 0; i < n; i++) {
-        if (ranN == Math.floor(Math.random() * max)) {
-            i--
-            ranN = Math.floor(Math.random() * max)
-        } else {
-            ranN = Math.floor(Math.random() * max)
-            // console.log( Math.floor(Math.random()*max) ) 
-            ranArticle.value.push(data[ranN])
-        }
+    // old problems
+    // for (i = 0; i < n; i++) {
+    //     if (ranN == Math.floor(Math.random() * max)) {
+    //         i--
+    //         ranN = Math.floor(Math.random() * max)
+    //     } else {
+    //         ranN = Math.floor(Math.random() * max)
+    //         // console.log( Math.floor(Math.random()*max) ) 
+    //         ranArticle.value.push(data[ranN])
+    //     }
+    // }
+
+    // Solution1: The Fisher-Yates algorithm; ref: https://dev.to/codebubb/how-to-shuffle-an-array-in-javascript-2ikj
+    // for (let i = data.length - 1; i > 0; i--) {
+    //     const j = Math.floor(Math.random() * (i + 1));
+    //     const temp = data[i];
+    //     data[i] = data[j];
+    //     data[j] = temp;
+    // }
+
+    // Solution1:
+    for (let i = data.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [data[i], data[j]] = [data[j], data[i]];
     }
+
+    // Solution2:
+    // data = data.map(value => ({ value, sort: Math.random() }))
+    // .sort((a, b) => a.sort - b.sort)
+    // .map(({ value }) => value)
+
+    ranArticle.value.push(...data.slice(0, 4))
     // return Math.floor(Math.random()*max) 
 }
 
