@@ -339,7 +339,7 @@ const searchByKeyW = () => {
 }
 </script>
 <template>
-    <div>
+    <div class="show_up">
         <div class=" bg-white w-full mx-auto h-full ">
             <div class="w-full text-center font-semibold text-[40px] pt-6">
                 <div class="flex w-fit mx-auto">

@@ -46,7 +46,7 @@ onBeforeMount(() => {
     <div class="w-fit mx-auto mt-2 text-[2.5rem] text-gray-600 font-bold sm:mt-4 sm:text-[3.75rem]">
         เลือกบริการ
     </div>
-    <div class="w-fit mx-auto mt-10">
+    <div class="w-fit mx-auto mt-10 show_up">
         <div class="flex flex-col 
                         md:flex-row
                     ">

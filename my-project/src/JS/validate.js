@@ -318,7 +318,8 @@ const validate={
                 return data    
             }
         }
-    }
+    },
+    
 }
 
 export default validate
