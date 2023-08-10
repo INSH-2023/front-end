@@ -36,6 +36,7 @@ const searching = ref('')
 const findingKeyW = async (keyWord) => {
 
     let arr = []
+    ranArticle.value = []
 
     // let matchStep = (a, kw) => {
     //     let check = false
@@ -48,15 +49,15 @@ const findingKeyW = async (keyWord) => {
     //     return check
     // }
     for (let solu of solutionList.value) {
-        if (solu.solution_title.toLowerCase() == keyWord) {
+        if (solu.solution_title.toLowerCase().includes(keyWord.toLowerCase())) {
             arr.push(solu)
             console.log('This from searching title', solu.solution_title)
         } else
-            if (solu.solution_tag.includes(keyWord)) {
-                arr.push(solu)
-                console.log('this from searching tag :', solu.solution_tag.includes(keyWord))
-            } else
-                if (solu.solution_text.toLowerCase().includes(keyWord)) {
+            // if (solu.solution_tag.includes(keyWord)) {
+            //     arr.push(solu)
+            //     console.log('this from searching tag :', solu.solution_tag.includes(keyWord))
+            // } else
+                if (solu.solution_text.toLowerCase().includes(keyWord.toLowerCase())) {
                     arr.push(solu)
                     console.log('this from searching text: ', solu.solution_text.includes(keyWord))
                 }
@@ -464,7 +465,7 @@ onBeforeMount(() => {
             หรือค้นหาหัวข้อปัญหาที่คุณเจอ
         </h3>
         <div class="flex overflow-hidden w-[500px] h-[30px] mt-3 mx-auto border rounded-[20px] border-gray-400">
-            <label for="searching" @click="findingKeyW(searching)">
+            <label for="searching" @click="findingKeyW(searching)" class="cursor-pointer">
                 <img src="../../../assets/loupe.png" alt="" class="w-[20px] mx-3 inline-block">
             </label>
             <input id="searching" type="text" v-model="searching" placeholder="ลองพิมพ์ปัญหาของคุณมาสิ."
