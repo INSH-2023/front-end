@@ -1,17 +1,16 @@
 <script setup>
-// import { EMPTY_ARR } from '@vue/shared';
+import { EMPTY_ARR } from '@vue/shared';
 import { ref, computed, onBeforeMount } from 'vue'
 import { useLink, useRouter } from 'vue-router'
 import toBackEnd from '../../../JS/fetchToBack.js'
 import validate from '../../../JS/validate.js'
-// import jsCookie from '../../../JS/cookies';
-// import getRefreshToken from './../../../JS/refresh';
-// import Cookies from '../../../JS/cookies';
-import BaseAlert from '../../../components/BaseAlert.vue'
+import jsCookie from '../../../JS/cookies';
+import getRefreshToken from './../../../JS/refresh';
+import Cookies from '../../../JS/cookies';
 onBeforeMount(() => {
     changePath()
     getUsers()
-    // getRefreshToken()
+    getRefreshToken(JSON.parse(jsCookie.get("data")).refreshToken)
 })
 
 //variable 
@@ -20,10 +19,6 @@ const myRouter = useRouter()
 // const userLink ='http://localhost:3000/users'
 // const userLink ='http://localhost:5000/api/users'
 const userLink = `${import.meta.env.VITE_BACK_END_HOST}/users`
-
-const alert_status=ref(undefined)
-const alert_message=ref([])
-const alert_title=ref('')
 
 // get variable
 const userList = ref([])
@@ -40,21 +35,20 @@ const eOffice = ref('')
 const eGroup = ref('')
 const ePosition = ref('')
 const eStatus = ref('')
-const organization = '@moralcenter.or.th'
-// const eCPw = ref('')
-// const ePw = ref('')
+const eCPw = ref('')
+const ePw = ref('')
 let dataCh = computed(() => {
     return {
         user_first_name: eFName.value,
         user_last_name: eLName.value,
-        user_email: `${eEmail.value}${organization}`,
+        user_email: eEmail.value,
         user_role: eRole.value,
         user_office: eOffice.value,
         user_position: ePosition.value,
-        // user_password: ePw.value,
+        user_password: ePw.value,
         user_group: eGroup.value,
         user_status: eStatus.value,
-        // user_cPassW: eCPw.value
+        user_cPassW: eCPw.value
     }
 })
 
@@ -62,10 +56,11 @@ let dataCh = computed(() => {
 const user_id = ref(undefined)
 
 const lenghtOfInput = {
-    fNameL:50,
-    lNameL:50,
-    emailL:50,
-    positionL:80
+    fnameL: 30,
+    lnameL: 61,
+    emailL: 30,
+    passwordL: 14,
+    // cPasswordL: 14
 }
 
 
@@ -98,21 +93,22 @@ const is_edit_open = ref(false)
 const is_active_open = ref(false)
 
 const token = ref('')
-const role = ref(validate.getUserDataFromLocal('user_role'))
+const role = ref(JSON.parse(Cookies.get("data")).user_role)
 
 // get user
 const getUsers = async (id = undefined) => {
     console.log(id)
     let status = false
-    // token.value = validate.getUserDataFromLocal('token')
     if (id == undefined) {
-        let [s, data] = await toBackEnd.getData('user', userLink)
+        token.value = JSON.parse(jsCookie.get("data")).token
+        let [s, data] = await toBackEnd.getData('user', userLink, token.value)
         if (s == 200) status = true
-        userList.value = data.reverse().sort((a, b) => (a.user_status < b.user_status) ? -1 : (a.user_status > b.user_status) ? 1 : 0)
+        userList.value = data.reverse().sort((a,b)=>(a.user_status < b.user_status) ? -1 : (a.user_status > b.user_status) ? 1 : 0)
 
         showList.value = userList.value
 
     } else {
+        token.value = JSON.parse(jsCookie.get("data")).token
         let [s, data] = await toBackEnd.getDataBy('user', `${userLink}/emp-code`, id, token.value)
         if (s == 200) status = true
         user.value = data
@@ -122,12 +118,11 @@ const getUsers = async (id = undefined) => {
     return status
 }
 
-const goVerify = () => myRouter.push({ name: "verify" })
 
 // delete user
 const deleteUser = async (v) => {
-    // token.value = validate.getUserDataFromLocal('token')
-    let [status, data] = await toBackEnd.delete('user', userLink, v)
+    token.value = JSON.parse(jsCookie.get("data")).token
+    let [status, data] = await toBackEnd.delete('user', userLink, v, token.value)
 
     if (status == 200) {
         await getUsers()
@@ -146,9 +141,7 @@ const deleteUser = async (v) => {
 const showInfoByID = async (v, index) => {
     user.value = {}
     user_id.value = v
-    alert_status.value=undefined
-    alert_message.value=[]
-    alert_title.value=''
+
     let status = false
     console.log('value : ', v)
     console.log('index : ', index)
@@ -177,14 +170,14 @@ const assignDetail = (b) => {
             is_edit_open.value = b
             eFName.value = user.value.user_first_name
             eLName.value = user.value.user_last_name
-            eEmail.value = user.value.user_email.split("@")[0]
+            eEmail.value = user.value.user_email
             eRole.value = user.value.user_role
             eOffice.value = user.value.user_office
             eGroup.value = user.value.user_group
             ePosition.value = user.value.user_position
             eStatus.value = user.value.user_status
-            // ePw.value = user.value.user_password
-            // eCPw.value = user.value.user_password
+            ePw.value = user.value.user_password
+            eCPw.value = user.value.user_password
             is_active_open.value = user.value.user_status == 'active' ? true : false
             console.log('open edit mode')
         } else if (b == false) {
@@ -197,8 +190,8 @@ const assignDetail = (b) => {
             eGroup.value = ''
             ePosition.value = ''
             eStatus.value = ''
-            // ePw.value = ''
-            // eCPw.value = ''
+            ePw.value = ''
+            eCPw.value = ''
             console.log('close edit mode')
         }
     } else {
@@ -209,12 +202,10 @@ const assignDetail = (b) => {
 
 
 const submitEdit = async (id) => {
-    alert_status.value=undefined
-    alert_message.value=[]
-    alert_title.value=''
+
     // if(validate.vUserCreate(dataCh.value,lenghtOfInput) !=true){
-    // token.value = validate.getUserDataFromLocal('token')
-    let [status, data] = await toBackEnd.editData('user', `${userLink}/${id}`, dataCh.value)
+    token.value = JSON.parse(jsCookie.get("data")).token
+    let [status, data] = await toBackEnd.editData('user', userLink, id, dataCh.value, token.value)
     console.log(status)
     if (status == 200) {
         await getUsers()
@@ -226,9 +217,6 @@ const submitEdit = async (id) => {
         changePath('#showInfo')
         console.log(data)
         // status something
-        alert_title.value='Server error'
-        alert_message.value=[data]
-        alert_status.value=true
     }
     // }else{
     //     // status something
@@ -250,16 +238,10 @@ const isEmptyOBJ = computed(() => {
 
 // validate input
 const checkInput = () => {
-    let {status=status,msg:vMsg} = validate.vUser(dataCh.value, lenghtOfInput,false,user.value)
-    if ( status== false) {
+    if (validate.vUserCreate(dataCh.value, lenghtOfInput) != true) {
         window.location.href = '#veri'
     } else {
-        console.log('input invalid value pls fix it ')
-        console.log(vMsg)
-        alert_title.value='Cannot update user detail!!'
-        alert_message.value=vMsg
-        alert_status.value=false
-        
+        console.log('input invalid value pls fix it 😂')
     }
 }
 
@@ -307,179 +289,185 @@ const searchByKeyW = () => {
     //     console.log('this name filter : '+f_name.value)
     // }
 
-
-    filterList.value = userList.value.filter( u =>
-        (f_email.value.length == 0 ? true :
-            u.user_email.toLowerCase().includes(f_email.value.toLowerCase())) &&
-        (f_status.value.length == 0 ? true :
-            u.user_status == f_status.value) &&
-        (f_reposibility.value.length == 0 ? true :
-            u.user_role.toLowerCase() == f_reposibility.value.toLowerCase())
-    )
-    console.log("user list has been searching...")
-
-    // // email
-    // if (f_email.value.length != 0) {
-    //     filterList.value = userList.value.filter(u => u.user_email.toLowerCase().includes(f_email.value.toLowerCase()))
-    //     console.log('this  email filter : ' + f_email.value)
-    // }
-    // // status
-    // else if (f_status.value.length != 0) {
-    //     filterList.value = userList.value.filter(u => u.user_status == f_status.value)
-    //     console.log('this status filter : ' + f_status.value)
-    // }
-    // // reposibility
-    // else if (f_reposibility.value.length != 0) {
-    //     filterList.value = userList.value.filter(u => u.user_role.toLowerCase() == f_reposibility.value.toLowerCase())
-    //     console.log('this role filter : ' + f_reposibility.value)
-    // }
+    // email
+    if (f_email.value.length != 0) {
+        filterList.value = userList.value.filter(u => u.user_email.toLowerCase().includes(f_email.value.toLowerCase()))
+        console.log('this  email filter : ' + f_email.value)
+    }
+    // status
+    else if (f_status.value.length != 0) {
+        filterList.value = userList.value.filter(u => u.user_status == f_status.value)
+        console.log('this status filter : ' + f_status.value)
+    }
+    // reposibility
+    else if (f_reposibility.value.length != 0) {
+        filterList.value = userList.value.filter(u => u.user_role.toLowerCase() == f_reposibility.value.toLowerCase())
+        console.log('this role filter : ' + f_reposibility.value)
+    }
 
     showList.value = filterList.value
     console.log(filterList.value)
 }
 </script>
 <template>
-    <div class="show_up">
-        <div class=" bg-white w-full mx-auto h-full ">
-            <div class="w-full text-center font-semibold text-[40px] pt-6">
-                <div class="flex w-fit mx-auto">
-                    <img src="../../../assets/admin_page/allUser.png" alt="users_icon"
-                        class="w-[40px] h-[40px] my-auto mr-4">
-                    All User
-                </div>
-            </div>
-            <!-- filter -->
-            <div class="relative h-[40px] mx-auto right-0">
-                <div v-show="is_filter_open == true" class="absolute w-fit h-fit bottom-0">
-                    <div class="flex ">
+    <div >
+        <div class="">
+            <div class="">
 
-                        <!-- name -->
-                        <!-- <div class="px-2 ">
+                <div class=" bg-white w-full mx-auto  h-fit ">
+                    <div class="w-full text-center font-semibold text-[40px] pt-6">
+                        <div class="flex w-fit mx-auto">
+                            <img src="../../../assets/admin_page/allUser.png" alt="users_icon"
+                                class="w-[40px] h-[40px] my-auto mr-4">
+                            All User
+                        </div>
+
+                </div>
+
+
+                    <!-- filter -->
+                    <div class="relative w-[1200px] h-[70px] pl-4 mx-auto ">
+                        <div v-show="is_filter_open == true" class="absolute w-fit h-fit bottom-0">
+                            <div class="flex ">
+
+                                <!-- name -->
+                                <!-- <div class="px-2 ">
                                     <input v-model="f_name" placeholder="Name" type="text" class="px-3 py-[4px] bg-[#E3F2FD] text-gray-600 rounded-xl focus:outline-0">
                                 </div> -->
 
-                        <!-- email -->
-                        <div class="px-2">
-                            <input v-model="f_email" placeholder="E-mail" type="text"
-                                class="px-3 py-[4px] bg-[#E3F2FD] text-gray-600 rounded-xl focus:outline-0">
+                                <!-- email -->
+                                <div class="px-2">
+                                    <input v-model="f_email" placeholder="E-mail" type="text"
+                                        class="px-3 py-[4px] bg-[#E3F2FD] text-gray-600 rounded-xl focus:outline-0">
+                                </div>
+
+                                <!-- status -->
+                                <div class="px-2">
+                                    <!-- <input placeholder="" type="text" class="bg-gray-300"> -->
+                                    <select v-model="f_status" name="status" id="status"
+                                        class="px-3 py-[4px] bg-[#E3F2FD] text-gray-600 rounded-xl focus:outline-0">
+                                        <option value="" selected hidden> Select status </option>
+                                        <option value="active"> active </option>
+                                        <option value="inactive"> inactive</option>
+
+                                    </select>
+                                </div>
+
+                                <div class="px-2">
+                                    <!-- <input placeholder="" type="text" class="px-3 py-[4px] bg-gray-300 rounded-xl"> -->
+                                    <select v-model="f_reposibility" name="reposibility" id="reposibility"
+                                        class="px-3 py-[4px] bg-[#E3F2FD] text-gray-600 rounded-xl focus:outline-0">
+                                        <option value="" selected hidden>Select Reposibility</option>
+                                        <option value="user">user</option>
+                                        <option value="admin_pr">Admin PR</option>
+                                        <option value="admin_it">Admin IT</option>
+
+                                    </select>
+                                </div>
+
+                                <div class="flex px-3 font-light">
+                                    <button @click="resetF"
+                                        class="px-3 mx-1 bg-gray-500 text-rose-300  rounded-xl hover:text-gray-500 hover:bg-rose-300">
+                                        รีเซต
+                                    </button>
+
+                                    <button @click="searchByKeyW" class="px-3 mx-1 bg-gray-300 rounded-xl">
+                                        ค้นหา
+                                    </button>
+                                </div>
+                            </div>
                         </div>
 
-                        <!-- status -->
-                        <div class="px-2">
-                            <!-- <input placeholder="" type="text" class="bg-gray-300"> -->
-                            <select v-model="f_status" name="status" id="status"
-                                class="px-3 py-[4px] bg-[#E3F2FD] text-gray-600 rounded-xl focus:outline-0">
-                                <option value="" selected hidden> Select status </option>
-                                <option value="active"> active </option>
-                                <option value="inactive"> inactive</option>
-                            </select>
-                        </div>
 
-                        <div class="px-2">
-                            <!-- <input placeholder="" type="text" class="px-3 py-[4px] bg-gray-300 rounded-xl"> -->
-                            <select v-model="f_reposibility" name="reposibility" id="reposibility"
-                                class="px-3 py-[4px] bg-[#E3F2FD] text-gray-600 rounded-xl focus:outline-0">
-                                <option value="" selected hidden>Select Reposibility</option>
-                                <option value="user">user</option>
-                                <option value="admin_pr">Admin PR</option>
-                                <option value="admin_it">Admin IT</option>
-
-                            </select>
-                        </div>
-
-                        <div class="flex px-3 font-light">
-                            <button @click="resetF"
-                                class="px-3 mx-1 bg-gray-500 text-rose-300  rounded-xl hover:text-gray-500 hover:bg-rose-300">
-                                รีเซต
+                        <!-- button -->
+                        <div class="   right-[70px] bottom-0  absolute">
+                            <button @click="is_filter_open = !is_filter_open" class="flex w-fit">
+                                <span class="font-semibold my-auto">
+                                    ตัวกรอง
+                                </span>
+                                <img src="../../../assets/admin_page/filter.png" alt="icon"
+                                    class="w-[20px] ml-[5px] my-auto">
                             </button>
-
-                            <button @click="searchByKeyW" class="px-3 mx-1 bg-gray-300 rounded-xl">
-                                ค้นหา
-                            </button>
                         </div>
+
                     </div>
                 </div>
 
-                <!-- button -->
-                <div class=" right-[20px] bottom-0 absolute">
-                    <button @click="is_filter_open = !is_filter_open" class="flex w-fit">
-                        <span class="font-semibold my-auto">
-                            ตัวกรอง
-                        </span>
-                        <img src="../../../assets/admin_page/filter.png" alt="icon" class="w-[20px] ml-[5px] my-auto">
-                    </button>
+
+
+
+                <!-- table -->
+                <div class="w-[1200px] mx-auto  h-[450px] mt-2">
+                    <hr class="mt-3 bg-gray-700  w-[1170px] h-[3px]">
+                    <div class="overflow-y-auto mx-auto h-[100%] w-[100%] ">
+                        <table class="w-full table-fixed text-sm text-center text-gray-800 ">
+                            <thead class="bg-white text-lg sticky top-0">
+                                <tr class="text-[20px] text-gray-500">
+                                    <th scope="col" class="w-[150px] py-2 px-2  pl-[40px]">
+                                        Name
+                                    </th>
+                                    <th scope="col" class="w-[250px] py-2 px-2">
+                                        Group
+                                    </th>
+                                    <th scope="col" class="w-[100px] py-2 px-2">
+                                        Status
+                                    </th>
+                                    <th scope="col" class="w-[100px] py-2 px-2">
+                                        Reposibility
+                                    </th>
+                                    <th scope="col" class=" w-[150px] py-2 px-2">
+                                        Detail
+                                    </th>
+
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="(data, index) in showList" :key="index"
+                                    class="text-[15px] cursor-default bg-white border-b-2 border-gray-300  hover:border-gray-400 hover:bg-gray-400">
+                                    <td class="]     px-2 py-2 font-medium ">
+                                        <div class="ml-4">
+                                            <div class="w-full ml-3 text-[18px] font-light truncate mx-auto">
+                                                {{ data.user_first_name }} {{ data.user_last_name }}
+                                            </div>
+                                            <div class="w-full ml-3 text-[10px] truncate mx-auto">
+                                                {{ data.user_email }}
+                                            </div>
+                                        </div>
+
+                                    </td>
+                                    <td class=" text-[15px] px-2 py-2 font-light text-l">
+                                        <div class="w-full truncate mx-auto">
+                                            {{ data.user_group }}
+                                        </div>
+                                    </td>
+                                    <td class=" px-2 py-2 text-[20px] font-semibold capitalize">
+                                        <div class="w-full truncate mx-auto"
+                                            :style="data.user_status == 'active' ? 'color:green' : 'color:red'">
+                                            {{ data.user_status }}
+                                        </div>
+
+                                    </td>
+                                    <td class=" px-2 py-2 text-[20px] font-light">
+                                        <div class=" mx-auto truncate">
+                                            {{ data.user_role }}
+                                        </div>
+                                    </td>
+                                    <td class=" px-2 py-2 font-semibold">
+                                        <div class="flex w-fit mx-auto truncate ">
+                                            <a class="goInfo w-[28px] m-2 ">
+                                                <button @click="showInfoByID(data.user_emp_code, index)">
+                                                    <img src="../../../assets/admin_page/edit.png" alt="edit_icon">
+                                                </button>
+                                            </a>
+                                            <!-- <img @click="deleteUser(data.userId)" src="../../../assets/admin_page/bin.png" alt="delete_icon" class="w-[28px] h-[28px] m-2 cursor-pointer"> -->
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-            </div>
-        </div>
-
-        <!-- table -->
-        <div class="w-auto mx-auto h-[420px] mt-2">
-            <hr class="mt-3 bg-gray-700  w-[100%] h-[3px]">
-            <div class="overflow-y-auto mx-auto h-[100%] w-[100%] ">
-                <table class="relative w-full table-fixed text-sm text-center text-gray-800">
-                    <thead class="bg-white text-lg sticky top-0 border-b-2 border-b-gray-500">
-                        <tr class="text-[20px]">
-                            <th scope="col" class="w-[150px] py-2 px-2  pl-[40px]">
-                                Name
-                            </th>
-                            <th scope="col" class="w-[250px] py-2 px-2">
-                                Group
-                            </th>
-                            <th scope="col" class="w-[100px] py-2 px-2">
-                                Status
-                            </th>
-                            <th scope="col" class="w-[100px] py-2 px-2">
-                                Reposibility
-                            </th>
-                            <th scope="col" class=" w-[150px] py-2 px-2">
-                                Detail
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-for="(data, index) in showList" :key="index"
-                            class="text-[15px] cursor-default bg-white border-b-2 border-gray-300  hover:border-gray-400 hover:bg-gray-400">
-                            <td class="]     px-2 py-2 font-medium ">
-                                <div class="ml-4">
-                                    <div class="w-full ml-3 text-[18px] font-light truncate mx-auto">
-                                        {{ data.user_first_name }} {{ data.user_last_name }}
-                                    </div>
-                                    <div class="w-full ml-3 text-[10px] truncate mx-auto">
-                                        {{ data.user_email }}
-                                    </div>
-                                </div>
-
-                            </td>
-                            <td class=" text-[15px] px-2 py-2 font-light text-l">
-                                <div class="w-full truncate mx-auto">
-                                    {{ data.user_group }}
-                                </div>
-                            </td>
-                            <td class=" px-2 py-2 text-[20px] font-semibold capitalize">
-                                <div class="w-full truncate mx-auto"
-                                    :style="data.user_status == 'active' ? 'color:green' : 'color:red'">
-                                    {{ data.user_status }}
-                                </div>
-
-                            </td>
-                            <td class=" px-2 py-2 text-[20px] font-light">
-                                <div class=" mx-auto truncate">
-                                    {{ data.user_role }}
-                                </div>
-                            </td>
-                            <td class=" px-2 py-2 font-semibold">
-                                <div class="flex w-fit mx-auto truncate ">
-                                    <a class="goInfo w-[28px] m-2 ">
-                                        <button @click="showInfoByID(data.user_emp_code, index)">
-                                            <img src="../../../assets/admin_page/edit.png" alt="edit_icon">
-                                        </button>
-                                    </a>
-                                    <!-- <img @click="deleteUser(data.userId)" src="../../../assets/admin_page/bin.png" alt="delete_icon" class="w-[28px] h-[28px] m-2 cursor-pointer"> -->
-                                </div>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
             </div>
         </div>
         <!-- show detail -->
@@ -487,7 +475,7 @@ const searchByKeyW = () => {
             <div class=" popup2 h-96 ">
                 <div class="h-[100%] p-3 overflow-y-auto">
                     <div class="w-full">
-                        <h4 class="w-fit h-fit mx-auto font-semibold text-[1.25rem] text-gray-500">
+                        <h4 class="w-fit h-fit mx-auto font-semibold text-[30px] text-gray-500">
                             User Detail
                         </h4>
                     </div>
@@ -496,7 +484,7 @@ const searchByKeyW = () => {
                     <div v-if="is_edit_open == false">
                         <!-- table -->
                         <div>
-                            <table class="w-[600px]  table-fixed mx-auto mt-6 text-[20px]">
+                            <table class="w-full table-fixed mx-auto mt-6 text-[20px]">
                                 <tr>
                                     <th class="table_header w-[120px] h-fit pt-2 text-right font-normal">
                                         Status
@@ -513,7 +501,7 @@ const searchByKeyW = () => {
                                             {{  }}
                                         </span> -->
                                     </th>
-                                    <td class="pt-2 pl-2 indent-[5px] break-all font-light text-gray-600">
+                                    <td class="pt-2 pl-2 indent-[5px] font-light text-gray-600">
                                         {{ user.user_first_name }} {{ user.user_last_name }}
                                     </td>
                                 </tr>
@@ -523,7 +511,7 @@ const searchByKeyW = () => {
                                     <th class="table_header w-[120px] h-fit pt-2 text-right font-normal">
                                         E-mail
                                     </th>
-                                    <td class="pt-2 pl-2 indent-[5px] break-all font-light text-gray-600">
+                                    <td class="pt-2 pl-2 indent-[5px] font-light text-gray-600">
                                         {{ user.user_email }}
                                     </td>
                                 </tr>
@@ -533,7 +521,7 @@ const searchByKeyW = () => {
                                     <th class="table_header w-[120px] h-fit pt-2 text-right font-normal">
                                         Role
                                     </th>
-                                    <td class="pt-2 pl-2 indent-[5px] break-all font-light text-gray-600">
+                                    <td class="pt-2 pl-2 indent-[5px] font-light text-gray-600">
                                         {{ user.user_role }}
                                     </td>
                                 </tr>
@@ -543,7 +531,7 @@ const searchByKeyW = () => {
                                     <th class="table_header w-[120px] h-fit pt-2 text-right font-normal">
                                         Office
                                     </th>
-                                    <td class="pt-2 pl-2 indent-[5px] break-all font-light text-gray-600">
+                                    <td class="pt-2 pl-2 indent-[5px] font-light text-gray-600">
                                         {{ user.user_office }}
                                     </td>
                                 </tr>
@@ -553,7 +541,7 @@ const searchByKeyW = () => {
                                     <th class="table_header w-[120px] text-right  font-normal">
                                         Group
                                     </th>
-                                    <td class="pt-2 pl-2 indent-[5px] break-all  font-light text-gray-600">
+                                    <td class="pt-2 pl-2 indent-[5px]  font-light text-gray-600">
                                         {{ user.user_group }}
                                     </td>
                                 </tr>
@@ -563,7 +551,7 @@ const searchByKeyW = () => {
                                     <th class="table_header w-[120px] h-fit  text-right font-normal">
                                         Position
                                     </th>
-                                    <td class="w-[100px] h-fit pt-2 pl-2 indent-[5px] break-all font-light text-gray-600">
+                                    <td class="w-[100px] h-fit pt-2 pl-2 indent-[5px] font-light text-gray-600">
                                         {{ user.user_position }}
                                     </td>
                                 </tr>
@@ -590,9 +578,10 @@ const searchByKeyW = () => {
                     </div>
 
                     <!-- edit detail  -->
-                    <div v-else-if="is_edit_open == true" class=" w-[60rem] mx-auto">
+                    <div v-else-if="is_edit_open == true" class="w-[500px] mx-auto">
+
                         <!-- active -->
-                        <div class="relative flex  w-full h-[40px] mt-3 mb-2 ">
+                        <div class="relative flex t  w-full h-[40px] mt-3">
                             <button @click="change_s" id="container_active"
                                 class="relative w-[150px] h-[30px] my-auto bg-gray-700 text-gray-100 text-[15px] z-0 rounded-lg">
                                 <div v-if="is_active_open == true" id="active" class="w-full h-full z-10 flex ">
@@ -623,176 +612,141 @@ const searchByKeyW = () => {
                                 </select>
                             </div> -->
                         </div>
-                        <div class="flex flex-row">
-                            <div class="w-full mt-2">
-                                <!-- first name  and last name-->
-                                <div class="relative flex w-[500px]">
-                                    <!-- name -->
-                                    <div class="relative w-[250px]  h-[50px]  text-sm">
-                                        <h4 class="ml-2 text-sm font-light text-gray-500">
-                                            First Name
-                                            <span class="" :style="[eFName.length==lenghtOfInput.fNameL?'color: rgb(225 29 72);':'']">
-                                                {{eFName.length}}/{{lenghtOfInput.fNameL}}
-                                            </span>
-                                        </h4>
-                                        <input v-model="eFName" :maxlength="lenghtOfInput.fNameL" type="text"
-                                            class="absolute bottom-0 w-full h-[30px] px-2 bg-sky-300 font-light text-[20px] text-gray-600 rounded-lg focus:outline-0">
-                                    </div>
-                                    <!-- role -->
-                                    <div class="relative w-[250px] h-[50px] ml-[2px] text-sm">
-                                        <h4 class="ml-2  font-light text-gray-500">
-                                            Last Name
-                                            <span class="" :style="[eLName.length==lenghtOfInput.lNameL?'color: rgb(225 29 72);':'']">
-                                                {{eLName.length}}/{{lenghtOfInput.lNameL}}
-                                            </span>
-                                        </h4>
-                                        <input v-model="eLName" :maxlength="lenghtOfInput.lNameL" type="text"
-                                            class="absolute bottom-0 w-full h-[30px] px-2 bg-sky-300 font-light text-[20px] text-gray-600 rounded-lg focus:outline-0">
-                                        <!-- <select v-model="eRole" name="role" id="role" class="absolute bottom-0 w-full h-[30px] px-2 bg-sky-300 font-light text-[20px] text-gray-600 rounded-lg focus:outline-0">
-                                            <option value="user">User</option>
-                                            <option value="admin_it">Admin_IT</option>
-                                            <option value="admin_pr">Admin_PR</option>
-                                        </select> -->
-                                        <!-- <input type="text" class="absolute bottom-0 w-full h-[30px] p-2 bg-sky-300 font-light text-gray-600 rounded-lg focus:outline-0"> -->
-                                    </div>
-                                </div>
 
-                                <!-- email -->
-                                <div class="relative w-full h-[50px] mt-2">
-                                    <h4 class="ml-2 text-sm font-light text-gray-500">
-                                        E-mail
-                                        <span class="" :style="[eEmail.length==lenghtOfInput.emailL-18?'color: rgb(225 29 72);':'']">
-                                            {{eEmail.length}}/{{lenghtOfInput.emailL-18}}
-                                        </span>
-                                    </h4>
-                                    <div class="flex absolute bottom-0 w-full h-[30px] px-2 bg-sky-300 rounded-lg font-light text-[20px] text-gray-600">
-                                        <input v-model="eEmail" :maxlength="lenghtOfInput.emailL-18" type="text"
-                                            class="w-full bg-inherit    focus:outline-0">
-                                        <h5 class="w-fit m-auto mx-1 cursor-default">
-                                            @moralcenter.or.th
-                                        </h5>
-                                    </div>
-                                </div>
 
-                                <!-- role -->
-                                <div class="relative w-full h-[50px] mt-2">
-                                    <h4 class="ml-2 text-sm font-light text-gray-500">
-                                        Role
-                                    </h4>
-                                    <select v-model="eRole" name="role" id="role"
-                                        class="absolute bottom-0 w-full h-[30px] px-2 bg-sky-300 font-light text-[20px] text-gray-600 rounded-lg focus:outline-0">
-                                        <option value="user">User</option>
-                                        <option value="admin_it">Admin_IT</option>
-                                        <option value="admin_pr">Admin_PR</option>
-                                        <option value="super_admin">Super_Admin</option>
-                                    </select>
-                                </div>
-
-                                
-
-                                <!-- password -->
-                                <!-- <div class="relative w-[500px] flex h-[50px] mt-1">
-                                    <div class="relative w-[249px]">
-                                        <h4 h4 class="ml-2 text-sm font-light text-gray-500">
-                                            Password
-                                        </h4>
-                                        <input v-model="ePw" type="text"
-                                            class="absolute bottom-0 w-full h-[30px] p-2 bg-sky-300 font-light text-[20px] text-gray-600 rounded-lg focus:outline-0">
-                                    </div>
-                                    <div class="relative w-[249px] ml-[2px]">
-                                        <h4 h4 class="ml-2 text-sm font-light text-gray-500">
-                                            Confirm Password
-                                        </h4>
-                                        <input v-model="eCPw" type="text"
-                                            class="absolute bottom-0 w-full h-[30px] p-2 bg-sky-300 font-light text-[20px] text-gray-600 rounded-lg focus:outline-0">
-                                    </div>
-                                </div> -->
-
-                            
+                        <!-- first name  and last name-->
+                        <div class="relative flex w-[500px]">
+                            <!-- name -->
+                            <div class="relative w-[250px]  h-[50px]  text-sm">
+                                <h4 class="ml-2 text-sm font-light text-gray-500">
+                                    First Name
+                                </h4>
+                                <input v-model="eFName" type="text"
+                                    class="absolute bottom-0 w-full h-[30px] px-2 bg-sky-300 font-light text-[20px] text-gray-600 rounded-lg focus:outline-0">
                             </div>
-
-                            <div class="w-full  ml-3">
-                                <!-- office -->
-                                <div class="relative w-full h-[50px] mt-2">
-                                    <h4 class="ml-2 text-sm font-light text-gray-500">
-                                        Office
-                                    </h4>
-                                    <select v-model="eOffice" name="office" id="office"
-                                        class="absolute bottom-0 w-full h-[30px] px-2 px- bg-sky-300 font-light text-[20px] text-gray-600 rounded-lg focus:outline-0">
-                                        <option value="" selected disabled hidden>Office</option>
-                                        <option value="ผู้บริหาร">ผู้บริหาร</option>
-                                        <option value="สำนักส่งเสริมและขับเคลื่อนเครือข่ายทางสังคม">
-                                            สำนักส่งเสริมและขับเคลื่อนเครือข่ายทางสังคม</option>
-                                        <option value="สำนักบริหารจัดการองค์กรและยุทธศาสตร์">สำนักบริหารจัดการองค์กรและยุทธศาสตร์
-                                        </option>
-                                        <option value="สำนักพัฒนาองค์ความรู้นวัตกรรมและสื่อสารสนเทศ">
-                                            สำนักพัฒนาองค์ความรู้นวัตกรรมและสื่อสารสนเทศ</option>
-                                        <option value="งานตรวจสอบภายใน">งานตรวจสอบภายใน</option>
-                                    </select>
-                                    <!-- <input type="text" class="absolute bottom-0 w-full h-[30px] p-2 bg-sky-300 font-light text-gray-600 rounded-lg focus:outline-0"> -->
-                                </div>
-
-                                <!-- group -->
-                                <div class="relative w-full h-[50px] mt-2">
-                                    <h4 class="ml-2 text-sm font-light text-gray-500">
-                                        Group
-                                    </h4>
-                                    <select v-model="eGroup" name="group" id="group"
-                                        class="absolute bottom-0 w-full h-[30px] px-2 bg-sky-300 font-light text-[20px] text-gray-600 rounded-lg focus:outline-0">
-                                        <option value="" selected disabled hidden>Group</option>
-                                        <option value="ผู้บริหาร">ผู้บริหาร</option>
-                                        <option value="บริหารจัดการองค์กร">บริหารจัดการองค์กร</option>
-                                        <option value="นโยบายและยุทธศาสตร์">นโยบายและยุทธศาสตร์</option>
-                                        <option value="วิจัยนวัตกรรมและระบบพฤติกรรมไทย">วิจัยนวัตกรรมและระบบพฤติกรรมไทย</option>
-                                        <option value="สื่อสารและรณรงค์ทางสังคม">สื่อสารและรณรงค์ทางสังคม</option>
-                                        <option value="ศูนย์ข้อมูลและเทคโนโลยีสารสนเทศ">ศูนย์ข้อมูลและเทคโนโลยีสารสนเทศ</option>
-                                        <option value="สมัชชาคุณธรรมและความร่วมมือนานาชาติ">สมัชชาคุณธรรมและความร่วมมือนานาชาติ
-                                        </option>
-                                        <option value="ส่งเสริมคุณธรรมเครือข่ายทางสังคม">ส่งเสริมคุณธรรมเครือข่ายทางสังคม</option>
-                                    </select>
-                                    <!-- <input type="text" class="absolute bottom-0 w-full h-[30px] p-2 bg-sky-300 font-light text-gray-600 rounded-lg focus:outline-0"> -->
-                                </div>
-
-                                <!-- position -->
-                                <div class="relative w-full h-[50px] mt-2">
-                                    <h4 class="ml-2 text-sm font-light text-gray-500">
-                                        Position
-                                        <span class="" :style="[ePosition.length==lenghtOfInput.positionL?'color: rgb(225 29 72);':'']">
-                                            {{ePosition.length}}/{{lenghtOfInput.positionL}}
-                                        </span>
-                                    </h4>
-                                    <input v-model="ePosition" :maxlength="lenghtOfInput.positionL" type="text"
-                                        class="absolute bottom-0 w-full h-[30px] p-2 bg-sky-300 font-light text-[20px] text-gray-600 rounded-lg focus:outline-0">
-                                </div>
+                            <!-- role -->
+                            <div class="relative w-[250px] h-[50px] ml-[2px] text-sm">
+                                <h4 class="ml-2  font-light text-gray-500">
+                                    Last Name
+                                </h4>
+                                <input v-model="eLName" type="text"
+                                    class="absolute bottom-0 w-full h-[30px] px-2 bg-sky-300 font-light text-[20px] text-gray-600 rounded-lg focus:outline-0">
+                                <!-- <select v-model="eRole" name="role" id="role" class="absolute bottom-0 w-full h-[30px] px-2 bg-sky-300 font-light text-[20px] text-gray-600 rounded-lg focus:outline-0">
+                                    <option value="user">User</option>
+                                    <option value="admin_it">Admin_IT</option>
+                                    <option value="admin_pr">Admin_PR</option>
+                                </select> -->
+                                <!-- <input type="text" class="absolute bottom-0 w-full h-[30px] p-2 bg-sky-300 font-light text-gray-600 rounded-lg focus:outline-0"> -->
                             </div>
                         </div>
-                        
-                        <BaseAlert :status="alert_status" :title="alert_title" :msg-arr="alert_message" type="EU" />
+
+                        <!-- email -->
+                        <div class="relative w-full h-[50px] mt-1">
+                            <h4 class="ml-2 text-sm font-light text-gray-500">
+                                E-mail
+                            </h4>
+                            <input v-model="eEmail" type="text"
+                                class="absolute bottom-0 w-full h-[30px] px-2 bg-sky-300 font-light text-[20px] text-gray-600 rounded-lg focus:outline-0">
+                        </div>
+
+                        <!-- role -->
+                        <div class="relative w-full h-[50px] mt-1">
+                            <h4 class="ml-2 text-sm font-light text-gray-500">
+                                Role
+                            </h4>
+                            <select v-model="eRole" name="role" id="role"
+                                class="absolute bottom-0 w-full h-[30px] px-2 bg-sky-300 font-light text-[20px] text-gray-600 rounded-lg focus:outline-0">
+                                <option value="user">User</option>
+                                <option value="admin_it">Admin_IT</option>
+                                <option value="admin_pr">Admin_PR</option>
+                                <option value="super_admin">Admin_PR</option>
+                            </select>
+                        </div>
+
+                        <!-- office -->
+                        <div class="relative w-full h-[50px] mt-1">
+                            <h4 class="ml-2 text-sm font-light text-gray-500">
+                                Office
+                            </h4>
+                            <select v-model="eOffice" name="office" id="office"
+                                class="absolute bottom-0 w-full h-[30px] px-2 px- bg-sky-300 font-light text-[20px] text-gray-600 rounded-lg focus:outline-0">
+                                <option value="" selected disabled hidden>Office</option>
+                                <option value="ผู้บริหาร">ผู้บริหาร</option>
+                                <option value="สำนักส่งเสริมและขับเคลื่อนเครือข่ายทางสังคม">
+                                    สำนักส่งเสริมและขับเคลื่อนเครือข่ายทางสังคม</option>
+                                <option value="สำนักบริหารจัดการองค์กรและยุทธศาสตร์">สำนักบริหารจัดการองค์กรและยุทธศาสตร์
+                                </option>
+                                <option value="สำนักพัฒนาองค์ความรู้นวัตกรรมและสื่อสารสนเทศ">
+                                    สำนักพัฒนาองค์ความรู้นวัตกรรมและสื่อสารสนเทศ</option>
+                                <option value="งานตรวจสอบภายใน">งานตรวจสอบภายใน</option>
+                            </select>
+                            <!-- <input type="text" class="absolute bottom-0 w-full h-[30px] p-2 bg-sky-300 font-light text-gray-600 rounded-lg focus:outline-0"> -->
+                        </div>
+
+                        <!-- group -->
+                        <div class="relative w-full h-[50px] mt-1">
+                            <h4 class="ml-2 text-sm font-light text-gray-500">
+                                Group
+                            </h4>
+                            <select v-model="eGroup" name="group" id="group"
+                                class="absolute bottom-0 w-full h-[30px] px-2 bg-sky-300 font-light text-[20px] text-gray-600 rounded-lg focus:outline-0">
+                                <option value="" selected disabled hidden>Group</option>
+                                <option value="ผู้บริหาร">ผู้บริหาร</option>
+                                <option value="บริหารจัดการองค์กร">บริหารจัดการองค์กร</option>
+                                <option value="นโยบายและยุทธศาสตร์">นโยบายและยุทธศาสตร์</option>
+                                <option value="วิจัยนวัตกรรมและระบบพฤติกรรมไทย">วิจัยนวัตกรรมและระบบพฤติกรรมไทย</option>
+                                <option value="สื่อสารและรณรงค์ทางสังคม">สื่อสารและรณรงค์ทางสังคม</option>
+                                <option value="ศูนย์ข้อมูลและเทคโนโลยีสารสนเทศ">ศูนย์ข้อมูลและเทคโนโลยีสารสนเทศ</option>
+                                <option value="สมัชชาคุณธรรมและความร่วมมือนานาชาติ">สมัชชาคุณธรรมและความร่วมมือนานาชาติ
+                                </option>
+                                <option value="ส่งเสริมคุณธรรมเครือข่ายทางสังคม">ส่งเสริมคุณธรรมเครือข่ายทางสังคม</option>
+                            </select>
+                            <!-- <input type="text" class="absolute bottom-0 w-full h-[30px] p-2 bg-sky-300 font-light text-gray-600 rounded-lg focus:outline-0"> -->
+                        </div>
+
+                        <!-- position -->
+                        <div class="relative w-full h-[50px] mt-1">
+                            <h4 class="ml-2 text-sm font-light text-gray-500">
+                                Position
+                            </h4>
+                            <input v-model="ePosition" type="text"
+                                class="absolute bottom-0 w-full h-[30px] p-2 bg-sky-300 font-light text-[20px] text-gray-600 rounded-lg focus:outline-0">
+                        </div>
+
+                        <!-- password -->
+                        <div class="relative w-[500px] flex h-[50px] mt-1">
+                            <div class="relative w-[249px]">
+                                <h4 h4 class="ml-2 text-sm font-light text-gray-500">
+                                    Password
+                                </h4>
+                                <input v-model="ePw" type="text"
+                                    class="absolute bottom-0 w-full h-[30px] p-2 bg-sky-300 font-light text-[20px] text-gray-600 rounded-lg focus:outline-0">
+                            </div>
+                            <div class="relative w-[249px] ml-[2px]">
+                                <h4 h4 class="ml-2 text-sm font-light text-gray-500">
+                                    Confirm Password
+                                </h4>
+                                <input v-model="eCPw" type="text"
+                                    class="absolute bottom-0 w-full h-[30px] p-2 bg-sky-300 font-light text-[20px] text-gray-600 rounded-lg focus:outline-0">
+                            </div>
+                        </div>
 
                         <!-- button -->
-                        <div class="flex mx-auto w-fit h-fit mt-3">
-                            <div class="mt-6 m-1 mb-1.5">
-                                <button @click="goVerify"
-                                    class="w-[250px] h-fit bg-gray-600 p-2 text-[#e0aaff] rounded-lg  hover:bg-[#e0aaff] hover:text-gray-600 ">
-                                    ขอรหัสผ่านใหม่
-                                </button>
-                            </div>
-                            <div class="mt-6 m-1 mb-1.5">
-                                <button @click="checkInput"
-                                    class="w-[250px] h-fit bg-gray-600 p-2 text-[#b8e0d2] rounded-lg hover:bg-[#b8e0d2] hover:text-gray-600">
-                                    ทำการแก้ไข ->
-                                </button>
-                            </div>    
+                        <div class="mt-6 mb-1.5">
+                            <button @click="checkInput"
+                                class="w-[250px] h-fit bg-gray-600 p-2 text-[#90CAF9] rounded-lg hover:bg-[#90CAF9] hover:text-gray-600">
+                                ทำการแก้ไข ->
+                            </button>
                         </div>
 
                         <!-- back -->
                         <div class="absolute top-[20px] left-[15px] font-light text-[20px]">
-                                <button @click="assignDetail(false)"
-                                    class="flex rounded-full pr-3 hover:bg-[#90CAF9] hover:text-[#E3F2FD]">
-                                    <img src="../../../assets/left-arrow.svg" alt="left-arrow" class="w-[30px] h-[30px] p-1.5 ">
-                                    <h4 class="my-auto text-[15px]">ย้อนกลับ</h4>
-                                </button>
-                            </div>
+                            <button @click="assignDetail(false)"
+                                class="flex rounded-full pr-3 hover:bg-[#90CAF9] hover:text-[#E3F2FD]">
+                                <img src="../../../assets/left-arrow.svg" alt="left-arrow" class="w-[30px] h-[30px] p-1.5 ">
+                                <h4 class="my-auto text-[15px]">ย้อนกลับ</h4>
+                            </button>
+                        </div>
                     </div>
 
                     <div class="absolute top-[15px] right-[15px] font-bold text-[30px]">
@@ -812,7 +766,7 @@ const searchByKeyW = () => {
                     คุณต้องการที่จะแก้ไขข้อมูลใช่หรือไม่ ?
                 </h2>
                 <div class=" absolute bottom-0 w-full  flex m-auto">
-                    <button @click="myRouter.go(-1),alert_status=undefined"
+                    <button @click="myRouter.go(-1)"
                         class="w-full h-fit text-center mx-auto p-2 bg-gray-300 hover:bg-rose-300">
                         ย้อนกลับ
                     </button>
@@ -857,7 +811,7 @@ const searchByKeyW = () => {
     transition: opacity 500ms;
     visibility: hidden;
     opacity: 0;
-    z-index: 20;
+    z-index: 50;
 }
 
 .overlay:target {
@@ -867,14 +821,14 @@ const searchByKeyW = () => {
 
 .popup2 {
     margin: auto;
-    margin-top: 5%;
+    margin-top: 3%;
     /* overflow-y: auto; */
-    padding: 20px;
-    padding-top: 20px;
-    padding-left: 20px;
+    padding: 30px;
+    padding-top: 30px;
+    padding-left: 30px;
     padding-right: 16px;
     background: #fff;
-    width: fit-content;
+    width: 45%;
     height: fit-content;
     border-radius: 20px;
     position: relative;
@@ -954,43 +908,4 @@ const searchByKeyW = () => {
 
 .table_header::after {
     content: ':';
-}
-
-@keyframes tada {
-    0% {
-        opacity: 0;
-        /* transition-property: all 1s; */
-        margin-top: -30px;
-    }
-
-    100% {
-        opacity: 1;
-        /* transition-property: all 1s; */
-        margin-top: 0px;
-
-    }
-}
-
-::-webkit-scrollbar {
-    width: 10px;
-    background-color: rgb(119, 173, 212);
-    border-radius: 20px;
-}
-
-::-webkit-scrollbar-thumb {
-    background-color: rgb(104, 104, 104);
-    border-radius: 20px;
-}
-
-/* scroll bar of comments */
-.comment_old::-webkit-scrollbar {
-    background-color: transparent;
-    width: 10px
-}
-
-.comment_old::-webkit-scrollbar-thumb {
-    background-color: rgb(119, 173, 212);
-    border-top-right-radius: 20px;
-    border-bottom-right-radius: 20px;
-}
-</style>
+}</style>

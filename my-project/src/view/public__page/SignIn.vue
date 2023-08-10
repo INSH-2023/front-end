@@ -5,8 +5,6 @@ import toBackEnd from '../../JS/fetchToBack'
 import BaseAlert from '../../components/BaseAlert.vue'
 import BaseLoading from '../../components/BaseLoading.vue'
 import Cookies from '../../JS/cookies'
-import cryptoJs from 'crypto-js';
-import validate from "../../JS/validate"
 // src\components\BaseLoading.vue
 const myRouter = useRouter()
 const goMain=()=>myRouter.push({name:'services'})
@@ -39,12 +37,7 @@ const logIn=async()=>{
         let [status,data]=await toBackEnd.postData('login',loginLink,data_ch.value)
         if(status==200){
             console.log('login successfully')
-            // console.log(data)
-            let ciphertext = cryptoJs.AES.encrypt(JSON.stringify(data),import.meta.env.VITE_PERSONAL_SECRET)
-            // console.log(cryptoJs.AES)
-            // console.log(cryptoJs.AES.decrypt(ciphertext,import.meta.env.VITE_PERSONAL_SECRET).toString(cryptoJs.enc.Utf8))
-            // console.log(validate.getUserDataFromLocal())
-            Cookies.set("data",ciphertext)
+            Cookies.set("data",JSON.stringify(data))
             button_status.value=false
             goMain()
         }else 
@@ -60,12 +53,6 @@ const logIn=async()=>{
             alert_message.value='สถานะของ user ไม่พร้อมใช้งาน'
             button_status.value=false
         }else
-        if(status==404){
-            alert_status.value=false
-            alert_title.value='Not Found !!'
-            alert_message.value='อีเมลนี้ยังไม่ได้ลงทะเบียน'
-            button_status.value=false
-        }else
         {
             alert_status.value=true
             alert_title.value='Error !!'
@@ -76,28 +63,17 @@ const logIn=async()=>{
     }
 }
 
-const pd =ref(false)
-const showPd =()=>{
-    let b = document.getElementById('pw')
-    pd.value= !pd.value
-    if(pd.value==false){
-        b.setAttribute('type','password')
-    }else
-    if(pd.value==true){
-        b.setAttribute('type','text')     
-    }
-    // console.log('hello world')
-}
-
+// testing button
+const isEmailTesting=ref(false)
 </script>
 <template>
 
     <div class="w-full pt-3 relative ">
        <div class="mt-6 w-fit mx-auto text-[27px] font-semibold text-gray-600
             sm:text-gray-300 md:text-rose-300 lg:text-sky-300 sm:text-[40px]
+          
        ">
-       
-        ลงชื่อเข้าใช้
+         ลงชื่อเข้าใช้
        </div>
        <div class="mt-2 w-[20rem] h-[6.563rem]  mx-auto relative 
             sm:w-[25rem]
@@ -111,8 +87,8 @@ const showPd =()=>{
             </h4>
             <!-- input zone -->
             <div class=" w-full h-fit border-2 border-gray-400 rounded-[10px]">
-                <div class="flex pl-2 py-1.5">
-                    <input v-model="email" type="text" placeholder="E-mail" class="w-[90%] px-2 focus:outline-0 my-auto">
+                <div class="flex px-2 py-1.5">
+                    <input v-model="email" type="text" placeholder="E-mail" class="w-[90%] focus:outline-0 my-auto">
                     <!-- <button v-show="isEmailTesting==false && email.length!=0" @click="isEmailTesting=true"  class=" ml-[2px] mx-auto rounded-full border-2 border-gray-500 text-gray-500 w-[25px] h-[25px] hover:bg-gray-700 hover:text-gray-200">
                        <h2  class="p-[1px] mx-auto text-[13px] " >
                          > 
@@ -122,11 +98,9 @@ const showPd =()=>{
                 </div>
                 <!-- ค่อยมาทำต่อ -->
                 <!-- v-show="isEmailTesting==true" -->
-                <hr class="w-[100%] h-[3px] bg-gray-400 ">
-                <div class="flex pl-2 py-1.5">
-                    <input v-model="pw" @keyup.enter="logIn" type="password" id="pw" placeholder="Password" class="w-[90%] px-2 focus:outline-0 my-auto">
-                    <img v-show="pw.length>0" v-if="pd" @click="showPd" src="../../assets/password/eye.png" alt="eye"  class="w-[25px] cursor-pointer ">
-                    <img v-show="pw.length>0" v-else @click="showPd" src="../../assets/password/blind.png" alt="blind"  class="w-[25px] cursor-pointer ">
+                <hr  class="w-[100%] h-[3px]   bg-gray-400 ">
+                <div  class="flex px-2 py-1.5  ">
+                    <input v-model="pw" @keyup.enter="logIn" type="password" placeholder="Password" class="w-[90%]  focus:outline-0 my-auto">
                     <!-- <button class="w-[10%] ml-[2px] mx-auto">
                         <h2 class="p-[1px] mx-auto rounded-full border-2 border-gray-500 text-gray-500 w-[30px]" >
                          > 
@@ -146,7 +120,7 @@ const showPd =()=>{
        <!-- button submit -->
        <!-- v-show="isEmailTesting==true" -->
        <div class="w-fit h-fit mx-auto mt-3  md:mt-6 ">
-            <button @click="logIn"  class="bg-sky-500 w-[13rem] h-[3rem] rounded-2xl text-white md:w-[16rem] hover:bg-sky-800 focus:ring-4 focus:ring-blue-300">
+            <button @click="logIn"  class="  bg-sky-500 w-[13rem] h-[3rem]  rounded-2xl text-white md:w-[16rem]">
                 <div class="flex w-fit h-fit mx-auto">
                     <h4 class="w-fit h-fit p-2 mx-auto">
                         login
@@ -177,15 +151,15 @@ const showPd =()=>{
                 </h5>
             </button>
        </div> -->
-    
-       <div class=" w-fit mx-auto mt-5 font-semibold text-gray-500">
-            <router-link :to="{name:'verify'}">
-                <h5 class="text-[15px] m-auto underline underline-offset-1">
-                    ลืมรหัสผ่าน
-                </h5>
-            </router-link>
-       </div>
+        
+
+   
+       
     </div>
+
+          
+
+
 
 <!--     
     <div class="h-fit w-fit mx-auto font-mono">

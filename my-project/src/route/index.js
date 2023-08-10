@@ -32,8 +32,6 @@ import Dashboard from '../view/private__page/for_admin/Dashboard.vue'
 // public
 import SignIn from '../view/public__page/SignIn.vue'
 import Home from '../view/public__page/Home.vue'
-import Verify from '../view/public__page/Verify.vue'
-import ResetPassword from '../view/public__page/ResetPassword.vue'
 import NotFound from '../view/NotFound.vue'
 import Main_public from '../view/public__page/Main_public.vue'
 import ComingSoon from '../view/ComingSoon.vue'
@@ -62,16 +60,6 @@ const routes=[
                 path:'sign-in',
                 name:'signIn',
                 component:SignIn
-            },
-            {
-                path:'verify',
-                name:'verify',
-                component: Verify
-            },
-            {
-                path: 'reset-password',
-                name: 'resetPassword',
-                component: ResetPassword
             }
     //         {
     //             path:'account/admin',
