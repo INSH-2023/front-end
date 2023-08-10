@@ -1,4 +1,6 @@
 import {createRouter, createWebHistory} from 'vue-router'
+import getRefreshToken from '../JS/refresh'
+import validate from '../JS/validate'
 
 // user
 import Booking_main from '../view/private__page/for_user/Booking_main.vue'
@@ -15,6 +17,8 @@ import Solutions from '../view/private__page/for_user/Solutions.vue'
 // user/report
 import Report from '../view/private__page/for_user/Report.vue'
 
+import Profile from '../view/private__page/for_user/Profile.vue'
+
 // admin
 import SignUp from '../view/private__page/for_admin/SignUp.vue'
 import Main_private_admin from '../view/private__page/for_admin/Main_private_admin.vue'
@@ -23,16 +27,23 @@ import ShowAllEvent from'../view/private__page/for_admin/ShowAllEvent.vue'
 import WriteSolutions from '../view/private__page/for_admin/Write_solution.vue'
 import ShowAllSolution from '../view/private__page/for_admin/ShowAllSolution.vue'
 import ProblemsList from '../view/private__page/for_admin/ProblemsList.vue'
+import Dashboard from '../view/private__page/for_admin/Dashboard.vue'
 
 // public
 import SignIn from '../view/public__page/SignIn.vue'
 import Home from '../view/public__page/Home.vue'
+import Verify from '../view/public__page/Verify.vue'
+import ResetPassword from '../view/public__page/ResetPassword.vue'
 import NotFound from '../view/NotFound.vue'
 import Main_public from '../view/public__page/Main_public.vue'
 import ComingSoon from '../view/ComingSoon.vue'
 import ErrorServer from '../view/ErrorServer.vue'
 // private
 import Main_for_navbar from '../view/private__page/Main_for_navbar.vue'
+
+// cookie
+import Cookies from '../JS/cookies'
+
 
 const history=createWebHistory()
 const routes=[
@@ -51,6 +62,16 @@ const routes=[
                 path:'sign-in',
                 name:'signIn',
                 component:SignIn
+            },
+            {
+                path:'verify',
+                name:'verify',
+                component: Verify
+            },
+            {
+                path: 'reset-password',
+                name: 'resetPassword',
+                component: ResetPassword
             }
     //         {
     //             path:'account/admin',
@@ -130,7 +151,7 @@ const routes=[
     },
 
     {
-        path:'/account/admin',
+        // path:'/account',
         name:'mainForNavbar',
         component:Main_for_navbar,
         children:[
@@ -169,12 +190,17 @@ const routes=[
                         path:'add-problems',
                         name:'problemsList',
                         component:ProblemsList
+                    },
+                    {
+                        path:'dashboard',
+                        name: 'dashboard',
+                        component: Dashboard
                     }
                 ]
         
             },
             {
-                path:'/account/user/services',
+                path:'/account/user/service',
                 name:'mainPrivateUser',
                 component:Main_private_user,
                 children:[
@@ -213,7 +239,12 @@ const routes=[
                     }
                 ]
             }
-
+            ,
+            {
+                path:'/account/user/profile/:emp_code?',
+                name:'profile',
+                component: Profile
+            }
         ]
     }
     ,
@@ -234,4 +265,26 @@ const routes=[
     }
 ]
 const router=createRouter({history,routes})
+
+// vue nav guard
+router.beforeEach((to, from, next) => {
+    // if personal data was remove that redirect to login page
+    // if user or admin redirect on admin service the user is not allow and admin can go to service by normally
+    // when refresh page, cookie is refresh page
+    if (to.name == 'mainForNavbar') next({ name: 'home'})
+    else if (to.name == 'home') next()
+    else if (to.name !== 'signIn' && Cookies.get("data").length == 0) next({ name: 'signIn' })
+    else if (to.name == 'mainPrivateAdmin' && validate.getUserDataFromLocal("user_role") == "user") next({ name: 'services' })
+    else if (to.name == 'mainPrivateAdmin' && validate.getUserDataFromLocal("user_role") != "user") next({ name: 'showAllEvents' })
+    else {
+        if(Cookies.get("data").length !== 0){
+            getRefreshToken()
+        }
+        next()
+    }
+})
+
+// when router is error
+router.onError({name: 'errorServer'})
+
 export default router

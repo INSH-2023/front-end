@@ -1,8 +1,21 @@
 <script setup>
 import{ref,computed,onBeforeMount,onUpdated} from 'vue'
 import toBackEnd from '../../JS/fetchToBack'
-import getRefreshToken from '../../JS/refresh';
-import jsCookie from 'js-cookie';
+// import getRefreshToken from '../../JS/refresh';
+// import jsCookie from '../../JS/cookies';
+
+const path = `${import.meta.env.VITE_BACK_END_HOST}/images/problems`
+const APPLICATION = `${path}/application`
+const INTERNET =`${path}/internet`
+const MEDIA = `${path}/media`
+const MEETING =  `${path}/meeting`
+const NEWS =  `${path}/news`
+const PRINTER =  `${path}/printer`
+const HARDWARE =  `${path}/hardware`
+const SOFTWARE =  `${path}/software`
+const WEBSITE = `${path}/website`
+
+const problemIcon = [APPLICATION, INTERNET, MEDIA, MEETING, NEWS, PRINTER, HARDWARE, SOFTWARE, WEBSITE]
 
 const problemsLink = `${import.meta.env.VITE_BACK_END_HOST}/problems`
 const emit =defineEmits(["getProblemSelected"])
@@ -16,8 +29,7 @@ const props = defineProps({
 const token = ref('')
 
 onBeforeMount(()=>{
-    getProblems(),
-    getRefreshToken(JSON.parse(jsCookie.get("data")).refreshToken)
+    getProblems()
 })
 
 onUpdated(()=>{
@@ -40,11 +52,12 @@ const otherSelection=()=>{
 
 // get problems
 const getProblems=async()=>{
-    token.value = JSON.parse(jsCookie.get("data")).token
-    let[status,data]=await toBackEnd.getData('component_problem',`${problemsLink}/type/${props.typeP}`,token.value = JSON.parse(jsCookie.get("data")).token)
+    let cuurentIcon = []
+    // token.value = JSON.parse(jsCookie.get("data")).token
+    let[status,data]=await toBackEnd.getData('component_problem',`${problemsLink}/type/${props.typeP}`)
     if(status==200){
         problemList.value=data
-        console.log(data)        
+        console.log(data)
         addProperty(problemList.value)
     }else{
         console.log(data)
@@ -60,11 +73,10 @@ const addProperty =(v)=>{
 }
 
 // add problem
-const addP =(v)=>{
+const addP = (v)=>{
     let check=false
     for(let value of problems.value){
-        if(value==v)check=true;
-       
+        if(value==v.problem_problem)check=true;
     } 
     if(check==true){
         // console.log(problems.value.indexOf(v))
@@ -73,42 +85,60 @@ const addP =(v)=>{
 
         // animation
         for(let value2 of problemList.value){
-            if(value2.problem_problem==v){
-                value2.selection= !value2.selection
-            }
-            
+            if(value2.problemId==v.problemId){
+                value2.selection = !value2.selection
+            }  
         }
         check=false
         console.log(problems.value)
     }
     else if(check==false){
-        problems.value.push(v)
+        problems.value.push(v.problem_problem)
 
         // animation
         for(let value2 of problemList.value){
-            if(value2.problem_problem==v){
-                value2.selection= !value2.selection
+            if(value2.problemId==v.problemId){
+                value2.selection=!value2.selection
             }
             
         }
+        check=true
         // console.log(problemList.value)
         console.log(problems.value)
     }
 }
+
+const getImg = (problemId) => {
+    let currentList = []
+    let data = `${import.meta.env.VITE_BACK_END_HOST}/images/problems/${problemId}`
+    currentList.push(data)
+    return currentList
+}
+const getIcon = (problem_type) => {
+    let currentList = []
+    let path = `${import.meta.env.VITE_BACK_END_HOST}/images/problems/${problem_type}`
+    problemIcon.forEach(i => {
+        if (path == i) {
+            currentList.push(path)
+        }
+    })
+    return currentList
+}
+
 </script>
 <template>
     <div class="w-full text-[17px] font-normal md:text-[25px] sm:w-fit">
         <h3 v-if="props.typeP=='hardware'">
-            3. เลือก <span class="text-rose-500">ปัญหา</span> Hardware ที่ต้องการให้ช่วยเหลือ
+            3. เลือก ปัญหา<span class="text-rose-500">Hardware</span> ที่ต้องการให้ช่วยเหลือ
         </h3>
         <h3 v-if="props.typeP=='software'">
-            3. เลือก <span class="text-rose-500">ปัญหา</span>Software ที่ต้องการให้ช่วยเหลือ
+            3. เลือก ปัญหา<span class="text-rose-500">Software</span> ที่ต้องการให้ช่วยเหลือ
         </h3>
         <h3 v-if="props.typeP=='internet'">
-            3. เลือก <span class="text-rose-500">ปัญหา</span> Internet ที่ต้องการให้ช่วยเหลือ
+            3. เลือก ปัญหา<span class="text-rose-500">Internet</span> ที่ต้องการให้ช่วยเหลือ
         </h3>
         <h3 v-if="props.typeP=='printer'">
-            1. เลือก <span class="text-rose-500">ปัญหา</span> Printer ที่ต้องการให้ช่วยเหลือ
+            1. เลือก ปัญหา<span class="text-rose-500">Printer</span> ที่ต้องการให้ช่วยเหลือ
         </h3>
         <h3 v-if="props.typeP=='website'">
             1. เลือก หัวข้อ <span class="text-rose-500">Website</span> ที่ต้องการให้ช่วยเหลือ
@@ -133,9 +163,11 @@ const addP =(v)=>{
             lg:sm:gap-y-4
     ">
     <!-- problems -->
-        <button  v-for="(value,index) in problemList" :key="index" @click="addP(value.problem_problem)"  :style="[value.selection==true?'background-color:#1E88E5;color:#E3F2FD':'']" class="truncate w-full mx-auto p-2 bg-gray-200 rounded-xl hover:bg-gray-300 md:w-[150px] md:h-fit ">
-            <img src="../../assets/vue.svg" alt="NoteBook" draggable="false" class="w-[30px] mx-auto md:w-[60px]">
+        <button  v-for="(value,index) in problemList" :key="index" @click="addP(value)"  :style="[value.selection?'background-color:#1E88E5;color:#E3F2FD':'']" class="truncate w-full mx-auto p-2 bg-gray-200 rounded-xl hover:bg-gray-300 md:w-[150px] md:h-fit ">
+            <img :src="getImg(value.problemId)" alt="NoteBook" draggable="false" class="w-[30px] h-[60px] mx-auto md:w-[60px]" v-if="value.problem_upload">
+            <img :src="getIcon(value.problem_type)" alt="NoteBook" draggable="false" class="w-[30px] h-[60px] mx-auto md:w-[60px]" v-else>
             <h3 class="truncate w-fit mx-auto mt-2 text-[0.625rem] md:text-[1.125rem]">
+                <!-- {{value.problem_problem}} -->
                 {{value.problem_problem}}
             </h3>
         </button>

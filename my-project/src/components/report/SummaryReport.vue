@@ -58,6 +58,9 @@ const textToArray=(input)=>{
     let arr=input.split(",")
     return arr
 }
+
+const problemPath = ref(`${import.meta.env.VITE_BACK_END_HOST}/images/problems`)
+const itemPath = ref(`${import.meta.env.VITE_BACK_END_HOST}/images/items`)
 </script>
 <template>
     <div class=" w-[280px] h-fit mx-auto mt-3 lg:w-full" >
@@ -127,7 +130,7 @@ const textToArray=(input)=>{
                 ">
                     <!-- notebook -->
                     <div class="w-[80px] h-fit mx-auto p-2 bg-gray-200 rounded-xl lg:w-[70%] lg:h-[100px]">
-                        <img src="../../assets/vue.svg" alt="NoteBook" class="w-[30px] h-[30px] mx-auto lg:w-[50px] lg:h-[50px]">
+                        <img :src="`${itemPath}/${item.type}`" alt="NoteBook" class="w-[30px] h-[30px] mx-auto lg:w-[50px] lg:h-[50px]">
                         <h3 class="w-fit mx-auto text-[10px] lg:text-[15px]">
                             {{item.type}}
                         </h3>
@@ -169,13 +172,13 @@ const textToArray=(input)=>{
                     
                 </div>
 
-                
+                <!-- problem report -->
                 <div class="grid grid-cols-3 gap-y-2 gap-x-2 mt-4  font-medium
                     lg:grid-cols-4 
                 ">
                     
                     <div v-for="(data,index) in problems" :key="index"  class="w-[80px] h-fit mx-auto p-2 bg-gray-200 rounded-xl lg:w-[70%] lg:h-[100px]">
-                        <img src="../../assets/vue.svg" alt="NoteBook" class="w-[30px] h-[30px] mx-auto lg:w-[50px] lg:h-[50px]">
+                        <img :src="`${problemPath}/${subject}`" alt="NoteBook" class="w-[30px] h-[30px] mx-auto lg:w-[50px] lg:h-[50px]">
                         <h3 class="w-fit mx-auto text-[10px] lg:text-[15px]">
                            {{data}}
                         </h3>

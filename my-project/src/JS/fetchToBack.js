@@ -1,31 +1,31 @@
-let toBackEnd={
+let toBackEnd = {
 
-   async delete(name,link,id,token){
+   async delete(name, link, id="") {
       // variable
-      let return_data =[]
-      let status =undefined
+      let return_data = []
+      let status = undefined
       let res = undefined
       // show log
       console.log(`delete ${name} : ${id} => ${link}`);
       // fetch
       try {
-         res = await fetch(`${link}/${id}`,{
-            method:'DELETE',
-            headers: {
-               Authorization: "Bearer " + token
-            }
-         })         
-         status=res.status
+         res = await fetch(`${link}/${id}`, {
+            method: 'DELETE',
+            // headers: {
+            //    Authorization: "Bearer " + token
+            // },
+            credentials: 'include'
+         })
+         status = res.status
       } catch (error) {
-         console.log(error) 
+         console.log(error)
       }
-      
-      if(status==200){
+
+      if (status == 200) {
          console.log(`delete ${name} sucessful by ${id} `)
          return_data.push(status)
          return_data.push(await res.json())
-      }else{
-         status=500
+      } else {
          console.log(`cannot delete ${name} by ${id}`)
          return_data.push(status)
          return_data.push('An internal error occurred, please try again later.')
@@ -33,26 +33,27 @@ let toBackEnd={
       return return_data
    },
 
-   async getData(name,link,token){
+   async getData(name, link) {
       // variable
-      let return_data =[]
+      let return_data = []
       let status = undefined
       let res
       // show log
       console.log(`get data ${name} => ${link}`)
       // fetch
       // if(header==undefined||header==null||header==''){
-         try {
-            res =await fetch(link,{
-            method:'GET',
-            headers: {
-               Authorization: "Bearer " + token
-            }
-            })   
-            status=res.status         
-         } catch (error) {
-            console.log(error)
-         }
+      try {
+         res = await fetch(link, {
+            method: 'GET',
+            // headers: {
+            //    Authorization: "Bearer " + token
+            // },
+            credentials: 'include'
+         })
+         status = res.status
+      } catch (error) {
+         console.log(error)
+      }
 
       // }else{
       //    res =await fetch(link,{
@@ -62,8 +63,8 @@ let toBackEnd={
       //       }
       //    })
       // }
-      
-      if(status==200){
+
+      if (status == 200) {
          let data = await res.json()
          return_data.push(status)
          return_data.push(data)
@@ -77,143 +78,184 @@ let toBackEnd={
       //    return_data.push(status)
       //    // return_data.push(await res.json())
       // }
-      else{
+      else {
          console.log(`cannot get data ${name}`)
-         status = 500
          return_data.push(status)
          return_data.push('An internal error occurred, please try again later.')
       }
-      
+
 
       return return_data
-         
+
    },
 
-   async getDataBy(name,link,id,token){
+   async getDataBy(name, link, id) {
       // variable
-      let return_data =[]
+      let return_data = []
       let status = undefined
       let res = undefined
       // show log
       console.log(`get data ${name} : ${id} => ${link}`);
       // fetch    
       try {
-         res = await fetch(`${link}/${id}`,{
-            method:'GET',
-            headers: {
-               Authorization: "Bearer " + token
-            }
+         res = await fetch(`${link}/${id}`, {
+            method: 'GET',
+            // headers: {
+            //    Authorization: "Bearer " + token
+            // },
+            credentials: 'include'
          })
-         status=res.status
+         status = res.status
       } catch (error) {
-         console.log(name,error)
+         console.log(name, error)
       }
 
-      if(status==200){
+      if (status == 200) {
          let [data] = await res.json()
-         if(name=='request'){
-            if(data.request_problems.match(","))data.request_problems = data.request_problems.split(",")
-            else data.request_problems=[data.request_problems]               
+         console.log(data)
+         if (name == 'request') {
+            if (data.request_problems.match(",")) data.request_problems = data.request_problems.split(",")
+            else data.request_problems = [data.request_problems]
          }
-         status =res.status
+         status = res.status
          return_data.push(status)
          return_data.push(data)
          console.log(`get data ${name} by ${id} successfull`)
          console.log(return_data)
-      }else{
+      } else {
          console.log(`cannot get data ${name} by ${id}`)
-         status =500
          return_data.push(status)
          return_data.push('An internal error occurred, please try again later.')
       }
       return return_data
    },
 
-   async editData(name,link,id,data,token){
+   async editData(name, link, data={}) {
       // variable
-      let return_data =[]
-      let status =undefined
-      let res=undefined
+      let return_data = []
+      let status = undefined
+      let res = undefined
       // let name =eName.value.split(' ')
       // show log
-      console.log(`edit ${name} : ${id} => ${link}`)
+      console.log(`edit ${name} : ${link}`)
       // fetch
       try {
-         res = await fetch(`${link}/${id}`,{
-            method:'PUT',
-            headers:{ "content-type": "application/json", Authorization: "Bearer " + token},
-            body:JSON.stringify(data),
-         })         
-         status=res.status
+         res = await fetch(`${link}`, {
+            method: 'PUT',
+            headers: {
+               "content-type": "application/json",
+               // Authorization: "Bearer " + token
+            },
+            body: JSON.stringify(data),
+            credentials: 'include'
+         })
+         status = res.status
+         console.log(res.status)
       } catch (error) {
-         console.log(name,error)
+         console.log(name, error)
       }
-      console.log(res.status)
 
-      if(status==200){
+
+      if (status == 200) {
          console.log(`update ${name} successful`)
-         status=res.status
+         status = res.status
          return_data.push(status)
          return_data.push(await res.json())
-      }else{
+      } else {
          console.log(`error cannot update ${name}`)
-         status=500
          return_data.push(status)
          return_data.push('An internal error occurred, please try again later.')
       }
-      
+
       return return_data
    },
 
-   async postData(name,link,data,token){
+   async postData(name, link, data={}) {
       // variable
-      let return_data =[]
-      let status =undefined
-      let res= undefined
-      console.log(data)
+      let return_data = []
+      let status = undefined
+      let res = undefined
+      // console.log(data)
       // show log
       console.log(`post data ${name} => ${link}`)
       // fetch
       try {
-         res = await fetch(link,{
-            method:'POST',
-            headers:{ "content-type": "application/json", Authorization: "Bearer " + token},
-            body:JSON.stringify(data)
-         })       
-         status=res.status  
+         res = await fetch(link, {
+            method: 'POST',
+            headers: {
+               "content-type": "application/json",
+               // Authorization: "Bearer " + token
+            },
+            body: JSON.stringify(data),
+            credentials: 'include'
+         })
+         status = res.status
       } catch (error) {
-         console.log(name,error)
+         console.log(name, error)
       }
-      
-      if(status==200){
-         status=res.status
+
+      if (status == 200 || status == 201) {
+         status = res.status
          console.log(`post ${name} successful`)
          return_data.push(status)
          return_data.push(await res.json())
-      }else
-      if(status==400){
-         status=res.status
+      } else
+         if (status == 400) {
+            status = res.status
+            return_data.push(status)
+            return_data.push(await res.json())
+         } else
+            if (status == 401) {
+               status = res.status
+               return_data.push(status)
+            } else
+               if (status == 403) {
+                  status = res.status
+                  return_data.push(status)
+               } else
+                  if (status == 404) {
+                     status = res.status
+                     return_data.push(status)
+                  } else {
+                     status = 500
+                     console.log(`error cannot post ${name}`)
+                     return_data.push(status)
+                     return_data.push('เกิดข้อผิดพลาดฝั่ง Server กรูณาติดต่อฝ่าย IT !!')
+                  }
+
+      return return_data
+   },
+   async postFile(name, link, data={}) {
+      // variable
+      let return_data = []
+      let status = undefined
+      let res = undefined
+      console.log(data)
+      // show log
+      console.log(`post file ${name} => ${link}`)
+      // fetch
+      try {
+         res = await fetch(link, {
+            method: 'POST',
+            body: data
+         })
+         status = res.status
+      } catch (error) {
+         console.log(name, error)
+      }
+
+      if (status == 201) {
+         status = res.status
+         console.log(`post file ${name} successful`)
          return_data.push(status)
-         return_data.push(await res.json())
-      }else 
-      if(status==401){
-         status=res.status
-         return_data.push(status)
-      }else
-      if(status==403){
-         status=res.status
-         return_data.push(status)
-      }else
-      if(status==404){
-         status=res.status
-         return_data.push(status)
-      }else{
-         status=500
+         return_data.push(res.json())
+      } else {
+         status = 500
          console.log(`error cannot post ${name}`)
          return_data.push(status)
          return_data.push('เกิดข้อผิดพลาดฝั่ง Server กรูณาติดต่อฝ่าย IT !!')
       }
-   
+
       return return_data
    }
 }

@@ -1,14 +1,17 @@
 import Cookies from './cookies'
 import {useRouter} from 'vue-router'
+import cryptoJs from 'crypto-js';
 const validate={
-    vUserCreate(data,lenghtOfText){
+    vUser(data,lenghtOfText,passw=false,oldData=undefined){
         let vStatus=false
+        let return_data=[]
         let organization ='@moralcenter.or.th'
 
         console.log(data)
         console.log(lenghtOfText)
         
-        let {user_first_name:fname,
+        let {user_emp_code:empCode,
+            user_first_name:fname,
             user_last_name:lname,
             user_email:email,
             user_role:role,
@@ -20,100 +23,182 @@ const validate={
             user_cPassW:cPassword
             } = data
         
+
         let {fnameL,lnameL,emailL,passwordL,empCodeL}= lenghtOfText
-    //     let email = eEmail.value+organization
-    //     // fNameS.value=undefined
-    //     // eNameS.value=undefined
-    //     // emailS.value=undefined
-    //     // groupS.value =undefined
-    //     // passWS.value =undefined
-    //     // cPassWS.value =undefined
-    //     // positionS.value=undefined
-    //     // officeS.value =undefined
-    //     // roleS.value =undefined
-    //     // eEmail.value=email.value+organization
+// 
         
-        // if(empCode.length == 0){
-        //     console.log('Please input ur employee code')
-        //     vStatus =true
-        // }
+        
+        if(oldData!=undefined){
+            let {user_first_name:old_fname,
+                user_last_name:old_lname,
+                user_email:old_email,
+                user_role:old_role,
+                user_office:old_office,
+                user_position:old_position,
+                user_group:old_group,
+                user_status:old_status,
+                }=oldData
+
+            if( old_fname==fname&&
+                old_lname==lname&&
+                old_email==email&&
+                old_role==role&&
+                old_office==office&&
+                old_position==position&&
+                old_group==group&&
+                old_status==status
+              ){
+                vStatus=true
+                return_data.push('Infomation not change.')
+                return {status:vStatus,msg: return_data}
+            }
+           
+        }
+        // let email = eEmail.value+organization
+        // fNameS.value=undefined
+        // eNameS.value=undefined
+        // emailS.value=undefined
+        // groupS.value =undefined
+        // passWS.value =undefined
+        // cPassWS.value =undefined
+        // positionS.value=undefined
+        // officeS.value =undefined
+        // roleS.value =undefined
+        // eEmail.value=email.value+organization
+// 
+        if(passw!=false){
+            if(empCode.length == 0){
+                let msg='Please input ur employee code'
+                console.log('Please input ur employee code')
+                return_data.push(msg)
+                vStatus =true
+            }
+            if(passw!=false&&([null,undefined].includes(password) || password.length==0)){
+                let msg='Password is Null'
+                console.log('Please input ur password ')
+                return_data.push(msg)
+                vStatus =true
+            }
+            if(passw!=false&&([null,undefined].includes(cPassword) || cPassword.length==0)){
+                let msg='Confirm password is Null'
+                console.log('Please input ur confirm password ')
+                return_data.push(msg)
+                vStatus =true
+            }
+            if(empCode.length!=0&& isNaN(empCode)&&passw!=false){
+                let msg ='Employee code must be number'
+                console.log(msg)
+                return_data.push(msg)
+                vStatus =true
+    
+            }
+    
+            if(empCode.length>empCodeL&&passw!=false){
+                let msg=`lenght of employee code more then ${empCodeL}`
+                console.log(`lenght of employee code more then ${empCodeL}`)
+                return_data.push(msg)
+                vStatus =true
+            }
+            if(passw!=false&&(password.length>passwordL)){
+                let msg=`lenght of password more then ${passwordL}`
+                console.log(msg)
+                return_data.push(msg)
+                vStatus =true
+            }
+            if(passw!=false&&(cPassword.length>passwordL)){
+                let msg=`lenght of password more then ${passwordL}`
+                console.log(msg)
+                return_data.push(msg)
+                vStatus =true
+            }  
+            if(passw!=false&&(password !=cPassword)){
+                let msg=` password not match`
+                console.log(msg)
+                return_data.push(msg)
+                vStatus =true
+            }
+
+
+        }
+        
         if(fname.length == 0){
-            console.log('Please input ur first name')
+            let msg='First name is Null'
+            console.log('First name ')
+            return_data.push(msg)
             vStatus =true
         }
         if(lname.length==0){
-            console.log('Please input ur last name')
+            let msg='Last name is Null'
+            console.log('Last name ')
+            return_data.push(msg)
             vStatus =true
         }
         if(email.length==0){
+            let msg='Email is Null'
             console.log('Please input ur email')
+            return_data.push(msg)
             vStatus =true
         }
         if(group.length==0){
-            console.log('Please input ur group')
+            let msg='Group is Null'
+            console.log('Please input ur group ')
+            return_data.push(msg)
             vStatus =true
         }
         if(position.length==0){
-            console.log('Please input ur position')
+            let msg='Position is Null'
+            console.log('Please input ur position ')
+            return_data.push(msg)
             vStatus =true
         }
         if(office.length==0){
-            console.log('Please input ur office')
+            let msg='Office is Null'
+            console.log('Please input ur office ')
+            return_data.push(msg)
             vStatus =true
         }
         if(role.length==0){
-            console.log('Please input ur role')
+            let msg='Role is Null'
+            console.log('Please input ur role ')
+            return_data.push(msg)
             vStatus =true
         }
-        if([null,undefined].includes(password) || password.length==0){
-            console.log('Please input ur password')
-            vStatus =true
-        }
-        if([null,undefined].includes(cPassword) || cPassword.length==0){
-            console.log('Please input ur confirm password')
-            vStatus =true
-        }
+        
         // if(status.length==0){
         //     console.log('Please input ur confirm password')
         //     vStatus =true
         // }
-        // if(empCode.length>empCodeL){
-        //     console.log(`lenght of employee code more then ${empCodeL}`)
-        //     vStatus =true
-        // }
+        
         if(fname.length>fnameL){
-            console.log(`lenght of first name more then ${fnameL}`)
+            let msg=`lenght of first name more then ${fnameL}`
+            console.log(msg)
+            return_data.push(msg)
             vStatus =true
         }
         if(lname.length>lnameL){
-            console.log(`lenght of last name more then ${lnameL}`)
+            let msg=`lenght of last name more then ${lnameL}`
+            console.log(msg)
+            return_data.push(msg)
             vStatus =true
         }
         if(email.length>emailL){
-            console.log(`lenght of email more then ${emailL}`)
+            let msg=`lenght of email more then ${emailL}`
+            console.log(msg)
+            return_data.push(msg)
             vStatus =true
         }
         if(!this.vEmail(email)){
-            console.log('this email invalid')
+            let msg=`this email invalid`
+            console.log(msg)
+            return_data.push(msg)
             vStatus =true
         }
-        if(password.length>passwordL){
-            console.log(`lenght of password more then ${passwordL}`)
-            vStatus =true
-        }
-        if(cPassword.length>passwordL){
-            console.log(`lenght of password more then ${passwordL}`)
-            vStatus =true
-        }  
-        if(password !=cPassword){
-            console.log('password not match')
-            vStatus =true
-        }
+        
     
-        return vStatus
+        return {status:vStatus,msg: return_data}
     },
 
-    vEmail(email){
+    vEmail(email ){
         let valid =/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
         
         if (email.match(valid)) {
@@ -216,18 +301,25 @@ const validate={
         return problemArr
     },
     getUserDataFromLocal(property=undefined){
-        let data = JSON.parse(Cookies.get("data"))
-        if(data == null ||data == undefined){
+        let cookie = Cookies.get("data")
+        // console.log(cookie)
+        if(cookie == null ||cookie == undefined||cookie == NaN||cookie.length==0){
             console.log("login first !!")
-            return data
+            return null
         }else{
+            // console.log(cookie)
+
+            let data = JSON.parse(cryptoJs.AES.decrypt(
+                    Cookies.get("data"),
+                    import.meta.env.VITE_PERSONAL_SECRET ).toString(cryptoJs.enc.Utf8))
             if(property!=undefined||property!=null){
                 return data[property]
             }else{
                 return data    
             }
         }
-    }
+    },
+    
 }
 
 export default validate

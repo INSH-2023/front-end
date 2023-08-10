@@ -2,8 +2,8 @@
 import {ref,computed,onUpdated,onBeforeMount} from 'vue'
 import toBackEnd from '../../JS/fetchToBack';
 import validate from '../../JS/validate';
-import getRefreshToken from '../../JS/refresh';
-import jsCookie from '../../JS/cookies';
+// import getRefreshToken from '../../JS/refresh';
+// import jsCookie from '../../JS/cookies';
 const itemLink =`${import.meta.env.VITE_BACK_END_HOST}/items`;
 
 const token = ref('')
@@ -29,8 +29,8 @@ onUpdated(()=>{
     })
 })
 onBeforeMount(()=>{
-    getRefreshToken(JSON.parse(jsCookie.get("data")).refreshToken)
-    getItem(JSON.parse(jsCookie.get("data")).user_emp_code)
+    // getRefreshToken(JSON.parse(jsCookie.get("data")).refreshToken)
+    getItem()
 })
 
 // item variable
@@ -45,9 +45,9 @@ const item=ref({
 
 const itemList=ref([])
 // get item for use type = or
-const getItem=async(emp_code)=>{
-    token.value = JSON.parse(jsCookie.get("data")).token
-    let [status,data]= await toBackEnd.getData('component_item',`${itemLink}/emp-code/${emp_code}`,token.value)
+const getItem=async()=>{
+    let emp_code = validate.getUserDataFromLocal('user_emp_code')
+    let [status,data]= await toBackEnd.getData('component_item',`${itemLink}/emp-code/${emp_code}`)
     if(status==200){
         itemList.value =data
         console.log('data item :',itemList.value)
@@ -85,6 +85,8 @@ const setData=(data=undefined,index=undefined)=>{
     }
     // console.log(data)
 }
+
+const itemPath = ref(`${import.meta.env.VITE_BACK_END_HOST}/images/items`)
 </script>
 <template>
         <div class="w-full text-[20px] font-normal md:text-[25px] sm:w-fit">
@@ -100,16 +102,16 @@ const setData=(data=undefined,index=undefined)=>{
             lg:sm:gap-y-4
         ">
             <!-- notebook -->
-            <button @click="setData('NoteBook')" name="machine_sf" :style="[item.type=='NoteBook'?'background-color:#1E88E5;color:#E3F2FD':'']" class="truncate w-full mx-auto p-2 bg-gray-200 rounded-xl hover:bg-gray-300 md:w-[150px] md:h-fit ">
-                <img src="../../assets/machine/laptop.png" draggable="false" alt="NoteBook" class="w-[30px] mx-auto md:w-[60px]">
+            <button @click="setData('Notebook')" name="machine_sf" :style="[item.type=='Notebook'?'background-color:#1E88E5;color:#E3F2FD':'']" class="truncate w-full mx-auto p-2 bg-gray-200 rounded-xl hover:bg-gray-300 md:w-[150px] md:h-fit ">
+                <img src="../../assets/machine/Notebook.png" draggable="false" alt="Notebook" class="w-[30px] mx-auto md:w-[60px]">
                 <h3 class="truncate w-fit mx-auto mt-2 text-[0.813rem] md:text-[1.125rem]">
-                    NoteBook
+                    Notebook
                 </h3>
             </button>
 
             <!-- PC -->
             <button @click="setData('PC')" name="machine_sf" :style="[item.type=='PC'?'background-color:#1E88E5;color:#E3F2FD':'']" class="truncate w-full mx-auto p-2 bg-gray-200 rounded-xl hover:bg-gray-300 md:w-[150px] md:h-fit ">
-                <img src="../../assets/machine/pc.png" draggable="false" alt="NoteBook" class="w-[30px] mx-auto md:w-[60px]">
+                <img src="../../assets/machine/PC.png" draggable="false" alt="NoteBook" class="w-[30px] mx-auto md:w-[60px]">
                 <h3 class="truncate w-fit mx-auto mt-2  text-[0.813rem] md:text-[1.125rem] ">
                     PC
                 </h3>
@@ -117,7 +119,7 @@ const setData=(data=undefined,index=undefined)=>{
                     
             <!-- Smart Phone -->
             <button @click="setData('Smart_Phone')" name="machine_sf" :style="[item.type=='Smart_Phone'?'background-color:#1E88E5;color:#E3F2FD':'']" class="truncate w-full mx-auto p-2 bg-gray-200 rounded-xl hover:bg-gray-300 md:w-[150px] md:h-fit ">
-                <img src="../../assets/machine/phone.png" draggable="false" alt="NoteBook" class="w-[30px] mx-auto md:w-[60px]">
+                <img src="../../assets/machine/Smart_Phone.png" draggable="false" alt="NoteBook" class="w-[30px] mx-auto md:w-[60px]">
                 <h3 class="truncate w-fit mx-auto mt-2  text-[0.813rem] md:text-[1.125rem]">
                     Smart Phone
                 </h3>
@@ -125,7 +127,7 @@ const setData=(data=undefined,index=undefined)=>{
 
             <!-- Tablet -->
             <button @click="setData('Tablet')" name="machine_sf" :style="[item.type=='Tablet'?'background-color:#1E88E5;color:#E3F2FD':'']" class="truncate w-full mx-auto p-2 bg-gray-200 rounded-xl hover:bg-gray-300 md:w-[150px] md:h-fit ">
-                <img src="../../assets/machine/tablet.png" draggable="false" alt="NoteBook" class="w-[30px] mx-auto md:w-[60px]">
+                <img src="../../assets/machine/Tablet.png" draggable="false" alt="NoteBook" class="w-[30px] mx-auto md:w-[60px]">
                 <h3 class="truncate w-fit mx-auto mt-2  text-[0.813rem] md:text-[1.125rem]">
                     Tablet
                 </h3>
@@ -145,9 +147,9 @@ const setData=(data=undefined,index=undefined)=>{
                 :style="[item.sn==v.item_number?'background-color:#1E88E5;color:#E3F2FD':'']"
                 class="truncate w-full mx-auto p-2 bg-gray-200 rounded-xl hover:bg-gray-300 md:w-[150px] md:h-fit "
             >
-                <img src="../../assets/machine/laptop.png" 
+                <img :src="`${itemPath}/${v.item_type}`"
                     draggable="false" 
-                    alt="NoteBook" 
+                    alt="Notebook" 
                     class="w-[30px] mx-auto md:w-[60px]"
                 >
                 <h3 class="truncate w-fit mx-auto text-[0.625rem] md:text-[0.813rem] font-light">

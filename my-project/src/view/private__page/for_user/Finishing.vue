@@ -16,7 +16,7 @@
         
     </div>
     <div class="w-fit h-fit mx-auto mt-3 lg:mt-6">
-        <button @click="goMain" class="w-fit h-fit p-2 mx-auto text-[15px] md:text-[20] lg:text-[23px] bg-gray-300 rounded-xl">
+        <button @click="goMain" class="w-fit h-fit p-2 mx-auto text-[15px] md:text-[20] lg:text-[23px] bg-gray-200 rounded-xl hover:bg-sky-800 focus:ring-4 focus:ring-blue-300">
             กลับไปหน้าหลัก
         </button>
     </div>
