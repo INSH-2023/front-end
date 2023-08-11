@@ -57,9 +57,7 @@ const assignDetail=(data)=>{
     u_group.value=group
     u_office.value=office
     u_position.value=position
-    u_createdAt.value=createdAt.substring(0,10)
-
-    
+    u_createdAt.value=new Date(createdAt).toLocaleString('th-TH', { timeZone: 'Asia/Bangkok', day: "numeric", month: "narrow", year: "numeric"})
 }
 
 onBeforeMount(()=>{

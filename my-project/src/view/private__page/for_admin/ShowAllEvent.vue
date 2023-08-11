@@ -69,7 +69,11 @@ const getEvents = async (id = undefined) => {
         let [s1, count] = await toBackEnd.getData('request status', `${requestLink}/status/admin`)
         if (s == 200 || s1 == 200) {
             status = true
-            requestList.value = data.data.sort((a, b) => (a.request_req_date > b.request_req_date) ? -1 : (a.request_req_date < b.request_req_date) ? 1 : 0);
+            requestList.value = data.data.sort((a, b) => new Date(b.request_req_date) - new Date(a.request_req_date))
+            // format for request date
+            data.data.forEach(req => {
+                req.request_req_date = new Date(req.request_req_date).toLocaleString('th-TH', { timeZone: 'Asia/Bangkok' })
+            })
             showList.value = requestList.value
             get_status.value = true
 
@@ -354,9 +358,9 @@ const checkEdit = computed(() => {
     if (status_ch.value.length == 0 || status_ch.value == 'request' || assign_ch.value.length == 0 || assign_ch.value == 'Not_assign') {
         status = false
     } else
-    if (request.value.request_status != status_ch.value || request.value.request_assign != assign_ch.value){
-        status = true
-    }
+        if (request.value.request_status != status_ch.value || request.value.request_assign != assign_ch.value) {
+            status = true
+        }
     console.log(status)
     return status
 })
@@ -490,7 +494,8 @@ const resetSubject = () => {
                         <!-- type -->
                         <div class="px-2">
                             <select v-model="f_type" name="status" id="status"
-                                class="px-3 py-[4px] bg-[#E3F2FD] text-gray-600 rounded-xl focus:outline-0" @click="resetSubject">
+                                class="px-3 py-[4px] bg-[#E3F2FD] text-gray-600 rounded-xl focus:outline-0"
+                                @click="resetSubject">
                                 <option value="" selected hidden> Service type </option>
                                 <option value="IT_Service" class="bg-gray-100 text-[#0ea5e9]"> IT Service </option>
                                 <option value="PR_Service" class="bg-gray-100 text-[#d97706]"> PR Service </option>
@@ -502,15 +507,15 @@ const resetSubject = () => {
                             <select v-model="f_subject" name="Subject" id="Subject"
                                 class="px-3 py-[4px] bg-[#E3F2FD] text-gray-600 rounded-xl focus:outline-0">
                                 <option value="" selected hidden> Select Subject </option>
-                                <option value="hardware" :hidden="f_type=='PR_Service'"> hardware </option>
-                                <option value="software" :hidden="f_type=='PR_Service'"> software </option>
-                                <option value="internet" :hidden="f_type=='PR_Service'"> internet </option>
-                                <option value="printer" :hidden="f_type=='PR_Service'"> printer </option>
-                                <option value="website" :hidden="f_type=='PR_Service'"> website </option>
-                                <option value="meeting" :hidden="f_type=='PR_Service'"> meeting </option>
-                                <option value="application" :hidden="f_type=='PR_Service'"> application </option>
-                                <option value="media" :hidden="f_type=='IT_Service'"> media </option>
-                                <option value="news" :hidden="f_type=='IT_Service'"> news </option>
+                                <option value="hardware" :hidden="f_type == 'PR_Service'"> hardware </option>
+                                <option value="software" :hidden="f_type == 'PR_Service'"> software </option>
+                                <option value="internet" :hidden="f_type == 'PR_Service'"> internet </option>
+                                <option value="printer" :hidden="f_type == 'PR_Service'"> printer </option>
+                                <option value="website" :hidden="f_type == 'PR_Service'"> website </option>
+                                <option value="meeting" :hidden="f_type == 'PR_Service'"> meeting </option>
+                                <option value="application" :hidden="f_type == 'PR_Service'"> application </option>
+                                <option value="media" :hidden="f_type == 'IT_Service'"> media </option>
+                                <option value="news" :hidden="f_type == 'IT_Service'"> news </option>
                                 <option value="other"> other </option>
                             </select>
                         </div>
@@ -782,7 +787,8 @@ const resetSubject = () => {
                             class=" w-full grid grid-cols-4 gap-y-2 gap-x-2 mt-4 text-[15px] font-medium">
                             <!-- notebook -->
                             <div class="w-[85px] mx-auto p-2 bg-gray-200 rounded-xl">
-                                <img :src="`${itemPath}/${request.request_type_matchine}`" alt="NoteBook" class="w-[40px] mx-auto">
+                                <img :src="`${itemPath}/${request.request_type_matchine}`" alt="Notebook"
+                                    class="w-[40px] mx-auto">
                                 <h3 class="w-fit mx-auto text-[10px]">
                                     {{ request.request_type_matchine }}
                                 </h3>
@@ -808,7 +814,8 @@ const resetSubject = () => {
 
                             <div v-for="(data, index) of request.request_problems" :key="index"
                                 class="w-[85px] mx-auto p-2 bg-gray-200 rounded-xl ">
-                                <img :src="`${problemPath}/${request.request_subject}`" alt="NoteBook" class="w-[40px] mx-auto">
+                                <img :src="`${problemPath}/${request.request_subject}`" alt="NoteBook"
+                                    class="w-[40px] mx-auto">
                                 <h3 class="w-fit mx-auto text-[10px]">
                                     {{ data }}
                                 </h3>
@@ -1173,5 +1180,4 @@ const resetSubject = () => {
 
 .table_header::after {
     content: ':';
-}
-</style>
+}</style>

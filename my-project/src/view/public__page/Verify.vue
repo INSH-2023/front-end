@@ -25,6 +25,7 @@ const data_ch = computed(() => {
 })
 const verifyEmail = async () => {
     button_status.value = true
+    data_ch.value.email = email.value + "@moralcenter.or.th"
     if (email.value.length == 0) {
         console.log('please in put ur email')
         alert_status.value = false
@@ -39,6 +40,11 @@ const verifyEmail = async () => {
             Cookies.set("verify", JSON.stringify({"uuid":data.uuId_token,"email":data_ch.value.email}))
             button_status.value = false
             goResetPassword()
+        } else if (status == 400) {
+            alert_status.value = false
+            alert_title.value = 'Inactive !!'
+            alert_message.value = 'อีเมลนี้มีข้อผิดพลาด'
+            button_status.value = false
         } else if (status == 403) {
             alert_status.value = false
             alert_title.value = 'Inactive !!'
@@ -79,13 +85,14 @@ const verifyEmail = async () => {
             </h4>
             <!-- input zone -->
             <div class=" w-full h-fit border-2 border-gray-400 rounded-[10px]">
-                <div class="flex px-2 py-1.5">
+                <div class="flex px-2 py-1.5 ">
                     <input v-model="email" type="text" placeholder="E-mail" class="w-[90%] focus:outline-0 my-auto">
                     <!-- <button v-show="isEmailTesting==false && email.length!=0" @click="isEmailTesting=true"  class=" ml-[2px] mx-auto rounded-full border-2 border-gray-500 text-gray-500 w-[25px] h-[25px] hover:bg-gray-700 hover:text-gray-200">
                        <h2  class="p-[1px] mx-auto text-[13px] " >
                          > 
                        </h2> 
                     </button> -->
+                    <span class="px-2 my-auto">@moralcenter.or.th</span>
                 </div>
 
             </div>

@@ -62,6 +62,10 @@ const getEvents = async (id = undefined) => {
         if (s == 200) {
             status = true
             requestList.value = data.data.sort((a, b) => (a.request_req_date > b.request_req_date) ? -1 : (a.request_req_date < b.request_req_date) ? 1 : 0);
+            // format for request date
+            data.data.forEach(req => {
+                req.request_req_date = new Date(req.request_req_date).toLocaleString('th-TH', { timeZone: 'Asia/Bangkok' })
+            })
             showList.value = requestList.value
             get_status.value = true
 
@@ -435,7 +439,8 @@ const searchByKeyW = () => {
                         <span class="font-semibold my-auto">
                             ตัวกรอง
                         </span>
-                        <img src="../../../assets/admin_page/filter.png" alt="filter-icon" class="w-[20px] ml-[5px] my-auto">
+                        <img src="../../../assets/admin_page/filter.png" alt="filter-icon"
+                            class="w-[20px] ml-[5px] my-auto">
                     </button>
                 </div>
 
@@ -690,8 +695,8 @@ const searchByKeyW = () => {
                                 อาการของ {{ request.request_subject }} ที่พบ
                             </h3>
                             <h3 v-show="request.request_service_type == 'PR_Service'">
-                                ความช่วยเหลือที่ต้องการเกี่ยวกับ<span
-                                    class="text-rose-500 pl-2">{{ request.request_subject }}</span>
+                                ความช่วยเหลือที่ต้องการเกี่ยวกับ<span class="text-rose-500 pl-2">{{ request.request_subject
+                                }}</span>
                             </h3>
                         </div>
 
@@ -700,8 +705,10 @@ const searchByKeyW = () => {
 
                             <div v-for="(data, index) of request.request_problems" :key="index"
                                 class="w-[85px] mx-auto p-2 bg-gray-200 rounded-xl ">
-                                <img v-if="request.problem_upload" :src="`${path}/${request.request_subject}`" alt="NoteBook" class="w-[40px] mx-auto">
-                                <img v-else :src="`${path}/${request.request_subject}`" alt="NoteBook" class="w-[40px] mx-auto">
+                                <img v-if="request.problem_upload" :src="`${path}/${request.request_subject}`"
+                                    alt="NoteBook" class="w-[40px] mx-auto">
+                                <img v-else :src="`${path}/${request.request_subject}`" alt="NoteBook"
+                                    class="w-[40px] mx-auto">
                                 <h3 class="w-fit mx-auto text-[10px]">
                                     {{ data }}
                                 </h3>

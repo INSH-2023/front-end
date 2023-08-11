@@ -184,7 +184,6 @@ let toBackEnd = {
             method: 'POST',
             headers: {
                "content-type": "application/json",
-               // Authorization: "Bearer " + token
             },
             body: JSON.stringify(data),
             credentials: 'include'

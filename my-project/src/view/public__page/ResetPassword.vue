@@ -22,6 +22,7 @@ const cpw = ref('')
 const count = ref(0)
 const data_ch = computed(() => {
     return {
+        uuid: JSON.parse(Cookies.get("verify")).uuid,
         password: pw.value
     }
 })

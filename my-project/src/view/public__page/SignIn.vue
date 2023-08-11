@@ -35,6 +35,7 @@ const logIn=async()=>{
         alert_message.value='กรุณาใส่ข้อมูล E-mail และ Password ของคุณ!!'
         button_status.value=false
     }else{
+        data_ch.value.email = email.value + "@moralcenter.or.th" 
         // console.log(data_ch.value)
         let [status,data]=await toBackEnd.postData('login',loginLink,data_ch.value)
         if(status==200){
@@ -118,7 +119,7 @@ const showPd =()=>{
                          > 
                        </h2> 
                     </button> -->
-                    
+                    <span class="px-2 my-auto">@moralcenter.or.th</span>
                 </div>
                 <!-- ค่อยมาทำต่อ -->
                 <!-- v-show="isEmailTesting==true" -->

@@ -271,12 +271,15 @@ router.beforeEach((to, from, next) => {
     // if personal data was remove that redirect to login page
     // if user or admin redirect on admin service the user is not allow and admin can go to service by normally
     // when refresh page, cookie is refresh page
+    console.log(to.name)
+    console.log(Cookies.get("data").length)
     if (to.name == 'mainForNavbar') next({ name: 'home'})
-    else if (to.name == 'home') next()
+    else if (to.name == 'home' || to.name == 'verify' || (to.name == 'resetPassword' && Cookies.get("verify") != undefined)) next()
     else if (to.name !== 'signIn' && Cookies.get("data").length == 0) next({ name: 'signIn' })
     else if (to.name == 'mainPrivateAdmin' && validate.getUserDataFromLocal("user_role") == "user") next({ name: 'services' })
     else if (to.name == 'mainPrivateAdmin' && validate.getUserDataFromLocal("user_role") != "user") next({ name: 'showAllEvents' })
     else {
+        console.log("T")
         if(Cookies.get("data").length !== 0){
             getRefreshToken()
         }
